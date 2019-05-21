@@ -1,8 +1,9 @@
 import React from "react";
+import { SRLImages } from "simple-react-lightbox";
 
 const Content = () => {
   return (
-    <div>
+    <SRLImages>
       <p>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nulla, illo
         cum nobis laborum, ullam dolorem iure odit id placeat in est, aliquam
@@ -35,7 +36,7 @@ const Content = () => {
       <div>
         <img src="https://picsum.photos/900" alt="test alt tag 4" />
       </div>
-    </div>
+    </SRLImages>
   );
 };
 

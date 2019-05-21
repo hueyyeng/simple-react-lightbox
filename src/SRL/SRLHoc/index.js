@@ -1,5 +1,5 @@
 import React from "react";
-import { Consumer } from "./SRLContext";
+import { Consumer } from "../SRLContext";
 
 export function withContext(Component) {
   return function SRLHoc(props) {

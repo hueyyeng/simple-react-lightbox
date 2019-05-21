@@ -12,21 +12,28 @@ export default class SRLContext extends Component {
   };
 
   state = {
-    isOpened: false
+    isOpened: false,
+    images: []
   };
 
   handleLightbox = () => {
     this.setState({ isOpened: !this.state.isOpened });
   };
 
+  grabImages = images => {
+    this.setState({ images });
+  };
+
   render() {
+    console.log(this.state.images);
     return (
       <Provider
         value={{
           isOpened: this.state.isOpened,
-          handleLightbox: this.handleLightbox
+          handleLightbox: this.handleLightbox,
+          grabImages: this.grabImages,
+          images: this.state.images
         }}>
-        {this.state.isOpened ? "TEST" : null}
         {this.props.children}
       </Provider>
     );

@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SRLContext, { Consumer } from "./SRL/SRLContext";
+import SRLContext from "./SRL/SRLContext";
 import { withContext } from "./SRL/SRLHoc";
+import SRLImagesContext from "./SRL/SRLImages";
 
 const SimpleReactLightbox = ({
   overlayColour,
@@ -29,7 +30,6 @@ SimpleReactLightbox.propTypes = {
   ]).isRequired
 };
 
-export { Consumer as SRLConsumer };
 export { withContext };
-
+export { SRLImagesContext as SRLImages };
 export default SimpleReactLightbox;
