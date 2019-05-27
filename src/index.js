@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import SRLContext from "./SRL/SRLContext";
 import { withContext } from "./SRL/SRLHoc";
 import SRLImagesContext from "./SRL/SRLImages";
+import SRLLightbox from "./SRL/SRLLightbox";
 
 const SimpleReactLightbox = ({
   overlayColour,
@@ -11,12 +12,16 @@ const SimpleReactLightbox = ({
   children
 }) => {
   return (
-    <SRLContext
-      overlayColour={overlayColour || "#000000"}
-      overlayOpacity={overlayOpacity || 0.8}
-      thumbnailGallery={thumbnailGallery || false}>
-      {children}
-    </SRLContext>
+    <React.Fragment>
+      <SRLContext
+        overlayColour={overlayColour || "#000000"}
+        overlayOpacity={overlayOpacity || 0.8}
+        thumbnailGallery={thumbnailGallery || false}
+      >
+        {children}
+        <SRLLightbox />
+      </SRLContext>
+    </React.Fragment>
   );
 };
 
