@@ -21,17 +21,21 @@ class SRLImagesContext extends Component {
     const content = this.imgContainer.current;
     const images = content.getElementsByTagName("img");
     const imagesArray = [...images];
+    imagesArray.map((i, index) => {
+      i.addEventListener("click", e => {
+        // We pass some argument to the function which are needed to update the state with the selected image
+        this.props.context.handleLightbox(
+          e.target.currentSrc,
+          e.target.alt,
+          e.target.id
+        );
+      });
+    });
     this.props.context.grabImages(imagesArray);
   }
 
   render() {
-    const { context } = this.props;
-    return (
-      <div ref={this.imgContainer}>
-        {context.isOpened ? "Heyyyy" : null}
-        {this.props.children}
-      </div>
-    );
+    return <div ref={this.imgContainer}>{this.props.children}</div>;
   }
 }
 

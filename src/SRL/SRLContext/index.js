@@ -13,11 +13,24 @@ export default class SRLContext extends Component {
 
   state = {
     isOpened: false,
-    images: []
+    images: [],
+    selectedImage: {
+      source: "",
+      description: "",
+      id: ""
+    }
   };
 
-  handleLightbox = () => {
-    this.setState({ isOpened: !this.state.isOpened });
+  handleLightbox = (img, alt, id) => {
+    this.setState(prevState => ({
+      ...prevState,
+      isOpened: !this.state.isOpened,
+      selectedImage: {
+        source: img,
+        description: alt,
+        id
+      }
+    }));
   };
 
   grabImages = images => {
@@ -32,7 +45,8 @@ export default class SRLContext extends Component {
           isOpened: this.state.isOpened,
           handleLightbox: this.handleLightbox,
           grabImages: this.grabImages,
-          images: this.state.images
+          images: this.state.images,
+          selectedImage: this.state.selectedImage
         }}>
         {this.props.children}
       </Provider>
