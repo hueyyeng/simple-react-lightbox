@@ -14,24 +14,33 @@ class SRLImagesContext extends Component {
 
   constructor() {
     super();
+    this.state = {
+      imagesArray: []
+    };
     this.imgContainer = React.createRef();
   }
 
   componentDidMount() {
     const content = this.imgContainer.current;
     const images = content.getElementsByTagName("img");
-    const imagesArray = [...images];
-    imagesArray.map((i, index) => {
-      i.addEventListener("click", e => {
-        // We pass some argument to the function which are needed to update the state with the selected image
-        this.props.context.handleLightbox(
-          e.target.currentSrc,
-          e.target.alt,
-          e.target.id
-        );
+    this.setState({ imagesArray: [...images] });
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (this.state.imagesArray !== prevState.imagesArray) {
+      this.state.imagesArray.map((i, index) => {
+        i.addEventListener("click", e => {
+          // We pass some argument to the function which are needed to update the state with the selected image
+          this.props.context.handleLightbox(
+            e.target.currentSrc,
+            e.target.alt,
+            e.target.id
+          );
+        });
+        return null;
       });
-    });
-    this.props.context.grabImages(imagesArray);
+      this.props.context.grabImages(this.state.imagesArray);
+    }
   }
 
   render() {

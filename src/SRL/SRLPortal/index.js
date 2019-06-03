@@ -1,24 +1,34 @@
+import { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-const Portal = ({ selector, isOpened, children }) => {
-  const lightboxDiv = document.createElement("div");
-  const rootDiv = document.getElementById("root");
-  if (selector === undefined || isOpened === false) {
-    const portal = document.getElementById(selector);
-    if (portal !== null) {
-      document.body.removeChild(portal);
-    }
-    return null;
-  } else {
+class Portal extends Component {
+  componentDidMount() {
+    let { selector } = this.props;
+    const lightboxDiv = document.createElement("div");
+    const rootDiv = document.getElementById("root");
     lightboxDiv.setAttribute("id", selector);
+    this.element = lightboxDiv;
     rootDiv.parentNode.insertBefore(lightboxDiv, rootDiv.nextSibling);
-    return ReactDOM.createPortal(children, lightboxDiv);
   }
-};
+
+  render() {
+    let { isOpened } = this.props;
+    if (this.element === undefined || isOpened === false) {
+      return null;
+    }
+
+    return ReactDOM.createPortal(this.props.children, this.element);
+  }
+}
 
 Portal.propTypes = {
-  selector: PropTypes.string
+  selector: PropTypes.string,
+  isOpened: PropTypes.bool,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired
 };
 
 export default Portal;
