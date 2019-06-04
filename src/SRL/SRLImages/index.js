@@ -29,8 +29,11 @@ class SRLImagesContext extends Component {
   componentDidUpdate(_, prevState) {
     if (this.state.imagesArray !== prevState.imagesArray) {
       this.state.imagesArray.map((i, index) => {
+        // Let's set an ID for the images that we will use for the next/prev image function
+        i.id = `img${index}`;
+        // Let's add an event listener that will actually trigger the function to open the lightbox when clicking on an image
         i.addEventListener("click", e => {
-          // We pass some argument to the function which are needed to update the state with the selected image
+          // We pass some argument to the function which are needed to update the context with the selected image
           this.props.context.handleLightbox(
             e.target.currentSrc,
             e.target.alt,
