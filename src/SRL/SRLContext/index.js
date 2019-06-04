@@ -38,7 +38,6 @@ export default class SRLContext extends Component {
   };
 
   render() {
-    console.log(this.state.images);
     return (
       <Provider
         value={{
@@ -46,7 +45,9 @@ export default class SRLContext extends Component {
           handleLightbox: this.handleLightbox,
           grabImages: this.grabImages,
           images: this.state.images,
-          selectedImage: this.state.selectedImage
+          selectedImage: this.state.selectedImage,
+          // We spread the props so that we can pass the configuration set by the user :)
+          ...this.props
         }}>
         {this.props.children}
       </Provider>
