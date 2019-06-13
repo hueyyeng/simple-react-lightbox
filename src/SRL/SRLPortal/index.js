@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
 class Portal extends Component {
+  // Let's create the div for the portal ourself so the user don't have to change the index.html file himself
   componentDidMount() {
     let { selector } = this.props;
     const lightboxDiv = document.createElement("div");

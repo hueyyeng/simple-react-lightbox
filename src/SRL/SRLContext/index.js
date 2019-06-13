@@ -1,17 +1,10 @@
-import React, { Component } from "react";
+import React, { useReducer } from "react";
 import PropTypes from "prop-types";
+let isEqual = require("lodash/isEqual");
+export const SRLCtxt = React.createContext();
 
-export const { Provider, Consumer } = React.createContext();
-
-export default class SRLContext extends Component {
-  static propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node
-    ]).isRequired
-  };
-
-  state = {
+const SRLContext = props => {
+  const initialState = {
     isOpened: false,
     images: [],
     selectedImage: {
@@ -21,36 +14,79 @@ export default class SRLContext extends Component {
     }
   };
 
-  handleLightbox = (img, alt, id) => {
-    this.setState(prevState => ({
-      ...prevState,
-      isOpened: !this.state.isOpened,
-      selectedImage: {
-        source: img,
-        description: alt,
-        id
-      }
-    }));
-  };
-
-  grabImages = images => {
-    this.setState({ images });
-  };
-
-  render() {
-    return (
-      <Provider
-        value={{
-          isOpened: this.state.isOpened,
-          handleLightbox: this.handleLightbox,
-          grabImages: this.grabImages,
-          images: this.state.images,
-          selectedImage: this.state.selectedImage,
-          // We spread the props so that we can pass the configuration set by the user :)
-          ...this.props
-        }}>
-        {this.props.children}
-      </Provider>
-    );
+  function reducer(state, action) {
+    switch (action.type) {
+      case "handleLightbox":
+        return {
+          ...state,
+          isOpened: true,
+          selectedImage: {
+            source: action.payload.img,
+            description: action.payload.alt,
+            id: action.payload.id
+          }
+        };
+      case "grabImages":
+        return {
+          ...state,
+          images: [...action.images]
+        };
+      case "handleCloseLightbox":
+        return {
+          ...state,
+          isOpened: false
+        };
+      default:
+        return state;
+    }
   }
-}
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const handleLightbox = (img, alt, id) => {
+    const payload = { img, alt, id };
+    if (!state.isOpened) {
+      if (!isEqual(state.selectedImage, payload)) {
+        dispatch({ type: "handleLightbox", payload });
+      }
+    }
+  };
+
+  const grabImages = images => {
+    // SUPER IMPORTANT TO AVOID A MEMORY LEAK
+    if (!state.isOpened) {
+      if (state.images.length < images.length) {
+        dispatch({ type: "grabImages", images });
+      }
+    }
+  };
+
+  function handleCloseLightbox() {
+    if (state.isOpened) {
+      dispatch({ type: "handleCloseLightbox" });
+    }
+  }
+
+  return (
+    <SRLCtxt.Provider
+      value={{
+        handleLightbox,
+        grabImages,
+        handleCloseLightbox,
+        ...state,
+        // We spread the props so that we can pass the configuration set by the user :)
+        ...props
+      }}>
+      {props.children}
+    </SRLCtxt.Provider>
+  );
+};
+
+export default SRLContext;
+
+SRLContext.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired
+};

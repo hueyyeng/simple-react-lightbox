@@ -2,12 +2,12 @@ import React from "react";
 import Portal from "../SRLPortal";
 import { withContext } from "../SRLHoc";
 import PropTypes from "prop-types";
+import SRLLightboxGallery from "../SRLLightboxGallery";
 
-function SRLLightbox(props) {
-  const { context } = props;
+function SRLLightbox({ context }) {
   return (
     <Portal selector="lightbox" isOpened={context.isOpened}>
-      <h1>Test</h1>
+      <SRLLightboxGallery {...context} />
     </Portal>
   );
 }
