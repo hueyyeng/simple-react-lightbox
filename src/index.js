@@ -1,16 +1,39 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SRLContext from "./SRL/SRLContext";
-import { withContext } from "./SRL/SRLHoc";
 import SRLImagesContext from "./SRL/SRLImages";
 import SRLLightbox from "./SRL/SRLLightbox";
+import { withContext } from "./SRL/SRLHoc"; // REMOVE SOON
+import { createGlobalStyle } from "styled-components";
 
-const SimpleReactLightbox = ({ overlayColour, thumbnailGallery, children }) => {
+const GlobalStyle = createGlobalStyle`
+  body {
+    #lightbox {
+      width: 0;
+      height: 0;
+    }
+    &.SRLOpened {
+      overflow: hidden;
+      margin-right: 15px;
+      #lightbox {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+`;
+
+const SimpleReactLightbox = ({ overlayColor, thumbnailGallery, children }) => {
   return (
     <React.Fragment>
+      <GlobalStyle />
       <SRLContext
-        overlayColour={overlayColour || "rgba(255, 255, 255, 0.8)"}
-        thumbnailGallery={thumbnailGallery || false}>
+        overlayColor={overlayColor || "rgba(255, 255, 255, 1)"}
+        thumbnailGallery={thumbnailGallery || false}
+      >
         {children}
         <SRLLightbox />
       </SRLContext>
@@ -19,7 +42,7 @@ const SimpleReactLightbox = ({ overlayColour, thumbnailGallery, children }) => {
 };
 
 SimpleReactLightbox.propTypes = {
-  overlayColour: PropTypes.string,
+  overlayColor: PropTypes.string,
   thumbnailGallery: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -27,6 +50,6 @@ SimpleReactLightbox.propTypes = {
   ]).isRequired
 };
 
-export { withContext };
+export { withContext }; // REMOVE SOON
 export { SRLImagesContext as SRLImages };
 export default SimpleReactLightbox;

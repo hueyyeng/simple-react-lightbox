@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Portal from "../SRLPortal";
-import { withContext } from "../SRLHoc";
 import PropTypes from "prop-types";
-import SRLLightboxGallery from "../SRLLightboxGallery";
+import SRLLightboxGallery from "./SRLLightboxGallery";
+import { SRLCtxt } from "../SRLContext";
 
-function SRLLightbox({ context }) {
+function SRLLightbox() {
+  const context = useContext(SRLCtxt);
   return (
     <Portal selector="lightbox" isOpened={context.isOpened}>
       <SRLLightboxGallery {...context} />
@@ -16,4 +17,4 @@ SRLLightbox.propTypes = {
   context: PropTypes.object
 };
 
-export default withContext(SRLLightbox);
+export default SRLLightbox;

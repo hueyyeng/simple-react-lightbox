@@ -34,7 +34,7 @@ const Content = () => {
         iusto ea beatae perspiciatis fugit soluta nihil facilis inventore culpa.
       </p>
       <div>
-        <img src="https://picsum.photos/900" alt="test alt tag 4" />
+        <img src="https://picsum.photos/2000/1600" alt="test alt tag 4" />
       </div>
     </SRLImages>
   );
