@@ -29,7 +29,7 @@ const SRLContext = props => {
       case "grabImages":
         return {
           ...state,
-          images: [...action.images]
+          images: Array.prototype.slice.call(action.images) // IE 11 -_-
         };
       case "handleCloseLightbox":
         return {
@@ -76,7 +76,8 @@ const SRLContext = props => {
         ...state,
         // We spread the props so that we can pass the configuration set by the user :)
         ...props
-      }}>
+      }}
+    >
       {props.children}
     </SRLCtxt.Provider>
   );

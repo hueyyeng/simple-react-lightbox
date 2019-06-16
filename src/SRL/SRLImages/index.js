@@ -1,10 +1,4 @@
-import React, {
-  Component,
-  useState,
-  useContext,
-  useRef,
-  useEffect
-} from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { SRLCtxt } from "../SRLContext";
 
@@ -21,20 +15,15 @@ const SRLImagesContext = props => {
     let collectedImages = imagesContainer.current.getElementsByTagName("img");
 
     if (collectedImages.length > 0) {
-      console.log(context);
       setImages(collectedImages);
       if (images.length > 0) {
-        const imagesArray = [...images];
+        const imagesArray = Array.prototype.slice.call(images); // IE 11 -_-
         imagesArray.map((i, index) => {
           // Let's set an ID for the images that we will use for the next/prev image function
           i.id = `img${index}`;
           // Let's add an event listener that will actually trigger the function to open the lightbox when clicking on an image
           i.addEventListener("click", e => {
-            context.handleLightbox(
-              e.target.currentSrc,
-              e.target.alt,
-              e.target.id
-            );
+            context.handleLightbox(e.target.src, e.target.alt, e.target.id);
           });
           return null;
         });

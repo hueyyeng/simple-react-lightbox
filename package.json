@@ -8,6 +8,7 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
+  "browserslist": "> 0.25%, not op_mini all, not dead, IE 11",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
@@ -27,7 +28,7 @@
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.4.5",
     "@babel/plugin-external-helpers": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-decorators": "^7.0.0",
@@ -45,7 +46,7 @@
     "@babel/plugin-proposal-throw-expressions": "^7.0.0",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-import-meta": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@svgr/rollup": "^2.4.1",
     "babel-eslint": "^9.0.0",
@@ -62,18 +63,21 @@
     "eslint-plugin-standard": "^3.1.0",
     "gh-pages": "^1.2.0",
     "lodash": "^4.17.11",
-    "react-scripts": "^1.1.4"
+    "react-scripts": "^1.1.4",
+    "rollup": "^1.15.6",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.0.3",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-url": "^2.2.2",
+    "styled-components": "^4.3.1"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "rollup": "^1.15.3",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^10.0.0",
-    "rollup-plugin-node-resolve": "^5.0.2",
-    "rollup-plugin-peer-deps-external": "^2.2.0",
-    "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-url": "^2.2.2"
+    "core-js": "3",
+    "regenerator-runtime": "^0.13.2"
   }
 }
