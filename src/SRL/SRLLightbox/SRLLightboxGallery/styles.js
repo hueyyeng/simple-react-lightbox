@@ -46,9 +46,60 @@ const SRLLightboxImage = styled.img`
   user-select: none;
 `;
 
+const StyledButton = styled.button`
+  border: none;
+  display: block;
+  height: 40px;
+  width: 40px;
+  overflow: visible;
+  position: relative;
+  background-color: rgba(30, 30, 36, 0.8);
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s ease;
+  z-index: 1;
+  &:focus {
+    outline: none;
+  }
+  svg {
+    display: block;
+    height: 100%;
+    overflow: visible;
+    position: relative;
+    width: 100%;
+    path {
+      fill: currentColor;
+    }
+  }
+  &:hover {
+    color: rgba(255, 255, 255, 1);
+  }
+`;
+
+const SRRLLightboxCloseIcon = styled(StyledButton)`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
+
+const SRLLightboxNextIcon = styled(StyledButton)`
+  position: absolute;
+  top: calc(50% - 50px);
+  right: 10px;
+`;
+
+const SRLLightboxPrevIcon = styled(StyledButton)`
+  position: absolute;
+  top: calc(50% - 50px);
+  left: 10px;
+`;
+
 export {
   SRLLightboxGalleryStage,
   SRLLightboxSlide,
   SRLLightboxContent,
-  SRLLightboxImage
+  SRLLightboxImage,
+  SRRLLightboxCloseIcon,
+  SRLLightboxNextIcon,
+  SRLLightboxPrevIcon
 };

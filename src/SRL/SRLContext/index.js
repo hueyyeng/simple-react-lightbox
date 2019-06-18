@@ -76,8 +76,7 @@ const SRLContext = props => {
         ...state,
         // We spread the props so that we can pass the configuration set by the user :)
         ...props
-      }}
-    >
+      }}>
       {props.children}
     </SRLCtxt.Provider>
   );
