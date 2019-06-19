@@ -100,6 +100,7 @@ const SRLLightboxGallery = ({
       {/* TODO: CREATE A COMPONENT FOR THE CHOOSEN IMAGE */}
       <SRLLightboxSlideComponent
         thumbnailGallery={thumbnailGallery}
+        handleCloseLightbox={controls.handleCloseLightbox}
         images={images}
         {...currentImage}
       />
