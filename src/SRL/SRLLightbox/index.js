@@ -7,7 +7,7 @@ import { SRLCtxt } from "../SRLContext";
 function SRLLightbox() {
   const context = useContext(SRLCtxt);
   return (
-    <Portal selector="lightbox" isOpened={context.isOpened}>
+    <Portal selector="SRLLightbox" isOpened={context.isOpened}>
       <SRLLightboxGallery {...context} />
     </Portal>
   );

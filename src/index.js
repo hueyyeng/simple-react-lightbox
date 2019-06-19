@@ -31,9 +31,8 @@ const SimpleReactLightbox = ({ overlayColor, thumbnailGallery, children }) => {
     <React.Fragment>
       <GlobalStyle />
       <SRLContext
-        overlayColor={overlayColor || "rgba(255, 255, 255, 1)"}
-        thumbnailGallery={thumbnailGallery || false}
-      >
+        overlayColor={overlayColor || "rgba(0, 0, 0, 0.8)"}
+        thumbnailGallery={thumbnailGallery || false}>
         {children}
         <SRLLightbox />
       </SRLContext>

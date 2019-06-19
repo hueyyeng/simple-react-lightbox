@@ -8,42 +8,59 @@ const SRLLightboxGalleryStage = styled.div`
   top: 0;
   left: 0;
   z-index: 9991;
-`;
-
-const SRLLightboxSlide = styled.div`
-  padding: ${props => (props.thumbnailGallery ? "40px 0 80px 0" : "40px 0")};
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
+  .image {
+    width: 80vw;
+    height: 80vh;
+    img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+    }
+  }
 `;
 
 const SRLLightboxContent = styled.div`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 100%;
-  max-height: 100%;
-  width: ${props =>
-    props.thumbnailGallery ? "calc(100vw - 80px)" : "calc(100vw - 40px)"};
-  height: ${props =>
-    props.thumbnailGallery ? "calc(100vh - 80px)" : "calc(100vh - 40px)"};
+`;
+
+const SRLLightboxImageContainer = styled.div`
+  width: 80vw;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const SRLLightboxImage = styled.img`
   background: transparent;
   border: 0;
-  max-height: 100%;
+  display: block;
   max-width: 100%;
-  margin: 0;
-  padding: 0;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  margin: auto;
+  position: relative;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+`;
+
+const SRRLLightboxCaption = styled.span`
+  color: white;
+  font-family: inherit;
+  margin-top: 20px;
 `;
 
 const StyledButton = styled.button`
@@ -94,12 +111,20 @@ const SRLLightboxPrevIcon = styled(StyledButton)`
   left: 10px;
 `;
 
+const SRLLightboxThubnailGallery = styled.div`
+  display: flex;
+  margin-top: auto;
+  color: white;
+`;
+
 export {
   SRLLightboxGalleryStage,
-  SRLLightboxSlide,
   SRLLightboxContent,
+  SRLLightboxImageContainer,
   SRLLightboxImage,
+  SRRLLightboxCaption,
   SRRLLightboxCloseIcon,
   SRLLightboxNextIcon,
-  SRLLightboxPrevIcon
+  SRLLightboxPrevIcon,
+  SRLLightboxThubnailGallery
 };
