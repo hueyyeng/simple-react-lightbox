@@ -8,10 +8,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <SimpleReactLightbox
-          overlayColor="rgba(198, 197, 185, 0.9);"
-          thumbnailGallery={true}
-        >
+        <SimpleReactLightbox thumbnailGallery={true}>
           <Heder />
           <hr />
           <Content />
