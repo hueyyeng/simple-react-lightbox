@@ -13,25 +13,18 @@ function SRLLightboxSlideComponent({
   description,
   thumbnailGallery,
   images,
-  handleCloseLightbox
+  id,
+  handleCloseLightbox,
+  handleCurrentImage
 }) {
   const SRLImageContainerRef = useRef();
+  // console.log(SRLImageContainerRef);
 
-  useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
+  // useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
 
   return (
-    // <SRLLightboxContent
-    //   description={description}
-    //   thumbnailGallery={thumbnailGallery}>
-    //   <SRLLightboxImage className="SRLImage" src={source} alt={description} />
-    //   <SRRLLightboxCaption className="SRLCaption">
-    //     {description}
-    //   </SRRLLightboxCaption>
-    //   {thumbnailGallery && <SRLLightboxThubnailGallery images={images} />}
-    // </SRLLightboxContent>
-
     <SRLLightboxContent className="SRLContent">
-      <SRLLightboxImageContainer className="SRLImageContainer">
+      <SRLLightboxImageContainer thumbnailGallery className="SRLImageContainer">
         <SRLLightboxImage
           ref={SRLImageContainerRef}
           className="SRLImage"
@@ -42,39 +35,53 @@ function SRLLightboxSlideComponent({
       <SRRLLightboxCaption className="caption">
         {description}
       </SRRLLightboxCaption>
+      {thumbnailGallery && (
+        <SRLLightboxThubnailGallery
+          handleCurrentImage={handleCurrentImage}
+          currentId={id}
+          images={images || []}
+        />
+      )}
     </SRLLightboxContent>
   );
   // Hook
 
-  function useOnClickOutside(ref, handler) {
-    useEffect(
-      () => {
-        const listener = event => {
-          // Do nothing if clicking ref's element or descendent elements
-          if (!ref.current || ref.current.contains(event.target)) {
-            return;
-          }
+  // function useOnClickOutside(ref, handler) {
+  //   useEffect(
+  //     () => {
+  //       const listener = event => {
+  //         // Do nothing if clicking ref's element or descendent elements
+  //         console.log(event);
+  //         if (
+  //           !ref.current ||
+  //           ref.current.contains(event.target) ||
+  //           event.target.classList.contains("SRLNextButton") ||
+  //           event.target.classList.contains("SRLPrevButton") ||
+  //           event.target.classList.contains("SRLCloseButton")
+  //         ) {
+  //           return;
+  //         }
 
-          handler(event);
-        };
+  //         handler(event);
+  //       };
 
-        document.addEventListener("mousedown", listener);
-        document.addEventListener("touchstart", listener);
+  //       document.addEventListener("mousedown", listener);
+  //       document.addEventListener("touchstart", listener);
 
-        return () => {
-          document.removeEventListener("mousedown", listener);
-          document.removeEventListener("touchstart", listener);
-        };
-      },
-      // Add ref and handler to effect dependencies
-      // It's worth noting that because passed in handler is a new ...
-      // ... function on every render that will cause this effect ...
-      // ... callback/cleanup to run every render. It's not a big deal ...
-      // ... but to optimize you can wrap handler in useCallback before ...
-      // ... passing it into this hook.
-      [ref, handler]
-    );
-  }
+  //       return () => {
+  //         document.removeEventListener("mousedown", listener);
+  //         document.removeEventListener("touchstart", listener);
+  //       };
+  //     },
+  //     // Add ref and handler to effect dependencies
+  //     // It's worth noting that because passed in handler is a new ...
+  //     // ... function on every render that will cause this effect ...
+  //     // ... callback/cleanup to run every render. It's not a big deal ...
+  //     // ... but to optimize you can wrap handler in useCallback before ...
+  //     // ... passing it into this hook.
+  //     [ref, handler]
+  //   );
+  // }
 }
 
 SRLLightboxSlideComponent.propTypes = {
@@ -82,7 +89,8 @@ SRLLightboxSlideComponent.propTypes = {
   description: PropTypes.string,
   thumbnailGallery: PropTypes.bool,
   images: PropTypes.array,
-  handleCloseLightbox: PropTypes.func
+  handleCloseLightbox: PropTypes.func,
+  id: PropTypes.string
 };
 
 export default SRLLightboxSlideComponent;

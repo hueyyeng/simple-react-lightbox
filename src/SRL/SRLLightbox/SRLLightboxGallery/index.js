@@ -4,6 +4,7 @@ import { SRLLightboxGalleryStage } from "./styles";
 import SRLLightboxSlideComponent from "./SRLLightboxSlide";
 import SRLLightboxControls from "./SRLLightboxControls";
 let _findIndex = require("lodash/findIndex");
+let _find = require("lodash/find");
 
 const SRLLightboxGallery = ({
   isOpened,
@@ -31,7 +32,9 @@ const SRLLightboxGallery = ({
 
   // Handle Current Image
   function handleCurrentImage(id) {
-    const selectedImage = imagesGallery.filter(i => i.id === id);
+    const selectedImage = _find(imagesGallery, function(i) {
+      return i.id === id;
+    });
     setCurrentImage({
       source: selectedImage.src,
       description: selectedImage.alt,
@@ -96,16 +99,13 @@ const SRLLightboxGallery = ({
   return (
     <SRLLightboxGalleryStage overlayColor={overlayColor}>
       <SRLLightboxControls {...controls} />
-
-      {/* TODO: CREATE A COMPONENT FOR THE CHOOSEN IMAGE */}
       <SRLLightboxSlideComponent
         thumbnailGallery={thumbnailGallery}
         handleCloseLightbox={controls.handleCloseLightbox}
+        handleCurrentImage={controls.handleCurrentImage}
         images={images}
         {...currentImage}
       />
-
-      {/* TODO: CREATE A COMPONENT FOR THE GALLERY IF SELECTED */}
     </SRLLightboxGalleryStage>
   );
 };

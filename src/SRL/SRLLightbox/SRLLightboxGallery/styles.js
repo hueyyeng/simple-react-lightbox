@@ -8,37 +8,29 @@ const SRLLightboxGalleryStage = styled.div`
   top: 0;
   left: 0;
   z-index: 9991;
-  .image {
-    width: 80vw;
-    height: 80vh;
-    img {
-      display: block;
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-    }
-  }
 `;
 
 const SRLLightboxContent = styled.div`
-  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   top: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const SRLLightboxImageContainer = styled.div`
-  width: 80vw;
-  height: 80vh;
+  width: ${props => (props.thumbnailGallery ? "65vw" : "80vw")};
+  height: ${props => (props.thumbnailGallery ? "65vh" : "80vh")};
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin-top: auto;
 `;
 
 const SRLLightboxImage = styled.img`
@@ -57,10 +49,12 @@ const SRLLightboxImage = styled.img`
   user-select: none;
 `;
 
-const SRRLLightboxCaption = styled.span`
+const SRRLLightboxCaption = styled.div`
   color: white;
   font-family: inherit;
   margin-top: 20px;
+  width: 100%;
+  text-align: center;
 `;
 
 const StyledButton = styled.button`
@@ -74,7 +68,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   color: rgba(255, 255, 255, 0.8);
   transition: color 0.3s ease;
-  z-index: 1;
+  z-index: 9992;
   &:focus {
     outline: none;
   }
@@ -113,8 +107,32 @@ const SRLLightboxPrevIcon = styled(StyledButton)`
 
 const SRLLightboxThubnailGallery = styled.div`
   display: flex;
-  margin-top: auto;
   color: white;
+  height: 80px;
+  width: 100%;
+  justify-content: center;
+  align-self: flex-end;
+`;
+
+const SRLLightboxThubnailGalleryImage = styled.a`
+  width: 100px;
+  height: 80px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0 1px;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  display: block;
+  cursor: pointer;
+  &:first-child {
+    margin: 0;
+  }
+  &:last-child {
+    margin: 0;
+  }
+  &.SRLSelected {
+    opacity: 1;
+  }
 `;
 
 export {
@@ -126,5 +144,6 @@ export {
   SRRLLightboxCloseIcon,
   SRLLightboxNextIcon,
   SRLLightboxPrevIcon,
-  SRLLightboxThubnailGallery
+  SRLLightboxThubnailGallery,
+  SRLLightboxThubnailGalleryImage
 };
