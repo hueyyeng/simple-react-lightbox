@@ -96,7 +96,7 @@ function SRLLightboxSlideComponent({
 }
 
 SRLLightboxSlideComponent.propTypes = {
-  source: PropTypes.string,
+  source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
   showThumbnails: PropTypes.bool,
   showCaption: PropTypes.bool,
