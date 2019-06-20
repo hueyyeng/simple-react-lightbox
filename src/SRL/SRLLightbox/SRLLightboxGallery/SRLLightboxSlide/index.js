@@ -20,7 +20,7 @@ function SRLLightboxSlideComponent({
   const SRLImageContainerRef = useRef();
   // console.log(SRLImageContainerRef);
 
-  // useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
+  useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
 
   return (
     <SRLLightboxContent className="SRLContent">
@@ -46,42 +46,45 @@ function SRLLightboxSlideComponent({
   );
   // Hook
 
-  // function useOnClickOutside(ref, handler) {
-  //   useEffect(
-  //     () => {
-  //       const listener = event => {
-  //         // Do nothing if clicking ref's element or descendent elements
-  //         console.log(event);
-  //         if (
-  //           !ref.current ||
-  //           ref.current.contains(event.target) ||
-  //           event.target.classList.contains("SRLNextButton") ||
-  //           event.target.classList.contains("SRLPrevButton") ||
-  //           event.target.classList.contains("SRLCloseButton")
-  //         ) {
-  //           return;
-  //         }
+  function useOnClickOutside(ref, handler) {
+    useEffect(
+      () => {
+        const listener = event => {
+          // Do nothing if clicking ref's element or descendent elements
+          console.log(event.button);
+          if (
+            !ref.current ||
+            ref.current.contains(event.target) ||
+            event.target.classList.contains("SRLNextButton") ||
+            event.target.classList.contains("SRLPrevButton") ||
+            event.target.classList.contains("SRLCloseButton") ||
+            event.target.classList.contains("SRLThumbnailGallery") ||
+            event.target.classList.contains("SRLThumb") ||
+            event.button !== 0
+          ) {
+            return;
+          }
 
-  //         handler(event);
-  //       };
+          handler(event);
+        };
 
-  //       document.addEventListener("mousedown", listener);
-  //       document.addEventListener("touchstart", listener);
+        document.addEventListener("mousedown", listener);
+        document.addEventListener("touchstart", listener);
 
-  //       return () => {
-  //         document.removeEventListener("mousedown", listener);
-  //         document.removeEventListener("touchstart", listener);
-  //       };
-  //     },
-  //     // Add ref and handler to effect dependencies
-  //     // It's worth noting that because passed in handler is a new ...
-  //     // ... function on every render that will cause this effect ...
-  //     // ... callback/cleanup to run every render. It's not a big deal ...
-  //     // ... but to optimize you can wrap handler in useCallback before ...
-  //     // ... passing it into this hook.
-  //     [ref, handler]
-  //   );
-  // }
+        return () => {
+          document.removeEventListener("mousedown", listener);
+          document.removeEventListener("touchstart", listener);
+        };
+      },
+      // Add ref and handler to effect dependencies
+      // It's worth noting that because passed in handler is a new ...
+      // ... function on every render that will cause this effect ...
+      // ... callback/cleanup to run every render. It's not a big deal ...
+      // ... but to optimize you can wrap handler in useCallback before ...
+      // ... passing it into this hook.
+      [ref, handler]
+    );
+  }
 }
 
 SRLLightboxSlideComponent.propTypes = {
@@ -90,6 +93,7 @@ SRLLightboxSlideComponent.propTypes = {
   thumbnailGallery: PropTypes.bool,
   images: PropTypes.array,
   handleCloseLightbox: PropTypes.func,
+  handleCurrentImage: PropTypes.func,
   id: PropTypes.string
 };
 
