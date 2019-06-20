@@ -20,7 +20,7 @@ const Content = () => {
       <img src="https://picsum.photos/400" alt="test alt tag" />
       <img src="https://picsum.photos/500" alt="test alt tag 1" />
       <p>
-        <img src="https://picsum.photos/600" />
+        <img src="https://picsum.photos/600" alt="test alt tag 3" />
       </p>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione aperiam
@@ -35,9 +35,9 @@ const Content = () => {
       </p>
       <div>
         <img src="https://picsum.photos/2000/1600" alt="test alt tag 4" />
-        <img src="https://picsum.photos/3000/3000" />
+        <img src="https://picsum.photos/3000/3000" alt="test alt tag 3" />
         <img src="https://picsum.photos/1920/1080" alt="test alt tag 5" />
-        <img src="https://picsum.photos/2000/1000" />
+        <img src="https://picsum.photos/2000/1000" alt="test alt tag 3" />
       </div>
     </SRLImages>
   );

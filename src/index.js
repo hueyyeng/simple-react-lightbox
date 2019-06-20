@@ -26,13 +26,19 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const SimpleReactLightbox = ({ overlayColor, thumbnailGallery, children }) => {
+const SimpleReactLightbox = ({
+  overlayColor,
+  showCaption,
+  showThumbnails,
+  children
+}) => {
   return (
     <React.Fragment>
       <GlobalStyle />
       <SRLContext
         overlayColor={overlayColor || "rgba(0, 0, 0, 0.8)"}
-        thumbnailGallery={thumbnailGallery || false}>
+        showCaption={showCaption || false}
+        showThumbnails={showThumbnails || false}>
         {children}
         <SRLLightbox />
       </SRLContext>
@@ -42,7 +48,8 @@ const SimpleReactLightbox = ({ overlayColor, thumbnailGallery, children }) => {
 
 SimpleReactLightbox.propTypes = {
   overlayColor: PropTypes.string,
-  thumbnailGallery: PropTypes.bool,
+  showThumbnails: PropTypes.bool,
+  showCaption: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node

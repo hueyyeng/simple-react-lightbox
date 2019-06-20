@@ -25,12 +25,12 @@ const SRLLightboxContent = styled.div`
 `;
 
 const SRLLightboxImageContainer = styled.div`
-  width: ${props => (props.thumbnailGallery ? "65vw" : "80vw")};
-  height: ${props => (props.thumbnailGallery ? "65vh" : "80vh")};
+  width: ${props => (props.showThumbnails ? "70vw" : "80vw")};
+  height: ${props => (props.showThumbnails ? "70vh" : "80vh")};
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: auto;
+  margin-top: ${props => (props.showCaption && props.showCaption ? 0 : "auto")};
 `;
 
 const SRLLightboxImage = styled.img`

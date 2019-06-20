@@ -11,7 +11,7 @@ const SRLLightboxThubnailGalleryComponent = ({
   handleCurrentImage
 }) => {
   return (
-    <SRLLightboxThubnailGallery className="SRLThumbnailGallery">
+    <SRLLightboxThubnailGallery className="SRLThumbnails">
       {images.map((i, index) => {
         return (
           <SRLLightboxThubnailGalleryImage

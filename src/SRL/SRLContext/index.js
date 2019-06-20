@@ -9,7 +9,7 @@ const SRLContext = props => {
     images: [],
     selectedImage: {
       source: "",
-      description: "",
+      caption: "",
       id: ""
     }
   };
@@ -22,7 +22,7 @@ const SRLContext = props => {
           isOpened: true,
           selectedImage: {
             source: action.payload.img,
-            description: action.payload.alt,
+            caption: action.payload.alt,
             id: action.payload.id
           }
         };
