@@ -1,27 +1,16 @@
-import { Component } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-class Portal extends Component {
-  // Let's create the div for the portal ourself so the user don't have to change the index.html file himself
-  componentDidMount() {
-    let { selector } = this.props;
-    const lightboxDiv = document.createElement("div");
-    const rootDiv = document.getElementById("root");
-    lightboxDiv.setAttribute("id", selector);
-    this.element = lightboxDiv;
-    rootDiv.parentNode.insertBefore(lightboxDiv, rootDiv.nextSibling);
+const Portal = ({ isOpened, selector, children }) => {
+  const modalMarkup = <div id={selector}>{children}</div>;
+  if (!isOpened || selector === undefined) {
+    return null;
   }
+  return ReactDOM.createPortal(modalMarkup, document.body);
+};
 
-  render() {
-    let { isOpened } = this.props;
-    if (this.element === undefined || isOpened === false) {
-      return null;
-    }
-
-    return ReactDOM.createPortal(this.props.children, this.element);
-  }
-}
+export default Portal;
 
 Portal.propTypes = {
   selector: PropTypes.string,
@@ -31,5 +20,3 @@ Portal.propTypes = {
     PropTypes.node
   ]).isRequired
 };
-
-export default Portal;
