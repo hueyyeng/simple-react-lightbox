@@ -36,9 +36,9 @@ const SimpleReactLightbox = ({
     <React.Fragment>
       <GlobalStyle />
       <SRLContext
-        overlayColor={overlayColor || "rgba(0, 0, 0, 0.8)"}
-        showCaption={showCaption || false}
-        showThumbnails={showThumbnails || false}>
+        overlayColor={overlayColor}
+        showCaption={showCaption}
+        showThumbnails={showThumbnails}>
         {children}
         <SRLLightbox />
       </SRLContext>
@@ -54,6 +54,12 @@ SimpleReactLightbox.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired
+};
+
+SRLContext.defaultProps = {
+  overlayColor: "rgba(0, 0, 0, 0.8)",
+  showCaption: false,
+  showThumbnails: false
 };
 
 export { withContext }; // REMOVE SOON
