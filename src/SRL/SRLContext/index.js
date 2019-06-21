@@ -10,7 +10,9 @@ const SRLContext = props => {
     selectedImage: {
       source: "",
       caption: "",
-      id: ""
+      id: "",
+      width: "",
+      height: ""
     }
   };
 
@@ -23,7 +25,9 @@ const SRLContext = props => {
           selectedImage: {
             source: action.payload.img,
             caption: action.payload.alt,
-            id: action.payload.id
+            id: action.payload.id,
+            width: action.payload.width,
+            height: action.payload.height
           }
         };
       case "grabImages":
@@ -43,8 +47,8 @@ const SRLContext = props => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handleLightbox = (img, alt, id) => {
-    const payload = { img, alt, id };
+  const handleLightbox = (img, alt, id, width, height) => {
+    const payload = { img, alt, id, width, height };
     if (!state.isOpened) {
       if (!isEqual(state.selectedImage, payload)) {
         dispatch({ type: "handleLightbox", payload });

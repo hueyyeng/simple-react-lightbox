@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
@@ -11,6 +12,7 @@ import {
 function SRLLightboxSlideComponent({
   source,
   caption,
+  height,
   showThumbnails,
   showCaption,
   images,
@@ -29,12 +31,17 @@ function SRLLightboxSlideComponent({
         showThumbnails
         showCaption
         className="SRLImageContainer">
-        <SRLLightboxImage
-          ref={SRLImageContainerRef}
-          className="SRLImage"
-          src={source}
-          alt={caption}
-        />
+        <TransitionGroup id="items">
+          <CSSTransition key={id} classNames="image-transition" timeout={500}>
+            <SRLLightboxImage
+              ref={SRLImageContainerRef}
+              className="SRLImage"
+              src={source}
+              alt={caption}
+              height={height}
+            />
+          </CSSTransition>
+        </TransitionGroup>
       </SRLLightboxImageContainer>
 
       {showCaption && (
@@ -103,7 +110,8 @@ SRLLightboxSlideComponent.propTypes = {
   images: PropTypes.array,
   handleCloseLightbox: PropTypes.func,
   handleCurrentImage: PropTypes.func,
-  id: PropTypes.string
+  id: PropTypes.string,
+  height: PropTypes.number
 };
 
 export default SRLLightboxSlideComponent;

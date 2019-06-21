@@ -2,8 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-const Portal = ({ isOpened, selector, children }) => {
-  const modalMarkup = <div id={selector}>{children}</div>;
+const Portal = ({ isOpened, selector, children, className }) => {
+  const modalMarkup = (
+    <div id={selector} className={className}>
+      {children}
+    </div>
+  );
   if (!isOpened || selector === undefined) {
     return null;
   }

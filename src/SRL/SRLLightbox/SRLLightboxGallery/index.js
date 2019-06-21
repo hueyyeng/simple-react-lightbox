@@ -25,7 +25,9 @@ const SRLLightboxGallery = ({
       setCurrentImage({
         source: imagesGallery[0].src,
         caption: imagesGallery[0].alt,
-        id: imagesGallery[0].id
+        id: imagesGallery[0].id,
+        width: imagesGallery[0].width,
+        height: imagesGallery[0].height
       });
     }
     // Add a class to the body to remove the overflow and compensate for the scroll-bar margin
@@ -49,7 +51,9 @@ const SRLLightboxGallery = ({
     setCurrentImage({
       source: selectedImage.src,
       caption: selectedImage.alt,
-      id: selectedImage.id
+      id: selectedImage.id,
+      width: selectedImage.width,
+      height: selectedImage.height
     });
   }
 
@@ -61,11 +65,13 @@ const SRLLightboxGallery = ({
       return i.id === id;
     });
     /* The next image will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to he first image */
-    const nextimage = imagesGallery[currentPosition + 1] || imagesGallery[0];
+    const nextImage = imagesGallery[currentPosition + 1] || imagesGallery[0];
     setCurrentImage({
-      source: nextimage.src,
-      caption: nextimage.alt,
-      id: nextimage.id
+      source: nextImage.src,
+      caption: nextImage.alt,
+      id: nextImage.id,
+      width: nextImage.width,
+      height: nextImage.height
     });
   }
 
@@ -78,13 +84,15 @@ const SRLLightboxGallery = ({
       return i.id === id;
     });
     /* The prev image will be the prev item in the array but it could be "undefined" as it goes negative. If it does we need to start from the last image. */
-    const nextimage =
+    const prevImage =
       imagesGallery[currentPosition - 1] ||
       imagesGallery[imagesGallery.length - 1];
     setCurrentImage({
-      source: nextimage.src,
-      caption: nextimage.alt,
-      id: nextimage.id
+      source: prevImage.src,
+      caption: prevImage.alt,
+      id: prevImage.id,
+      width: prevImage.width,
+      height: prevImage.height
     });
   }
 
