@@ -27,18 +27,19 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const SimpleReactLightbox = ({
-  overlayColor,
-  showCaption,
-  showThumbnails,
+  overlaycolor,
+  showcaption,
+  showthumbnails,
   children
 }) => {
   return (
     <React.Fragment>
       <GlobalStyle />
       <SRLContext
-        overlayColor={overlayColor}
-        showCaption={showCaption}
-        showThumbnails={showThumbnails}>
+        overlaycolor={overlaycolor}
+        showcaption={showcaption}
+        showthumbnails={showthumbnails}
+      >
         {children}
         <SRLLightbox />
       </SRLContext>
@@ -47,9 +48,9 @@ const SimpleReactLightbox = ({
 };
 
 SimpleReactLightbox.propTypes = {
-  overlayColor: PropTypes.string,
-  showThumbnails: PropTypes.bool,
-  showCaption: PropTypes.bool,
+  overlaycolor: PropTypes.string,
+  showthumbnails: PropTypes.bool,
+  showcaption: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
@@ -57,9 +58,9 @@ SimpleReactLightbox.propTypes = {
 };
 
 SRLContext.defaultProps = {
-  overlayColor: "rgba(0, 0, 0, 0.8)",
-  showCaption: false,
-  showThumbnails: false
+  overlaycolor: "rgba(0, 0, 0, 0.8)",
+  showcaption: false,
+  showthumbnails: false
 };
 
 export { withContext }; // REMOVE SOON

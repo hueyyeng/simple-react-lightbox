@@ -9,11 +9,11 @@ let _find = require("lodash/find");
 const SRLLightboxGallery = ({
   isOpened,
   handleCloseLightbox,
-  overlayColor,
+  overlaycolor,
   images,
   selectedImage,
-  showThumbnails,
-  showCaption
+  showthumbnails,
+  showcaption
 }) => {
   const [currentImage, setCurrentImage] = useState(selectedImage);
   const [imagesGallery, setimagesGallery] = useState(images);
@@ -41,7 +41,7 @@ const SRLLightboxGallery = ({
       document.body.classList.remove("SRLOpened");
       document.removeEventListener("keydown", handleLightboxWithKeys, false);
     };
-  }, [isOpened]);
+  }, [handleLightboxWithKeys, imagesGallery, isOpened, selectedImage.id]);
 
   // Handle Current Image
   function handleCurrentImage(id) {
@@ -116,11 +116,11 @@ const SRLLightboxGallery = ({
   };
 
   return (
-    <SRLLightboxGalleryStage overlayColor={overlayColor}>
+    <SRLLightboxGalleryStage overlaycolor={overlaycolor}>
       <SRLLightboxControls {...controls} />
       <SRLLightboxSlideComponent
-        showThumbnails={showThumbnails}
-        showCaption={showCaption}
+        showthumbnails={showthumbnails}
+        showcaption={showcaption}
         handleCloseLightbox={controls.handleCloseLightbox}
         handleCurrentImage={controls.handleCurrentImage}
         images={images}
@@ -133,9 +133,9 @@ const SRLLightboxGallery = ({
 SRLLightboxGallery.propTypes = {
   isOpened: PropTypes.bool,
   images: PropTypes.array,
-  overlayColor: PropTypes.string,
-  showThumbnails: PropTypes.bool,
-  showCaption: PropTypes.bool,
+  overlaycolor: PropTypes.string,
+  showthumbnails: PropTypes.bool,
+  showcaption: PropTypes.bool,
   selectedImage: PropTypes.object,
   handleCloseLightbox: PropTypes.func
 };

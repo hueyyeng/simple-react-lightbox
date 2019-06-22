@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import { animated } from "react-spring";
 
-const SRLLightboxGalleryStage = styled.div`
-  background-color: ${props => props.overlayColor};
+const SRLLightboxGalleryStage = styled(animated.div)`
+  background-color: ${props => props.overlaycolor};
   position: fixed;
   width: 100%;
   height: 100%;
@@ -25,12 +26,12 @@ const SRLLightboxContent = styled.div`
 `;
 
 const SRLLightboxImageContainer = styled.div`
-  width: ${props => (props.showThumbnails ? "70vw" : "80vw")};
-  height: ${props => (props.showThumbnails ? "70vh" : "80vh")};
+  width: ${props => (props.showthumbnails ? "70vw" : "80vw")};
+  height: ${props => (props.showthumbnails ? "70vh" : "80vh")};
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: ${props => (props.showCaption && props.showCaption ? 0 : "auto")};
+  margin-top: ${props => (props.showcaption && props.showcaption ? 0 : "auto")};
   position: relative;
   #items {
     background: transparent;
@@ -47,6 +48,7 @@ const SRLLightboxImageContainer = styled.div`
     -ms-user-select: none;
     user-select: none;
     display: flex;
+    align-items: center;
   }
 `;
 
@@ -59,29 +61,31 @@ const SRLLightboxImage = styled.img`
   width: auto;
   height: auto;
   margin: auto;
-  position: relative;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  transition: opacity 500ms ease;
 
   &.image-transition-enter {
     opacity: 0;
   }
   &.image-transition-enter-active {
     opacity: 1;
-    transition: opacity 500ms ease-in;
+    transition: opacity 1000ms ease, transform 300ms ease;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    z-index: -1;
   }
   &.image-transition-exit {
     opacity: 1;
   }
   &.image-transition-exit-active {
     opacity: 0;
-    transition: opacity 500ms ease-in;
+    transition: opacity 500ms ease;
+  }
+  &.image-transition-enter-done {
+    opacity: 1;
+    transition: opacity 500ms ease;
   }
 `;
 

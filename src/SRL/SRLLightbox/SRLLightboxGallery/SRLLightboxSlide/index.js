@@ -13,8 +13,8 @@ function SRLLightboxSlideComponent({
   source,
   caption,
   height,
-  showThumbnails,
-  showCaption,
+  showthumbnails,
+  showcaption,
   images,
   id,
   handleCloseLightbox,
@@ -28,29 +28,26 @@ function SRLLightboxSlideComponent({
   return (
     <SRLLightboxContent className="SRLContent">
       <SRLLightboxImageContainer
-        showThumbnails
-        showCaption
-        className="SRLImageContainer">
-        <TransitionGroup id="items">
-          <CSSTransition key={id} classNames="image-transition" timeout={500}>
-            <SRLLightboxImage
-              ref={SRLImageContainerRef}
-              className="SRLImage"
-              src={source}
-              alt={caption}
-              height={height}
-            />
-          </CSSTransition>
-        </TransitionGroup>
+        showthumbnails
+        showcaption
+        className="SRLImageContainer"
+      >
+        <SRLLightboxImage
+          ref={SRLImageContainerRef}
+          className="SRLImage"
+          src={source}
+          alt={caption}
+          height={height}
+        />
       </SRLLightboxImageContainer>
 
-      {showCaption && (
+      {showcaption && (
         <SRRLLightboxCaption className="SRLCaption">
           <p className="SRLCaption">{caption}</p>
         </SRRLLightboxCaption>
       )}
 
-      {showThumbnails && (
+      {showthumbnails && (
         <SRLLightboxThubnailGallery
           handleCurrentImage={handleCurrentImage}
           currentId={id}
@@ -72,7 +69,7 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains("SRLNextButton") ||
             event.target.classList.contains("SRLPrevButton") ||
             event.target.classList.contains("SRLCloseButton") ||
-            event.target.classList.contains("SRLshowThumbnails") ||
+            event.target.classList.contains("SRLshowthumbnails") ||
             event.target.classList.contains("SRLThumb") ||
             event.target.classList.contains("SRLCaption") ||
             event.button !== 0
@@ -105,8 +102,8 @@ function SRLLightboxSlideComponent({
 SRLLightboxSlideComponent.propTypes = {
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
-  showThumbnails: PropTypes.bool,
-  showCaption: PropTypes.bool,
+  showthumbnails: PropTypes.bool,
+  showcaption: PropTypes.bool,
   images: PropTypes.array,
   handleCloseLightbox: PropTypes.func,
   handleCurrentImage: PropTypes.func,
