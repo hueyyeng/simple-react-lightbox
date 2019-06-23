@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { SRLLightboxGalleryStage } from "./styles";
 import SRLLightboxSlideComponent from "./SRLLightboxSlide";
 import SRLLightboxControls from "./SRLLightboxControls";
+
 let _findIndex = require("lodash/findIndex");
 let _find = require("lodash/find");
 
@@ -16,7 +17,7 @@ const SRLLightboxGallery = ({
   showcaption
 }) => {
   const [currentImage, setCurrentImage] = useState(selectedImage);
-  const [imagesGallery, setimagesGallery] = useState(images);
+  const [imagesGallery, ,] = useState(images);
 
   useEffect(() => {
     // SET THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
@@ -124,6 +125,7 @@ const SRLLightboxGallery = ({
         handleCloseLightbox={controls.handleCloseLightbox}
         handleCurrentImage={controls.handleCurrentImage}
         images={images}
+        isopened={isOpened}
         {...currentImage}
       />
     </SRLLightboxGalleryStage>

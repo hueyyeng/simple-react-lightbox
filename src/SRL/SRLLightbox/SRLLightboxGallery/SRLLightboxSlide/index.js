@@ -12,7 +12,6 @@ import {
 function SRLLightboxSlideComponent({
   source,
   caption,
-  height,
   showthumbnails,
   showcaption,
   images,
@@ -21,7 +20,6 @@ function SRLLightboxSlideComponent({
   handleCurrentImage
 }) {
   const SRLImageContainerRef = useRef();
-  // console.log(SRLImageContainerRef);
 
   useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
 
@@ -32,13 +30,16 @@ function SRLLightboxSlideComponent({
         showcaption
         className="SRLImageContainer"
       >
-        <SRLLightboxImage
-          ref={SRLImageContainerRef}
-          className="SRLImage"
-          src={source}
-          alt={caption}
-          height={height}
-        />
+        <TransitionGroup>
+          <CSSTransition key={id} classNames="image-transition" timeout={800}>
+            <SRLLightboxImage
+              ref={SRLImageContainerRef}
+              className="SRLImage"
+              src={source}
+              alt={caption}
+            />
+          </CSSTransition>
+        </TransitionGroup>
       </SRLLightboxImageContainer>
 
       {showcaption && (
@@ -107,8 +108,7 @@ SRLLightboxSlideComponent.propTypes = {
   images: PropTypes.array,
   handleCloseLightbox: PropTypes.func,
   handleCurrentImage: PropTypes.func,
-  id: PropTypes.string,
-  height: PropTypes.number
+  id: PropTypes.string
 };
 
 export default SRLLightboxSlideComponent;

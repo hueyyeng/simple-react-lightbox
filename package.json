@@ -78,7 +78,6 @@
   ],
   "dependencies": {
     "core-js": "3",
-    "react-spring": "^8.0.25",
     "react-transition-group": "^4.1.1",
     "regenerator-runtime": "^0.13.2"
   }

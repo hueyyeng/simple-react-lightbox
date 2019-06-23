@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { animated } from "react-spring";
 
-const SRLLightboxGalleryStage = styled(animated.div)`
+const SRLLightboxGalleryStage = styled.div`
   background-color: ${props => props.overlaycolor};
   position: fixed;
   width: 100%;
@@ -33,23 +32,6 @@ const SRLLightboxImageContainer = styled.div`
   flex-direction: column;
   margin-top: ${props => (props.showcaption && props.showcaption ? 0 : "auto")};
   position: relative;
-  #items {
-    background: transparent;
-    border: 0;
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    margin: auto;
-    position: relative;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    display: flex;
-    align-items: center;
-  }
 `;
 
 const SRLLightboxImage = styled.img`
@@ -60,21 +42,22 @@ const SRLLightboxImage = styled.img`
   max-height: 100%;
   width: auto;
   height: auto;
-  margin: auto;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   transition: opacity 500ms ease;
-
+  opacity: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   &.image-transition-enter {
     opacity: 0;
   }
   &.image-transition-enter-active {
     opacity: 1;
-    transition: opacity 1000ms ease, transform 300ms ease;
-    position: absolute;
-    z-index: -1;
+    transition: opacity 800ms ease, transform 300ms ease;
   }
   &.image-transition-exit {
     opacity: 1;
@@ -98,51 +81,61 @@ const SRRLLightboxCaption = styled.div`
 `;
 
 const StyledButton = styled.button`
-  border: none;
-  display: block;
-  height: 40px;
-  width: 40px;
-  overflow: visible;
-  position: relative;
-  background-color: rgba(30, 30, 36, 0.8);
-  cursor: pointer;
+  background-clip: content-box;
+  height: 70px;
+  position: absolute;
+  width: 70px;
   color: rgba(255, 255, 255, 0.8);
   transition: color 0.3s ease;
-  z-index: 9992;
+  background-color: rgba(30, 30, 36, 0.8);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  visibility: inherit;
   &:focus {
     outline: none;
   }
-  svg {
-    display: block;
+  div {
+    padding: 7px;
     height: 100%;
-    overflow: visible;
-    position: relative;
-    width: 100%;
-    path {
-      fill: currentColor;
+    box-sizing: border-box;
+    svg {
+      display: block;
+      height: 100%;
+      overflow: visible;
+      position: relative;
+      width: 100%;
+      path {
+        fill: currentColor;
+      }
     }
-  }
-  &:hover {
-    color: rgba(255, 255, 255, 1);
+    &:hover {
+      color: rgba(255, 255, 255, 1);
+    }
   }
 `;
 
 const SRRLLightboxCloseIcon = styled(StyledButton)`
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0;
+  right: 0;
+  padding: 15px;
 `;
 
 const SRLLightboxNextIcon = styled(StyledButton)`
-  position: absolute;
   top: calc(50% - 50px);
-  right: 10px;
+  padding: 15px;
+  right: 0;
+  right: env(safe-area-inset-right);
 `;
 
 const SRLLightboxPrevIcon = styled(StyledButton)`
-  position: absolute;
   top: calc(50% - 50px);
-  left: 10px;
+  padding: 15px;
+  left: 0;
+  left: env(safe-area-inset-left);
 `;
 
 const SRLLightboxThubnailGallery = styled.div`
