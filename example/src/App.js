@@ -8,7 +8,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <SimpleReactLightbox showThumbnails={true} showCaption={true}>
+        <SimpleReactLightbox showthumbnails={true} showcaption={true}>
           <Heder />
           <hr />
           <Content />

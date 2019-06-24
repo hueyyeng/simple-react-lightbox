@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
@@ -11,39 +12,43 @@ import {
 function SRLLightboxSlideComponent({
   source,
   caption,
-  showThumbnails,
-  showCaption,
+  showthumbnails,
+  showcaption,
   images,
   id,
   handleCloseLightbox,
   handleCurrentImage
 }) {
   const SRLImageContainerRef = useRef();
-  // console.log(SRLImageContainerRef);
 
   useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
 
   return (
     <SRLLightboxContent className="SRLContent">
       <SRLLightboxImageContainer
-        showThumbnails
-        showCaption
-        className="SRLImageContainer">
-        <SRLLightboxImage
-          ref={SRLImageContainerRef}
-          className="SRLImage"
-          src={source}
-          alt={caption}
-        />
+        showthumbnails
+        showcaption
+        className="SRLImageContainer"
+      >
+        <TransitionGroup>
+          <CSSTransition key={id} classNames="image-transition" timeout={800}>
+            <SRLLightboxImage
+              ref={SRLImageContainerRef}
+              className="SRLImage"
+              src={source}
+              alt={caption}
+            />
+          </CSSTransition>
+        </TransitionGroup>
       </SRLLightboxImageContainer>
 
-      {showCaption && (
+      {showcaption && (
         <SRRLLightboxCaption className="SRLCaption">
           <p className="SRLCaption">{caption}</p>
         </SRRLLightboxCaption>
       )}
 
-      {showThumbnails && (
+      {showthumbnails && (
         <SRLLightboxThubnailGallery
           handleCurrentImage={handleCurrentImage}
           currentId={id}
@@ -65,7 +70,7 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains("SRLNextButton") ||
             event.target.classList.contains("SRLPrevButton") ||
             event.target.classList.contains("SRLCloseButton") ||
-            event.target.classList.contains("SRLshowThumbnails") ||
+            event.target.classList.contains("SRLshowthumbnails") ||
             event.target.classList.contains("SRLThumb") ||
             event.target.classList.contains("SRLCaption") ||
             event.button !== 0
@@ -98,8 +103,8 @@ function SRLLightboxSlideComponent({
 SRLLightboxSlideComponent.propTypes = {
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
-  showThumbnails: PropTypes.bool,
-  showCaption: PropTypes.bool,
+  showthumbnails: PropTypes.bool,
+  showcaption: PropTypes.bool,
   images: PropTypes.array,
   handleCloseLightbox: PropTypes.func,
   handleCurrentImage: PropTypes.func,

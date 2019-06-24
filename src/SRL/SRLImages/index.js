@@ -23,7 +23,13 @@ const SRLImagesContext = props => {
           i.id = `img${index}`;
           // Let's add an event listener that will actually trigger the function to open the lightbox when clicking on an image
           i.addEventListener("click", e => {
-            context.handleLightbox(e.target.src, e.target.alt, e.target.id);
+            context.handleLightbox(
+              e.target.src,
+              e.target.alt,
+              e.target.id,
+              e.target.width,
+              e.target.height
+            );
           });
           return null;
         });

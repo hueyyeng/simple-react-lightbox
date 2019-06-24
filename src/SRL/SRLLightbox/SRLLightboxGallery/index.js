@@ -3,20 +3,21 @@ import PropTypes from "prop-types";
 import { SRLLightboxGalleryStage } from "./styles";
 import SRLLightboxSlideComponent from "./SRLLightboxSlide";
 import SRLLightboxControls from "./SRLLightboxControls";
+
 let _findIndex = require("lodash/findIndex");
 let _find = require("lodash/find");
 
 const SRLLightboxGallery = ({
   isOpened,
   handleCloseLightbox,
-  overlayColor,
+  overlaycolor,
   images,
   selectedImage,
-  showThumbnails,
-  showCaption
+  showthumbnails,
+  showcaption
 }) => {
   const [currentImage, setCurrentImage] = useState(selectedImage);
-  const [imagesGallery, setimagesGallery] = useState(images);
+  const [imagesGallery, ,] = useState(images);
 
   useEffect(() => {
     // SET THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
@@ -25,7 +26,9 @@ const SRLLightboxGallery = ({
       setCurrentImage({
         source: imagesGallery[0].src,
         caption: imagesGallery[0].alt,
-        id: imagesGallery[0].id
+        id: imagesGallery[0].id,
+        width: imagesGallery[0].width,
+        height: imagesGallery[0].height
       });
     }
     // Add a class to the body to remove the overflow and compensate for the scroll-bar margin
@@ -39,7 +42,7 @@ const SRLLightboxGallery = ({
       document.body.classList.remove("SRLOpened");
       document.removeEventListener("keydown", handleLightboxWithKeys, false);
     };
-  }, [isOpened]);
+  }, [handleLightboxWithKeys, imagesGallery, isOpened, selectedImage.id]);
 
   // Handle Current Image
   function handleCurrentImage(id) {
@@ -49,7 +52,9 @@ const SRLLightboxGallery = ({
     setCurrentImage({
       source: selectedImage.src,
       caption: selectedImage.alt,
-      id: selectedImage.id
+      id: selectedImage.id,
+      width: selectedImage.width,
+      height: selectedImage.height
     });
   }
 
@@ -61,11 +66,13 @@ const SRLLightboxGallery = ({
       return i.id === id;
     });
     /* The next image will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to he first image */
-    const nextimage = imagesGallery[currentPosition + 1] || imagesGallery[0];
+    const nextImage = imagesGallery[currentPosition + 1] || imagesGallery[0];
     setCurrentImage({
-      source: nextimage.src,
-      caption: nextimage.alt,
-      id: nextimage.id
+      source: nextImage.src,
+      caption: nextImage.alt,
+      id: nextImage.id,
+      width: nextImage.width,
+      height: nextImage.height
     });
   }
 
@@ -78,13 +85,15 @@ const SRLLightboxGallery = ({
       return i.id === id;
     });
     /* The prev image will be the prev item in the array but it could be "undefined" as it goes negative. If it does we need to start from the last image. */
-    const nextimage =
+    const prevImage =
       imagesGallery[currentPosition - 1] ||
       imagesGallery[imagesGallery.length - 1];
     setCurrentImage({
-      source: nextimage.src,
-      caption: nextimage.alt,
-      id: nextimage.id
+      source: prevImage.src,
+      caption: prevImage.alt,
+      id: prevImage.id,
+      width: prevImage.width,
+      height: prevImage.height
     });
   }
 
@@ -108,14 +117,15 @@ const SRLLightboxGallery = ({
   };
 
   return (
-    <SRLLightboxGalleryStage overlayColor={overlayColor}>
+    <SRLLightboxGalleryStage overlaycolor={overlaycolor}>
       <SRLLightboxControls {...controls} />
       <SRLLightboxSlideComponent
-        showThumbnails={showThumbnails}
-        showCaption={showCaption}
+        showthumbnails={showthumbnails}
+        showcaption={showcaption}
         handleCloseLightbox={controls.handleCloseLightbox}
         handleCurrentImage={controls.handleCurrentImage}
         images={images}
+        isopened={isOpened}
         {...currentImage}
       />
     </SRLLightboxGalleryStage>
@@ -125,9 +135,9 @@ const SRLLightboxGallery = ({
 SRLLightboxGallery.propTypes = {
   isOpened: PropTypes.bool,
   images: PropTypes.array,
-  overlayColor: PropTypes.string,
-  showThumbnails: PropTypes.bool,
-  showCaption: PropTypes.bool,
+  overlaycolor: PropTypes.string,
+  showthumbnails: PropTypes.bool,
+  showcaption: PropTypes.bool,
   selectedImage: PropTypes.object,
   handleCloseLightbox: PropTypes.func
 };
