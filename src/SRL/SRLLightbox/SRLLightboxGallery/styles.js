@@ -86,6 +86,9 @@ const SRRLLightboxCaption = styled.div`
   margin-top: 20px;
   width: 100%;
   text-align: center;
+  @media (max-width: 768px) {
+    margin-top: 0;
+  }
   p {
     margin: 0;
     padding: 0;
@@ -162,6 +165,9 @@ const SRLLightboxThubnailGallery = styled.div`
   width: 100%;
   justify-content: center;
   align-self: flex-end;
+  flex-wrap: nowrap;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 `;
 
 const SRLLightboxThubnailGalleryImage = styled.a`
@@ -174,6 +180,7 @@ const SRLLightboxThubnailGalleryImage = styled.a`
   transition: opacity 0.3s ease;
   display: block;
   cursor: pointer;
+  flex: 0 0 auto;
   &:first-child {
     margin: 0;
   }
