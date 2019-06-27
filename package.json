@@ -78,6 +78,7 @@
   ],
   "dependencies": {
     "core-js": "3",
+    "react-scroll-wheel-handler": "^1.0.8",
     "react-transition-group": "^4.1.1",
     "regenerator-runtime": "^0.13.2"
   }

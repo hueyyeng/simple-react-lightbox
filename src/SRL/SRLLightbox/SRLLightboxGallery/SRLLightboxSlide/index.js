@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import ReactScrollWheelHandler from "react-scroll-wheel-handler";
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
@@ -61,19 +62,25 @@ function SRLLightboxSlideComponent({
       <SRLLightboxImageContainer
         showthumbnails
         showcaption
-        className="SRLImageContainer">
-        <TransitionGroup className="SRLTransitionGroup">
-          <CSSTransition key={id} classNames="image-transition" timeout={800}>
-            <SRLLightboxImage
-              onTouchStart={e => handleTouchStart(e)}
-              onTouchEnd={e => handleTouchEnd(e)}
-              ref={SRLImageContainerRef}
-              className="SRLImage"
-              src={source}
-              alt={caption}
-            />
-          </CSSTransition>
-        </TransitionGroup>
+        className="SRLImageContainer"
+      >
+        <ReactScrollWheelHandler
+          upHandler={() => handleNextImage(id)}
+          downHandler={() => handlePrevImage(id)}
+        >
+          <TransitionGroup className="SRLTransitionGroup">
+            <CSSTransition key={id} classNames="image-transition" timeout={800}>
+              <SRLLightboxImage
+                onTouchStart={e => handleTouchStart(e)}
+                onTouchEnd={e => handleTouchEnd(e)}
+                ref={SRLImageContainerRef}
+                className="SRLImage"
+                src={source}
+                alt={caption}
+              />
+            </CSSTransition>
+          </TransitionGroup>
+        </ReactScrollWheelHandler>
       </SRLLightboxImageContainer>
 
       {showcaption && (
@@ -137,6 +144,7 @@ function SRLLightboxSlideComponent({
 SRLLightboxSlideComponent.propTypes = {
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
+  captioncolor: PropTypes.string,
   showthumbnails: PropTypes.bool,
   showcaption: PropTypes.bool,
   images: PropTypes.array,
