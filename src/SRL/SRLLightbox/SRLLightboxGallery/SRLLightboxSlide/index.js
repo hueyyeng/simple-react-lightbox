@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -17,9 +17,41 @@ function SRLLightboxSlideComponent({
   images,
   id,
   handleCloseLightbox,
-  handleCurrentImage
+  handleCurrentImage,
+  handleNextImage,
+  handlePrevImage
 }) {
   const SRLImageContainerRef = useRef();
+  const [touchPosition, setTouchPosition] = useState({
+    startClientX: 0,
+    endClientX: 0
+  });
+
+  // Touch Events
+  const handleTouchStart = event => {
+    setTouchPosition({
+      ...touchPosition,
+      startClientX: event.touches[0].clientX
+    });
+  };
+
+  const handleTouchEnd = event => {
+    setTouchPosition({
+      ...touchPosition,
+      endClientX: event.changedTouches[0].clientX
+    });
+    if (
+      touchPosition.startClientX > touchPosition.endClientX &&
+      touchPosition.endClientX < touchPosition.startClientX - 50
+    ) {
+      handleNextImage(id);
+    } else if (
+      touchPosition.startClientX < touchPosition.endClientX &&
+      touchPosition.endClientX > touchPosition.startClientX + 50
+    ) {
+      handlePrevImage(id);
+    }
+  };
 
   useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
 
@@ -28,11 +60,12 @@ function SRLLightboxSlideComponent({
       <SRLLightboxImageContainer
         showthumbnails
         showcaption
-        className="SRLImageContainer"
-      >
+        className="SRLImageContainer">
         <TransitionGroup>
           <CSSTransition key={id} classNames="image-transition" timeout={800}>
             <SRLLightboxImage
+              onTouchStart={e => handleTouchStart(e)}
+              onTouchEnd={e => handleTouchEnd(e)}
               ref={SRLImageContainerRef}
               className="SRLImage"
               src={source}
@@ -108,6 +141,8 @@ SRLLightboxSlideComponent.propTypes = {
   images: PropTypes.array,
   handleCloseLightbox: PropTypes.func,
   handleCurrentImage: PropTypes.func,
+  handleNextImage: PropTypes.func,
+  handlePrevImage: PropTypes.func,
   id: PropTypes.string
 };
 

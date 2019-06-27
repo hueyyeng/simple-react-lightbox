@@ -142,6 +142,8 @@ const SRLLightboxGallery = ({
         showcaption={showcaption}
         handleCloseLightbox={controls.handleCloseLightbox}
         handleCurrentImage={controls.handleCurrentImage}
+        handleNextImage={controls.handleNextImage}
+        handlePrevImage={controls.handlePrevImage}
         images={images}
         isopened={isOpened}
         {...currentImage}
