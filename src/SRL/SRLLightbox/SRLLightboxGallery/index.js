@@ -94,7 +94,7 @@ const SRLLightboxGallery = ({
   );
 
   useEffect(() => {
-    // SET THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
+    // SETS THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
 
     // This is crucial in case the user uses the provided method to open the lightbox from a link or a button etc...
     if (currentImage.id === undefined) {
@@ -106,13 +106,13 @@ const SRLLightboxGallery = ({
         height: imagesGallery[0].height
       });
     }
-    // Add a class to the body to remove the overflow and compensate for the scroll-bar margin
+    // Adds a class to the body to remove the overflow and compensate for the scroll-bar margin
     if (isOpened) {
       document.body.classList.add("SRLOpened");
       document.addEventListener("keydown", handleLightboxWithKeys, false);
     }
 
-    // Clean up function to remove the class from the body
+    // Cleans up function to remove the class from the body
     return function cleanUp() {
       document.body.classList.remove("SRLOpened");
       document.removeEventListener("keydown", handleLightboxWithKeys, false);

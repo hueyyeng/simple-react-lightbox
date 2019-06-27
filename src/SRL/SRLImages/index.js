@@ -3,25 +3,32 @@ import PropTypes from "prop-types";
 import { SRLCtxt } from "../SRLContext";
 
 const SRLImagesContext = props => {
-  // Import the context
+  // Imports the context
   const context = useContext(SRLCtxt);
   const [images, setImages] = useState([]);
+  const [isImageSet, setIsImageSet] = useState(false);
 
-  // We set a ref
+  // Sets a new Ref which will be used to target the div with the images
   const imagesContainer = useRef(null);
 
-  // Grab all the images from the div in which we wrap the component and set them using the useState hook
+  // Grabs the images and set them using setImages
   useEffect(() => {
+    // Gets an HTMLCollection which we need to change to a normal array
     let collectedImages = imagesContainer.current.getElementsByTagName("img");
 
+    // Checks if collectedImages is not empty (which means there were no images)
     if (collectedImages.length > 0) {
       setImages(collectedImages);
-      if (images.length > 0) {
-        const imagesArray = Array.prototype.slice.call(images); // IE 11 -_-
+      // Checks if images were correctly set and so that is not empty
+      if (images.length > 0 && !isImageSet) {
+        // Convert the images to an array that is not an HTMLCollection (IE 11 -_-)
+        const imagesArray = Array.prototype.slice.call(images);
+        // Uses a map to go through each images and do the following:
         imagesArray.map((i, index) => {
-          // Let's set an ID for the images that we will use for the next/prev image function
+          // 1) Sets an ID for the images that we will use for the next/prev image
           i.id = `img${index}`;
-          // Let's add an event listener that will actually trigger the function to open the lightbox when clicking on an image
+          // 2) Adds an event listerner that will trigger the function to open the lightbox (passed using the Context)
+
           i.addEventListener("click", e => {
             context.handleLightbox(
               e.target.src,
@@ -31,14 +38,14 @@ const SRLImagesContext = props => {
               e.target.height
             );
           });
-          return null;
         });
-        // Grab the images
+        // 3 Avoid setting the ID and the event listener on the image AGAIN by setting true so it's skipped (because the useEffect will be triggered again as with the function below the component is going to be re-rendered again because the context is changing)
+        setIsImageSet(true);
+        // 4 Grabs the images with the new event listern and ID add add them to the context
         context.grabImages(images);
       }
     }
-    return undefined;
-  }, [context, images]);
+  }, [context, isImageSet, images]);
 
   return <div ref={imagesContainer}>{props.children}</div>;
 };
