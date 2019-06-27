@@ -25,12 +25,42 @@ const SRLLightboxContent = styled.div`
 `;
 
 const SRLLightboxImageContainer = styled.div`
-  width: ${props => (props.showthumbnails ? "70vw" : "80vw")};
-  height: ${props => (props.showthumbnails ? "70vh" : "80vh")};
+  width: ${props => {
+    if (props.showthumbnails === false && !!props.showcaption === false) {
+      return "90vw";
+    } else if (props.showthumbnails === false && props.showcaption === true) {
+      return "85vw";
+    } else if (props.showthumbnails === true && props.showcaption === false) {
+      return "75vw";
+    } else {
+      return "70vw";
+    }
+  }};
+  height: ${props => {
+    if (props.showthumbnails === false && !!props.showcaption === false) {
+      return "90vh";
+    } else if (props.showthumbnails === false && props.showcaption === true) {
+      return "85vh";
+    } else if (props.showthumbnails === true && props.showcaption === false) {
+      return "75vh";
+    } else {
+      return "70vh";
+    }
+  }};
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: ${props => (props.showcaption && props.showcaption ? 0 : "auto")};
+  margin-top: ${props => {
+    if (props.showthumbnails === false && !!props.showcaption === false) {
+      return "0px";
+    } else if (props.showthumbnails === false && props.showcaption === true) {
+      return "auto";
+    } else if (props.showthumbnails === true && props.showcaption === false) {
+      return "auto";
+    } else {
+      return "auto";
+    }
+  }};
   position: relative;
   @media (max-width: 768px) {
     width: 100vw;
@@ -115,6 +145,11 @@ const StyledButton = styled.button`
   margin: 0;
   visibility: inherit;
   z-index: 9992;
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+  }
   &:focus {
     outline: none;
   }
@@ -149,6 +184,9 @@ const SRLLightboxNextIcon = styled(StyledButton)`
   padding: 15px;
   right: 0;
   right: env(safe-area-inset-right);
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const SRLLightboxPrevIcon = styled(StyledButton)`
@@ -156,6 +194,9 @@ const SRLLightboxPrevIcon = styled(StyledButton)`
   padding: 15px;
   left: 0;
   left: env(safe-area-inset-left);
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const SRLLightboxThubnailGallery = styled.div`

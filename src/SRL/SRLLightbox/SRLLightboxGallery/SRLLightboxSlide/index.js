@@ -44,12 +44,12 @@ function SRLLightboxSlideComponent({
     });
     if (
       touchPosition.startClientX > touchPosition.endClientX &&
-      touchPosition.endClientX < touchPosition.startClientX - 50
+      touchPosition.endClientX < touchPosition.startClientX - 100
     ) {
       handleNextImage(id);
     } else if (
       touchPosition.startClientX < touchPosition.endClientX &&
-      touchPosition.endClientX > touchPosition.startClientX + 50
+      touchPosition.endClientX > touchPosition.startClientX + 100
     ) {
       handlePrevImage(id);
     }
@@ -60,8 +60,8 @@ function SRLLightboxSlideComponent({
   return (
     <SRLLightboxContent className="SRLContent">
       <SRLLightboxImageContainer
-        showthumbnails
-        showcaption
+        showthumbnails={showthumbnails}
+        showcaption={showcaption}
         className="SRLImageContainer"
       >
         <ReactScrollWheelHandler
@@ -104,6 +104,7 @@ function SRLLightboxSlideComponent({
     useEffect(
       () => {
         const listener = event => {
+          console.log(event.type);
           // Do nothing if clicking ref's element or descendent elements
           if (
             !ref.current ||
@@ -114,7 +115,9 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains("SRLshowthumbnails") ||
             event.target.classList.contains("SRLThumb") ||
             event.target.classList.contains("SRLCaption") ||
-            event.button !== 0
+            event.button !== 0 ||
+            event.type === "touchstart" ||
+            event.type === "mousedown"
           ) {
             return;
           }
