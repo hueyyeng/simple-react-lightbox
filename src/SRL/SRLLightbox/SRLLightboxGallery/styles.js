@@ -32,6 +32,14 @@ const SRLLightboxImageContainer = styled.div`
   flex-direction: column;
   margin-top: ${props => (props.showcaption && props.showcaption ? 0 : "auto")};
   position: relative;
+  @media (max-width: 768px) {
+    width: 100vw;
+    height: ${props => (props.showthumbnails ? "70vh" : "80vh")};
+  }
+  .SRLTransitionGroup {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const SRLLightboxImage = styled.img`
@@ -78,6 +86,14 @@ const SRRLLightboxCaption = styled.div`
   margin-top: 20px;
   width: 100%;
   text-align: center;
+  p {
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+    text-align: center;
+    background-color: transparent;
+    color: ${props => (props.captioncolor ? props.captioncolor : "white")};
+  }
 `;
 
 const StyledButton = styled.button`
@@ -95,6 +111,7 @@ const StyledButton = styled.button`
   display: inline-block;
   margin: 0;
   visibility: inherit;
+  z-index: 9992;
   &:focus {
     outline: none;
   }

@@ -30,6 +30,7 @@ const SimpleReactLightbox = ({
   overlaycolor,
   showcaption,
   showthumbnails,
+  captioncolor,
   children
 }) => {
   return (
@@ -38,7 +39,8 @@ const SimpleReactLightbox = ({
       <SRLContextComponent
         overlaycolor={overlaycolor}
         showcaption={showcaption}
-        showthumbnails={showthumbnails}>
+        showthumbnails={showthumbnails}
+        captioncolor={captioncolor}>
         {children}
         <SRLLightbox />
       </SRLContextComponent>
@@ -48,6 +50,7 @@ const SimpleReactLightbox = ({
 
 SimpleReactLightbox.propTypes = {
   overlaycolor: PropTypes.string,
+  captioncolor: PropTypes.string,
   showthumbnails: PropTypes.bool,
   showcaption: PropTypes.bool,
   children: PropTypes.oneOfType([
@@ -58,6 +61,7 @@ SimpleReactLightbox.propTypes = {
 
 SRLContextComponent.defaultProps = {
   overlaycolor: "rgba(0, 0, 0, 0.8)",
+  captioncolor: "#FFFFFF",
   showcaption: false,
   showthumbnails: false
 };

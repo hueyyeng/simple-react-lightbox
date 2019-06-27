@@ -14,6 +14,7 @@ const SRLLightboxGallery = ({
   images,
   selectedImage,
   showthumbnails,
+  captioncolor,
   showcaption
 }) => {
   const [currentImage, setCurrentImage] = useState(selectedImage);
@@ -139,6 +140,7 @@ const SRLLightboxGallery = ({
       <SRLLightboxControls {...controls} />
       <SRLLightboxSlideComponent
         showthumbnails={showthumbnails}
+        captioncolor={captioncolor}
         showcaption={showcaption}
         handleCloseLightbox={controls.handleCloseLightbox}
         handleCurrentImage={controls.handleCurrentImage}
@@ -158,6 +160,7 @@ SRLLightboxGallery.propTypes = {
   overlaycolor: PropTypes.string,
   showthumbnails: PropTypes.bool,
   showcaption: PropTypes.bool,
+  captioncolor: PropTypes.string,
   selectedImage: PropTypes.object,
   handleCloseLightbox: PropTypes.func
 };

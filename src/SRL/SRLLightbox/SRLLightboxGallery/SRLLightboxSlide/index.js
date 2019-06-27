@@ -12,6 +12,7 @@ import {
 function SRLLightboxSlideComponent({
   source,
   caption,
+  captioncolor,
   showthumbnails,
   showcaption,
   images,
@@ -61,7 +62,7 @@ function SRLLightboxSlideComponent({
         showthumbnails
         showcaption
         className="SRLImageContainer">
-        <TransitionGroup>
+        <TransitionGroup className="SRLTransitionGroup">
           <CSSTransition key={id} classNames="image-transition" timeout={800}>
             <SRLLightboxImage
               onTouchStart={e => handleTouchStart(e)}
@@ -76,7 +77,7 @@ function SRLLightboxSlideComponent({
       </SRLLightboxImageContainer>
 
       {showcaption && (
-        <SRRLLightboxCaption className="SRLCaption">
+        <SRRLLightboxCaption captioncolor={captioncolor} className="SRLCaption">
           <p className="SRLCaption">{caption}</p>
         </SRRLLightboxCaption>
       )}

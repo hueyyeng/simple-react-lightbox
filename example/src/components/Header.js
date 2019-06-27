@@ -2,7 +2,6 @@ import React from "react";
 import { withSRLContext } from "simple-react-lightbox";
 
 const Header = props => {
-  console.log(props);
   return (
     <div>
       <h1>Header</h1>
