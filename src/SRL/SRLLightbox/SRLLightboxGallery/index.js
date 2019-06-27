@@ -10,12 +10,14 @@ let _find = require("lodash/find");
 const SRLLightboxGallery = ({
   isOpened,
   handleCloseLightbox,
-  overlaycolor,
   images,
   selectedImage,
-  showthumbnails,
-  captioncolor,
-  showcaption
+  overlayColor,
+  captionColor,
+  buttonsBackgroundColor,
+  buttonsIconColor,
+  showCaption,
+  showThumbnails
 }) => {
   const [currentImage, setCurrentImage] = useState(selectedImage);
   const [imagesGallery, ,] = useState(images);
@@ -136,12 +138,16 @@ const SRLLightboxGallery = ({
   };
 
   return (
-    <SRLLightboxGalleryStage overlaycolor={overlaycolor}>
-      <SRLLightboxControls {...controls} />
+    <SRLLightboxGalleryStage overlayColor={overlayColor}>
+      <SRLLightboxControls
+        buttonsBackgroundColor={buttonsBackgroundColor}
+        buttonsIconColor={buttonsIconColor}
+        {...controls}
+      />
       <SRLLightboxSlideComponent
-        showthumbnails={showthumbnails}
-        captioncolor={captioncolor}
-        showcaption={showcaption}
+        showThumbnails={showThumbnails}
+        captionColor={captionColor}
+        showCaption={showCaption}
         handleCloseLightbox={controls.handleCloseLightbox}
         handleCurrentImage={controls.handleCurrentImage}
         handleNextImage={controls.handleNextImage}
@@ -157,10 +163,12 @@ const SRLLightboxGallery = ({
 SRLLightboxGallery.propTypes = {
   isOpened: PropTypes.bool,
   images: PropTypes.array,
-  overlaycolor: PropTypes.string,
-  showthumbnails: PropTypes.bool,
-  showcaption: PropTypes.bool,
-  captioncolor: PropTypes.string,
+  overlayColor: PropTypes.string,
+  showThumbnails: PropTypes.bool,
+  showCaption: PropTypes.bool,
+  captionColor: PropTypes.string,
+  buttonsBackgroundColor: PropTypes.string,
+  buttonsIconColor: PropTypes.string,
   selectedImage: PropTypes.object,
   handleCloseLightbox: PropTypes.func
 };

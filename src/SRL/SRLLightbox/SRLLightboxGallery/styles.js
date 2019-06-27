@@ -134,7 +134,6 @@ const StyledButton = styled.button`
   height: 70px;
   position: absolute;
   width: 70px;
-  color: rgba(255, 255, 255, 0.8);
   transition: color 0.3s ease;
   background-color: rgba(30, 30, 36, 0.8);
   border: 0;
@@ -164,11 +163,20 @@ const StyledButton = styled.button`
       position: relative;
       width: 100%;
       path {
-        fill: currentColor;
+        transition: fill 0.3s ease;
+        fill: ${props =>
+          props.buttonsIconColor
+            ? props.buttonsIconColor
+            : "rgba(255, 255, 255, 0.8)"};
       }
     }
     &:hover {
-      color: rgba(255, 255, 255, 1);
+      svg path {
+        fill: ${props =>
+          props.buttonsIconColor &&
+          // REGEX TO THE RESCUE (converts the RGBA value to have the full opacity to have the nice "hover" effect)
+          props.buttonsIconColor.replace(/[\d\.]+\)$/g, "1)")};
+      }
     }
   }
 `;

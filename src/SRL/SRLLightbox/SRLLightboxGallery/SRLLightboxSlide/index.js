@@ -12,16 +12,16 @@ import {
 
 function SRLLightboxSlideComponent({
   source,
-  caption,
-  captioncolor,
-  showthumbnails,
-  showcaption,
   images,
   id,
   handleCloseLightbox,
   handleCurrentImage,
   handleNextImage,
-  handlePrevImage
+  handlePrevImage,
+  caption,
+  captionColor,
+  showThumbnails,
+  showCaption
 }) {
   const SRLImageContainerRef = useRef();
   const [touchPosition, setTouchPosition] = useState({
@@ -60,8 +60,8 @@ function SRLLightboxSlideComponent({
   return (
     <SRLLightboxContent className="SRLContent">
       <SRLLightboxImageContainer
-        showthumbnails={showthumbnails}
-        showcaption={showcaption}
+        showThumbnails={showThumbnails}
+        showCaption={showCaption}
         className="SRLImageContainer"
       >
         <ReactScrollWheelHandler
@@ -83,13 +83,13 @@ function SRLLightboxSlideComponent({
         </ReactScrollWheelHandler>
       </SRLLightboxImageContainer>
 
-      {showcaption && (
-        <SRRLLightboxCaption captioncolor={captioncolor} className="SRLCaption">
+      {showCaption && (
+        <SRRLLightboxCaption captionColor={captionColor} className="SRLCaption">
           <p className="SRLCaption">{caption}</p>
         </SRRLLightboxCaption>
       )}
 
-      {showthumbnails && (
+      {showThumbnails && (
         <SRLLightboxThubnailGallery
           handleCurrentImage={handleCurrentImage}
           currentId={id}
@@ -104,7 +104,6 @@ function SRLLightboxSlideComponent({
     useEffect(
       () => {
         const listener = event => {
-          console.log(event.type);
           // Do nothing if clicking ref's element or descendent elements
           if (
             !ref.current ||
@@ -112,7 +111,7 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains("SRLNextButton") ||
             event.target.classList.contains("SRLPrevButton") ||
             event.target.classList.contains("SRLCloseButton") ||
-            event.target.classList.contains("SRLshowthumbnails") ||
+            event.target.classList.contains("SRLshowThumbnails") ||
             event.target.classList.contains("SRLThumb") ||
             event.target.classList.contains("SRLCaption") ||
             event.button !== 0 ||
@@ -147,9 +146,9 @@ function SRLLightboxSlideComponent({
 SRLLightboxSlideComponent.propTypes = {
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
-  captioncolor: PropTypes.string,
-  showthumbnails: PropTypes.bool,
-  showcaption: PropTypes.bool,
+  captionColor: PropTypes.string,
+  showThumbnails: PropTypes.bool,
+  showCaption: PropTypes.bool,
   images: PropTypes.array,
   handleCloseLightbox: PropTypes.func,
   handleCurrentImage: PropTypes.func,

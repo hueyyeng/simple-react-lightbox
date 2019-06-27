@@ -27,20 +27,25 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const SimpleReactLightbox = ({
-  overlaycolor,
-  showcaption,
-  showthumbnails,
-  captioncolor,
+  overlayColor,
+  showCaption,
+  showThumbnails,
+  captionColor,
+  buttonsBackgroundColor,
+  buttonsIconColor,
   children
 }) => {
   return (
     <React.Fragment>
       <GlobalStyle />
       <SRLContextComponent
-        overlaycolor={overlaycolor}
-        showcaption={showcaption}
-        showthumbnails={showthumbnails}
-        captioncolor={captioncolor}>
+        overlayColor={overlayColor}
+        showCaption={showCaption}
+        showThumbnails={showThumbnails}
+        captionColor={captionColor}
+        buttonsBackgroundColor={buttonsBackgroundColor}
+        buttonsIconColor={buttonsIconColor}
+      >
         {children}
         <SRLLightbox />
       </SRLContextComponent>
@@ -49,10 +54,12 @@ const SimpleReactLightbox = ({
 };
 
 SimpleReactLightbox.propTypes = {
-  overlaycolor: PropTypes.string,
-  captioncolor: PropTypes.string,
-  showthumbnails: PropTypes.bool,
-  showcaption: PropTypes.bool,
+  overlayColor: PropTypes.string,
+  captionColor: PropTypes.string,
+  buttonsBackgroundColor: PropTypes.string,
+  buttonsIconColor: PropTypes.string,
+  showThumbnails: PropTypes.bool,
+  showCaption: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
@@ -60,10 +67,12 @@ SimpleReactLightbox.propTypes = {
 };
 
 SRLContextComponent.defaultProps = {
-  overlaycolor: "rgba(0, 0, 0, 0.8)",
-  captioncolor: "#FFFFFF",
-  showcaption: false,
-  showthumbnails: false
+  overlayColor: "rgba(0, 0, 0, 0.8)",
+  captionColor: "#FFFFFF",
+  buttonsBackgroundColor: "rgba(30,30,36,0.8)",
+  buttonsIconColor: "rgba(255, 255, 255, 0.8)",
+  showCaption: false,
+  showThumbnails: false
 };
 
 export { withSRLContext };
