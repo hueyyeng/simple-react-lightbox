@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import SRLContextComponent from "./SRL/SRLContext";
 import SRLImages from "./SRL/SRLImages";
 import SRLLightbox from "./SRL/SRLLightbox";
-import { withContext } from "./SRL/SRLHoc"; // REMOVE SOON
+import { withSRLContext } from "./SRL/SRLHoc";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -62,6 +62,6 @@ SRLContextComponent.defaultProps = {
   showthumbnails: false
 };
 
-export { withContext }; // REMOVE SOON
+export { withSRLContext };
 export { SRLImages };
 export default SimpleReactLightbox;
