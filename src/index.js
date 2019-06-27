@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SRLContext from "./SRL/SRLContext";
-import SRLImagesContext from "./SRL/SRLImages";
+import SRLContextComponent from "./SRL/SRLContext";
+import SRLImages from "./SRL/SRLImages";
 import SRLLightbox from "./SRL/SRLLightbox";
 import { withContext } from "./SRL/SRLHoc"; // REMOVE SOON
 import { createGlobalStyle } from "styled-components";
@@ -35,14 +35,13 @@ const SimpleReactLightbox = ({
   return (
     <React.Fragment>
       <GlobalStyle />
-      <SRLContext
+      <SRLContextComponent
         overlaycolor={overlaycolor}
         showcaption={showcaption}
-        showthumbnails={showthumbnails}
-      >
+        showthumbnails={showthumbnails}>
         {children}
         <SRLLightbox />
-      </SRLContext>
+      </SRLContextComponent>
     </React.Fragment>
   );
 };
@@ -57,12 +56,12 @@ SimpleReactLightbox.propTypes = {
   ]).isRequired
 };
 
-SRLContext.defaultProps = {
+SRLContextComponent.defaultProps = {
   overlaycolor: "rgba(0, 0, 0, 0.8)",
   showcaption: false,
   showthumbnails: false
 };
 
 export { withContext }; // REMOVE SOON
-export { SRLImagesContext as SRLImages };
+export { SRLImages };
 export default SimpleReactLightbox;

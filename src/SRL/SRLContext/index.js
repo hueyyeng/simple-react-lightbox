@@ -1,9 +1,9 @@
 import React, { useReducer } from "react";
 import PropTypes from "prop-types";
 let isEqual = require("lodash/isEqual");
-export const SRLCtxt = React.createContext();
+export const SRLCtx = React.createContext();
 
-const SRLContext = props => {
+const SRLContextComponent = props => {
   const initialState = {
     isOpened: false,
     images: [],
@@ -72,7 +72,7 @@ const SRLContext = props => {
   }
 
   return (
-    <SRLCtxt.Provider
+    <SRLCtx.Provider
       value={{
         handleLightbox,
         grabImages,
@@ -82,13 +82,13 @@ const SRLContext = props => {
         ...props
       }}>
       {props.children}
-    </SRLCtxt.Provider>
+    </SRLCtx.Provider>
   );
 };
 
-export default SRLContext;
+export default SRLContextComponent;
 
-SRLContext.propTypes = {
+SRLContextComponent.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node

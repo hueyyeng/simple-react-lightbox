@@ -1,10 +1,10 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import { SRLCtxt } from "../SRLContext";
+import { SRLCtx } from "../SRLContext";
 
-const SRLImagesContext = props => {
+const SRLImages = props => {
   // Imports the context
-  const context = useContext(SRLCtxt);
+  const context = useContext(SRLCtx);
   const [images, setImages] = useState([]);
   const [isImageSet, setIsImageSet] = useState(false);
 
@@ -50,9 +50,9 @@ const SRLImagesContext = props => {
   return <div ref={imagesContainer}>{props.children}</div>;
 };
 
-export default SRLImagesContext;
+export default SRLImages;
 
-SRLImagesContext.propTypes = {
+SRLImages.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
@@ -65,9 +65,9 @@ SRLImagesContext.propTypes = {
 //   Component,
 // } from "react";
 // import PropTypes from "prop-types";
-// import { SRLCtxt } from "../SRLContext";
+// import { SRLCtx } from "../SRLContext";
 
-// class SRLImagesContext extends Component {
+// class SRLImages extends Component {
 //   static propTypes = {
 //     children: PropTypes.oneOfType([
 //       PropTypes.arrayOf(PropTypes.node),
@@ -117,4 +117,4 @@ SRLImagesContext.propTypes = {
 // }
 
 // // We wrap this using our HOC component so we have access to the context
-// export default withContext(SRLImagesContext);
+// export default withContext(SRLImages);

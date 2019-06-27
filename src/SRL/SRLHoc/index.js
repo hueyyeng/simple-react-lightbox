@@ -1,12 +1,12 @@
 import React from "react";
-import { SRLCtxt } from "../SRLContext";
+import { SRLCtx } from "../SRLContext";
 
 export function withContext(Component) {
   return function SRLHoc(props) {
     return (
-      <SRLCtxt.Consumer>
+      <SRLCtx.Consumer>
         {state => <Component {...props} context={state} />}
-      </SRLCtxt.Consumer>
+      </SRLCtx.Consumer>
     );
   };
 }
