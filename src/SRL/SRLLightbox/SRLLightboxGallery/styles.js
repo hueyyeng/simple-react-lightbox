@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const SRLLightboxGalleryStage = styled.div`
-  background-color: ${props => props.overlaycolor};
+  background-color: ${props => props.overlayColor};
   position: fixed;
   width: 100%;
   height: 100%;
@@ -26,22 +26,22 @@ const SRLLightboxContent = styled.div`
 
 const SRLLightboxImageContainer = styled.div`
   width: ${props => {
-    if (props.showthumbnails === false && !!props.showcaption === false) {
+    if (props.showThumbnails === false && !!props.showCaption === false) {
       return "90vw";
-    } else if (props.showthumbnails === false && props.showcaption === true) {
+    } else if (props.showThumbnails === false && props.showCaption === true) {
       return "85vw";
-    } else if (props.showthumbnails === true && props.showcaption === false) {
+    } else if (props.showThumbnails === true && props.showCaption === false) {
       return "75vw";
     } else {
       return "70vw";
     }
   }};
   height: ${props => {
-    if (props.showthumbnails === false && !!props.showcaption === false) {
+    if (props.showThumbnails === false && !!props.showCaption === false) {
       return "90vh";
-    } else if (props.showthumbnails === false && props.showcaption === true) {
+    } else if (props.showThumbnails === false && props.showCaption === true) {
       return "85vh";
-    } else if (props.showthumbnails === true && props.showcaption === false) {
+    } else if (props.showThumbnails === true && props.showCaption === false) {
       return "75vh";
     } else {
       return "70vh";
@@ -51,11 +51,11 @@ const SRLLightboxImageContainer = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: ${props => {
-    if (props.showthumbnails === false && !!props.showcaption === false) {
+    if (props.showThumbnails === false && !!props.showCaption === false) {
       return "0px";
-    } else if (props.showthumbnails === false && props.showcaption === true) {
+    } else if (props.showThumbnails === false && props.showCaption === true) {
       return "auto";
-    } else if (props.showthumbnails === true && props.showcaption === false) {
+    } else if (props.showThumbnails === true && props.showCaption === false) {
       return "auto";
     } else {
       return "auto";
@@ -64,7 +64,7 @@ const SRLLightboxImageContainer = styled.div`
   position: relative;
   @media (max-width: 768px) {
     width: 100vw;
-    height: ${props => (props.showthumbnails ? "70vh" : "80vh")};
+    height: ${props => (props.showThumbnails ? "70vh" : "80vh")};
   }
   .SRLTransitionGroup {
     width: 100%;
@@ -125,7 +125,7 @@ const SRRLLightboxCaption = styled.div`
     font-family: inherit;
     text-align: center;
     background-color: transparent;
-    color: ${props => (props.captioncolor ? props.captioncolor : "white")};
+    color: ${props => (props.captionColor ? props.captionColor : "white")};
   }
 `;
 
@@ -135,7 +135,10 @@ const StyledButton = styled.button`
   position: absolute;
   width: 70px;
   transition: color 0.3s ease;
-  background-color: rgba(30, 30, 36, 0.8);
+  background-color: ${props =>
+    props.buttonsBackgroundColor
+      ? props.buttonsBackgroundColor
+      : "rgba(30, 30, 36, 0.8)"};
   border: 0;
   border-radius: 0;
   box-shadow: none;
