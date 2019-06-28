@@ -11,10 +11,7 @@ class App extends Component {
         <SimpleReactLightbox
           showThumbnails={true}
           showCaption={true}
-          overlayColor="rgba(255,255,255,0.6)"
-          captionColor="rgba(0,0,0,0)"
-          buttonsIconColor="rgba(255,255,255, 0.6)"
-        >
+          autoplaySpeed={5000}>
           <Heder />
           <hr />
           <Content />

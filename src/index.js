@@ -33,6 +33,7 @@ const SimpleReactLightbox = ({
   captionColor,
   buttonsBackgroundColor,
   buttonsIconColor,
+  autoplaySpeed,
   children
 }) => {
   return (
@@ -45,7 +46,7 @@ const SimpleReactLightbox = ({
         captionColor={captionColor}
         buttonsBackgroundColor={buttonsBackgroundColor}
         buttonsIconColor={buttonsIconColor}
-      >
+        autoplaySpeed={autoplaySpeed}>
         {children}
         <SRLLightbox />
       </SRLContextComponent>
@@ -58,6 +59,7 @@ SimpleReactLightbox.propTypes = {
   captionColor: PropTypes.string,
   buttonsBackgroundColor: PropTypes.string,
   buttonsIconColor: PropTypes.string,
+  autoplaySpeed: PropTypes.number,
   showThumbnails: PropTypes.bool,
   showCaption: PropTypes.bool,
   children: PropTypes.oneOfType([
@@ -71,6 +73,7 @@ SRLContextComponent.defaultProps = {
   captionColor: "#FFFFFF",
   buttonsBackgroundColor: "rgba(30,30,36,0.8)",
   buttonsIconColor: "rgba(255, 255, 255, 0.8)",
+  autoplaySpeed: 3000,
   showCaption: false,
   showThumbnails: false
 };

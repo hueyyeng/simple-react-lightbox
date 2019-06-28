@@ -62,12 +62,10 @@ function SRLLightboxSlideComponent({
       <SRLLightboxImageContainer
         showThumbnails={showThumbnails}
         showCaption={showCaption}
-        className="SRLImageContainer"
-      >
+        className="SRLImageContainer">
         <ReactScrollWheelHandler
           upHandler={() => handleNextImage(id)}
-          downHandler={() => handlePrevImage(id)}
-        >
+          downHandler={() => handlePrevImage(id)}>
           <TransitionGroup className="SRLTransitionGroup">
             <CSSTransition key={id} classNames="image-transition" timeout={800}>
               <SRLLightboxImage
@@ -111,12 +109,12 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains("SRLNextButton") ||
             event.target.classList.contains("SRLPrevButton") ||
             event.target.classList.contains("SRLCloseButton") ||
-            event.target.classList.contains("SRLshowThumbnails") ||
+            event.target.classList.contains("SRLAutoplayButton") ||
+            event.target.classList.contains("SRLThumbnails") ||
             event.target.classList.contains("SRLThumb") ||
             event.target.classList.contains("SRLCaption") ||
-            event.button !== 0 ||
             event.type === "touchstart" ||
-            event.type === "mousedown"
+            event.button !== 0
           ) {
             return;
           }

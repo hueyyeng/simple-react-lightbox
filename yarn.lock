@@ -8780,6 +8780,11 @@ react-scripts@^1.1.4:
   optionalDependencies:
     fsevents "^1.1.3"
 
+react-scroll-wheel-handler@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-scroll-wheel-handler/-/react-scroll-wheel-handler-1.0.8.tgz#0ca5083a487df3683ef5daff1a5093089504ddbd"
+  integrity sha512-GEZjJC4QO0/5u+qVZOa1eRb6pq+tm57gQTqAPDioIzigQs35Tgg2dms/iRNc2xFoMHctHLid8M+Hc1CWAs1s/g==
+
 react-transition-group@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.1.1.tgz#16efe9ac8c68306f6bef59c7da5a96b4dfd9fb32"

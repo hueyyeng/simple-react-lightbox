@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import { SRLLightboxGalleryStage } from "./styles";
 import SRLLightboxSlideComponent from "./SRLLightboxSlide";
@@ -14,6 +14,7 @@ const SRLLightboxGallery = ({
   selectedImage,
   overlayColor,
   captionColor,
+  autoplaySpeed,
   buttonsBackgroundColor,
   buttonsIconColor,
   showCaption,
@@ -21,6 +22,7 @@ const SRLLightboxGallery = ({
 }) => {
   const [currentImage, setCurrentImage] = useState(selectedImage);
   const [imagesGallery, ,] = useState(images);
+  const [autoplay, setAutoplay] = useState(false);
 
   // Handle Current Image
   const handleCurrentImage = useCallback(
@@ -39,6 +41,26 @@ const SRLLightboxGallery = ({
     [imagesGallery]
   );
 
+  function useInterval(callback, delay) {
+    const savedCallback = useRef();
+
+    // Remember the latest callback.
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
+  }
+
   // Handle Next Image
   const handleNextImage = useCallback(
     id => {
@@ -47,8 +69,10 @@ const SRLLightboxGallery = ({
       const currentPosition = _findIndex(imagesGallery, function(i) {
         return i.id === id;
       });
+
       /* The next image will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to he first image */
       const nextImage = imagesGallery[currentPosition + 1] || imagesGallery[0];
+
       setCurrentImage({
         source: nextImage.src,
         caption: nextImage.alt,
@@ -96,6 +120,11 @@ const SRLLightboxGallery = ({
     [currentImage.id, handleCloseLightbox, handleNextImage, handlePrevImage]
   );
 
+  const handleAutoplay = useInterval(
+    () => handleNextImage(currentImage.id),
+    autoplay ? autoplaySpeed : null
+  );
+
   useEffect(() => {
     // SETS THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
 
@@ -109,6 +138,7 @@ const SRLLightboxGallery = ({
         height: imagesGallery[0].height
       });
     }
+
     // Adds a class to the body to remove the overflow and compensate for the scroll-bar margin
     if (isOpened) {
       document.body.classList.add("SRLOpened");
@@ -134,7 +164,10 @@ const SRLLightboxGallery = ({
     handleCurrentImage,
     handleNextImage,
     handlePrevImage,
-    handleCloseLightbox
+    handleCloseLightbox,
+    autoplay,
+    autoplaySpeed,
+    setAutoplay
   };
 
   return (
@@ -167,6 +200,7 @@ SRLLightboxGallery.propTypes = {
   showThumbnails: PropTypes.bool,
   showCaption: PropTypes.bool,
   captionColor: PropTypes.string,
+  autoplaySpeed: PropTypes.number,
   buttonsBackgroundColor: PropTypes.string,
   buttonsIconColor: PropTypes.string,
   selectedImage: PropTypes.object,

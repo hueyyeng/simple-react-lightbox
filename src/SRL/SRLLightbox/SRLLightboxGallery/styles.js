@@ -190,6 +190,13 @@ const SRRLLightboxCloseIcon = styled(StyledButton)`
   padding: 15px;
 `;
 
+const SRRLLightboxAutoplayIcon = styled(StyledButton)`
+  top: 0;
+  right: 50px;
+  padding: 15px;
+  display: ${props => (props.autoplaySpeed === 0 ? "none" : "block")};
+`;
+
 const SRLLightboxNextIcon = styled(StyledButton)`
   top: calc(50% - 50px);
   padding: 15px;
@@ -253,6 +260,7 @@ export {
   SRRLLightboxCloseIcon,
   SRLLightboxNextIcon,
   SRLLightboxPrevIcon,
+  SRRLLightboxAutoplayIcon,
   SRLLightboxThubnailGallery,
   SRLLightboxThubnailGalleryImage
 };
