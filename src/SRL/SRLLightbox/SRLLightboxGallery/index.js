@@ -78,7 +78,6 @@ const SRLLightboxGallery = ({
 
       /* The next image will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to he first image */
       const nextImage = imagesGallery[currentPosition + 1] || imagesGallery[0];
-
       setCurrentImage({
         source: nextImage.src,
         caption: nextImage.alt,

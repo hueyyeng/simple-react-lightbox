@@ -73,8 +73,6 @@ function SRLLightboxSlideComponent({
           <TransitionGroup className="SRLTransitionGroup">
             <CSSTransition key={id} classNames="image-transition" timeout={800}>
               <SRLLightboxImage
-                onMouseDown={zoomIn}
-                onMouseUp={zoomOut}
                 onTouchStart={e => handleTouchStart(e)}
                 onTouchEnd={e => handleTouchEnd(e)}
                 ref={SRLImageContainerRef}
