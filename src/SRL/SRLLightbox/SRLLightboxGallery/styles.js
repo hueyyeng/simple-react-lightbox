@@ -70,6 +70,39 @@ const SRLLightboxImageContainer = styled.div`
     width: 100%;
     height: 100%;
   }
+  .pan-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    &.image-transition-enter {
+      opacity: 0;
+    }
+    &.image-transition-enter-active {
+      opacity: 1;
+      transition: opacity 800ms ease, transform 300ms ease;
+    }
+    &.image-transition-exit {
+      opacity: 1;
+    }
+    &.image-transition-exit-active {
+      opacity: 0;
+      transition: opacity 500ms ease;
+    }
+    &.image-transition-enter-done {
+      opacity: 1;
+      transition: opacity 500ms ease;
+    }
+    > div {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+  }
 `;
 
 const SRLLightboxImage = styled.img`
@@ -86,28 +119,7 @@ const SRLLightboxImage = styled.img`
   user-select: none;
   transition: opacity 500ms ease;
   opacity: 1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  &.image-transition-enter {
-    opacity: 0;
-  }
-  &.image-transition-enter-active {
-    opacity: 1;
-    transition: opacity 800ms ease, transform 300ms ease;
-  }
-  &.image-transition-exit {
-    opacity: 1;
-  }
-  &.image-transition-exit-active {
-    opacity: 0;
-    transition: opacity 500ms ease;
-  }
-  &.image-transition-enter-done {
-    opacity: 1;
-    transition: opacity 500ms ease;
-  }
+  margin: auto;
 `;
 
 const SRRLLightboxCaption = styled.div`
