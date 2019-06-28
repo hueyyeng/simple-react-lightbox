@@ -77,9 +77,8 @@
     "dist"
   ],
   "dependencies": {
-    "@ajainarayanan/react-pan-zoom": "^0.0.3",
     "core-js": "3",
-    "react-scroll-wheel-handler": "^1.0.8",
+    "react-scroll-wheel-handler": "^1.0.9",
     "react-transition-group": "^4.1.1",
     "regenerator-runtime": "^0.13.2"
   }

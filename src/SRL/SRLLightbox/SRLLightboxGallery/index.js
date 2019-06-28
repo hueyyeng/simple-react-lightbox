@@ -41,6 +41,7 @@ const SRLLightboxGallery = ({
     [imagesGallery]
   );
 
+  // Handle Autoplay
   function useInterval(callback, delay) {
     const savedCallback = useRef();
 
@@ -60,6 +61,11 @@ const SRLLightboxGallery = ({
       }
     }, [delay]);
   }
+
+  useInterval(
+    () => handleNextImage(currentImage.id),
+    autoplay ? autoplaySpeed : null
+  );
 
   // Handle Next Image
   const handleNextImage = useCallback(
@@ -84,6 +90,7 @@ const SRLLightboxGallery = ({
     [imagesGallery]
   );
 
+  // Handle Previous Image
   const handlePrevImage = useCallback(
     id => {
       /* We receive the ID of the current image and we want the image after that.
@@ -107,6 +114,7 @@ const SRLLightboxGallery = ({
     [imagesGallery]
   );
 
+  // Handle Navigation With Keys
   const handleLightboxWithKeys = useCallback(
     event => {
       if (event.keyCode === 39) {
@@ -120,11 +128,7 @@ const SRLLightboxGallery = ({
     [currentImage.id, handleCloseLightbox, handleNextImage, handlePrevImage]
   );
 
-  const handleAutoplay = useInterval(
-    () => handleNextImage(currentImage.id),
-    autoplay ? autoplaySpeed : null
-  );
-
+  // USE EFFECT
   useEffect(() => {
     // SETS THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
     // This is crucial in case the user uses the provided method to open the lightbox from a link or a button etc...

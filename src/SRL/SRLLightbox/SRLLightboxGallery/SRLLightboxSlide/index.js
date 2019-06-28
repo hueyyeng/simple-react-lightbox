@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import ReactScrollWheelHandler from "react-scroll-wheel-handler";
-import ReactPanZoom from "@ajainarayanan/react-pan-zoom";
+
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
@@ -29,7 +29,6 @@ function SRLLightboxSlideComponent({
     startClientX: 0,
     endClientX: 0
   });
-  const [zoom, setZoom] = useState(1);
 
   // Touch Events
   const handleTouchStart = event => {
@@ -37,14 +36,6 @@ function SRLLightboxSlideComponent({
       ...touchPosition,
       startClientX: event.touches[0].clientX
     });
-  };
-
-  const zoomIn = () => {
-    setZoom(zoom + 0.5);
-  };
-
-  const zoomOut = () => {
-    setZoom(1);
   };
 
   const handleTouchEnd = event => {
@@ -72,25 +63,25 @@ function SRLLightboxSlideComponent({
       <SRLLightboxImageContainer
         showThumbnails={showThumbnails}
         showCaption={showCaption}
-        className="SRLImageContainer">
+        className="SRLImageContainer"
+      >
         <ReactScrollWheelHandler
           upHandler={() => handleNextImage(id)}
           downHandler={() => handlePrevImage(id)}
-          disableKeyboard={true}>
+          disableKeyboard={true}
+        >
           <TransitionGroup className="SRLTransitionGroup">
             <CSSTransition key={id} classNames="image-transition" timeout={800}>
-              <ReactPanZoom zoom={zoom} pandx={0} pandy={0}>
-                <SRLLightboxImage
-                  onMouseDown={zoomIn}
-                  onMouseUp={zoomOut}
-                  onTouchStart={e => handleTouchStart(e)}
-                  onTouchEnd={e => handleTouchEnd(e)}
-                  ref={SRLImageContainerRef}
-                  className="SRLImage"
-                  src={source}
-                  alt={caption}
-                />
-              </ReactPanZoom>
+              <SRLLightboxImage
+                onMouseDown={zoomIn}
+                onMouseUp={zoomOut}
+                onTouchStart={e => handleTouchStart(e)}
+                onTouchEnd={e => handleTouchEnd(e)}
+                ref={SRLImageContainerRef}
+                className="SRLImage"
+                src={source}
+                alt={caption}
+              />
             </CSSTransition>
           </TransitionGroup>
         </ReactScrollWheelHandler>
