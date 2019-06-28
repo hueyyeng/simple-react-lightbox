@@ -127,7 +127,6 @@ const SRLLightboxGallery = ({
 
   useEffect(() => {
     // SETS THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
-
     // This is crucial in case the user uses the provided method to open the lightbox from a link or a button etc...
     if (currentImage.id === undefined) {
       setCurrentImage({
@@ -150,14 +149,7 @@ const SRLLightboxGallery = ({
       document.body.classList.remove("SRLOpened");
       document.removeEventListener("keydown", handleLightboxWithKeys, false);
     };
-  }, [
-    handleLightboxWithKeys,
-    handleCurrentImage,
-    imagesGallery,
-    isOpened,
-    selectedImage,
-    currentImage.id
-  ]);
+  }, [handleLightboxWithKeys, imagesGallery, isOpened, currentImage.id]);
 
   const controls = {
     currentImageId: currentImage.id,
