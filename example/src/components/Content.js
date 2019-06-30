@@ -1,6 +1,12 @@
 import React from "react";
 import { SRLImages } from "simple-react-lightbox";
-
+import img01 from "../images/800x800.jpg";
+import img02 from "../images/1000x600.jpg";
+import img03 from "../images/1024x768.jpg";
+import img04 from "../images/1920x1024.jpg";
+import img05 from "../images/2000x1900.jpg";
+import img06 from "../images/4000x1980.jpg";
+import img07 from "../images/4000x1980_2.jpg";
 const Content = () => {
   return (
     <SRLImages>
@@ -17,27 +23,26 @@ const Content = () => {
         dolore? Deserunt, sit corporis repellendus quasi fugit voluptatem
         mollitia exercitationem ipsa ipsam earum inventore odit.
       </p>
-      <img src="https://picsum.photos/400" alt="test alt tag" />
-      <img src="https://picsum.photos/500" alt="test alt tag 1" />
+      <img src={img01} alt="Lorem ipsum, dolor sit amet" />
+      <img src={img02} alt="Consectetur adipisicing elit" />
+      <img src={img03} alt="Nulla, illo cum nobis laborum" />
       <p>
-        <img src="https://picsum.photos/600" alt="test alt tag 3" />
+        <img src={img04} alt="Dolores aspernatur odit totam" />
       </p>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione aperiam
         iusto ea beatae perspiciatis fugit soluta nihil facilis inventore culpa.
       </p>
       <span>
-        <img src="https://picsum.photos/800" alt="test alt tag 3" />
+        <img src={img05} alt="Magnam iure distinctio" />
       </span>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione aperiam
         iusto ea beatae perspiciatis fugit soluta nihil facilis inventore culpa.
       </p>
       <div>
-        <img src="https://picsum.photos/2000/1600" alt="test alt tag 4" />
-        <img src="https://picsum.photos/3000/3000" alt="test alt tag 3" />
-        <img src="https://picsum.photos/1920/1080" alt="test alt tag 5" />
-        <img src="https://picsum.photos/2000/1000" alt="test alt tag 3" />
+        <img src={img06} alt="Hic unde nostrum qui" />
+        <img src={img07} alt="Deserunt, sit corporis repellendus quasi fugit" />
       </div>
     </SRLImages>
   );
