@@ -15,6 +15,7 @@ const SRLLightboxGallery = ({
   overlayColor,
   captionColor,
   autoplaySpeed,
+  transitionSpeed,
   buttonsBackgroundColor,
   buttonsIconColor,
   showCaption,
@@ -180,6 +181,7 @@ const SRLLightboxGallery = ({
         handleCurrentImage={controls.handleCurrentImage}
         handleNextImage={controls.handleNextImage}
         handlePrevImage={controls.handlePrevImage}
+        transitionSpeed={transitionSpeed}
         images={images}
         isopened={isOpened}
         {...currentImage}
@@ -196,6 +198,7 @@ SRLLightboxGallery.propTypes = {
   showCaption: PropTypes.bool,
   captionColor: PropTypes.string,
   autoplaySpeed: PropTypes.number,
+  transitionSpeed: PropTypes.number,
   buttonsBackgroundColor: PropTypes.string,
   buttonsIconColor: PropTypes.string,
   selectedImage: PropTypes.object,

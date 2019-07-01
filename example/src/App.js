@@ -11,7 +11,8 @@ class App extends Component {
         <SimpleReactLightbox
           showThumbnails={true}
           showCaption={true}
-          autoplaySpeed={5000}>
+          autoplaySpeed={3000}
+          transitionSpeed={1200}>
           <Heder />
           <hr />
           <Content />

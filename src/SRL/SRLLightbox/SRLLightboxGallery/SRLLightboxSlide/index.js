@@ -22,8 +22,10 @@ function SRLLightboxSlideComponent({
   caption,
   captionColor,
   showThumbnails,
-  showCaption
+  showCaption,
+  transitionSpeed
 }) {
+  console.log(transitionSpeed);
   const SRLImageContainerRef = useRef();
   const [touchState, setTouchState] = useState({
     startX: 0,
@@ -94,10 +96,14 @@ function SRLLightboxSlideComponent({
           downHandler={() => handlePrevImage(id)}
           disableKeyboard={true}>
           <TransitionGroup className="SRLTransitionGroup">
-            <CSSTransition key={id} classNames="image-transition" timeout={800}>
+            <CSSTransition
+              key={id}
+              classNames="image-transition"
+              timeout={transitionSpeed}>
               <SRLLightboxImage
                 ref={SRLImageContainerRef}
                 className="SRLImage"
+                transitionSpeed={transitionSpeed}
                 src={source}
                 alt={caption}
               />
@@ -172,6 +178,7 @@ SRLLightboxSlideComponent.propTypes = {
   captionColor: PropTypes.string,
   showThumbnails: PropTypes.bool,
   showCaption: PropTypes.bool,
+  transitionSpeed: PropTypes.number,
   images: PropTypes.array,
   handleCloseLightbox: PropTypes.func,
   handleCurrentImage: PropTypes.func,

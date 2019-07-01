@@ -96,18 +96,33 @@ const SRLLightboxImage = styled.img`
   }
   &.image-transition-enter-active {
     opacity: 1;
-    transition: opacity 800ms ease, transform 300ms ease;
+    transition: ${props =>
+      props.transitionSpeed
+        ? `opacity ${props.transitionSpeed + 600}ms ease, transform ${
+            props.transitionSpeed
+          }ms ease`
+        : "opacity 1200ms ease, transform 600ms ease"};
   }
   &.image-transition-exit {
     opacity: 1;
   }
   &.image-transition-exit-active {
     opacity: 0;
-    transition: opacity 500ms ease;
+    transition: ${props =>
+      props.transitionSpeed
+        ? `opacity ${props.transitionSpeed}ms ease, transform ${
+            props.transitionSpeed
+          }ms ease`
+        : "opacity 600ms ease;"};
   }
   &.image-transition-enter-done {
     opacity: 1;
-    transition: opacity 500ms ease;
+    transition: ${props =>
+      props.transitionSpeed
+        ? `opacity ${props.transitionSpeed}ms ease, transform ${
+            props.transitionSpeed
+          }ms ease`
+        : "opacity 600ms ease;"};
   }
 `;
 
