@@ -25,36 +25,59 @@ function SRLLightboxSlideComponent({
   showCaption
 }) {
   const SRLImageContainerRef = useRef();
-  const [touchPosition, setTouchPosition] = useState({
-    startClientX: 0,
-    endClientX: 0
+  const [touchState, setTouchState] = useState({
+    startX: 0,
+    startY: 0,
+    distX: 0,
+    distY: 0,
+    threshold: 150, // required min distance traveled to be considered swipe
+    restraint: 100, // maximum distance allowed at the same time in perpendicular direction
+    allowedTime: 300, // maximum time allowed to travel that distance
+    startTime: 0,
+    elapsedTime: 0
   });
 
-  // Touch Events
-  const handleTouchStart = event => {
-    setTouchPosition({
-      ...touchPosition,
-      startClientX: event.touches[0].clientX
+  function handleTouchStart(e) {
+    let touchObject = e.changedTouches[0];
+    setTouchState({
+      ...touchState,
+      startX: touchObject.pageX,
+      startY: touchObject.pageY,
+      startTime: new Date().getTime()
     });
-  };
+  }
 
-  const handleTouchEnd = event => {
-    setTouchPosition({
-      ...touchPosition,
-      endClientX: event.changedTouches[0].clientX
+  function handleTouchEnd(e) {
+    let touchObject = e.changedTouches[0];
+    let {
+      startX,
+      startY,
+      startTime,
+      distX,
+      distY,
+      elapsedTime,
+      allowedTime,
+      threshold,
+      restraint
+    } = touchState;
+    setTouchState({
+      ...touchState,
+      distX: touchObject.pageX - startX,
+      distY: touchObject.pageY - startY,
+      elapsedTime: new Date().getTime() - startTime
     });
-    if (
-      touchPosition.startClientX > touchPosition.endClientX &&
-      touchPosition.endClientX < touchPosition.startClientX - 100
-    ) {
-      handleNextImage(id);
-    } else if (
-      touchPosition.startClientX < touchPosition.endClientX &&
-      touchPosition.endClientX > touchPosition.startClientX + 100
-    ) {
-      handlePrevImage(id);
+    // This is, in a way, a method to check if the action is a Swipe...
+    // if the finger is held by more than 400 milliseconds, maybe that wasn't a swipe
+    if (elapsedTime <= allowedTime) {
+      if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) {
+        if (distY < 0) {
+          handlePrevImage(id);
+        } else if (distY > 0) {
+          handleNextImage(id);
+        }
+      }
     }
-  };
+  }
 
   useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
 
@@ -64,17 +87,15 @@ function SRLLightboxSlideComponent({
         showThumbnails={showThumbnails}
         showCaption={showCaption}
         className="SRLImageContainer"
-      >
+        onTouchStart={e => handleTouchStart(e)}
+        onTouchEnd={e => handleTouchEnd(e)}>
         <ReactScrollWheelHandler
           upHandler={() => handleNextImage(id)}
           downHandler={() => handlePrevImage(id)}
-          disableKeyboard={true}
-        >
+          disableKeyboard={true}>
           <TransitionGroup className="SRLTransitionGroup">
             <CSSTransition key={id} classNames="image-transition" timeout={800}>
               <SRLLightboxImage
-                onTouchStart={e => handleTouchStart(e)}
-                onTouchEnd={e => handleTouchEnd(e)}
                 ref={SRLImageContainerRef}
                 className="SRLImage"
                 src={source}

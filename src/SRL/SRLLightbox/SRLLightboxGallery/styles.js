@@ -228,6 +228,9 @@ const SRLLightboxThubnailGallery = styled.div`
   flex-wrap: nowrap;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+  @media (max-width: 768px) {
+    justify-content: start;
+  }
 `;
 
 const SRLLightboxThubnailGalleryImage = styled.a`
