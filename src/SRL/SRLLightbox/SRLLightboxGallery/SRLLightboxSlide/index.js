@@ -25,7 +25,6 @@ function SRLLightboxSlideComponent({
   showCaption,
   transitionSpeed
 }) {
-  console.log(transitionSpeed);
   const SRLImageContainerRef = useRef();
   const [touchState, setTouchState] = useState({
     startX: 0,

@@ -24,7 +24,7 @@ const SRLLightboxGallery = ({
   const [currentImage, setCurrentImage] = useState(selectedImage);
   const [imagesGallery, ,] = useState(images);
   const [autoplay, setAutoplay] = useState(false);
-
+  console.log("test");
   // Handle Current Image
   const handleCurrentImage = useCallback(
     id => {
@@ -142,10 +142,17 @@ const SRLLightboxGallery = ({
       });
     }
 
+    console.log("effect");
+
     // Adds a class to the body to remove the overflow and compensate for the scroll-bar margin
     if (isOpened) {
       document.body.classList.add("SRLOpened");
-      document.addEventListener("keydown", handleLightboxWithKeys, false);
+      document.addEventListener(
+        "keydown",
+        handleLightboxWithKeys,
+        { once: true },
+        false
+      );
     }
 
     // Cleans up function to remove the class from the body

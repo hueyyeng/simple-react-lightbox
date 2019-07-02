@@ -1,0 +1,8 @@
+#gallery {
+  img {
+    width: calc(33.3333% - 2px);
+    height: 300px;
+    object-fit: cover;
+    margin: 1px;
+  }
+}

@@ -1,14 +1,21 @@
 import React from "react";
-import { withSRLContext } from "simple-react-lightbox";
+import SRLLogo from "../assets/images/SRL_Logo.png";
 
-const Header = props => {
+const Header = () => {
   return (
-    <div>
-      <h1>Header</h1>
-      <span onClick={props.openLightbox}>Open lightbox</span>
-      <span onClick={props.closeLightbox}>Close lightbox</span>
+    <div id="header">
+      <div className="container">
+        <div className="section">
+          <div className="SRL_Logo">
+            <img
+              src={SRLLogo}
+              alt="Simple React Lightbox - A simple but functional light-box for React"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default withSRLContext(Header);
+export default Header;
