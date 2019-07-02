@@ -26,15 +26,18 @@ const PortalWithTransitionStyles = styled(Portal)`
 
 function SRLLightbox() {
   const context = useContext(SRLCtx);
+
   return (
     <CSSTransition
       in={context.isOpened}
       className="portal-transition"
       classNames="portal-transition"
-      timeout={duration}>
+      timeout={duration}
+    >
       <PortalWithTransitionStyles
         selector="SRLLightbox"
-        isOpened={context.isOpened}>
+        isOpened={context.isOpened}
+      >
         <SRLLightboxGallery {...context} />
       </PortalWithTransitionStyles>
     </CSSTransition>

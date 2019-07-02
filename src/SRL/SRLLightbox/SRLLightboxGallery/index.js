@@ -24,7 +24,6 @@ const SRLLightboxGallery = ({
   const [currentImage, setCurrentImage] = useState(selectedImage);
   const [imagesGallery, ,] = useState(images);
   const [autoplay, setAutoplay] = useState(false);
-  console.log("test");
   // Handle Current Image
   const handleCurrentImage = useCallback(
     id => {
@@ -141,8 +140,6 @@ const SRLLightboxGallery = ({
         height: imagesGallery[0].height
       });
     }
-
-    console.log("effect");
 
     // Adds a class to the body to remove the overflow and compensate for the scroll-bar margin
     if (isOpened) {

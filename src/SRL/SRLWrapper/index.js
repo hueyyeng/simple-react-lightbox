@@ -10,25 +10,27 @@ const SRLWrapper = props => {
 
   // Sets a new Ref which will be used to target the div with the images
   const imagesContainer = useRef(null);
-
+  const imagesObject = [{}];
   // Grabs the images and set them using setImages
   useEffect(() => {
-    // Gets an HTMLCollection which we need to change to a normal array
+    // Gets an HTMLCollection which we need to change to a normal array.
+    // We want to extrapolate only the thing that we need, we don't want to pass an etire HTMLCollection to the context
     let collectedImages = imagesContainer.current.getElementsByTagName("img");
+    const imagesArray = Array.prototype.slice.call(collectedImages);
 
     // Checks if collectedImages is not empty (which means there were no images)
     if (collectedImages.length > 0) {
-      setImages(collectedImages);
-      // Checks if images were correctly set and so that is not empty
-      if (images.length > 0 && !isImageSet) {
-        // Convert the images to an array that is not an HTMLCollection (IE 11 -_-)
-        const imagesArray = Array.prototype.slice.call(images);
-        // Uses a map to go through each images and do the following:
+      // 1) Grabs the images. This will be empty on the first run but it will run again as we set setIsImageIsSet
+      // When it runs the second time will grab the images and add them to the context
+      context.grabImages(images);
+
+      // Checks if images were correctly set and don't repeat this infinitely again
+      if (!isImageSet) {
+        // Uses a map to go through each images
         imagesArray.map((i, index) => {
           // 1) Sets an ID for the images that we will use for the next/prev image
           i.id = `img${index}`;
           // 2) Adds an event listerner that will trigger the function to open the lightbox (passed using the Context)
-
           i.addEventListener("click", e => {
             context.handleLightbox(
               e.target.src,
@@ -39,13 +41,24 @@ const SRLWrapper = props => {
             );
           });
         });
-        // 3 Avoid setting the ID and the event listener on the image AGAIN by setting true so it's skipped (because the useEffect will be triggered again as with the function below the component is going to be re-rendered again because the context is changing)
+
+        imagesArray.map((image, index) => {
+          imagesObject[index] = {
+            src: image.src,
+            alt: image.alt,
+            id: `img${index}`,
+            width: image.width,
+            height: image.height
+          };
+        });
+
+        setImages(imagesObject);
+
+        // Avoid ifinite re-rendering by changing this value to TRUE
         setIsImageSet(true);
-        // 4 Grabs the images with the new event listern and ID add add them to the context
-        context.grabImages(images);
       }
     }
-  }, [context, isImageSet, images]);
+  }, [context, images, imagesObject, isImageSet]);
 
   return <div ref={imagesContainer}>{props.children}</div>;
 };
