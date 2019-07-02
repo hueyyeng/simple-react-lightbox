@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SRLContextComponent from "./SRL/SRLContext";
-import SRLImages from "./SRL/SRLImages";
+import SRLWrapper from "./SRL/SRLWrapper";
 import SRLLightbox from "./SRL/SRLLightbox";
 import { withSRLContext } from "./SRL/SRLHoc";
 import { createGlobalStyle } from "styled-components";
@@ -83,5 +83,5 @@ SRLContextComponent.defaultProps = {
 };
 
 export { withSRLContext };
-export { SRLImages };
+export { SRLWrapper };
 export default SimpleReactLightbox;

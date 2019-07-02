@@ -2,7 +2,7 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { SRLCtx } from "../SRLContext";
 
-const SRLImages = props => {
+const SRLWrapper = props => {
   // Imports the context
   const context = useContext(SRLCtx);
   const [images, setImages] = useState([]);
@@ -50,9 +50,9 @@ const SRLImages = props => {
   return <div ref={imagesContainer}>{props.children}</div>;
 };
 
-export default SRLImages;
+export default SRLWrapper;
 
-SRLImages.propTypes = {
+SRLWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
