@@ -48,7 +48,8 @@ const SimpleReactLightbox = ({
         buttonsBackgroundColor={buttonsBackgroundColor}
         buttonsIconColor={buttonsIconColor}
         autoplaySpeed={autoplaySpeed}
-        transitionSpeed={transitionSpeed}>
+        transitionSpeed={transitionSpeed}
+      >
         {children}
         <SRLLightbox />
       </SRLContextComponent>
@@ -78,8 +79,8 @@ SRLContextComponent.defaultProps = {
   buttonsIconColor: "rgba(255, 255, 255, 0.8)",
   autoplaySpeed: 3000,
   transitionSpeed: 600,
-  showCaption: false,
-  showThumbnails: false
+  showCaption: true,
+  showThumbnails: true
 };
 
 export { withSRLContext };
