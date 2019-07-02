@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./components/Header";
-import Gallery from "./components/Gallery";
+import Content from "./components/Content";
 import SimpleReactLightbox from "simple-react-lightbox";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <SimpleReactLightbox>
       <div className="App">
         <Header />
-        <Gallery />
+        <Content />
       </div>
     </SimpleReactLightbox>
   );
