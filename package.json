@@ -53,6 +53,8 @@
     "@babel/plugin-syntax-import-meta": "^7.0.0",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
+    "@emotion/core": "^10.0.14",
+    "@emotion/styled": "^10.0.14",
     "@svgr/rollup": "^2.4.1",
     "babel-eslint": "^10.0.2",
     "core-js": "3",
@@ -79,8 +81,7 @@
     "rollup-plugin-node-resolve": "^5.0.3",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-url": "^2.2.2",
-    "styled-components": "^4.3.1"
+    "rollup-plugin-url": "^2.2.2"
   },
   "files": [
     "dist"

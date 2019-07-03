@@ -4,7 +4,7 @@ import Portal from "../SRLPortal";
 import PropTypes from "prop-types";
 import SRLLightboxGallery from "./SRLLightboxGallery";
 import { SRLCtx } from "../SRLContext";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 const duration = 500;
 
 const PortalWithTransitionStyles = styled(Portal)`

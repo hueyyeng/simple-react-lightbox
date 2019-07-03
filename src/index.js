@@ -4,27 +4,7 @@ import SRLContextComponent from "./SRL/SRLContext";
 import SRLWrapper from "./SRL/SRLWrapper";
 import SRLLightbox from "./SRL/SRLLightbox";
 import { withSRLContext } from "./SRL/SRLHoc";
-import { createGlobalStyle } from "styled-components";
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    #lightbox {
-      width: 0;
-      height: 0;
-    }
-    &.SRLOpened {
-      overflow: hidden;
-      margin-right: 15px;
-      #lightbox {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-      }
-    }
-  }
-`;
+import { Global, css } from "@emotion/core";
 
 const SimpleReactLightbox = ({
   overlayColor,
@@ -39,7 +19,28 @@ const SimpleReactLightbox = ({
 }) => {
   return (
     <React.Fragment>
-      <GlobalStyle />
+      <Global
+        styles={css`
+          body {
+            #lightbox {
+              width: 0;
+              height: 0;
+            }
+            &.SRLOpened {
+              overflow: hidden;
+              /* Compensate for the scrollbar when overflow is hidden */
+              margin-right: 15px;
+              #lightbox {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+              }
+            }
+          }
+        `}
+      />
       <SRLContextComponent
         overlayColor={overlayColor}
         showCaption={showCaption}
@@ -48,8 +49,7 @@ const SimpleReactLightbox = ({
         buttonsBackgroundColor={buttonsBackgroundColor}
         buttonsIconColor={buttonsIconColor}
         autoplaySpeed={autoplaySpeed}
-        transitionSpeed={transitionSpeed}
-      >
+        transitionSpeed={transitionSpeed}>
         {children}
         <SRLLightbox />
       </SRLContextComponent>
