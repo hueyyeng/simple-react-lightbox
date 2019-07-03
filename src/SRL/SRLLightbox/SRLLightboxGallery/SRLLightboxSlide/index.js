@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -26,59 +26,51 @@ function SRLLightboxSlideComponent({
   transitionSpeed
 }) {
   const SRLImageContainerRef = useRef();
-  const [touchState, setTouchState] = useState({
-    startX: 0,
-    startY: 0,
-    distX: 0,
-    distY: 0,
-    threshold: 150, // required min distance traveled to be considered swipe
-    restraint: 100, // maximum distance allowed at the same time in perpendicular direction
-    allowedTime: 300, // maximum time allowed to travel that distance
-    startTime: 0,
-    elapsedTime: 0
-  });
+  // credit: http://www.javascriptkit.com/javatutors/touchevents2.shtml
+  let startX;
+  let startY;
+  let distX;
+  let distY;
+  let threshold = 150; // required min distance traveled to be considered swipe
+  let restraint = 100; // maximum distance allowed at the same time in perpendicular direction
+  let allowedTime = 300; // maximum time allowed to travel that distance
+  let elapsedTime;
+  let startTime;
 
-  function handleTouchStart(e) {
-    let touchObject = e.changedTouches[0];
-    setTouchState({
-      ...touchState,
-      startX: touchObject.pageX,
-      startY: touchObject.pageY,
-      startTime: new Date().getTime()
-    });
-  }
-
-  function handleTouchEnd(e) {
-    let touchObject = e.changedTouches[0];
-    let {
-      startX,
-      startY,
-      startTime,
-      distX,
-      distY,
-      elapsedTime,
-      allowedTime,
-      threshold,
-      restraint
-    } = touchState;
-
-    // This is, in a way, a method to check if the action is a Swipe...
-    // if the finger is held by more than 400 milliseconds, maybe that wasn't a swipe
+  function handleTouchChange(x, y, t, r) {
+    // FIRST CONDITION
+    /* This is, in a way, a method to check if the action is a Swipe...
+       if the finger is held by more than 400 milliseconds, maybe that wasn't a swipe */
     if (elapsedTime <= allowedTime) {
-      setTouchState({
-        ...touchState,
-        distX: touchObject.pageX - startX,
-        distY: touchObject.pageY - startY,
-        elapsedTime: new Date().getTime() - startTime
-      });
-      if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) {
-        if (distY <= 0) {
+      // SECOND CONDITION
+      if (Math.abs(x) >= t) {
+        if (x <= 0) {
           handlePrevImage(id);
-        } else if (distY >= 0) {
+        } else if (x >= 0) {
           handleNextImage(id);
         }
       }
     }
+  }
+
+  function handleTouchStart(e) {
+    let touchObject = e.changedTouches[0];
+    startX = touchObject.pageX;
+    startY = touchObject.pageY;
+    startTime = new Date().getTime();
+    e.preventDefault();
+  }
+
+  function handleTouchEnd(e) {
+    let touchObject = e.changedTouches[0];
+    distX = touchObject.pageX - startX;
+    distY = touchObject.pageX - startY;
+    elapsedTime = new Date().getTime() - startTime;
+
+    // Run the function on touchend
+    handleTouchChange(distX, distY, threshold, restraint);
+
+    e.preventDefault();
   }
 
   useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
