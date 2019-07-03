@@ -14,24 +14,6 @@ body {
   }
 }
 
-// Define a container
-.container {
-  max-width: 1240px;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-
-  // Define a section inside of the container
-  .section {
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-  }
-}
-
 img {
   width: 100%;
   height: auto;

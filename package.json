@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "A simple but functional lightbox for React",
   "author": "michelecocuccio",
-  "license": "MIT",
+  "license": "(ISC OR GPL-3.0)",
   "repository": "michelecocuccio/simple-react-lightbox",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

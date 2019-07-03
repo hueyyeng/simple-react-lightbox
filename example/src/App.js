@@ -10,7 +10,7 @@ const options = {
   buttonsIconColor: "rgba(205, 221, 221, 0.6)",
   autoplaySpeed: 1500,
   transitionSpeed: 900,
-  showCaption: false,
+  showCaption: true,
   showThumbnails: true
 };
 

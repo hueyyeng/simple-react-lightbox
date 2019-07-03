@@ -61,19 +61,20 @@ function SRLLightboxSlideComponent({
       threshold,
       restraint
     } = touchState;
-    setTouchState({
-      ...touchState,
-      distX: touchObject.pageX - startX,
-      distY: touchObject.pageY - startY,
-      elapsedTime: new Date().getTime() - startTime
-    });
+
     // This is, in a way, a method to check if the action is a Swipe...
     // if the finger is held by more than 400 milliseconds, maybe that wasn't a swipe
     if (elapsedTime <= allowedTime) {
+      setTouchState({
+        ...touchState,
+        distX: touchObject.pageX - startX,
+        distY: touchObject.pageY - startY,
+        elapsedTime: new Date().getTime() - startTime
+      });
       if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) {
-        if (distY < 0) {
+        if (distY <= 0) {
           handlePrevImage(id);
-        } else if (distY > 0) {
+        } else if (distY >= 0) {
           handleNextImage(id);
         }
       }

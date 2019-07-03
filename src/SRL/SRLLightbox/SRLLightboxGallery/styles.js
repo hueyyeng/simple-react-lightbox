@@ -164,8 +164,8 @@ const StyledButton = styled.button`
   visibility: inherit;
   z-index: 9992;
   @media (max-width: 768px) {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     padding: 0;
   }
   &:focus {
@@ -204,6 +204,10 @@ const SRRLLightboxCloseIcon = styled(StyledButton)`
   top: 0;
   right: 0;
   padding: 15px;
+  @media (max-width: 768px) {
+    top: 5px;
+    right: 5px;
+  }
 `;
 
 const SRRLLightboxAutoplayIcon = styled(StyledButton)`
@@ -211,6 +215,9 @@ const SRRLLightboxAutoplayIcon = styled(StyledButton)`
   right: 50px;
   padding: 15px;
   display: ${props => (props.autoplaySpeed === 0 ? "none" : "block")};
+  @media (max-width: 768px) {
+    top: 5px;
+  }
 `;
 
 const SRLLightboxNextIcon = styled(StyledButton)`
