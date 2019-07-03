@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import SRLLightboxGallery from "./SRLLightboxGallery";
 import { SRLCtx } from "../SRLContext";
 import styled from "styled-components";
-const duration = 300;
+const duration = 500;
 
 const PortalWithTransitionStyles = styled(Portal)`
   &.portal-transition-enter {
@@ -32,12 +32,10 @@ function SRLLightbox() {
       in={context.isOpened}
       className="portal-transition"
       classNames="portal-transition"
-      timeout={duration}
-    >
+      timeout={duration}>
       <PortalWithTransitionStyles
         selector="SRLLightbox"
-        isOpened={context.isOpened}
-      >
+        isOpened={context.isOpened}>
         <SRLLightboxGallery {...context} />
       </PortalWithTransitionStyles>
     </CSSTransition>
