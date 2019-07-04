@@ -1,6 +1,9 @@
 #header {
   padding: 20px 0;
   .SRL_Logo {
+    @media (max-width: 768px) {
+      text-align: center;
+    }
     img {
       width: 125px;
       height: auto;
@@ -13,14 +16,24 @@
   nav {
     margin-left: auto;
     display: block;
-    width: 225px;
     ul {
       list-style: none;
       display: flex;
+      margin: 0;
+      padding: 0;
+      @media (max-width: 768px) {
+        margin: 20px auto;
+      }
       li {
-        margin-right: 20px;
+        margin-left: auto;
+        @media (max-width: 768px) {
+          margin: 0 auto;
+        }
         &:last-child {
-          margin-right: 0;
+          margin-left: 20px;
+          @media (max-width: 768px) {
+            margin: 0 auto;
+          }
         }
         a {
           color: #313e50;
@@ -36,6 +49,9 @@
     .SRL_CTA-OpenLightbox {
       display: block;
       margin-left: auto;
+      @media (max-width: 768px) {
+        margin: 0 auto;
+      }
       font-family: "Roboto", sans-serif;
       font-weight: 700;
       color: white;
