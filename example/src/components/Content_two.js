@@ -21,7 +21,10 @@ const Content = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-6 col-12 col-text">
-                <h1>Lorem ipsum dolor sit amet</h1>
+                <h1>
+                  Page 2 - <br />
+                  Lorem ipsum
+                </h1>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -38,13 +41,16 @@ const Content = () => {
                 </p>
               </div>
               <div className="col-md-6 col-12 col-image">
-                <img src={img01} alt="New York City - Architecture" />
+                <img src={img08} alt="A beautiful landscape" />
               </div>
               <div className="col-md-4 col-12 col-image-small">
-                <img src={img02} alt="Between Two Mountains" />
+                <img src={img07} alt="BE PROUD!" />
               </div>
               <div className="col-md-4 col-12 col-image-small">
-                <img src={img03} alt="Parallel Buildings" />
+                <img
+                  src={img09}
+                  alt="It's so beautiful it makes me want to jump in"
+                />
               </div>
               <div className="col-md-4 col-12 col-image-small">
                 <img src={img04} alt="The forst and the fog..." />
@@ -70,10 +76,10 @@ const Content = () => {
                 </p>
               </div>
               <div className="col-12 col-md-6 col-image-half">
-                <img src={img07} alt="BE PROUD!" />
+                <img src={img02} alt="Between Two Mountains" />
               </div>
               <div className="col-12 col-md-6 col-image-half">
-                <img src={img08} alt="A beautiful landscape" />
+                <img src={img01} alt="New York City - Architecture" />
               </div>
               <div className="col-12">
                 <h2>Lorem ipsum dolor sit amet</h2>
@@ -97,13 +103,10 @@ const Content = () => {
                 </p>
               </div>
               <div className="col-12 col-image-large">
-                <img
-                  src={img09}
-                  alt="It's so beautiful it makes me want to jump in"
-                />
+                <img src={img06} alt="Beautiful landscape...speachless..." />
               </div>
               <div className="col-12 col-image-large">
-                <img src={img06} alt="Beautiful landscape...speachless..." />
+                <img src={img03} alt="Parallel Buildings" />
               </div>
             </div>
           </div>

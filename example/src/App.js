@@ -1,7 +1,8 @@
 import React from "react";
-import Header from "./components/Header";
 import Content from "./components/Content";
+import ContentTwo from "./components/Content_two";
 import SimpleReactLightbox from "simple-react-lightbox";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 const options = {
   overlayColor: "white",
@@ -18,8 +19,10 @@ function App() {
   return (
     <SimpleReactLightbox {...options}>
       <div className="App">
-        <Header />
-        <Content />
+        <Router>
+          <Route path="/" exact component={Content} />
+          <Route path="/example-two/" component={ContentTwo} />
+        </Router>
       </div>
     </SimpleReactLightbox>
   );

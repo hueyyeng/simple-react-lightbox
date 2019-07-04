@@ -10,11 +10,32 @@
       }
     }
   }
+  nav {
+    margin-left: auto;
+    display: block;
+    width: 225px;
+    ul {
+      list-style: none;
+      display: flex;
+      li {
+        margin-right: 20px;
+        &:last-child {
+          margin-right: 0;
+        }
+        a {
+          color: #313e50;
+          text-transform: uppercase;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
   .SRL_CTA {
     margin-bottom: 10px;
     .SRL_CTA-OpenLightbox {
-      margin-left: auto;
       display: block;
+      margin-left: auto;
       font-family: "Roboto", sans-serif;
       font-weight: 700;
       color: white;
