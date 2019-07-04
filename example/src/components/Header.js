@@ -13,7 +13,7 @@ const Header = props => {
     <div id="header">
       <div className="container">
         <div className="row align-items-end">
-          <div className="SRL_Logo col-md-4 col-12">
+          <div className="SRL_Logo col-md-6 col-12">
             <img
               src={SRLLogo}
               alt="Simple React Lightbox - A simple but functional light-box for React"
