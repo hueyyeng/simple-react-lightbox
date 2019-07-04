@@ -57,9 +57,16 @@ const SRLContextComponent = props => {
   };
 
   const grabImages = images => {
-    // SUPER IMPORTANT TO AVOID A MEMORY LEAK
+    // IT'S CRUCIAL TO ADD THESE CONDITIONALS CHECK OR THE DISPATCH WILL RUN INFINITELY
+    /*
+    First: we compare the "prev state" with the new state from the context to see if the images is not an empty array
+    Second: we check if the two objects are different. In this case it means that there are multiple galleries and we want to grab the new images
+    */
     if (!state.isOpened) {
-      if (state.images.length < images.length) {
+      if (
+        state.images.length < images.length ||
+        !isEqual(state.images, images)
+      ) {
         dispatch({ type: "grabImages", images });
       }
     }
