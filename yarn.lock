@@ -9368,6 +9368,11 @@ rollup-plugin-commonjs@^10.0.0:
     resolve "^1.11.0"
     rollup-pluginutils "^2.8.1"
 
+rollup-plugin-gzip@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-gzip/-/rollup-plugin-gzip-2.2.0.tgz#fd918f925bb5b82f7c80558aee8ff4f61f559814"
+  integrity sha512-3DFfB/0zGkvLMrZ3MnTU7L906u20dqepuxWJKXvnFZTji+IY8XwgA9iLvBX2H40C//fA3vWhNmtuPiFMfSzFgQ==
+
 rollup-plugin-node-resolve@^5.0.3:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-5.1.0.tgz#49608b6ecaf2b776ab83e317d39b282d65d21b76"

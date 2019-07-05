@@ -5,7 +5,7 @@ import postcss from "rollup-plugin-postcss";
 import resolve from "rollup-plugin-node-resolve";
 import url from "rollup-plugin-url";
 import svgr from "@svgr/rollup";
-
+import gzipPlugin from "rollup-plugin-gzip";
 import pkg from "./package.json";
 
 export default {
@@ -52,6 +52,7 @@ export default {
           "ForwardRef"
         ]
       }
-    })
+    }),
+    gzipPlugin()
   ]
 };
