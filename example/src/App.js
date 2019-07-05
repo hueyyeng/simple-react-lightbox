@@ -5,17 +5,17 @@ import SimpleReactLightbox from "simple-react-lightbox";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 const options = {
-  overlayColor: "white",
+  overlayColor: "rgb(25, 136, 124)",
   captionStyle: {
-    captionColor: "rgba(53, 129, 184, 1)",
+    captionColor: "#a6cfa5",
     captionFontFamily: "Raleway, sans-serif",
     captionFontSize: "22px",
     captionFontWeight: "300",
-    captionFontStyle: "uppercase"
+    captionFontStyle: "capitalize"
   },
   buttonsStyle: {
-    buttonsBackgroundColor: "rgba(53, 129, 184, 1)",
-    buttonsIconColor: "rgba(205, 221, 221, 0.6)"
+    buttonsBackgroundColor: "#1b5245",
+    buttonsIconColor: "rgba(126, 172, 139, 0.8)"
   },
   autoplaySpeed: 1500,
   transitionSpeed: 900,
