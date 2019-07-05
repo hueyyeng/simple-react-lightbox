@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 
+// Main div containing the light-box
 const SRLLightboxGalleryStage = styled.div`
   background-color: ${props => props.overlayColor};
   position: fixed;
@@ -10,6 +11,7 @@ const SRLLightboxGalleryStage = styled.div`
   z-index: 9991;
 `;
 
+// The content of the light-box
 const SRLLightboxContent = styled.div`
   bottom: 0;
   left: 0;
@@ -24,6 +26,7 @@ const SRLLightboxContent = styled.div`
   height: 100%;
 `;
 
+// The container for the image
 const SRLLightboxImageContainer = styled.div`
   width: ${props => {
     if (props.showThumbnails === false && !!props.showCaption === false) {
@@ -72,6 +75,7 @@ const SRLLightboxImageContainer = styled.div`
   }
 `;
 
+// The image itself
 const SRLLightboxImage = styled.img`
   background: transparent;
   border: 0;
@@ -126,6 +130,7 @@ const SRLLightboxImage = styled.img`
   }
 `;
 
+// The caption
 const SRRLLightboxCaption = styled.div`
   color: white;
   font-family: inherit;
@@ -138,13 +143,32 @@ const SRRLLightboxCaption = styled.div`
   p {
     margin: 0;
     padding: 0;
-    font-family: inherit;
     text-align: center;
     background-color: transparent;
-    color: ${props => (props.captionColor ? props.captionColor : "white")};
+    font-weight: ${props =>
+      props.captionStyle.captionFontWeight
+        ? props.captionStyle.captionFontWeight
+        : "inherit"};
+    font-size: ${props =>
+      props.captionStyle.captionFontSize
+        ? props.captionStyle.captionFontSize
+        : "inherit"};
+    font-family: ${props =>
+      props.captionStyle.captionColor
+        ? props.captionStyle.captionFontFamily
+        : "inherit"};
+    color: ${props =>
+      props.captionStyle.captionColor
+        ? props.captionStyle.captionColor
+        : "white"};
+    text-transform: ${props =>
+      props.captionStyle.captionFontStyle
+        ? props.captionStyle.captionFontStyle
+        : "inherit"};
   }
 `;
 
+// The buttons
 const StyledButton = styled.button`
   background-clip: content-box;
   height: 70px;
@@ -152,8 +176,8 @@ const StyledButton = styled.button`
   width: 70px;
   transition: color 0.3s ease;
   background-color: ${props =>
-    props.buttonsBackgroundColor
-      ? props.buttonsBackgroundColor
+    props.buttonsStyle.buttonsBackgroundColor
+      ? props.buttonsStyle.buttonsBackgroundColor
       : "rgba(30, 30, 36, 0.8)"};
   border: 0;
   border-radius: 0;
@@ -184,22 +208,23 @@ const StyledButton = styled.button`
       path {
         transition: fill 0.3s ease;
         fill: ${props =>
-          props.buttonsIconColor
-            ? props.buttonsIconColor
+          props.buttonsStyle.buttonsIconColor
+            ? props.buttonsStyle.buttonsIconColor
             : "rgba(255, 255, 255, 0.8)"};
       }
     }
     &:hover {
       svg path {
         fill: ${props =>
-          props.buttonsIconColor &&
+          props.buttonsStyle.buttonsIconColor &&
           // REGEX TO THE RESCUE (converts the RGBA value to have the full opacity to have the nice "hover" effect)
-          props.buttonsIconColor.replace(/[\d\.]+\)$/g, "1)")};
+          props.buttonsStyle.buttonsIconColor.replace(/[\d\.]+\)$/g, "1)")};
       }
     }
   }
 `;
 
+// The "close" button
 const SRRLLightboxCloseIcon = styled(StyledButton)`
   top: 0;
   right: 0;
@@ -210,6 +235,7 @@ const SRRLLightboxCloseIcon = styled(StyledButton)`
   }
 `;
 
+// The "autoplay" button
 const SRRLLightboxAutoplayIcon = styled(StyledButton)`
   top: 0;
   right: 50px;
@@ -220,6 +246,7 @@ const SRRLLightboxAutoplayIcon = styled(StyledButton)`
   }
 `;
 
+// The "next" button
 const SRLLightboxNextIcon = styled(StyledButton)`
   top: calc(50% - 50px);
   padding: 15px;
@@ -230,6 +257,7 @@ const SRLLightboxNextIcon = styled(StyledButton)`
   }
 `;
 
+// The "prev" button
 const SRLLightboxPrevIcon = styled(StyledButton)`
   top: calc(50% - 50px);
   padding: 15px;
@@ -240,6 +268,7 @@ const SRLLightboxPrevIcon = styled(StyledButton)`
   }
 `;
 
+// The thumbnails galley
 const SRLLightboxThubnailGallery = styled.div`
   display: flex;
   color: white;
@@ -255,6 +284,7 @@ const SRLLightboxThubnailGallery = styled.div`
   }
 `;
 
+// The images on the thumbnail gallery
 const SRLLightboxThubnailGalleryImage = styled.a`
   width: 100px;
   height: 80px;
@@ -277,6 +307,7 @@ const SRLLightboxThubnailGalleryImage = styled.a`
   }
 `;
 
+// Export all of the above
 export {
   SRLLightboxGalleryStage,
   SRLLightboxContent,

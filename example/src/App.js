@@ -6,9 +6,17 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 const options = {
   overlayColor: "white",
-  captionColor: "black",
-  buttonsBackgroundColor: "rgba(53, 129, 184, 1)",
-  buttonsIconColor: "rgba(205, 221, 221, 0.6)",
+  captionStyle: {
+    captionColor: "rgba(53, 129, 184, 1)",
+    captionFontFamily: "Raleway, sans-serif",
+    captionFontSize: "22px",
+    captionFontWeight: "300",
+    captionFontStyle: "uppercase"
+  },
+  buttonsStyle: {
+    buttonsBackgroundColor: "rgba(53, 129, 184, 1)",
+    buttonsIconColor: "rgba(205, 221, 221, 0.6)"
+  },
   autoplaySpeed: 1500,
   transitionSpeed: 900,
   showCaption: true,

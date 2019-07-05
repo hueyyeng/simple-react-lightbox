@@ -20,7 +20,7 @@ function SRLLightboxSlideComponent({
   handleNextImage,
   handlePrevImage,
   caption,
-  captionColor,
+  captionStyle,
   showThumbnails,
   showCaption,
   transitionSpeed
@@ -105,7 +105,7 @@ function SRLLightboxSlideComponent({
       </SRLLightboxImageContainer>
 
       {showCaption && (
-        <SRRLLightboxCaption captionColor={captionColor} className="SRLCaption">
+        <SRRLLightboxCaption captionStyle={captionStyle} className="SRLCaption">
           <p className="SRLCaption">{caption}</p>
         </SRRLLightboxCaption>
       )}
@@ -167,7 +167,13 @@ function SRLLightboxSlideComponent({
 SRLLightboxSlideComponent.propTypes = {
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
-  captionColor: PropTypes.string,
+  captionStyle: PropTypes.shape({
+    captionColor: PropTypes.string,
+    captionFontFamily: PropTypes.string,
+    captionFontSize: PropTypes.string,
+    captionFontWeight: PropTypes.string,
+    captionFontStyle: PropTypes.string
+  }),
   showThumbnails: PropTypes.bool,
   showCaption: PropTypes.bool,
   transitionSpeed: PropTypes.number,

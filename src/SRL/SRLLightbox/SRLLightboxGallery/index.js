@@ -13,11 +13,10 @@ const SRLLightboxGallery = ({
   images,
   selectedImage,
   overlayColor,
-  captionColor,
+  captionStyle,
+  buttonsStyle,
   autoplaySpeed,
   transitionSpeed,
-  buttonsBackgroundColor,
-  buttonsIconColor,
   showCaption,
   showThumbnails
 }) => {
@@ -171,15 +170,13 @@ const SRLLightboxGallery = ({
   };
 
   return (
-    <SRLLightboxGalleryStage overlayColor={overlayColor}>
-      <SRLLightboxControls
-        buttonsBackgroundColor={buttonsBackgroundColor}
-        buttonsIconColor={buttonsIconColor}
-        {...controls}
-      />
+    <SRLLightboxGalleryStage
+      className="SRLOuterWrapper"
+      overlayColor={overlayColor}>
+      <SRLLightboxControls buttonsStyle={buttonsStyle} {...controls} />
       <SRLLightboxSlideComponent
         showThumbnails={showThumbnails}
-        captionColor={captionColor}
+        captionStyle={captionStyle}
         showCaption={showCaption}
         handleCloseLightbox={controls.handleCloseLightbox}
         handleCurrentImage={controls.handleCurrentImage}
@@ -200,11 +197,19 @@ SRLLightboxGallery.propTypes = {
   overlayColor: PropTypes.string,
   showThumbnails: PropTypes.bool,
   showCaption: PropTypes.bool,
-  captionColor: PropTypes.string,
+  captionStyle: PropTypes.shape({
+    captionColor: PropTypes.string,
+    captionFontFamily: PropTypes.string,
+    captionFontSize: PropTypes.string,
+    captionFontWeight: PropTypes.string,
+    captionFontStyle: PropTypes.string
+  }),
+  buttonsStyle: PropTypes.shape({
+    buttonsBackgroundColor: PropTypes.string,
+    buttonsIconColor: PropTypes.string
+  }),
   autoplaySpeed: PropTypes.number,
   transitionSpeed: PropTypes.number,
-  buttonsBackgroundColor: PropTypes.string,
-  buttonsIconColor: PropTypes.string,
   selectedImage: PropTypes.object,
   handleCloseLightbox: PropTypes.func
 };

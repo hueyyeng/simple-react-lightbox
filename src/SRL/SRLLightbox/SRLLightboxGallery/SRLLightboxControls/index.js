@@ -15,14 +15,12 @@ const SRLLightboxControls = ({
   autoplaySpeed,
   setAutoplay,
   currentImageId,
-  buttonsBackgroundColor,
-  buttonsIconColor
+  buttonsStyle
 }) => {
   return (
     <React.Fragment>
       <SRRLLightboxAutoplayIcon
-        buttonsBackgroundColor={buttonsBackgroundColor}
-        buttonsIconColor={buttonsIconColor}
+        buttonsStyle={buttonsStyle}
         autoplaySpeed={autoplaySpeed}
         title="Autoplay"
         className="SRLAutoplayButton"
@@ -52,8 +50,7 @@ const SRLLightboxControls = ({
         </div>
       </SRRLLightboxAutoplayIcon>
       <SRRLLightboxCloseIcon
-        buttonsBackgroundColor={buttonsBackgroundColor}
-        buttonsIconColor={buttonsIconColor}
+        buttonsStyle={buttonsStyle}
         title="Close"
         className="SRLCloseButton"
         onClick={() => handleCloseLightbox(currentImageId)}>
@@ -70,8 +67,7 @@ const SRLLightboxControls = ({
         </div>
       </SRRLLightboxCloseIcon>
       <SRLLightboxNextIcon
-        buttonsBackgroundColor={buttonsBackgroundColor}
-        buttonsIconColor={buttonsIconColor}
+        buttonsStyle={buttonsStyle}
         title="Next"
         className="SRLNextButton"
         onClick={e => handleNextImage(currentImageId, e)}>
@@ -88,8 +84,7 @@ const SRLLightboxControls = ({
         </div>
       </SRLLightboxNextIcon>
       <SRLLightboxPrevIcon
-        buttonsBackgroundColor={buttonsBackgroundColor}
-        buttonsIconColor={buttonsIconColor}
+        buttonsStyle={buttonsStyle}
         title="Previous"
         className="SRLPrevButton"
         onClick={() => handlePrevImage(currentImageId)}>
@@ -119,6 +114,8 @@ SRLLightboxControls.propTypes = {
   autoplay: PropTypes.bool,
   autoplaySpeed: PropTypes.number,
   currentImageId: PropTypes.string,
-  buttonsBackgroundColor: PropTypes.string,
-  buttonsIconColor: PropTypes.string
+  buttonsStyle: PropTypes.shape({
+    buttonsBackgroundColor: PropTypes.string,
+    buttonsIconColor: PropTypes.string
+  })
 };
