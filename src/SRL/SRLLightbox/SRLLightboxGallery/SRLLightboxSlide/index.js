@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import ReactScrollWheelHandler from "react-scroll-wheel-handler";
-
+import SRLLoadingIcon from "./SRL_LoadingIcon.gif";
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
@@ -96,7 +96,7 @@ function SRLLightboxSlideComponent({
                 ref={SRLImageContainerRef}
                 className="SRLImage"
                 transitionSpeed={transitionSpeed}
-                src={source}
+                src={typeof source === "object" ? SRLLoadingIcon : source}
                 alt={caption}
               />
             </CSSTransition>

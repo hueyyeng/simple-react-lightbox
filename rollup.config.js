@@ -6,6 +6,7 @@ import resolve from "rollup-plugin-node-resolve";
 import url from "rollup-plugin-url";
 import svgr from "@svgr/rollup";
 import gzipPlugin from "rollup-plugin-gzip";
+import image from "rollup-plugin-image";
 import pkg from "./package.json";
 
 export default {
@@ -27,7 +28,10 @@ export default {
     postcss({
       modules: true
     }),
-    url(),
+    url({
+      limit: 0, // 0 => copy all files
+      include: ["**/*.?(ttf|woff|woff2|png|jpg|svg|gif)"]
+    }),
     svgr(),
     babel({
       exclude: "node_modules/**"
@@ -53,6 +57,7 @@ export default {
         ]
       }
     }),
-    gzipPlugin()
+    gzipPlugin(),
+    image()
   ]
 };
