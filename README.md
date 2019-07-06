@@ -4,6 +4,8 @@
 
 <img src="https://www.michelec.site/app/uploads/SRL/SRL_Logo.png" width="150px" height="auto" style="padding: 20px 0;"/>
 
+[![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
+
 </p>
 
 ####A brief introduction 🧐

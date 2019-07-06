@@ -1,9 +1,9 @@
 {
-  "name": "@michelecocuccio/simple-react-lightbox",
+  "name": "simple-react-lightbox",
   "version": "0.0.1",
   "description": "A simple but functional lightbox for React",
   "author": "michelecocuccio",
-  "license": "(ISC OR GPL-3.0)",
+  "license": "MIT",
   "repository": "michelecocuccio/simple-react-lightbox",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
