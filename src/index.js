@@ -29,7 +29,7 @@ const SimpleReactLightbox = ({
               overflow: hidden;
               /* Compensate for the scrollbar when overflow is hidden */
               margin-right: 15px;
-              #lightbox {
+              #SRLLightbox {
                 position: absolute;
                 width: 100%;
                 height: 100%;
@@ -47,7 +47,8 @@ const SimpleReactLightbox = ({
         captionStyle={captionStyle}
         buttonsStyle={buttonsStyle}
         autoplaySpeed={autoplaySpeed}
-        transitionSpeed={transitionSpeed}>
+        transitionSpeed={transitionSpeed}
+      >
         {children}
         <SRLLightbox />
       </SRLContextComponent>
