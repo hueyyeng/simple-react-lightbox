@@ -1,26 +1,22 @@
-#Simple-React-Lightbox (SRL)
+# simple-react-lightbox (SRL)
 
-<p align="center">
+![Simple React Lightbox - Logo](https://www.michelec.site/app/uploads/SRL/SRL_Logo.png)
 
-<img src="https://www.michelec.site/app/uploads/SRL/SRL_Logo.png" width="150px" height="auto" style="padding: 20px 0;"/>
+---
 
-[![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
+[![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox-button.svg?branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
-</p>
-
-####A brief introduction 🧐
+#### A brief introduction 🧐
 
 It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend I had no control over the content of each post (the content was written in a WYSIWYG editor by the way).
 
 I checked online for some light-box for React but I had to declare the images beforehand in either an array, an object etc...but what if you don't know about the content and you just want to add a light-box to the images? 😞
 
-<br />
-####My Idea 💡
+#### My Idea 💡
 
 **Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, wether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app and then use the "SRLWrapper" component by wrapping it around the content in which you have your images (or just the images). 😮
 
-<br />
-####Packed with features 📦
+#### Packed with features 📦
 
 **Simple React Lightbox** comes with many features: please check the [options](#options) section to learn more.
 
@@ -87,10 +83,11 @@ export default MyComponent;
 That's it 🥳 As we are not passing any [options](#options) you should have a working light-box with the default options like the image below:
 
 ![Simple React Lightbox - Default options](https://www.michelec.site/app/uploads/SRL/SRL_DefaultLightbox.jpg)
-######The light-box with the default options
-<br/>
 
-####Options
+###### The light-box with the default options
+
+#### Options
+
 I know what you are thinking.
 
 > "That's cool and all but the style of the light-box dosen't match the one of my project. That's ok though. I will use your classes and override things with my custom styles..."
@@ -108,7 +105,6 @@ Check the options below.
 | showCaption     | boolean | true                                                                                                                                                              | Shows/hides the caption. _The caption of the images is generated from the [image alt tag](https://www.w3schools.com/tags/tag_img.asp)!_                                                                                                                                                                                                                                                                                                                                                    |
 | showThumbnails  | boolean | true                                                                                                                                                              | Shows/hides the thumbnail gallery.                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
-<br />
 #### Yes, options! But how do I use them?
 
 Passing options is as simple as defining props for a React component. Actually, the options **are** props for the SimpleReactLightbox component. I will strongely reccomend to create a constant with all the options and then [spread it](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) in the component. Is fast, readable and easy to change. Thanks ES6 😎
@@ -156,9 +152,9 @@ export default App;
 ```
 
 ![Simple React Lightbox - Default options](https://www.michelec.site/app/uploads/SRL/SRL_LightboxWithOptions.jpg)
-######The light-box with the custom options
 
-<br />
+###### The light-box with the custom options
+
 #### High Order Component
 
 ⚠️ **_Please note this feature might be removed in the future_** ⚠️
@@ -190,8 +186,7 @@ export withSRLContext(MyComponent);
 
 To be honest I don't really see a reason to use that, especially the "closeLightbox" method so I might consider to remove this in the near future.
 
-<br />
-##Example project
+## Example project
 
 There is a an example project that you can run. Just download this repository and `cd` in to the directory "example" and to the following:
 
@@ -209,11 +204,11 @@ yarn start
 
 The example project is useful as you can test the functionallity and how **Simple React Lightbox** works. The example project will be constantly updated with the release of new features. As for now it demonstrates how you can have two different pages using **Simple React Lightbox**. It also demonstrate how to use the the [High Order Component](#high-order-component) in case you want to open/close the light-box from an external button.
 
-<br />
 ## Caveats 👮
+
 The images will have an `id` tag assigned by **Simple React Lightbox**. Any other `id` tag on the image will be removed. If you are using `id` tag in the images, I suggest you use a `class` instead. I don't think `id` tag on images are used a lot but if this is the case let me know and I might adjust the code in the future.
 
-<br />
 ## What the future holds 🔮
+
 - I know that usually the way people implements an image gallery is by setting a div with a background image and then wrap the `div` in a `a` tag to do something with the image. Or maybe they just use a thumbnail and link to the full image. Unfortunately in this case, **Simple React Lightbox** is not going to work as it scans for actual `img` and not links. I might consider to create a separated option in the future to allow this behaviour.
 - Use TypeScript
