@@ -1,13 +1,39 @@
-import React, { Component } from 'react'
+import React from "react";
+import Content from "./components/Content";
+import ContentTwo from "./components/Content_two";
+import SimpleReactLightbox from "simple-react-lightbox";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import ExampleComponent from 'simple-react-lightbox'
+const options = {
+  overlayColor: "rgb(25, 136, 124)",
+  captionStyle: {
+    captionColor: "#a6cfa5",
+    captionFontFamily: "Raleway, sans-serif",
+    captionFontSize: "22px",
+    captionFontWeight: "300",
+    captionFontStyle: "capitalize"
+  },
+  buttonsStyle: {
+    buttonsBackgroundColor: "#1b5245",
+    buttonsIconColor: "rgba(126, 172, 139, 0.8)"
+  },
+  autoplaySpeed: 1500,
+  transitionSpeed: 900,
+  showCaption: true,
+  showThumbnails: true
+};
 
-export default class App extends Component {
-  render () {
-    return (
-      <div>
-        <ExampleComponent text='Modern React component module' />
+function App() {
+  return (
+    <SimpleReactLightbox {...options}>
+      <div className="App">
+        <Router>
+          <Route path="/" exact component={Content} />
+          <Route path="/example-two/" component={ContentTwo} />
+        </Router>
       </div>
-    )
-  }
+    </SimpleReactLightbox>
+  );
 }
+
+export default App;

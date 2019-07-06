@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap|Raleway:300,700&display=swap");
+@import "~bootstrap/scss/bootstrap";
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: white;
+  font-weight: 300;
+  p {
+    line-height: 1.5rem;
+    margin: 0 0 20px 0;
+  }
+  strong {
+    font-weight: 700;
+  }
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
