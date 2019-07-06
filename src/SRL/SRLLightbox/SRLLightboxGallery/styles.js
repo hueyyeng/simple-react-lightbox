@@ -296,7 +296,7 @@ const SRLLightboxThubnailGalleryImage = styled.a`
   display: block;
   cursor: pointer;
   flex: 0 0 auto;
-  &:first-child {
+  &:first-of-type {
     margin: 0;
   }
   &:last-child {
