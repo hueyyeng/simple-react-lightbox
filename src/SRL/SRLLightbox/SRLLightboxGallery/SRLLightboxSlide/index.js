@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import ReactScrollWheelHandler from "react-scroll-wheel-handler";
-import SRLLoadingIcon from "./SRL_LoadingIcon.gif";
+
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
@@ -45,9 +45,9 @@ function SRLLightboxSlideComponent({
       // SECOND CONDITION
       if (Math.abs(x) >= t) {
         if (x <= 0) {
-          handlePrevImage(id);
-        } else if (x >= 0) {
           handleNextImage(id);
+        } else if (x >= 0) {
+          handlePrevImage(id);
         }
       }
     }
@@ -58,7 +58,6 @@ function SRLLightboxSlideComponent({
     startX = touchObject.pageX;
     startY = touchObject.pageY;
     startTime = new Date().getTime();
-    e.preventDefault();
   }
 
   function handleTouchEnd(e) {
@@ -69,8 +68,6 @@ function SRLLightboxSlideComponent({
 
     // Run the function on touchend
     handleTouchChange(distX, distY, threshold, restraint);
-
-    e.preventDefault();
   }
 
   useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
@@ -82,21 +79,28 @@ function SRLLightboxSlideComponent({
         showCaption={showCaption}
         className="SRLImageContainer"
         onTouchStart={e => handleTouchStart(e)}
-        onTouchEnd={e => handleTouchEnd(e)}>
+        onTouchEnd={e => handleTouchEnd(e)}
+      >
         <ReactScrollWheelHandler
           upHandler={() => handleNextImage(id)}
           downHandler={() => handlePrevImage(id)}
-          disableKeyboard={true}>
+          disableKeyboard={true}
+        >
           <TransitionGroup className="SRLTransitionGroup">
             <CSSTransition
               key={id}
               classNames="image-transition"
-              timeout={transitionSpeed}>
+              timeout={transitionSpeed}
+            >
               <SRLLightboxImage
                 ref={SRLImageContainerRef}
                 className="SRLImage"
                 transitionSpeed={transitionSpeed}
-                src={typeof source === "object" ? SRLLoadingIcon : source}
+                src={
+                  typeof source === "object"
+                    ? "https://www.michelec.site/app/uploads/SRL/SRL_LoadingIcon.gif"
+                    : source
+                }
                 alt={caption}
               />
             </CSSTransition>
