@@ -114,18 +114,14 @@ const SRLLightboxImage = styled.img`
     opacity: 0;
     transition: ${props =>
       props.transitionSpeed
-        ? `opacity ${props.transitionSpeed}ms ease, transform ${
-            props.transitionSpeed
-          }ms ease`
+        ? `opacity ${props.transitionSpeed}ms ease, transform ${props.transitionSpeed}ms ease`
         : "opacity 600ms ease;"};
   }
   &.image-transition-enter-done {
     opacity: 1;
     transition: ${props =>
       props.transitionSpeed
-        ? `opacity ${props.transitionSpeed}ms ease, transform ${
-            props.transitionSpeed
-          }ms ease`
+        ? `opacity ${props.transitionSpeed}ms ease, transform ${props.transitionSpeed}ms ease`
         : "opacity 600ms ease;"};
   }
 `;
@@ -145,6 +141,9 @@ const SRRLLightboxCaption = styled.div`
     padding: 0;
     text-align: center;
     background-color: transparent;
+    @media (max-width: 768px) {
+      padding: 0 15px;
+    }
     font-weight: ${props =>
       props.captionStyle.captionFontWeight
         ? props.captionStyle.captionFontWeight
