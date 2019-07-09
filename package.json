@@ -14,6 +14,24 @@
     "not dead",
     "IE 11"
   ],
+  "keywords": [
+    "react",
+    "reactjs",
+    "es6",
+    "javascript",
+    "react-lightbox",
+    "react lightbox",
+    "react light-box",
+    "lightbox",
+    "light-box",
+    "react images",
+    "react images gallery",
+    "react gallery",
+    "image gallery",
+    "images gallery",
+    "react gallery component",
+    "react images component"
+  ],
   "scripts": {
     "test": "cross-env CI=1 react-scripts test --env=jsdom  --passWithNoTests",
     "test:watch": "react-scripts test --env=jsdom  --passWithNoTests",
