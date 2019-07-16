@@ -10,7 +10,7 @@ const SRLWrapper = props => {
 
   // Sets a new Ref which will be used to target the div with the images
   const imagesContainer = useRef(null);
-  const imagesObject = [{}];
+  const imagesObject = [];
   // Grabs the images and set them using setImages
   useEffect(() => {
     // Gets an HTMLCollection which we need to change to a normal array.
@@ -40,16 +40,14 @@ const SRLWrapper = props => {
               e.target.height
             );
           });
-        });
-
-        imagesArray.map((image, index) => {
-          imagesObject[index] = {
-            src: image.src,
-            alt: image.alt,
+          // 3) Pushes each image to the temporary array of objects
+          imagesObject.push({
+            src: i.src,
+            alt: i.alt,
             id: `img${index}`,
-            width: image.width,
-            height: image.height
-          };
+            width: i.width,
+            height: i.height
+          });
         });
 
         setImages(imagesObject);
