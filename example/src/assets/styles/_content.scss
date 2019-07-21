@@ -1,4 +1,4 @@
-#content {
+.content {
   margin-top: 60px;
 
   img {
@@ -53,5 +53,10 @@
       object-fit: cover;
       height: 500px;
     }
+  }
+
+  // Gallery with link
+  .col-image-with-link {
+    margin-bottom: 20px;
   }
 }

@@ -23,10 +23,13 @@ const Header = props => {
             <nav>
               <ul>
                 <li>
-                  <Link to="/">Gallery 1</Link>
+                  <Link to="/">Mixed content</Link>
                 </li>
                 <li>
-                  <Link to="/example-two/">Gallery 2</Link>
+                  <Link to="/example-two/">Mixed content - Page 2</Link>
+                </li>
+                <li>
+                  <Link to="/gallery-with-links/">Gallery with links</Link>
                 </li>
               </ul>
             </nav>
