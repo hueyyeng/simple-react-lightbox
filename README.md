@@ -1,4 +1,4 @@
-# simple-react-lightbox (SRL)
+# Simple-React-Lightbox (SRL)
 
 ![Simple React Lightbox - Logo](https://www.michelec.site/app/uploads/SRL/SRL_LogoGit.jpg)
 
@@ -6,13 +6,13 @@
 
 #### A brief introduction 🧐
 
-It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend I had no control over the content of each post (the content was written in a WYSIWYG editor by the way).
+It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend and I had no control over the content of each post (the content was in a WYSIWYG editor).
 
-I checked online for some light-box for React but I had to declare the images beforehand in either an array, an object etc...but what if you don't know about the content and you just want to add a light-box to the images? 😞
+I checked online for some light-box for React but the way that they were working was that I had to declare the images beforehand in either an array, an object etc...but what if you don't know about the content and you just want to add a light-box to the images? 😞
 
 #### My Idea 💡
 
-**Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, wether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app and then use the "SRLWrapper" component by wrapping it around the content in which you have your images (or just the images). 😮
+**Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, wether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app, define your options and then use the "SRLWrapper" component by wrapping it around the content in which you have your images 😮!
 
 🆕 From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the "Gallery with links" example page on the CodeSandbox [demo](#demo)
 
@@ -43,7 +43,6 @@ yarn add simple-react-lightbox
 
 I have provided a working demo on Codesandbox
 
-**Working demo**
 [![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
 
 #### Instructions
@@ -68,7 +67,7 @@ function App() {
 export default App;
 ```
 
-Next you want to import and use the SRLWrapper component wherever expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image alt tag](https://www.w3schools.com/tags/tag_img.asp)!_
+Next you want to import and use the **SRLWrapper** component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image alt tag](https://www.w3schools.com/tags/tag_img.asp)!_
 
 ```jsx
 import React from "react";
@@ -97,9 +96,9 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 
 #### 🆕 Custom gallery
 
-Due to popular demanding I have now added the option to use the light box in a more traditional way. If you want to create a gallery in which thumbnails are wrapped in a link that points to the full width image, now you can. (You can check the "Gallery with links" example page on the CodeSandbox [demo](#demo))
+Due to popular demand I have now added the option to use the light-box in a more traditional way. If you want to create a gallery in which thumbnails are wrapped in a link that points to a full width image, now you can. (You can check the "Gallery with links" example page on the CodeSandbox [demo](#demo)).
 
-Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the "alt" tag for the images will be used as caption if defined.
+Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the `alt` tag for the images will be used as caption if declared.
 
 ```jsx
 import React from "react";
@@ -115,6 +114,7 @@ function MyComponent() {
         <a href="link/to/the/full/width/image_two.jpg" data-attribute="SRL">
           <img src="src/for/the/thumbnail/image_two.jpg" alt="Umbrella" />
         </a>
+        // More images...
       </SRLWrapper>
     </div>
   );
@@ -127,7 +127,7 @@ export default MyComponent;
 
 I know what you are thinking.
 
-> "That's cool and all but the style of the light-box dosen't match the one of my project. That's ok though. I will use your classes and override things with my custom styles..."
+> "That's cool and all but the style of the light-box dosen't match the one of my project. That's ok though. I will use your classes and override everything with my custom styles..."
 
 ⚠️ **WAIT!** ⚠️ Despite the fact that I have made sure to define class names for each part of the light-box, I have provided all the options that you need to customize the light-box so that you don't have to add any additional logic. **You can customize everything!**
 Check the options below.
@@ -195,7 +195,7 @@ export default App;
 #### High Order Component
 
 ⚠️ **_Please note this feature might be removed in the future_** ⚠️
-Sometimes you may have a lot of images and yes, the user could open the light-box clicking on the first one. But every website is designed differently and UI / UX play a big part when designing and coding a website. So I created a HOC _[High Order Component](https://reactjs.org/docs/higher-order-components.html)_ that you can use to get access to two methods:
+Sometimes you may have a lot of images and yes, the user could open the light-box by clicking on the first one. But every website is designed differently and UI / UX play a big part when designing and coding a website. So I created a HOC _[High Order Component](https://reactjs.org/docs/higher-order-components.html)_ that you can use to get access to two methods:
 
 | Method        | Description                                        |
 | ------------- | -------------------------------------------------- |
@@ -235,5 +235,5 @@ The images will have an `id` tag assigned by **Simple React Lightbox**. Any othe
 
 ## What the future holds 🔮
 
-- I know that usually the way people implements an image gallery is by setting a div with a background image and then wrap the `div` in a `a` tag to do something with the image. Or maybe they just use a thumbnail and link to the full image. Unfortunately in this case, **Simple React Lightbox** is not going to work as it scans for actual `img` and not links. I might consider to create a separated option in the future to allow this behaviour.
+- Custom options for each light-box
 - Use TypeScript
