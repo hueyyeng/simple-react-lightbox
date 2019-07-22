@@ -14,6 +14,8 @@ I checked online for some light-box for React but I had to declare the images be
 
 **Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, wether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app and then use the "SRLWrapper" component by wrapping it around the content in which you have your images (or just the images). 😮
 
+🆕 From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the
+
 #### Packed with features 📦
 
 **Simple React Lightbox** comes with many features: please check the [options](#options) section to learn more.
@@ -83,6 +85,34 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 ![Simple React Lightbox - Default options](https://www.michelec.site/app/uploads/SRL/SRL_DefaultLightbox.jpg)
 
 ###### The light-box with the default options
+
+#### 🆕 Custom gallery
+
+Due to popular demanding I have now added the option to use the light box in a more traditional way. If you want to create a gallery in which thumbnails are wrapped in a link that points to the full width image, now you can.
+
+Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the "alt" tag for the images will be used as caption if defined.
+
+```jsx
+import React from "react";
+import { SRLWrapper } from "simple-react-lightbox"; // Import SRLWrapper
+
+function MyComponent() {
+  return (
+    <div className="MyComponent">
+      <SRLWrapper>
+        <a href="link/to/the/full/width/image.jpg" data-attribute="SRL">
+          <img src="src/for/the/thumbnail/image.jpg" alt="Umbrella" />
+        </a>
+        <a href="link/to/the/full/width/image_two.jpg" data-attribute="SRL">
+          <img src="src/for/the/thumbnail/image_two.jpg" alt="Umbrella" />
+        </a>
+      </SRLWrapper>
+    </div>
+  );
+}
+
+export default MyComponent;
+```
 
 #### Options
 
