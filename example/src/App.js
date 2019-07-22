@@ -1,6 +1,7 @@
 import React from "react";
 import Content from "./components/Content";
-import ContentTwo from "./components/Content_two";
+import ContentPageTwo from "./components/ContentPageTwo";
+import GalleryWithLinks from "./components/GalleryWithLinks";
 import SimpleReactLightbox from "simple-react-lightbox";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
@@ -29,7 +30,8 @@ function App() {
       <div className="App">
         <Router>
           <Route path="/" exact component={Content} />
-          <Route path="/example-two/" component={ContentTwo} />
+          <Route path="/example-two/" component={ContentPageTwo} />
+          <Route path="/gallery-with-links/" component={GalleryWithLinks} />
         </Router>
       </div>
     </SimpleReactLightbox>
