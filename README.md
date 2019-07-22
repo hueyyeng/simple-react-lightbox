@@ -14,7 +14,7 @@ I checked online for some light-box for React but I had to declare the images be
 
 **Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, wether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app and then use the "SRLWrapper" component by wrapping it around the content in which you have your images (or just the images). 😮
 
-🆕 From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the
+🆕 From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the "Gallery with links" example page on the CodeSandbox [demo](#demo)
 
 #### Packed with features 📦
 
@@ -38,6 +38,15 @@ yarn add simple-react-lightbox
 ```
 
 ## How to use
+
+#### Demo
+
+I have provided a working demo on Codesandbox
+
+**Working demo**
+[![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
+
+#### Instructions
 
 First of all you need to wrap your React app with the main component so that it can create the context. The example below will allow you to use the **Simple React Lightbox** wherever you need it in your app:
 
@@ -88,7 +97,7 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 
 #### 🆕 Custom gallery
 
-Due to popular demanding I have now added the option to use the light box in a more traditional way. If you want to create a gallery in which thumbnails are wrapped in a link that points to the full width image, now you can.
+Due to popular demanding I have now added the option to use the light box in a more traditional way. If you want to create a gallery in which thumbnails are wrapped in a link that points to the full width image, now you can. (You can check the "Gallery with links" example page on the CodeSandbox [demo](#demo))
 
 Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the "alt" tag for the images will be used as caption if defined.
 
@@ -213,24 +222,6 @@ export withSRLContext(MyComponent);
 ```
 
 To be honest I don't really see a reason to use that, especially the "closeLightbox" method so I might consider to remove this in the near future.
-
-## Example project
-
-There is a an example project that you can run. Just download this repository and `cd` in to the directory "example" and to the following:
-
-```bash
-npm install
-npm run start
-```
-
-or with Yarn
-
-```bash
-yarn
-yarn start
-```
-
-The example project is useful as you can test the functionallity and how **Simple React Lightbox** works. The example project will be constantly updated with the release of new features. As for now it demonstrates how you can have two different pages using **Simple React Lightbox**. It also demonstrate how to use the the [High Order Component](#high-order-component) in case you want to open/close the light-box from an external button.
 
 ## Caveats 👮
 
