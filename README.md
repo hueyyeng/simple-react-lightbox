@@ -67,7 +67,7 @@ function App() {
 export default App;
 ```
 
-Next you want to import and use the **SRLWrapper** component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image alt tag](https://www.w3schools.com/tags/tag_img.asp)!_
+Next you want to import and use the **SRLWrapper** component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
 
 ```jsx
 import React from "react";
@@ -98,7 +98,7 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 
 Due to popular demand I have now added the option to use the light-box in a more traditional way. If you want to create a gallery in which thumbnails are wrapped in a link that points to a full width image, now you can. (You can check the "Gallery with links" example page on the CodeSandbox [demo](#demo)).
 
-Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the `alt` tag for the images will be used as caption if declared.
+Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the `alt` attribute for the images will be used as caption if declared.
 
 ```jsx
 import React from "react";
@@ -127,7 +127,7 @@ export default MyComponent;
 
 I know what you are thinking.
 
-> "That's cool and all but the style of the light-box dosen't match the one of my project. That's ok though. I will use your classes and override everything with my custom styles..."
+> "That's cool and all but the style of the light-box doesn't match the one of my project. That's ok though. I will use your classes and override everything with my custom styles..."
 
 ⚠️ **WAIT!** ⚠️ Despite the fact that I have made sure to define class names for each part of the light-box, I have provided all the options that you need to customize the light-box so that you don't have to add any additional logic. **You can customize everything!**
 Check the options below.
@@ -139,7 +139,7 @@ Check the options below.
 | buttonsStyle    | object  | `buttonsStyle: { buttonsBackgroundColor: "rgb(30,30,36,0.8)", buttonsIconColor: "rgba(255, 255, 255, 0.8)"}`,                                                     | This is an object that defines the style for the buttons and the icon inside the button. So you can control both of them easily. Any CSS Color value is valid **but there is some magic 🎩 happening in here**: if you use an rgba() value for the icon and set an opacity (like "0.8" as showed in the default value), when you hover with the mouse on the icon this will create a nice CSS hover effect by automatically changing the opacity to "1", regardless the colour you choose. |
 | autoplaySpeed   | number  | 3000                                                                                                                                                              | Controls the auto play change interval. **Set it to 0** if you don't want to use the auto play functionallity and you want to hide the button.                                                                                                                                                                                                                                                                                                                                             |
 | transitionSpeed | number  | 600                                                                                                                                                               | Controls the transition speed of when an image is swapped with another. **Be gentle** as using a really high value can potentially cause issues.                                                                                                                                                                                                                                                                                                                                           |
-| showCaption     | boolean | true                                                                                                                                                              | Shows/hides the caption. _The caption of the images is generated from the [image alt tag](https://www.w3schools.com/tags/tag_img.asp)!_                                                                                                                                                                                                                                                                                                                                                    |
+| showCaption     | boolean | true                                                                                                                                                              | Shows/hides the caption. _The caption of the images is generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_                                                                                                                                                                                                                                                                                                                                            |
 | showThumbnails  | boolean | true                                                                                                                                                              | Shows/hides the thumbnail gallery.                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 #### Yes, options! But how do I use them?
@@ -225,7 +225,7 @@ To be honest I don't really see a reason to use that, especially the "closeLight
 
 ## Caveats 👮
 
-The images will have an `id` tag assigned by **Simple React Lightbox**. Any other `id` tag on the image will be removed. If you are using `id` tag in the images, I suggest you use a `class` instead. I don't think `id` tag on images are used a lot but if this is the case let me know and I might adjust the code in the future.
+The images will have an `id` attribute assigned by **Simple React Lightbox**. Any other `id` attribute on the image will be removed. If you are using `id` attribute in the images, I suggest you use a `class` attribute instead. I don't think `id` attribute on images are used a lot but if this is the case let me know and I might adjust the code in the future.
 
 ## Browsers support
 
