@@ -12,7 +12,7 @@ I checked online for some light-box for React but the way that they were working
 
 #### My Idea 💡
 
-**Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, wether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app, define your options and then use the "SRLWrapper" component by wrapping it around the content in which you have your images 😮!
+**Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, whether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app, define your options and then use the "SRLWrapper" component by wrapping it around the content in which you have or expect your images 😮!
 
 🆕 From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the "Gallery with links" example page on the CodeSandbox [demo](#demo)
 
@@ -78,7 +78,7 @@ function MyComponent() {
     <div className="MyComponent">
       <SRLWrapper>
         // This will be your content with the images. It can be anything.
-        Content defined by yourself, content fetchted from an API, data from a
+        Content defined by yourself, content fetched from an API, data from a
         graphQL query... anything :)
       </SRLWrapper>
     </div>
