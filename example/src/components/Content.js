@@ -1,11 +1,40 @@
 import React from "react";
 import Layout from "./Layout";
 import { SRLWrapper } from "simple-react-lightbox";
+import img01 from "../assets/images/gallery/unsplash01.jpg";
+import img02 from "../assets/images/gallery/unsplash02.jpg";
+import img03 from "../assets/images/gallery/unsplash03.jpg";
+import img04 from "../assets/images/gallery/unsplash04.jpg";
+import img05 from "../assets/images/gallery/unsplash05.jpg";
+import img06 from "../assets/images/gallery/unsplash06.jpg";
+import img07 from "../assets/images/gallery/unsplash07.jpg";
+import img08 from "../assets/images/gallery/unsplash08.jpg";
+import videomp4 from "../assets/images/gallery/small.mp4";
+import videogg from "../assets/images/gallery/small.ogv";
+
+const options = {
+  overlayColor: "rgb(25, 136, 124)",
+  captionStyle: {
+    captionColor: "#a6cfa5",
+    captionFontFamily: "Raleway, sans-serif",
+    captionFontSize: "22px",
+    captionFontWeight: "300",
+    captionFontStyle: "capitalize"
+  },
+  buttonsStyle: {
+    buttonsBackgroundColor: "#1b5245",
+    buttonsIconColor: "rgba(126, 172, 139, 0.8)"
+  },
+  autoplaySpeed: 1500,
+  transitionSpeed: 900,
+  showCaption: true,
+  showThumbnails: true
+};
 
 const Content = () => {
   return (
     <Layout>
-      <SRLWrapper>
+      <SRLWrapper options={options}>
         <div id="content-page-one" className="container content">
           <div className="row">
             <div className="col-md-6 col-12 col-text">
@@ -26,34 +55,26 @@ const Content = () => {
               </p>
             </div>
             <div className="col-md-6 col-12 col-image">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash01.jpg"
-                alt="New York City - Architecture"
-              />
+              <img src={img01} alt="New York City - Architecture" />
+            </div>
+            <div className="col-12">
+              <video width="320" height="240" controls>
+                <source src={videomp4} type="video/mp4" />
+                <source src={videogg} type="video/ogg" />
+                Your browser does not support the video tag.
+              </video>
             </div>
             <div className="col-md-4 col-12 col-image-small">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash02.jpg"
-                alt="Between two mountains"
-              />
+              <img src={img02} alt="Between two mountains" />
             </div>
             <div className="col-md-4 col-12 col-image-small">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash03.jpg"
-                alt="Parallels building"
-              />
+              <img src={img03} alt="Parallels building" />
             </div>
             <div className="col-md-4 col-12 col-image-small">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash04.jpg"
-                alt="The mist in the forest"
-              />
+              <img src={img03} alt="The mist in the forest" />
             </div>
             <div className="col-md-6 col-12 col-image">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash05.jpg"
-                alt="A beautiful landscape"
-              />
+              <img src={img04} alt="A beautiful landscape" />
             </div>
             <div className="col-md-6 col-12 col-text">
               <h1>Consectetur adipiscing elit</h1>
@@ -73,16 +94,10 @@ const Content = () => {
               </p>
             </div>
             <div className="col-12 col-md-6 col-image-half">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash06.jpg"
-                alt="Night in new york"
-              />
+              <img src={img06} alt="Night in new york" />
             </div>
             <div className="col-12 col-md-6 col-image-half">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash07.jpg"
-                alt="Be proud!!!"
-              />
+              <img src={img07} alt="Be proud!!!" />
             </div>
             <div className="col-12">
               <h2>Lorem ipsum dolor sit amet</h2>
@@ -106,16 +121,10 @@ const Content = () => {
               </p>
             </div>
             <div className="col-12 col-image-large">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash08.jpg"
-                alt="Sunset road..."
-              />
+              <img src={img05} alt="Sunset road..." />
             </div>
             <div className="col-12 col-image-large">
-              <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash09.jpg"
-                alt="A stunning lake."
-              />
+              <img src={img08} alt="A stunning lake." />
             </div>
           </div>
         </div>
