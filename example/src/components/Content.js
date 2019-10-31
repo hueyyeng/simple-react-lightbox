@@ -27,31 +27,31 @@ const Content = () => {
             </div>
             <div className="col-md-6 col-12 col-image">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash01.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash01.jpg"
                 alt="New York City - Architecture"
               />
             </div>
             <div className="col-md-4 col-12 col-image-small">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash02.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash02.jpg"
                 alt="Between two mountains"
               />
             </div>
             <div className="col-md-4 col-12 col-image-small">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash03.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash03.jpg"
                 alt="Parallels building"
               />
             </div>
             <div className="col-md-4 col-12 col-image-small">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash04.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash04.jpg"
                 alt="The mist in the forest"
               />
             </div>
             <div className="col-md-6 col-12 col-image">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash05.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash05.jpg"
                 alt="A beautiful landscape"
               />
             </div>
@@ -74,13 +74,13 @@ const Content = () => {
             </div>
             <div className="col-12 col-md-6 col-image-half">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash06.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash06.jpg"
                 alt="Night in new york"
               />
             </div>
             <div className="col-12 col-md-6 col-image-half">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash07.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash07.jpg"
                 alt="Be proud!!!"
               />
             </div>
@@ -107,13 +107,13 @@ const Content = () => {
             </div>
             <div className="col-12 col-image-large">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash08.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash08.jpg"
                 alt="Sunset road..."
               />
             </div>
             <div className="col-12 col-image-large">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash09.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash09.jpg"
                 alt="A stunning lake."
               />
             </div>

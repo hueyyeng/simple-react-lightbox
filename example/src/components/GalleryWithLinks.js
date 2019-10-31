@@ -10,77 +10,77 @@ function GalleryWithLinks() {
           <div className="row">
             <div className="col-md-4 col-6 col-image-with-link">
               <a
-                href="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash17.jpg"
+                href="https://www.simple-react-lightbox.dev/images/gallery/unsplash17.jpg"
                 data-attribute="SRL"
               >
                 <img
-                  src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/thumbnails/unsplash17_thumb.jpg"
+                  src="https://www.simple-react-lightbox.dev/images/gallery/thumbnails/unsplash17_thumb.jpg"
                   alt="A small boat"
                 />
               </a>
             </div>
             <div className="col-md-4 col-6 col-image-with-link">
               <a
-                href="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash18.jpg"
+                href="https://www.simple-react-lightbox.dev/images/gallery/unsplash18.jpg"
                 data-attribute="SRL"
               >
                 <img
-                  src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/thumbnails/unsplash18_thumb.jpg"
+                  src="https://www.simple-react-lightbox.dev/images/gallery/thumbnails/unsplash18_thumb.jpg"
                   alt="Umbrella"
                 />
               </a>
             </div>
             <div className="col-md-4 col-6 col-image-with-link">
               <a
-                href="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash19.jpg"
+                href="https://www.simple-react-lightbox.dev/images/gallery/unsplash19.jpg"
                 data-attribute="SRL"
               >
                 <img
-                  src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/thumbnails/unsplash19_thumb.jpg"
+                  src="https://www.simple-react-lightbox.dev/images/gallery/thumbnails/unsplash19_thumb.jpg"
                   alt="Penguins kissed by the sun"
                 />
               </a>
             </div>
             <div className="col-md-3 col-6 col-image-with-link">
               <a
-                href="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash20.jpg"
+                href="https://www.simple-react-lightbox.dev/images/gallery/unsplash20.jpg"
                 data-attribute="SRL"
               >
                 <img
-                  src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/thumbnails/unsplash20_thumb.jpg"
+                  src="https://www.simple-react-lightbox.dev/images/gallery/thumbnails/unsplash20_thumb.jpg"
                   alt="A peaceful lake."
                 />
               </a>
             </div>
             <div className="col-md-3 col-6 col-image-with-link">
               <a
-                href="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash21.jpg"
+                href="https://www.simple-react-lightbox.dev/images/gallery/unsplash21.jpg"
                 data-attribute="SRL"
               >
                 <img
-                  src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/thumbnails/unsplash21_thumb.jpg"
+                  src="https://www.simple-react-lightbox.dev/images/gallery/thumbnails/unsplash21_thumb.jpg"
                   alt="Small insect"
                 />
               </a>
             </div>
             <div className="col-md-3 col-6 col-image-with-link">
               <a
-                href="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash22.jpg"
+                href="https://www.simple-react-lightbox.dev/images/gallery/unsplash22.jpg"
                 data-attribute="SRL"
               >
                 <img
-                  src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/thumbnails/unsplash22_thumb.jpg"
+                  src="https://www.simple-react-lightbox.dev/images/gallery/thumbnails/unsplash22_thumb.jpg"
                   alt="Desert lizard"
                 />
               </a>
             </div>
             <div className="col-md-3 col-6 col-image-with-link">
               <a
-                href="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash23.jpg"
+                href="https://www.simple-react-lightbox.dev/images/gallery/unsplash23.jpg"
                 data-attribute="SRL"
               >
                 <img
-                  src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/thumbnails/unsplash23_thumb.jpg"
+                  src="https://www.simple-react-lightbox.dev/images/gallery/thumbnails/unsplash23_thumb.jpg"
                   alt="When in Rome..."
                 />
               </a>
