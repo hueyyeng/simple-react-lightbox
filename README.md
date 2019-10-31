@@ -1,6 +1,6 @@
 # Simple-React-Lightbox (SRL)
 
-![Simple React Lightbox - Logo](https://www.michelec.site/app/uploads/SRL/SRL_LogoGit.jpg)
+![Simple React Lightbox - Logo](https://www.simple-react-lightbox.dev/images/SRL_Logo_Git.jpeg)
 
 [![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox.svg?token=RytKLBgaYszcR25z6ZLP&branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
@@ -20,7 +20,7 @@ I checked online for some light-box for React but the way that they were working
 
 **Simple React Lightbox** comes with many features: please check the [options](#options) section to learn more.
 
-![Simple React Lightbox - Features](https://www.michelec.site/app/uploads/SRL/SRL_Icons.jpg)
+![Simple React Lightbox - Features](https://www.simple-react-lightbox.dev/images/SRL_Icons_Git.jpeg)
 <br/>
 
 ---
@@ -90,7 +90,7 @@ export default MyComponent;
 
 That's it 🥳 As we are not passing any [options](#options) you should have a working light-box with the default options like the image below:
 
-![Simple React Lightbox - Default options](https://www.michelec.site/app/uploads/SRL/SRL_DefaultLightbox.jpg)
+![Simple React Lightbox - Default options](https://www.simple-react-lightbox.dev/images/SRL_Example1_Git.jpeg)
 
 ###### The light-box with the default options
 
@@ -188,7 +188,7 @@ function App() {
 export default App;
 ```
 
-![Simple React Lightbox - Default options](https://www.michelec.site/app/uploads/SRL/SRL_LightboxWithOptions.jpg)
+![Simple React Lightbox - Default options](https://www.simple-react-lightbox.dev/images/SRL_Example2_Git.jpeg)
 
 ###### The light-box with the custom options
 
