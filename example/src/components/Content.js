@@ -9,6 +9,7 @@ import img05 from "../assets/images/gallery/unsplash05.jpg";
 import img06 from "../assets/images/gallery/unsplash06.jpg";
 import img07 from "../assets/images/gallery/unsplash07.jpg";
 import img08 from "../assets/images/gallery/unsplash08.jpg";
+import img09 from "../assets/images/gallery/unsplash09.jpg";
 import videomp4 from "../assets/images/gallery/small.mp4";
 import videogg from "../assets/images/gallery/small.ogv";
 
@@ -71,10 +72,10 @@ const Content = () => {
               <img src={img03} alt="Parallels building" />
             </div>
             <div className="col-md-4 col-12 col-image-small">
-              <img src={img03} alt="The mist in the forest" />
+              <img src={img04} alt="The mist in the forest" />
             </div>
             <div className="col-md-6 col-12 col-image">
-              <img src={img04} alt="A beautiful landscape" />
+              <img src={img05} alt="A beautiful landscape" />
             </div>
             <div className="col-md-6 col-12 col-text">
               <h1>Consectetur adipiscing elit</h1>
@@ -121,10 +122,10 @@ const Content = () => {
               </p>
             </div>
             <div className="col-12 col-image-large">
-              <img src={img05} alt="Sunset road..." />
+              <img src={img08} alt="Sunset road..." />
             </div>
             <div className="col-12 col-image-large">
-              <img src={img08} alt="A stunning lake." />
+              <img src={img09} alt="A stunning lake." />
             </div>
           </div>
         </div>

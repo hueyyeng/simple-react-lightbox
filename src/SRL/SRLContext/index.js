@@ -5,7 +5,7 @@ const isEqual = require("lodash/isEqual");
 const initialState = {
   isOpened: false,
   elements: [],
-  selectedImage: {
+  selectedElement: {
     source: "",
     caption: "",
     id: "",
@@ -60,6 +60,13 @@ const SRLContextComponent = props => {
         return {
           ...state,
           elements: action.elements
+        }
+      case "HANDLE_ELEMENT":
+        return {
+          ...state,
+          selectedElement: {
+            ...action.element
+          }
         }
     }
   }

@@ -32,31 +32,31 @@ const ContentPageTwo = () => {
             </div>
             <div className="col-md-6 col-12 col-image">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash10.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash10.jpg"
                 alt="Perfect reflection"
               />
             </div>
             <div className="col-md-4 col-12 col-image-small">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash11.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash11.jpg"
                 alt="Coast in the evening"
               />
             </div>
             <div className="col-md-4 col-12 col-image-small">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash12.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash12.jpg"
                 alt="Clouds & Sea"
               />
             </div>
             <div className="col-md-4 col-12 col-image-small">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash13.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash13.jpg"
                 alt="Green"
               />
             </div>
             <div className="col-md-6 col-12 col-image">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash14.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash14.jpg"
                 alt="Above"
               />
             </div>
@@ -86,14 +86,14 @@ const ContentPageTwo = () => {
             </div>
             <div className="col-12 col-md-6 col-image-half">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash15.jpg"
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash15.jpg"
                 alt="Pattern"
               />
             </div>
             <div className="col-12 col-md-6 col-image-half">
               <img
-                src="https://www.michelec.site/app/uploads/SRL/ExampleGallery/unsplash16.jpg"
-                alt="When in Rome..."
+                src="https://www.simple-react-lightbox.dev/images/gallery/unsplash16.jpg"
+                alt="Countryside"
               />
             </div>
           </div>
