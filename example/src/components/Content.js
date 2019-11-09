@@ -1,36 +1,25 @@
-import React from "react";
-import Layout from "./Layout";
-import { SRLWrapper } from "simple-react-lightbox";
-import img01 from "../assets/images/gallery/unsplash01.jpg";
-import img02 from "../assets/images/gallery/unsplash02.jpg";
-import img03 from "../assets/images/gallery/unsplash03.jpg";
-import img04 from "../assets/images/gallery/unsplash04.jpg";
-import img05 from "../assets/images/gallery/unsplash05.jpg";
-import img06 from "../assets/images/gallery/unsplash06.jpg";
-import img07 from "../assets/images/gallery/unsplash07.jpg";
-import img08 from "../assets/images/gallery/unsplash08.jpg";
-import img09 from "../assets/images/gallery/unsplash09.jpg";
-import videomp4 from "../assets/images/gallery/small.mp4";
-import videogg from "../assets/images/gallery/small.ogv";
+import React from 'react'
+import Layout from './Layout'
+import { SRLWrapper } from 'simple-react-lightbox'
+import img01 from '../assets/images/gallery/unsplash01.jpg'
+import img02 from '../assets/images/gallery/unsplash02.jpg'
+import img03 from '../assets/images/gallery/unsplash03.jpg'
+import img04 from '../assets/images/gallery/unsplash04.jpg'
+import img05 from '../assets/images/gallery/unsplash05.jpg'
+import img06 from '../assets/images/gallery/unsplash06.jpg'
+import img07 from '../assets/images/gallery/unsplash07.jpg'
+import img08 from '../assets/images/gallery/unsplash08.jpg'
+import img09 from '../assets/images/gallery/unsplash09.jpg'
+import videomp4 from '../assets/images/gallery/small.mp4'
+import videogg from '../assets/images/gallery/small.ogv'
 
 const options = {
-  overlayColor: "rgb(25, 136, 124)",
-  captionStyle: {
-    captionColor: "#a6cfa5",
-    captionFontFamily: "Raleway, sans-serif",
-    captionFontSize: "22px",
-    captionFontWeight: "300",
-    captionFontStyle: "capitalize"
-  },
-  buttonsStyle: {
-    buttonsBackgroundColor: "#1b5245",
-    buttonsIconColor: "rgba(126, 172, 139, 0.8)"
-  },
-  autoplaySpeed: 1500,
-  transitionSpeed: 900,
-  showCaption: true,
-  showThumbnails: true
-};
+  overlayColor: 'rgb(25, 136, 124)',
+  transitionSpeed: 1000,
+  autoplaySpeed: 10000000,
+  slideTransitionSpeed: 100,
+  showCaption: false
+}
 
 const Content = () => {
   return (
@@ -131,7 +120,7 @@ const Content = () => {
         </div>
       </SRLWrapper>
     </Layout>
-  );
-};
+  )
+}
 
-export default Content;
+export default Content

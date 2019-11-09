@@ -2,10 +2,11 @@ import React, { useContext, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { SRLCtx } from "../SRLContext";
 
-const SRLWrapper = ({ options, children }) => {
+const SRLWrapper = ({ options, children, defaultOptions }) => {
 
   // IsEqual from loadash to do a deep comparison of the objects
   const isEqual = require("lodash/isEqual");
+  const isEmpty = require("lodash/isEmpty");
 
   // Imports the context
   const context = useContext(SRLCtx);
@@ -17,13 +18,26 @@ const SRLWrapper = ({ options, children }) => {
 
   useEffect(() => {
 
-    // Dispatch the Action the options
+    // Dispatch the Action to grab the options
     const grabOptions = (options) => {
-      if (!isEqual(options, context.options)) {
-        console.log("dispatched options")
+      console.log("dispatched options")
+      // We merge the options that we receive from the user via Props with the original ones (defaultOptions)
+      // If the user hasn't provided any options via props we make mergedOptions use just the default options
+      let mergedOptions = {}
+      if(isEmpty(options)) {
+        mergedOptions = {
+          ...defaultOptions
+        }
+      } else {
+        mergedOptions = {
+          ...defaultOptions,
+          ...options
+        }
+      }
+      if(!isEqual(mergedOptions, context.options)) {
         context.dispatch({
           type: 'GRAB_OPTIONS',
-          options
+          mergedOptions
         })
       }
     }
@@ -114,7 +128,7 @@ const SRLWrapper = ({ options, children }) => {
         );
       }
     }
-  }, [options, isEqual, context])
+  }, [options, isEqual, context, isEmpty, defaultOptions])
 
 
   return <div ref={imagesContainer}>{children}</div>;
@@ -123,9 +137,44 @@ const SRLWrapper = ({ options, children }) => {
 export default SRLWrapper;
 
 SRLWrapper.propTypes = {
+  defaultOptions: PropTypes.shape({
+    overlayColor: PropTypes.string,
+    transitionSpeed: PropTypes.number,
+    autoplaySpeed: PropTypes.number,
+    slidesTransitionSpeed: PropTypes.number,
+    showThumbnails: PropTypes.bool,
+    showCaption: PropTypes.bool,
+    captionColor: PropTypes.string,
+    captionFontFamily: PropTypes.string,
+    captionFontSize: PropTypes.string,
+    captionFontWeight: PropTypes.string,
+    captionFontStyle: PropTypes.string,
+    buttonsBackgroundColor: PropTypes.string,
+    buttonsIconColor: PropTypes.string
+  }),
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
   options: PropTypes.object
+};
+
+
+
+SRLWrapper.defaultProps = {
+  defaultOptions: {
+    overlayColor: "rgba(0, 0, 0, 0.9)",
+    transitionSpeed: 500,
+    autoplaySpeed: 3000,
+    slideTransitionSpeed: 600,
+    showCaption: true,
+    showThumbnails: true,
+    captionColor: "#FFFFFF",
+    captionFontFamily: "inherit",
+    captionFontSize: "inherit",
+    captionFontWeight: "inherit",
+    captionFontStyle: "inherit",
+    buttonsBackgroundColor: "rgba(30,30,36,0.8)",
+    buttonsIconColor: "rgba(255, 255, 255, 0.8)"
+  }
 };

@@ -1,6 +1,5 @@
 import React, { useReducer } from "react";
 import PropTypes from "prop-types";
-const isEqual = require("lodash/isEqual");
 
 const initialState = {
   isOpened: false,
@@ -12,7 +11,21 @@ const initialState = {
     width: "",
     height: ""
   },
-  options: {}
+  options: {
+    overlayColor: "rgba(0, 0, 0, 0.9)",
+    transitionSpeed: 500,
+    autoplaySpeed: 3000,
+    slideTransitionSpeed: 600,
+    showCaption: true,
+    showThumbnails: true,
+    captionColor: "#FFFFFF",
+    captionFontFamily: "inherit",
+    captionFontSize: "inherit",
+    captionFontWeight: "inherit",
+    captionFontStyle: "inherit",
+    buttonsBackgroundColor: "rgba(30,30,36,0.8)",
+    buttonsIconColor: "rgba(255, 255, 255, 0.8)"
+  }
 };
 
 const SRLCtx = React.createContext(initialState);
@@ -54,7 +67,9 @@ const SRLContextComponent = props => {
       case "GRAB_OPTIONS":
         return {
           ...state,
-          options: action.options
+          options: {
+            ...action.mergedOptions
+          }
         }
       case "GRAB_ELEMENTS":
         return {
@@ -64,6 +79,7 @@ const SRLContextComponent = props => {
       case "HANDLE_ELEMENT":
         return {
           ...state,
+          isOpened: true,
           selectedElement: {
             ...action.element
           }
@@ -73,39 +89,6 @@ const SRLContextComponent = props => {
 
 
   const [state, dispatch] = useReducer(reducer, initialState);
-
-
-
-  // const handleLightbox = (img, alt, id, width, height) => {
-  //   const payload = { img, alt, id, width, height };
-  //   if (!state.isOpened) {
-  //     if (!isEqual(state.selectedImage, payload)) {
-  //       dispatch({ type: "handleLightbox", payload });
-  //     }
-  //   }
-  // };
-
-  // const grabImages = images => {
-  //   // IT'S CRUCIAL TO ADD THESE CONDITIONALS CHECK OR THE DISPATCH WILL RUN INFINITELY
-  //   /*
-  //   First: we compare the "prev state" with the new state from the context to see if the images is not an empty array
-  //   Second: we check if the two objects are different. In this case it means that there are multiple galleries and we want to grab the new images
-  //   */
-  //   if (!state.isOpened) {
-  //     if (
-  //       state.images.length < images.length ||
-  //       !isEqual(state.images, images)
-  //     ) {
-  //       dispatch({ type: "grabImages", images });
-  //     }
-  //   }
-  // };
-
-  // function handleCloseLightbox() {
-  //   if (state.isOpened) {
-  //     dispatch({ type: "handleCloseLightbox" });
-  //   }
-  // }
 
   return (
     <SRLCtx.Provider
@@ -126,5 +109,5 @@ SRLContextComponent.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
-  ]).isRequired
+  ]).isRequired,
 };

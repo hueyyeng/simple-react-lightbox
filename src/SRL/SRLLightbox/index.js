@@ -24,6 +24,18 @@ const PortalWithTransitionStyles = styled(Portal)`
   }
 `;
 
+
+
+const Test = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9991;
+  background-color: red;
+`
+
 function SRLLightbox() {
   const context = useContext(SRLCtx);
   return (
@@ -31,11 +43,13 @@ function SRLLightbox() {
       in={context.isOpened}
       className="portal-transition"
       classNames="portal-transition"
-      timeout={duration}>
+      timeout={duration}
+    >
       <PortalWithTransitionStyles
         selector="SRLLightbox"
-        isOpened={context.isOpened}>
-        <SRLLightboxGallery {...context} />
+        isOpened={context.isOpened}
+      >
+        <Test>Hello Portal</Test>
       </PortalWithTransitionStyles>
     </CSSTransition>
   );
