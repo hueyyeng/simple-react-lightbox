@@ -19,7 +19,7 @@ const initialState = {
     showCaption: true,
     showThumbnails: true,
     slideTransitionSpeed: 600,
-    transitionEase: "ease",
+    transitionTimingFunction: "ease",
     transitionSpeed: 500
   },
   selectedElement: {

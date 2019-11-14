@@ -15,7 +15,7 @@ import videogg from '../assets/images/gallery/small.ogv'
 
 const options = {
   overlayColor: 'rgb(25, 136, 124)',
-  transitionSpeed: 300,
+  transitionSpeed: 1000,
   transitionTimingFunction: 'ease',
   buttonsSize: '50px',
   buttonsIconPadding: '1px',

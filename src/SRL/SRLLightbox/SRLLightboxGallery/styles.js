@@ -27,7 +27,7 @@ const SRLLightboxContent = styled.div`
 `;
 
 // The container for the image
-const SRLLightboxImageContainer = styled.div`
+const SRLLightboxElementContainer = styled.div`
   width: ${props => {
     if (props.showThumbnails === false && !!props.showCaption === false) {
       return "90vw";
@@ -319,7 +319,7 @@ const SRLLightboxThubnailGalleryImage = styled.a`
 export {
   SRLLightboxGalleryStage,
   SRLLightboxContent,
-  SRLLightboxImageContainer,
+  SRLLightboxElementContainer,
   SRLLightboxImage,
   SRRLLightboxCaption,
   SRRLLightboxCloseIcon,

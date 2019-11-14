@@ -19,7 +19,6 @@ const SRLLightboxControls = ({
   buttonsIconColor,
   buttonsSize,
   buttonsIconPadding
-
 }) => {
   return (
     <>

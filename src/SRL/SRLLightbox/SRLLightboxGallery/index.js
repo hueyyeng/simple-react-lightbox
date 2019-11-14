@@ -18,7 +18,6 @@ const SRLLightboxGallery = ({
 // Destructuring the options
 const { autoplaySpeed } = options;
 
-
   // In this component we set the state using the context.
   // We don't want to manipulate the context every time so we create a localized state
   // The first element will be the one that is clicked
@@ -142,8 +141,6 @@ const { autoplaySpeed } = options;
 
   useEffect(() => {
 
-    console.log(options)
-
     // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
     if (currentElement.id === undefined) {
       setCurrentElement({
@@ -173,17 +170,20 @@ const { autoplaySpeed } = options;
 
   }, [currentElement, elements, handleLightboxWithKeys, isOpened, options])
 
-    const controls = {
-      currentElementID: currentElement.id,
-      handleCurrentElement,
-      handleNextElement,
-      handlePrevElement,
-      handleCloseLightbox,
-      autoplay,
-      autoplaySpeed,
-      setAutoplay
+
+  // Light-box controls
+  const controls = {
+    currentElementID: currentElement.id,
+    handleCurrentElement,
+    handleNextElement,
+    handlePrevElement,
+    handleCloseLightbox,
+    autoplay,
+    autoplaySpeed,
+    setAutoplay
   };
 
+  // Light-box buttons options
   const buttonOptions = {
     buttonsBackgroundColor: options.buttonsBackgroundColor,
     buttonsIconColor: options.buttonsIconColor,
@@ -194,86 +194,18 @@ const { autoplaySpeed } = options;
   return (
     <SRLLightboxGalleryStage overlayColor={options.overlayColor}>
       <SRLLightboxControls {...buttonOptions} {...controls} />
+      <SRLLightboxSlideComponent {...currentElement} {...controls} elements={elements} options={options} />
     </SRLLightboxGalleryStage>
     )
 }
 
-// const SRLLightboxGallery = ({
-//   isOpened,
-//   handleCloseLightbox,
-//   images,
-//   selectedImage,
-//   overlayColor,
-//   captionStyle,
-//   buttonsStyle,
-//   autoplaySpeed,
-//   transitionSpeed,
-//   showCaption,
-//   showThumbnails
-// }) => {
-//   const [currentImage, setCurrentImage] = useState(selectedImage);
-//   const [imagesGallery, ,] = useState(images);
-//   const [autoplay, setAutoplay] = useState(false);
-
-
-
-
-//   const controls = {
-//     currentImageId: currentImage.id,
-//     handleCurrentImage,
-//     handleNextImage,
-//     handlePrevImage,
-//     handleCloseLightbox,
-//     autoplay,
-//     autoplaySpeed,
-//     setAutoplay
-//   };
-
-//   return (
-//     <SRLLightboxGalleryStage
-//       className="SRLOuterWrapper"
-//       overlayColor={overlayColor}>
-//       <SRLLightboxControls buttonsStyle={buttonsStyle} {...controls} />
-//       <SRLLightboxSlideComponent
-//         showThumbnails={showThumbnails}
-//         captionStyle={captionStyle}
-//         showCaption={showCaption}
-//         handleCloseLightbox={controls.handleCloseLightbox}
-//         handleCurrentImage={controls.handleCurrentImage}
-//         handleNextImage={controls.handleNextImage}
-//         handlePrevImage={controls.handlePrevImage}
-//         transitionSpeed={transitionSpeed}
-//         images={images}
-//         isopened={isOpened}
-//         {...currentImage}
-//       />
-//     </SRLLightboxGalleryStage>
-//   );
-// };
-
 SRLLightboxGallery.propTypes = {
   options: PropTypes.object,
   overlayColor: PropTypes.string,
-  // isOpened: PropTypes.bool,
-  // images: PropTypes.array,
-  // overlayColor: PropTypes.string,
-  // showThumbnails: PropTypes.bool,
-  // showCaption: PropTypes.bool,
-  // captionStyle: PropTypes.shape({
-  //   captionColor: PropTypes.string,
-  //   captionFontFamily: PropTypes.string,
-  //   captionFontSize: PropTypes.string,
-  //   captionFontWeight: PropTypes.string,
-  //   captionFontStyle: PropTypes.string
-  // }),
-  // buttonsStyle: PropTypes.shape({
-  //   buttonsBackgroundColor: PropTypes.string,
-  //   buttonsIconColor: PropTypes.string
-  // }),
-  // autoplaySpeed: PropTypes.number,
-  // transitionSpeed: PropTypes.number,
-  // selectedImage: PropTypes.object,
-  // handleCloseLightbox: PropTypes.func
+  selectedElement: PropTypes.object,
+  elements: PropTypes.array,
+  isOpened: PropTypes.bool,
+  dispatch: PropTypes.func
 };
 
 export default SRLLightboxGallery;

@@ -7,33 +7,45 @@ import ReactScrollWheelHandler from "react-scroll-wheel-handler";
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
-  SRLLightboxImageContainer,
+  SRLLightboxElementContainer,
   SRLLightboxImage
 } from "../styles";
 
 function SRLLightboxSlideComponent({
   source,
-  images,
+  elements,
+  caption,
   id,
   handleCloseLightbox,
-  handleCurrentImage,
-  handleNextImage,
-  handlePrevImage,
-  caption,
-  captionStyle,
-  showThumbnails,
-  showCaption,
-  transitionSpeed
+  handleCurrentElement,
+  handleNextElement,
+  handlePrevElement,
+  options,
+  width,
+  height
 }) {
+
+  const {showThumbnails, showCaption, transitionSpeed} = options;
+
+  // Light-box captions options
+  const captionOptions = {
+    captionColor: options.captionColor,
+    captionFontFamily: options.captionFontFamily,
+    captionFontSize: options.captionFontSize,
+    captionFontStyle: options.captionFontStyle,
+    captionFontWeight: options.captionFontWeight,
+  }
+
+
   const SRLImageContainerRef = useRef();
   // credit: http://www.javascriptkit.com/javatutors/touchevents2.shtml
   let startX;
   let startY;
   let distX;
   let distY;
-  let threshold = 150; // required min distance traveled to be considered swipe
-  let restraint = 100; // maximum distance allowed at the same time in perpendicular direction
-  let allowedTime = 300; // maximum time allowed to travel that distance
+  const threshold = 150; // required min distance traveled to be considered swipe
+  const restraint = 100; // maximum distance allowed at the same time in perpendicular direction
+  const allowedTime = 300; // maximum time allowed to travel that distance
   let elapsedTime;
   let startTime;
 
@@ -45,23 +57,23 @@ function SRLLightboxSlideComponent({
       // SECOND CONDITION
       if (Math.abs(x) >= t) {
         if (x <= 0) {
-          handleNextImage(id);
+          handleNextElement(id);
         } else if (x >= 0) {
-          handlePrevImage(id);
+          handlePrevElement(id);
         }
       }
     }
   }
 
   function handleTouchStart(e) {
-    let touchObject = e.changedTouches[0];
+    const touchObject = e.changedTouches[0];
     startX = touchObject.pageX;
     startY = touchObject.pageY;
     startTime = new Date().getTime();
   }
 
   function handleTouchEnd(e) {
-    let touchObject = e.changedTouches[0];
+    const touchObject = e.changedTouches[0];
     distX = touchObject.pageX - startX;
     distY = touchObject.pageX - startY;
     elapsedTime = new Date().getTime() - startTime;
@@ -72,18 +84,22 @@ function SRLLightboxSlideComponent({
 
   useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
 
+
+  // Check if it's an image to load the right content
+  const isImage = (/\.(gif|jpg|jpeg|tiff|png|webp)$/i).test(source);
+
   return (
     <SRLLightboxContent className="SRLContent">
-      <SRLLightboxImageContainer
+      <SRLLightboxElementContainer
         showThumbnails={showThumbnails}
         showCaption={showCaption}
-        className="SRLImageContainer"
+        className="SRLElementContainer"
         onTouchStart={e => handleTouchStart(e)}
         onTouchEnd={e => handleTouchEnd(e)}
       >
         <ReactScrollWheelHandler
-          upHandler={() => handleNextImage(id)}
-          downHandler={() => handlePrevImage(id)}
+          upHandler={() => handleNextElement(id)}
+          downHandler={() => handlePrevElement(id)}
           disableKeyboard={true}
         >
           <TransitionGroup className="SRLTransitionGroup">
@@ -92,39 +108,43 @@ function SRLLightboxSlideComponent({
               classNames="image-transition"
               timeout={transitionSpeed}
             >
-              <SRLLightboxImage
-                ref={SRLImageContainerRef}
-                className="SRLImage"
-                transitionSpeed={transitionSpeed}
-                src={
-                  typeof source === "object"
-                    ? "https://www.michelec.site/app/uploads/SRL/SRL_LoadingIcon.gif"
-                    : source
-                }
-                alt={caption}
-              />
+              {isImage ?
+                <SRLLightboxImage
+                  ref={SRLImageContainerRef}
+                  className="SRLImage"
+                  transitionSpeed={transitionSpeed}
+                  width={width}
+                  height={height}
+                  src={
+                    typeof source === "object"
+                      ? "Loading..."
+                      : source
+                  }
+                  alt={caption}
+                />
+                : <div>Video</div>}
             </CSSTransition>
           </TransitionGroup>
         </ReactScrollWheelHandler>
-      </SRLLightboxImageContainer>
+      </SRLLightboxElementContainer>
 
       {showCaption && (
-        <SRRLLightboxCaption captionStyle={captionStyle} className="SRLCaption">
+        <SRRLLightboxCaption captionStyle={captionOptions} className="SRLCaption">
           <p className="SRLCaption">{caption}</p>
         </SRRLLightboxCaption>
       )}
 
       {showThumbnails && (
         <SRLLightboxThubnailGallery
-          handleCurrentImage={handleCurrentImage}
+          handleCurrentElement={handleCurrentElement}
           currentId={id}
-          images={images || []}
+          elements={elements || []}
         />
       )}
+
     </SRLLightboxContent>
   );
   // Hook
-
   function useOnClickOutside(ref, handler) {
     useEffect(
       () => {
@@ -171,22 +191,32 @@ function SRLLightboxSlideComponent({
 SRLLightboxSlideComponent.propTypes = {
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
-  captionStyle: PropTypes.shape({
+  elements: PropTypes.array,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  handleCloseLightbox: PropTypes.func,
+  handleCurrentElement: PropTypes.func,
+  handleNextElement: PropTypes.func,
+  handlePrevElement: PropTypes.func,
+  id: PropTypes.string,
+  options: PropTypes.shape({
+    overlayColor: PropTypes.string,
+    transitionSpeed: PropTypes.number,
+    transitionTimingFunction: PropTypes.string,
+    autoplaySpeed: PropTypes.number,
+    slidesTransitionSpeed: PropTypes.number,
+    showThumbnails: PropTypes.bool,
+    showCaption: PropTypes.bool,
     captionColor: PropTypes.string,
     captionFontFamily: PropTypes.string,
     captionFontSize: PropTypes.string,
     captionFontWeight: PropTypes.string,
-    captionFontStyle: PropTypes.string
+    captionFontStyle: PropTypes.string,
+    buttonsBackgroundColor: PropTypes.string,
+    buttonsIconColor: PropTypes.string,
+    buttonsIconPadding: PropTypes.string,
+    buttonsSize: PropTypes.string,
   }),
-  showThumbnails: PropTypes.bool,
-  showCaption: PropTypes.bool,
-  transitionSpeed: PropTypes.number,
-  images: PropTypes.array,
-  handleCloseLightbox: PropTypes.func,
-  handleCurrentImage: PropTypes.func,
-  handleNextImage: PropTypes.func,
-  handlePrevImage: PropTypes.func,
-  id: PropTypes.string
 };
 
 export default SRLLightboxSlideComponent;
