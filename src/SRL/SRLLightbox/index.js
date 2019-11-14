@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import SRLLightboxGallery from "./SRLLightboxGallery";
 import { SRLCtx } from "../SRLContext";
 import styled from "@emotion/styled";
-const duration = 500;
 
 const PortalWithTransitionStyles = styled(Portal)`
   &.portal-transition-enter {
@@ -13,18 +12,16 @@ const PortalWithTransitionStyles = styled(Portal)`
   }
   &.portal-transition-enter-active {
     opacity: 1;
-    transition: opacity ${duration}ms ease-in-out;
+    transition: opacity ${props => props.transitionSpeed}ms ${props => props.transitionTimingFunction};
   }
   &.portal-transition-exit {
     opacity: 1;
   }
   &.portal-transition-exit-active {
     opacity: 0;
-    transition: opacity ${duration}ms ease-in-out;
+    transition: opacity ${props => props.transitionSpeed}ms ${props => props.transitionTimingFunction};
   }
 `;
-
-
 
 const Test = styled.div`
   position: fixed;
@@ -38,18 +35,22 @@ const Test = styled.div`
 
 function SRLLightbox() {
   const context = useContext(SRLCtx);
+  const {options, isOpened} = context;
+
   return (
     <CSSTransition
-      in={context.isOpened}
+      in={isOpened}
       className="portal-transition"
       classNames="portal-transition"
-      timeout={duration}
+      timeout={options.transitionSpeed}
     >
       <PortalWithTransitionStyles
         selector="SRLLightbox"
-        isOpened={context.isOpened}
+        isOpened={isOpened}
+        transitionSpeed={options.transitionSpeed}
+        transitionTimingFunction={options.transitionTimingFunction}
       >
-        <Test>Hello Portal</Test>
+        <SRLLightboxGallery {...context} />
       </PortalWithTransitionStyles>
     </CSSTransition>
   );

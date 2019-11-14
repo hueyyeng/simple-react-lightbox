@@ -4,41 +4,101 @@ import { SRLLightboxGalleryStage } from "./styles";
 import SRLLightboxSlideComponent from "./SRLLightboxSlide";
 import SRLLightboxControls from "./SRLLightboxControls";
 
-let _findIndex = require("lodash/findIndex");
-let _find = require("lodash/find");
+const _findIndex = require("lodash/findIndex");
+const _find = require("lodash/find");
 
 const SRLLightboxGallery = ({
+  options,
+  selectedElement,
+  elements,
   isOpened,
-  handleCloseLightbox,
-  images,
-  selectedImage,
-  overlayColor,
-  captionStyle,
-  buttonsStyle,
-  autoplaySpeed,
-  transitionSpeed,
-  showCaption,
-  showThumbnails
+  dispatch
 }) => {
-  const [currentImage, setCurrentImage] = useState(selectedImage);
-  const [imagesGallery, ,] = useState(images);
-  const [autoplay, setAutoplay] = useState(false);
-  // Handle Current Image
-  const handleCurrentImage = useCallback(
+
+// Destructuring the options
+const { autoplaySpeed } = options;
+
+
+  // In this component we set the state using the context.
+  // We don't want to manipulate the context every time so we create a localized state
+  // The first element will be the one that is clicked
+  const [currentElement, setCurrentElement] = useState(selectedElement)
+  // Let's set a state for the "autoplay" option
+  const [autoplay, setAutoplay] = useState(false)
+
+  // Handle Previous Element
+  const handlePrevElement = useCallback(
     id => {
-      const imageSelected = _find(imagesGallery, function(i) {
+      /* We receive the ID of the current element and we want the element after that.
+        Let's find the current position of the current element in the array */
+      // const currentPosition = imagesGallery.findIndex(i => i.id === id);
+      const currentPosition = _findIndex(elements, function(i) {
         return i.id === id;
       });
-      setCurrentImage({
-        source: imageSelected.src,
-        caption: imageSelected.alt,
-        id: imageSelected.id,
-        width: imageSelected.width,
-        height: imageSelected.height
+      /* The prev element will be the prev item in the array but it could be "undefined" as it goes negative. If it does we need to start from the last item. */
+      const prevElement =  elements[currentPosition - 1] || elements[elements.length - 1];
+      // Set the state with the new element
+      setCurrentElement({
+        source: prevElement.source,
+        caption: prevElement.caption,
+        id: prevElement.id,
+        width: prevElement.width,
+        height: prevElement.height
       });
     },
-    [imagesGallery]
+    [elements]
   );
+
+  // Handle Next element
+  const handleNextElement = useCallback(
+    id => {
+      /* We receive the ID of the current element and we want the element after that.
+      Let's find the current position of the current element in the array */
+      const currentPosition = _findIndex(elements, function(i) {
+        return i.id === id;
+      });
+      /* The next element will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to the first item */
+      const nextElement = elements[currentPosition + 1] || elements[0];
+      // Set the state with the new element
+      setCurrentElement({
+        source: nextElement.source,
+        caption: nextElement.caption,
+        id: nextElement.id,
+        width: nextElement.width,
+        height: nextElement.height
+      });
+    },
+    [elements]
+  );
+
+  // Handle Current Element
+  const handleCurrentElement = useCallback(
+    id => {
+      const currentElement = _find(elements, function(i) {
+        return i.id === id;
+      });
+      // Set the state with the new element
+      setCurrentElement({
+        source: currentElement.source,
+        caption: currentElement.caption,
+        id: currentElement.id,
+        width: currentElement.width,
+        height: currentElement.height
+      });
+    },
+    [elements]
+  );
+
+
+  // Handle Close Lightbox
+  const handleCloseLightbox = useCallback(
+    () => {
+      dispatch({
+        type: 'CLOSE_LIGHTBOX',
+      });
+    },
+    [dispatch],
+  )
 
   // Handle Autoplay
   function useInterval(callback, delay) {
@@ -55,88 +115,43 @@ const SRLLightboxGallery = ({
         savedCallback.current();
       }
       if (delay !== null) {
-        let id = setInterval(tick, delay);
+        const id = setInterval(tick, delay);
         return () => clearInterval(id);
       }
     }, [delay]);
   }
 
-  useInterval(
-    () => handleNextImage(currentImage.id),
-    autoplay ? autoplaySpeed : null
-  );
-
-  // Handle Next Image
-  const handleNextImage = useCallback(
-    id => {
-      /* We receive the ID of the current image and we want the image after that.
-      Let's find the current position of the current image in the array */
-      const currentPosition = _findIndex(imagesGallery, function(i) {
-        return i.id === id;
-      });
-
-      /* The next image will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to he first image */
-      const nextImage = imagesGallery[currentPosition + 1] || imagesGallery[0];
-      setCurrentImage({
-        source: nextImage.src,
-        caption: nextImage.alt,
-        id: nextImage.id,
-        width: nextImage.width,
-        height: nextImage.height
-      });
-    },
-    [imagesGallery]
-  );
-
-  // Handle Previous Image
-  const handlePrevImage = useCallback(
-    id => {
-      /* We receive the ID of the current image and we want the image after that.
-        Let's find the current position of the current image in the array */
-      // const currentPosition = imagesGallery.findIndex(i => i.id === id);
-      const currentPosition = _findIndex(imagesGallery, function(i) {
-        return i.id === id;
-      });
-      /* The prev image will be the prev item in the array but it could be "undefined" as it goes negative. If it does we need to start from the last image. */
-      const prevImage =
-        imagesGallery[currentPosition - 1] ||
-        imagesGallery[imagesGallery.length - 1];
-      setCurrentImage({
-        source: prevImage.src,
-        caption: prevImage.alt,
-        id: prevImage.id,
-        width: prevImage.width,
-        height: prevImage.height
-      });
-    },
-    [imagesGallery]
-  );
-
   // Handle Navigation With Keys
   const handleLightboxWithKeys = useCallback(
     event => {
       if (event.keyCode === 39) {
-        handleNextImage(currentImage.id);
+        handleNextElement(currentElement.id);
       } else if (event.keyCode === 37) {
-        handlePrevImage(currentImage.id);
+        handlePrevElement(currentElement.id);
       } else if (event.keyCode === 27) {
         handleCloseLightbox();
       }
     },
-    [currentImage.id, handleCloseLightbox, handleNextImage, handlePrevImage]
+    [currentElement.id, handleCloseLightbox, handleNextElement, handlePrevElement]
   );
 
-  // USE EFFECT
+  useInterval(
+    () => handleNextElement(currentElement.id),
+    autoplay ? autoplaySpeed : null
+  );
+
   useEffect(() => {
-    // SETS THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
-    // This is crucial in case the user uses the provided method to open the lightbox from a link or a button etc...
-    if (currentImage.id === undefined) {
-      setCurrentImage({
-        source: imagesGallery[0].src,
-        caption: imagesGallery[0].alt,
-        id: imagesGallery[0].id,
-        width: imagesGallery[0].width,
-        height: imagesGallery[0].height
+
+    console.log(options)
+
+    // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
+    if (currentElement.id === undefined) {
+      setCurrentElement({
+        source: elements[0].source,
+        caption: elements[0].caption,
+        id: elements[0].id,
+        width: elements[0].width,
+        height: elements[0].height
       });
     }
 
@@ -150,68 +165,115 @@ const SRLLightboxGallery = ({
         false
       );
     }
-
     // Cleans up function to remove the class from the body
     return function cleanUp() {
       document.body.classList.remove("SRLOpened");
       document.removeEventListener("keydown", handleLightboxWithKeys, false);
     };
-  }, [handleLightboxWithKeys, imagesGallery, isOpened, currentImage.id]);
 
-  const controls = {
-    currentImageId: currentImage.id,
-    handleCurrentImage,
-    handleNextImage,
-    handlePrevImage,
-    handleCloseLightbox,
-    autoplay,
-    autoplaySpeed,
-    setAutoplay
+  }, [currentElement, elements, handleLightboxWithKeys, isOpened, options])
+
+    const controls = {
+      currentElementID: currentElement.id,
+      handleCurrentElement,
+      handleNextElement,
+      handlePrevElement,
+      handleCloseLightbox,
+      autoplay,
+      autoplaySpeed,
+      setAutoplay
   };
 
+  const buttonOptions = {
+    buttonsBackgroundColor: options.buttonsBackgroundColor,
+    buttonsIconColor: options.buttonsIconColor,
+    buttonsSize: options.buttonsSize,
+    buttonsIconPadding: options.buttonsIconPadding
+  }
+
   return (
-    <SRLLightboxGalleryStage
-      className="SRLOuterWrapper"
-      overlayColor={overlayColor}>
-      <SRLLightboxControls buttonsStyle={buttonsStyle} {...controls} />
-      <SRLLightboxSlideComponent
-        showThumbnails={showThumbnails}
-        captionStyle={captionStyle}
-        showCaption={showCaption}
-        handleCloseLightbox={controls.handleCloseLightbox}
-        handleCurrentImage={controls.handleCurrentImage}
-        handleNextImage={controls.handleNextImage}
-        handlePrevImage={controls.handlePrevImage}
-        transitionSpeed={transitionSpeed}
-        images={images}
-        isopened={isOpened}
-        {...currentImage}
-      />
+    <SRLLightboxGalleryStage overlayColor={options.overlayColor}>
+      <SRLLightboxControls {...buttonOptions} {...controls} />
     </SRLLightboxGalleryStage>
-  );
-};
+    )
+}
+
+// const SRLLightboxGallery = ({
+//   isOpened,
+//   handleCloseLightbox,
+//   images,
+//   selectedImage,
+//   overlayColor,
+//   captionStyle,
+//   buttonsStyle,
+//   autoplaySpeed,
+//   transitionSpeed,
+//   showCaption,
+//   showThumbnails
+// }) => {
+//   const [currentImage, setCurrentImage] = useState(selectedImage);
+//   const [imagesGallery, ,] = useState(images);
+//   const [autoplay, setAutoplay] = useState(false);
+
+
+
+
+//   const controls = {
+//     currentImageId: currentImage.id,
+//     handleCurrentImage,
+//     handleNextImage,
+//     handlePrevImage,
+//     handleCloseLightbox,
+//     autoplay,
+//     autoplaySpeed,
+//     setAutoplay
+//   };
+
+//   return (
+//     <SRLLightboxGalleryStage
+//       className="SRLOuterWrapper"
+//       overlayColor={overlayColor}>
+//       <SRLLightboxControls buttonsStyle={buttonsStyle} {...controls} />
+//       <SRLLightboxSlideComponent
+//         showThumbnails={showThumbnails}
+//         captionStyle={captionStyle}
+//         showCaption={showCaption}
+//         handleCloseLightbox={controls.handleCloseLightbox}
+//         handleCurrentImage={controls.handleCurrentImage}
+//         handleNextImage={controls.handleNextImage}
+//         handlePrevImage={controls.handlePrevImage}
+//         transitionSpeed={transitionSpeed}
+//         images={images}
+//         isopened={isOpened}
+//         {...currentImage}
+//       />
+//     </SRLLightboxGalleryStage>
+//   );
+// };
 
 SRLLightboxGallery.propTypes = {
-  isOpened: PropTypes.bool,
-  images: PropTypes.array,
+  options: PropTypes.object,
   overlayColor: PropTypes.string,
-  showThumbnails: PropTypes.bool,
-  showCaption: PropTypes.bool,
-  captionStyle: PropTypes.shape({
-    captionColor: PropTypes.string,
-    captionFontFamily: PropTypes.string,
-    captionFontSize: PropTypes.string,
-    captionFontWeight: PropTypes.string,
-    captionFontStyle: PropTypes.string
-  }),
-  buttonsStyle: PropTypes.shape({
-    buttonsBackgroundColor: PropTypes.string,
-    buttonsIconColor: PropTypes.string
-  }),
-  autoplaySpeed: PropTypes.number,
-  transitionSpeed: PropTypes.number,
-  selectedImage: PropTypes.object,
-  handleCloseLightbox: PropTypes.func
+  // isOpened: PropTypes.bool,
+  // images: PropTypes.array,
+  // overlayColor: PropTypes.string,
+  // showThumbnails: PropTypes.bool,
+  // showCaption: PropTypes.bool,
+  // captionStyle: PropTypes.shape({
+  //   captionColor: PropTypes.string,
+  //   captionFontFamily: PropTypes.string,
+  //   captionFontSize: PropTypes.string,
+  //   captionFontWeight: PropTypes.string,
+  //   captionFontStyle: PropTypes.string
+  // }),
+  // buttonsStyle: PropTypes.shape({
+  //   buttonsBackgroundColor: PropTypes.string,
+  //   buttonsIconColor: PropTypes.string
+  // }),
+  // autoplaySpeed: PropTypes.number,
+  // transitionSpeed: PropTypes.number,
+  // selectedImage: PropTypes.object,
+  // handleCloseLightbox: PropTypes.func
 };
 
 export default SRLLightboxGallery;

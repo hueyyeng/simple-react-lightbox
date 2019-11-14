@@ -170,13 +170,19 @@ const SRRLLightboxCaption = styled.div`
 // The buttons
 const StyledButton = styled.button`
   background-clip: content-box;
-  height: 70px;
   position: absolute;
-  width: 70px;
+  height: ${props =>
+    props.buttonsSize
+      ? props.buttonsSize
+      : "70px"};
+  width: ${props =>
+    props.buttonsSize
+      ? props.buttonsSize
+      : "70px"};
   transition: color 0.3s ease;
   background-color: ${props =>
-    props.buttonsStyle.buttonsBackgroundColor
-      ? props.buttonsStyle.buttonsBackgroundColor
+    props.buttonsBackgroundColor
+      ? props.buttonsBackgroundColor
       : "rgba(30, 30, 36, 0.8)"};
   border: 0;
   border-radius: 0;
@@ -195,7 +201,10 @@ const StyledButton = styled.button`
     outline: none;
   }
   div {
-    padding: 7px;
+    padding: ${props =>
+    props.buttonsIconPadding
+      ? props.buttonsIconPadding
+      : "7px"};
     height: 100%;
     box-sizing: border-box;
     svg {
@@ -207,17 +216,17 @@ const StyledButton = styled.button`
       path {
         transition: fill 0.3s ease;
         fill: ${props =>
-          props.buttonsStyle.buttonsIconColor
-            ? props.buttonsStyle.buttonsIconColor
+          props.buttonsIconColor
+            ? props.buttonsIconColor
             : "rgba(255, 255, 255, 0.8)"};
       }
     }
     &:hover {
       svg path {
         fill: ${props =>
-          props.buttonsStyle.buttonsIconColor &&
+          props.buttonsIconColor &&
           // REGEX TO THE RESCUE (converts the RGBA value to have the full opacity to have the nice "hover" effect)
-          props.buttonsStyle.buttonsIconColor.replace(/[\d\.]+\)$/g, "1)")};
+          props.buttonsIconColor.replace(/[\d\.]+\)$/g, "1)")};
       }
     }
   }
@@ -237,7 +246,7 @@ const SRRLLightboxCloseIcon = styled(StyledButton)`
 // The "autoplay" button
 const SRRLLightboxAutoplayIcon = styled(StyledButton)`
   top: 0;
-  right: 50px;
+  right: calc(${props => props.buttonsSize}/1.5);
   padding: 15px;
   display: ${props => (props.autoplaySpeed === 0 ? "none" : "block")};
   @media (max-width: 768px) {

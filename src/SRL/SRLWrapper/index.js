@@ -14,8 +14,6 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
   // Sets a new Ref which will be used to target the div with the images
   const imagesContainer = useRef(null);
 
-  console.log(context)
-
   useEffect(() => {
 
     // Dispatch the Action to grab the options
@@ -130,7 +128,6 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     }
   }, [options, isEqual, context, isEmpty, defaultOptions])
 
-
   return <div ref={imagesContainer}>{children}</div>;
 };
 
@@ -140,6 +137,7 @@ SRLWrapper.propTypes = {
   defaultOptions: PropTypes.shape({
     overlayColor: PropTypes.string,
     transitionSpeed: PropTypes.number,
+    transitionTimingFunction: PropTypes.string,
     autoplaySpeed: PropTypes.number,
     slidesTransitionSpeed: PropTypes.number,
     showThumbnails: PropTypes.bool,
@@ -150,7 +148,9 @@ SRLWrapper.propTypes = {
     captionFontWeight: PropTypes.string,
     captionFontStyle: PropTypes.string,
     buttonsBackgroundColor: PropTypes.string,
-    buttonsIconColor: PropTypes.string
+    buttonsIconColor: PropTypes.string,
+    buttonsIconPadding: PropTypes.string,
+    buttonsSize: PropTypes.string,
   }),
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -159,22 +159,23 @@ SRLWrapper.propTypes = {
   options: PropTypes.object
 };
 
-
-
 SRLWrapper.defaultProps = {
   defaultOptions: {
-    overlayColor: "rgba(0, 0, 0, 0.9)",
-    transitionSpeed: 500,
     autoplaySpeed: 3000,
-    slideTransitionSpeed: 600,
-    showCaption: true,
-    showThumbnails: true,
+    buttonIconPadding: "5px",
+    buttonsBackgroundColor: "rgba(30,30,36,0.8)",
+    buttonsIconColor: "rgba(255, 255, 255, 0.8)",
+    buttonsSize: "70px",
     captionColor: "#FFFFFF",
     captionFontFamily: "inherit",
     captionFontSize: "inherit",
-    captionFontWeight: "inherit",
     captionFontStyle: "inherit",
-    buttonsBackgroundColor: "rgba(30,30,36,0.8)",
-    buttonsIconColor: "rgba(255, 255, 255, 0.8)"
+    captionFontWeight: "inherit",
+    overlayColor: "rgba(0, 0, 0, 0.9)",
+    showCaption: true,
+    showThumbnails: true,
+    slideTransitionSpeed: 600,
+    transitionSpeed: 500,
+    transitionTimingFunction: "ease"
   }
 };

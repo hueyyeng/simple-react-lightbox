@@ -2,29 +2,32 @@ import React, { useReducer } from "react";
 import PropTypes from "prop-types";
 
 const initialState = {
-  isOpened: false,
   elements: [],
-  selectedElement: {
-    source: "",
-    caption: "",
-    id: "",
-    width: "",
-    height: ""
-  },
+  isOpened: false,
   options: {
-    overlayColor: "rgba(0, 0, 0, 0.9)",
-    transitionSpeed: 500,
     autoplaySpeed: 3000,
-    slideTransitionSpeed: 600,
-    showCaption: true,
-    showThumbnails: true,
+    buttonIconPadding: "5px",
+    buttonsBackgroundColor: "rgba(30,30,36,0.8)",
+    buttonsIconColor: "rgba(255, 255, 255, 0.8)",
+    buttonsSize: "70px",
     captionColor: "#FFFFFF",
     captionFontFamily: "inherit",
     captionFontSize: "inherit",
-    captionFontWeight: "inherit",
     captionFontStyle: "inherit",
-    buttonsBackgroundColor: "rgba(30,30,36,0.8)",
-    buttonsIconColor: "rgba(255, 255, 255, 0.8)"
+    captionFontWeight: "inherit",
+    overlayColor: "rgba(0, 0, 0, 0.9)",
+    showCaption: true,
+    showThumbnails: true,
+    slideTransitionSpeed: 600,
+    transitionEase: "ease",
+    transitionSpeed: 500
+  },
+  selectedElement: {
+    caption: undefined,
+    height: undefined,
+    id: undefined,
+    source: undefined,
+    width: undefined
   }
 };
 
@@ -32,36 +35,7 @@ const SRLCtx = React.createContext(initialState);
 
 const SRLContextComponent = props => {
 
-  // function reducer(state, action) {
-  //   switch (action.type) {
-  //     case "handleLightbox":
-  //       return {
-  //         ...state,
-  //         isOpened: true,
-  //         selectedImage: {
-  //           source: action.payload.img,
-  //           caption: action.payload.alt,
-  //           id: action.payload.id,
-  //           width: action.payload.width,
-  //           height: action.payload.height
-  //         }
-  //       };
-  //     case "grabImages":
-  //       return {
-  //         ...state,
-  //         images: action.images // IE 11 -_-
-  //       };
-  //     case "handleCloseLightbox":
-  //       return {
-  //         ...state,
-  //         isOpened: false
-  //       };
-  //     default:
-  //       return state;
-  //   }
-  // }
-
-
+  // Reducer
   const reducer = (state, action) => {
     switch (action.type) {
       case "GRAB_OPTIONS":
@@ -84,10 +58,20 @@ const SRLContextComponent = props => {
             ...action.element
           }
         }
+      case "CLOSE_LIGHTBOX":
+        return {
+          ...state,
+          isOpened: false
+        }
+      case "OPEN_LIGHTBOX":
+        return {
+          ...state,
+          isOpened: true
+        }
+      default:
+        return state
     }
   }
-
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (

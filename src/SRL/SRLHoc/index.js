@@ -5,11 +5,10 @@ export function withSRLContext(Component) {
   return function SRLHoc(props) {
     return (
       <SRLCtx.Consumer>
-        {state => (
+        {(state) => (
           <Component
             {...props}
-            openLightbox={state.handleLightbox}
-            closeLightbox={state.handleCloseLightbox}
+            openLightbox={() => state.dispatch({ type: "OPEN_LIGHTBOX"})}
           />
         )}
       </SRLCtx.Consumer>

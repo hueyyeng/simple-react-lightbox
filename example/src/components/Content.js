@@ -15,10 +15,11 @@ import videogg from '../assets/images/gallery/small.ogv'
 
 const options = {
   overlayColor: 'rgb(25, 136, 124)',
-  transitionSpeed: 1000,
-  autoplaySpeed: 10000000,
-  slideTransitionSpeed: 100,
-  showCaption: false
+  transitionSpeed: 300,
+  transitionTimingFunction: 'ease',
+  buttonsSize: '50px',
+  buttonsIconPadding: '1px',
+  buttonsBackgroundColor: 'red'
 }
 
 const Content = () => {
