@@ -169,16 +169,15 @@ const SRRLLightboxCaption = styled.div`
 
 // The buttons
 const StyledButton = styled.button`
-  background-clip: content-box;
   position: absolute;
   height: ${props =>
     props.buttonsSize
       ? props.buttonsSize
-      : "70px"};
+      : "30px"};
   width: ${props =>
     props.buttonsSize
       ? props.buttonsSize
-      : "70px"};
+      : "30px"};
   transition: color 0.3s ease;
   background-color: ${props =>
     props.buttonsBackgroundColor
@@ -204,7 +203,7 @@ const StyledButton = styled.button`
     padding: ${props =>
     props.buttonsIconPadding
       ? props.buttonsIconPadding
-      : "7px"};
+      : "0px"};
     height: 100%;
     box-sizing: border-box;
     svg {
@@ -232,34 +231,36 @@ const StyledButton = styled.button`
   }
 `;
 
+// Top right buttons
+
+const SRLLLightboxTopButtons = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  top: calc(env(safe-area-inset-top) + 5px);
+  right: calc(env(safe-area-inset-right) + 5px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`
+
 // The "close" button
 const SRRLLightboxCloseIcon = styled(StyledButton)`
-  top: 0;
-  right: 0;
-  padding: 15px;
-  @media (max-width: 768px) {
-    top: 5px;
-    right: 5px;
-  }
+  position: relative;
 `;
 
 // The "autoplay" button
 const SRRLLightboxAutoplayIcon = styled(StyledButton)`
-  top: 0;
-  right: calc(${props => props.buttonsSize}/1.5);
-  padding: 15px;
+  position: relative;
+  margin-right: 5px;
   display: ${props => (props.autoplaySpeed === 0 ? "none" : "block")};
-  @media (max-width: 768px) {
-    top: 5px;
-  }
 `;
 
 // The "next" button
 const SRLLightboxNextIcon = styled(StyledButton)`
   top: calc(50% - 50px);
-  padding: 15px;
-  right: 0;
-  right: env(safe-area-inset-right);
+  right: 5px;
+  right: calc(env(safe-area-inset-right) + 5px);
   @media (max-width: 768px) {
     display: none;
   }
@@ -268,9 +269,8 @@ const SRLLightboxNextIcon = styled(StyledButton)`
 // The "prev" button
 const SRLLightboxPrevIcon = styled(StyledButton)`
   top: calc(50% - 50px);
-  padding: 15px;
-  left: 0;
-  left: env(safe-area-inset-left);
+  left: 5px;
+  left: calc(env(safe-area-inset-left) + 5px);
   @media (max-width: 768px) {
     display: none;
   }
@@ -327,5 +327,6 @@ export {
   SRLLightboxPrevIcon,
   SRRLLightboxAutoplayIcon,
   SRLLightboxThubnailGallery,
-  SRLLightboxThubnailGalleryImage
+  SRLLightboxThubnailGalleryImage,
+  SRLLLightboxTopButtons
 };

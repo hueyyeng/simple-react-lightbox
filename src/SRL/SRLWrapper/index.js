@@ -162,10 +162,10 @@ SRLWrapper.propTypes = {
 SRLWrapper.defaultProps = {
   defaultOptions: {
     autoplaySpeed: 3000,
-    buttonIconPadding: "5px",
+    buttonIconPadding: "0px",
     buttonsBackgroundColor: "rgba(30,30,36,0.8)",
     buttonsIconColor: "rgba(255, 255, 255, 0.8)",
-    buttonsSize: "70px",
+    buttonsSize: "40px",
     captionColor: "#FFFFFF",
     captionFontFamily: "inherit",
     captionFontSize: "inherit",
