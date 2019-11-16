@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { SRLLightboxGalleryStage } from "./styles";
 import SRLLightboxSlideComponent from "./SRLLightboxSlide";
 import SRLLightboxControls from "./SRLLightboxControls";
+import fscreen from 'fscreen';
 
 const _findIndex = require("lodash/findIndex");
 const _find = require("lodash/find");
@@ -88,7 +89,6 @@ const { autoplaySpeed } = options;
     [elements]
   );
 
-
   // Handle Close Lightbox
   const handleCloseLightbox = useCallback(
     () => {
@@ -139,6 +139,20 @@ const { autoplaySpeed } = options;
     autoplay ? autoplaySpeed : null
   );
 
+  const handleFullScreen = useCallback(
+    () => {
+      const el = document.querySelector('.SRLImage');
+      if(el !== null) {
+        if (fscreen.fullscreenEnabled) {
+          fscreen.addEventListener('fullscreenchange', null, false);
+          fscreen.requestFullscreen(el);
+        }
+      }
+
+    },
+    [],
+  )
+
   useEffect(() => {
 
     // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
@@ -178,6 +192,7 @@ const { autoplaySpeed } = options;
     handleNextElement,
     handlePrevElement,
     handleCloseLightbox,
+    handleFullScreen,
     autoplay,
     autoplaySpeed,
     setAutoplay

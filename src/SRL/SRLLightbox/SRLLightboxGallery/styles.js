@@ -192,9 +192,9 @@ const StyledButton = styled.button`
   visibility: inherit;
   z-index: 9992;
   @media (max-width: 768px) {
-    width: 35px;
-    height: 35px;
-    padding: 0;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
   }
   &:focus {
     outline: none;
@@ -247,6 +247,12 @@ const SRLLLightboxTopButtons = styled.div`
 // The "close" button
 const SRRLLightboxCloseIcon = styled(StyledButton)`
   position: relative;
+`;
+
+// The "close" button
+const SRRLExpandIcon = styled(StyledButton)`
+  position: relative;
+  margin-right: 5px;
 `;
 
 // The "autoplay" button
@@ -326,6 +332,7 @@ export {
   SRLLightboxNextIcon,
   SRLLightboxPrevIcon,
   SRRLLightboxAutoplayIcon,
+  SRRLExpandIcon,
   SRLLightboxThubnailGallery,
   SRLLightboxThubnailGalleryImage,
   SRLLLightboxTopButtons

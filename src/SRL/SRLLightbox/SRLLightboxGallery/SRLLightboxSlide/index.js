@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import ReactScrollWheelHandler from "react-scroll-wheel-handler";
-
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
@@ -36,8 +35,8 @@ function SRLLightboxSlideComponent({
     captionFontWeight: options.captionFontWeight,
   }
 
+  const SRLElementContainerRef = useRef();
 
-  const SRLImageContainerRef = useRef();
   // credit: http://www.javascriptkit.com/javatutors/touchevents2.shtml
   let startX;
   let startY;
@@ -82,7 +81,7 @@ function SRLLightboxSlideComponent({
     handleTouchChange(distX, distY, threshold, restraint);
   }
 
-  useOnClickOutside(SRLImageContainerRef, () => handleCloseLightbox());
+  useOnClickOutside(SRLElementContainerRef, () => handleCloseLightbox());
 
 
   // Check if it's an image to load the right content
@@ -110,7 +109,7 @@ function SRLLightboxSlideComponent({
             >
               {isImage ?
                 <SRLLightboxImage
-                  ref={SRLImageContainerRef}
+                  ref={SRLElementContainerRef}
                   className="SRLImage"
                   transitionSpeed={transitionSpeed}
                   width={width}
@@ -122,7 +121,7 @@ function SRLLightboxSlideComponent({
                   }
                   alt={caption}
                 />
-                : <div>Video</div>}
+              : <div>Video</div>}
             </CSSTransition>
           </TransitionGroup>
         </ReactScrollWheelHandler>
@@ -157,9 +156,12 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains("SRLPrevButton") ||
             event.target.classList.contains("SRLCloseButton") ||
             event.target.classList.contains("SRLAutoplayButton") ||
+            event.target.classList.contains("SRLExpandButton") ||
             event.target.classList.contains("SRLThumbnails") ||
             event.target.classList.contains("SRLThumb") ||
             event.target.classList.contains("SRLCaption") ||
+            event.target.classList.contains("react-transform-component") ||
+            event.target.classList.contains("react-transform-element") ||
             event.type === "touchstart" ||
             event.button !== 0
           ) {

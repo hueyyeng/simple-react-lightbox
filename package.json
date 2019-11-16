@@ -101,5 +101,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "fscreen": "^1.0.2"
+  }
 }
