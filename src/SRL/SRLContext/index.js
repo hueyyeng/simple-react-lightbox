@@ -20,7 +20,7 @@ const initialState = {
     showThumbnails: true,
     slideTransitionSpeed: 600,
     transitionTimingFunction: "ease",
-    transitionSpeed: 500
+    transitionSpeed: 600
   },
   selectedElement: {
     caption: undefined,

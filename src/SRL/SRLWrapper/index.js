@@ -63,13 +63,34 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
       }
     }
 
+    // Generate a canvas with a frame from the video
+    function capture(video) {
+      const scaleFactor = 1;
+      var w = video.videoWidth * scaleFactor;
+      var h = video.videoHeight * scaleFactor;
+      var canvas = document.createElement('canvas');
+      canvas.width  = w;
+      canvas.height = h;
+      var ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, w, h);
+        return canvas;
+    }
+
+    // Takes the dataUrl from the canvas
+    function generateScreen(element) {
+      var video = element;
+      var canvas = capture(video);
+      const dataUrl = canvas.toDataURL();
+      return dataUrl;
+    }
+
     // Loop through the elemenents or the links to add them to the context
     const handleElementsWithContext = (array) => {
       if (array !== 0) {
         const elements = array.map((e, index) => {
           e.id = `element${index}`
           // Check if it's an image
-          const isImage = (/\.(gif|jpg|jpeg|tiff|png|webp)$/i).test(e.currentSrc);
+          const isImage = (/\.(gif|jpg|jpeg|tiff|png|webp)$/i).test(e.currentSrc || e.src || e.href);
           // Creates an object for each element
           const element = {
             // Grabs the "src" attribute from the image/video.
@@ -86,7 +107,9 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
             width: isImage ? e.naturalWidth || null : e.videoWidth || null,
             // Grabs the "height" from the image/video
             // If it's a link we can't grab the height and we will need to calculate it after.
-            height: isImage ? e.naturalHeight || null : e.videoHeight || null
+            height: isImage ? e.naturalHeight || null : e.videoHeight || null,
+            // Generates a thumbnail image for the video otherwise set it to null
+            videoThumbnail: isImage ? null : generateScreen(e)
           };
 
           // Adds an event listerner that will trigger the function to open the lightbox (passed using the Context)

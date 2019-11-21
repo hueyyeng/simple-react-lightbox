@@ -1,13 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   SRRLLightboxCloseIcon,
   SRLLightboxNextIcon,
   SRLLightboxPrevIcon,
   SRLLLightboxTopButtons,
   SRRLLightboxAutoplayIcon,
-  SRRLExpandIcon
-} from "../styles";
+  SRRLExpandIcon,
+  SRLZoomOutIcon
+} from '../styles'
 
 const SRLLightboxControls = ({
   handleCloseLightbox,
@@ -21,7 +22,9 @@ const SRLLightboxControls = ({
   buttonsBackgroundColor,
   buttonsIconColor,
   buttonsSize,
-  buttonsIconPadding
+  buttonsIconPadding,
+  panzoomEnabled,
+  handleDisablePanzoom
 }) => {
   return (
     <>
@@ -62,6 +65,32 @@ const SRLLightboxControls = ({
             )}
           </div>
         </SRRLLightboxAutoplayIcon>
+        {panzoomEnabled ? (
+          <SRLZoomOutIcon
+            buttonsBackgroundColor={buttonsBackgroundColor}
+            buttonsIconColor={buttonsIconColor}
+            buttonsSize={buttonsSize}
+            buttonsIconPadding={buttonsIconPadding}
+            title="Zoom Out"
+            className="SRLZoomOutButton"
+            onClick={handleDisablePanzoom}
+          >
+            <div className="SRLZoomOutButton">
+              <svg
+                className="SRLZoomOutButton"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 50 50"
+              >
+                <path
+                  className="SRLZoomOutButton"
+                  d="M27.9 21.6v1.3c0 .4-.3.7-.7.7h-10c-.4 0-.7-.3-.7-.7v-1.3c0-.4.3-.7.7-.7h10c.4 0 .7.3.7.7zm10.7 15.8l-1.2 1.2c-.3.3-.7.3-.9 0L29.9 32c-.1-.1-.2-.3-.2-.5v-.7c-2 1.7-4.6 2.8-7.4 2.8C16 33.6 11 28.5 11 22.3s5-11.4 11.3-11.4S33.6 16 33.6 22.3c0 2.8-1 5.4-2.8 7.4h.7c.2 0 .3.1.5.2l6.6 6.6c.3.2.3.6 0 .9zM31 22.3c0-4.8-3.9-8.7-8.7-8.7s-8.7 3.9-8.7 8.7 3.9 8.7 8.7 8.7 8.7-3.9 8.7-8.7z"
+                />
+              </svg>
+            </div>
+          </SRLZoomOutIcon>
+        ) : (
+          ''
+        )}
         <SRRLExpandIcon
           buttonsBackgroundColor={buttonsBackgroundColor}
           buttonsIconColor={buttonsIconColor}
@@ -152,16 +181,18 @@ const SRLLightboxControls = ({
         </div>
       </SRLLightboxPrevIcon>
     </>
-  );
-};
+  )
+}
 
-export default SRLLightboxControls;
+export default SRLLightboxControls
 
 SRLLightboxControls.propTypes = {
   handleCloseLightbox: PropTypes.func,
   handleNextElement: PropTypes.func,
   handlePrevElement: PropTypes.func,
   handleFullScreen: PropTypes.func,
+  handleDisablePanzoom: PropTypes.func,
+  panzoomEnabled: PropTypes.bool,
   setAutoplay: PropTypes.func,
   autoplay: PropTypes.bool,
   autoplaySpeed: PropTypes.number,
@@ -169,5 +200,5 @@ SRLLightboxControls.propTypes = {
   buttonsBackgroundColor: PropTypes.string,
   buttonsIconColor: PropTypes.string,
   buttonsSize: PropTypes.string,
-  buttonsIconPadding: PropTypes.string,
-};
+  buttonsIconPadding: PropTypes.string
+}

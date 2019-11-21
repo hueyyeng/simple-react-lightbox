@@ -1,14 +1,18 @@
-import React, { useRef, useEffect } from "react";
-import PropTypes from "prop-types";
-import SRLLightboxThubnailGallery from "./SRLLightboxThubnailGallery";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-import ReactScrollWheelHandler from "react-scroll-wheel-handler";
+import React, { useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+import SRLLightboxThubnailGallery from './SRLLightboxThubnailGallery'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import ReactScrollWheelHandler from 'react-scroll-wheel-handler'
+
 import {
   SRLLightboxContent,
   SRRLLightboxCaption,
   SRLLightboxElementContainer,
-  SRLLightboxImage
-} from "../styles";
+  SRLElementWrapper,
+  SRLLightboxImage,
+  SRLLightboxPanzoomImage,
+  SRLLightboxVideo
+} from '../styles'
 
 function SRLLightboxSlideComponent({
   source,
@@ -19,12 +23,17 @@ function SRLLightboxSlideComponent({
   handleCurrentElement,
   handleNextElement,
   handlePrevElement,
+  handlePanzoom,
+  panzoomEnabled,
+  SRLElementPanzoomRef,
   options,
   width,
   height
 }) {
+  const { showThumbnails, showCaption, slideTransitionSpeed } = options
 
-  const {showThumbnails, showCaption, transitionSpeed} = options;
+  // Ref for the Element
+  const SRLElementRef = useRef()
 
   // Light-box captions options
   const captionOptions = {
@@ -32,21 +41,19 @@ function SRLLightboxSlideComponent({
     captionFontFamily: options.captionFontFamily,
     captionFontSize: options.captionFontSize,
     captionFontStyle: options.captionFontStyle,
-    captionFontWeight: options.captionFontWeight,
+    captionFontWeight: options.captionFontWeight
   }
 
-  const SRLElementContainerRef = useRef();
-
   // credit: http://www.javascriptkit.com/javatutors/touchevents2.shtml
-  let startX;
-  let startY;
-  let distX;
-  let distY;
-  const threshold = 150; // required min distance traveled to be considered swipe
-  const restraint = 100; // maximum distance allowed at the same time in perpendicular direction
-  const allowedTime = 300; // maximum time allowed to travel that distance
-  let elapsedTime;
-  let startTime;
+  let startX
+  let startY
+  let distX
+  let distY
+  const threshold = 150 // required min distance traveled to be considered swipe
+  const restraint = 100 // maximum distance allowed at the same time in perpendicular direction
+  const allowedTime = 300 // maximum time allowed to travel that distance
+  let elapsedTime
+  let startTime
 
   function handleTouchChange(x, y, t, r) {
     // FIRST CONDITION
@@ -56,36 +63,36 @@ function SRLLightboxSlideComponent({
       // SECOND CONDITION
       if (Math.abs(x) >= t) {
         if (x <= 0) {
-          handleNextElement(id);
+          handleNextElement(id)
         } else if (x >= 0) {
-          handlePrevElement(id);
+          handlePrevElement(id)
         }
       }
     }
   }
 
   function handleTouchStart(e) {
-    const touchObject = e.changedTouches[0];
-    startX = touchObject.pageX;
-    startY = touchObject.pageY;
-    startTime = new Date().getTime();
+    const touchObject = e.changedTouches[0]
+    startX = touchObject.pageX
+    startY = touchObject.pageY
+    startTime = new Date().getTime()
   }
 
   function handleTouchEnd(e) {
-    const touchObject = e.changedTouches[0];
-    distX = touchObject.pageX - startX;
-    distY = touchObject.pageX - startY;
-    elapsedTime = new Date().getTime() - startTime;
+    const touchObject = e.changedTouches[0]
+    distX = touchObject.pageX - startX
+    distY = touchObject.pageX - startY
+    elapsedTime = new Date().getTime() - startTime
 
     // Run the function on touchend
-    handleTouchChange(distX, distY, threshold, restraint);
+    handleTouchChange(distX, distY, threshold, restraint)
   }
 
-  useOnClickOutside(SRLElementContainerRef, () => handleCloseLightbox());
-
+  // UseOnClickOutside
+  useOnClickOutside(SRLElementRef, () => handleCloseLightbox())
 
   // Check if it's an image to load the right content
-  const isImage = (/\.(gif|jpg|jpeg|tiff|png|webp)$/i).test(source);
+  const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(source)
 
   return (
     <SRLLightboxContent className="SRLContent">
@@ -100,35 +107,63 @@ function SRLLightboxSlideComponent({
           upHandler={() => handleNextElement(id)}
           downHandler={() => handlePrevElement(id)}
           disableKeyboard={true}
+          pauseListeners={panzoomEnabled}
         >
           <TransitionGroup className="SRLTransitionGroup">
             <CSSTransition
               key={id}
-              classNames="image-transition"
-              timeout={transitionSpeed}
+              classNames="element-transition"
+              timeout={slideTransitionSpeed}
             >
-              {isImage ?
-                <SRLLightboxImage
-                  ref={SRLElementContainerRef}
-                  className="SRLImage"
-                  transitionSpeed={transitionSpeed}
-                  width={width}
-                  height={height}
-                  src={
-                    typeof source === "object"
-                      ? "Loading..."
-                      : source
-                  }
-                  alt={caption}
-                />
-              : <div>Video</div>}
+              <SRLElementWrapper
+                transitionSpeed={slideTransitionSpeed}
+                ref={SRLElementRef}
+                className="SRLElementWrapper"
+              >
+                {isImage ? (
+                  panzoomEnabled ? (
+                    <SRLLightboxPanzoomImage
+                      className="SRLPanzoomImage"
+                      ref={SRLElementPanzoomRef}
+                      width={width}
+                      height={height}
+                      onClick={handlePanzoom}
+                      src={typeof source === 'object' ? 'Loading...' : source}
+                      alt={caption}
+                    />
+                  ) : (
+                    <SRLLightboxImage
+                      className="SRLImage"
+                      width={width}
+                      height={height}
+                      onClick={handlePanzoom}
+                      src={typeof source === 'object' ? 'Loading...' : source}
+                      alt={caption}
+                    />
+                  )
+                ) : (
+                  <SRLLightboxVideo
+                    className="SRLVideo"
+                    transitionSpeed={slideTransitionSpeed}
+                    width={width}
+                    height={height}
+                    controls
+                  >
+                    <source src={source} type="video/mp4" />
+                    <source src={source} type="video/ogg" />
+                  </SRLLightboxVideo>
+                )}
+              </SRLElementWrapper>
             </CSSTransition>
           </TransitionGroup>
         </ReactScrollWheelHandler>
       </SRLLightboxElementContainer>
 
       {showCaption && (
-        <SRRLLightboxCaption captionStyle={captionOptions} className="SRLCaption">
+        <SRRLLightboxCaption
+          captionStyle={captionOptions}
+          className="SRLCaption"
+        >
           <p className="SRLCaption">{caption}</p>
         </SRRLLightboxCaption>
       )}
@@ -140,9 +175,8 @@ function SRLLightboxSlideComponent({
           elements={elements || []}
         />
       )}
-
     </SRLLightboxContent>
-  );
+  )
   // Hook
   function useOnClickOutside(ref, handler) {
     useEffect(
@@ -152,32 +186,36 @@ function SRLLightboxSlideComponent({
           if (
             !ref.current ||
             ref.current.contains(event.target) ||
-            event.target.classList.contains("SRLNextButton") ||
-            event.target.classList.contains("SRLPrevButton") ||
-            event.target.classList.contains("SRLCloseButton") ||
-            event.target.classList.contains("SRLAutoplayButton") ||
-            event.target.classList.contains("SRLExpandButton") ||
-            event.target.classList.contains("SRLThumbnails") ||
-            event.target.classList.contains("SRLThumb") ||
-            event.target.classList.contains("SRLCaption") ||
-            event.target.classList.contains("react-transform-component") ||
-            event.target.classList.contains("react-transform-element") ||
-            event.type === "touchstart" ||
+            event.target.classList.contains('SRLNextButton') ||
+            event.target.classList.contains('SRLPrevButton') ||
+            event.target.classList.contains('SRLCloseButton') ||
+            event.target.classList.contains('SRLAutoplayButton') ||
+            event.target.classList.contains('SRLExpandButton') ||
+            event.target.classList.contains('SRLZoomOutButton') ||
+            event.target.classList.contains('SRLThumbnails') ||
+            event.target.classList.contains('SRLThumb') ||
+            event.target.classList.contains('SRLCaption') ||
+            event.target.classList.contains('element-transition-enter') ||
+            event.target.classList.contains(
+              'element-transition-enter-active'
+            ) ||
+            event.target.classList.contains('element-transition-exit') ||
+            event.target.classList.contains('element-transition-exit-active') ||
+            event.type === 'touchstart' ||
             event.button !== 0
           ) {
-            return;
+            return
           }
+          handler(event)
+        }
 
-          handler(event);
-        };
-
-        document.addEventListener("mousedown", listener);
-        document.addEventListener("touchstart", listener);
+        document.addEventListener('mousedown', listener)
+        document.addEventListener('touchstart', listener)
 
         return () => {
-          document.removeEventListener("mousedown", listener);
-          document.removeEventListener("touchstart", listener);
-        };
+          document.removeEventListener('mousedown', listener)
+          document.removeEventListener('touchstart', listener)
+        }
       },
       // Add ref and handler to effect dependencies
       // It's worth noting that because passed in handler is a new ...
@@ -186,7 +224,7 @@ function SRLLightboxSlideComponent({
       // ... but to optimize you can wrap handler in useCallback before ...
       // ... passing it into this hook.
       [ref, handler]
-    );
+    )
   }
 }
 
@@ -206,7 +244,7 @@ SRLLightboxSlideComponent.propTypes = {
     transitionSpeed: PropTypes.number,
     transitionTimingFunction: PropTypes.string,
     autoplaySpeed: PropTypes.number,
-    slidesTransitionSpeed: PropTypes.number,
+    slideTransitionSpeed: PropTypes.number,
     showThumbnails: PropTypes.bool,
     showCaption: PropTypes.bool,
     captionColor: PropTypes.string,
@@ -217,8 +255,8 @@ SRLLightboxSlideComponent.propTypes = {
     buttonsBackgroundColor: PropTypes.string,
     buttonsIconColor: PropTypes.string,
     buttonsIconPadding: PropTypes.string,
-    buttonsSize: PropTypes.string,
-  }),
-};
+    buttonsSize: PropTypes.string
+  })
+}
 
-export default SRLLightboxSlideComponent;
+export default SRLLightboxSlideComponent

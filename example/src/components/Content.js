@@ -10,16 +10,15 @@ import img06 from '../assets/images/gallery/unsplash06.jpg'
 import img07 from '../assets/images/gallery/unsplash07.jpg'
 import img08 from '../assets/images/gallery/unsplash08.jpg'
 import img09 from '../assets/images/gallery/unsplash09.jpg'
-import videomp4 from '../assets/images/gallery/small.mp4'
-import videogg from '../assets/images/gallery/small.ogv'
+import bunnyMp4 from '../assets/images/gallery/video/big_buck_bunny.mp4'
+import bunnyOgv from '../assets/images/gallery/video/big_buck_bunny.ogv'
+import robotMp4 from '../assets/images/gallery/video/robot.mp4'
+import robotOgv from '../assets/images/gallery/video/robot.ogv'
 
 const options = {
   overlayColor: 'rgb(25, 136, 124)',
-  transitionSpeed: 1000,
   transitionTimingFunction: 'ease',
-  buttonsSize: '50px',
-  buttonsIconPadding: '1px',
-  buttonsBackgroundColor: 'red'
+  slideTransitionSpeed: 1000
 }
 
 const Content = () => {
@@ -48,11 +47,18 @@ const Content = () => {
             <div className="col-md-6 col-12 col-image">
               <img src={img01} alt="New York City - Architecture" />
             </div>
-            <div className="col-12">
-              <video width="320" height="240" controls>
-                <source src={videomp4} type="video/mp4" />
-                <source src={videogg} type="video/ogg" />
-                Your browser does not support the video tag.
+            <div className="col-6">
+              <video width="100%" height="auto" controls>
+                <source src={bunnyMp4} type="video/mp4" />
+                <source src={bunnyOgv} type="video/ogg" />
+                Video 1
+              </video>
+            </div>
+            <div className="col-6">
+              <video width="100%" height="auto" controls>
+                <source src={robotMp4} type="video/mp4" />
+                <source src={robotOgv} type="video/ogg" />
+                Video 2
               </video>
             </div>
             <div className="col-md-4 col-12 col-image-small">
