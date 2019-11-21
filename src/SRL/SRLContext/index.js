@@ -1,26 +1,28 @@
-import React, { useReducer } from "react";
-import PropTypes from "prop-types";
+import React, { useReducer } from 'react'
+import PropTypes from 'prop-types'
 
 const initialState = {
   elements: [],
   isOpened: false,
   options: {
     autoplaySpeed: 3000,
-    buttonIconPadding: "0px",
-    buttonsBackgroundColor: "rgba(30,30,36,0.8)",
-    buttonsIconColor: "rgba(255, 255, 255, 0.8)",
-    buttonsSize: "40px",
-    captionColor: "#FFFFFF",
-    captionFontFamily: "inherit",
-    captionFontSize: "inherit",
-    captionFontStyle: "inherit",
-    captionFontWeight: "inherit",
-    overlayColor: "rgba(0, 0, 0, 0.9)",
+    buttonIconPadding: '0px',
+    buttonsBackgroundColor: 'rgba(30,30,36,0.8)',
+    buttonsIconColor: 'rgba(255, 255, 255, 0.8)',
+    buttonsSize: '40px',
+    captionColor: '#FFFFFF',
+    captionFontFamily: 'inherit',
+    captionFontSize: 'inherit',
+    captionFontStyle: 'inherit',
+    captionFontWeight: 'inherit',
+    enablePanzoom: 'true',
+    overlayColor: 'rgba(0, 0, 0, 0.9)',
     showCaption: true,
     showThumbnails: true,
     slideTransitionSpeed: 600,
-    transitionTimingFunction: "ease",
-    transitionSpeed: 600
+    thumbnailsOpacity: 0.4,
+    transitionSpeed: 600,
+    transitionTimingFunction: 'ease'
   },
   selectedElement: {
     caption: undefined,
@@ -29,28 +31,27 @@ const initialState = {
     source: undefined,
     width: undefined
   }
-};
+}
 
-const SRLCtx = React.createContext(initialState);
+const SRLCtx = React.createContext(initialState)
 
 const SRLContextComponent = props => {
-
   // Reducer
   const reducer = (state, action) => {
     switch (action.type) {
-      case "GRAB_OPTIONS":
+      case 'GRAB_OPTIONS':
         return {
           ...state,
           options: {
             ...action.mergedOptions
           }
         }
-      case "GRAB_ELEMENTS":
+      case 'GRAB_ELEMENTS':
         return {
           ...state,
           elements: action.elements
         }
-      case "HANDLE_ELEMENT":
+      case 'HANDLE_ELEMENT':
         return {
           ...state,
           isOpened: true,
@@ -58,12 +59,12 @@ const SRLContextComponent = props => {
             ...action.element
           }
         }
-      case "CLOSE_LIGHTBOX":
+      case 'CLOSE_LIGHTBOX':
         return {
           ...state,
           isOpened: false
         }
-      case "OPEN_LIGHTBOX":
+      case 'OPEN_LIGHTBOX':
         return {
           ...state,
           isOpened: true
@@ -72,7 +73,7 @@ const SRLContextComponent = props => {
         return state
     }
   }
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   return (
     <SRLCtx.Provider
@@ -83,15 +84,15 @@ const SRLContextComponent = props => {
     >
       {props.children}
     </SRLCtx.Provider>
-  );
-};
+  )
+}
 
-export {SRLCtx}
-export default SRLContextComponent;
+export { SRLCtx }
+export default SRLContextComponent
 
 SRLContextComponent.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
-  ]).isRequired,
-};
+  ]).isRequired
+}

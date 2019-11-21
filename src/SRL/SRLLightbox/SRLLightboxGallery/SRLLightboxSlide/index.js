@@ -15,22 +15,28 @@ import {
 } from '../styles'
 
 function SRLLightboxSlideComponent({
-  source,
-  elements,
   caption,
-  id,
+  elements,
   handleCloseLightbox,
   handleCurrentElement,
   handleNextElement,
-  handlePrevElement,
   handlePanzoom,
-  panzoomEnabled,
-  SRLElementPanzoomRef,
+  handlePrevElement,
+  height,
+  id,
   options,
-  width,
-  height
+  panzoomEnabled,
+  source,
+  SRLElementPanzoomRef,
+  width
 }) {
-  const { showThumbnails, showCaption, slideTransitionSpeed } = options
+  const {
+    enablePanzoom,
+    showCaption,
+    showThumbnails,
+    slideTransitionSpeed,
+    thumbnailsOpacity
+  } = options
 
   // Ref for the Element
   const SRLElementRef = useRef()
@@ -134,6 +140,7 @@ function SRLLightboxSlideComponent({
                   ) : (
                     <SRLLightboxImage
                       className="SRLImage"
+                      enablePanzoom={enablePanzoom}
                       width={width}
                       height={height}
                       onClick={handlePanzoom}
@@ -171,6 +178,7 @@ function SRLLightboxSlideComponent({
       {showThumbnails && (
         <SRLLightboxThubnailGallery
           handleCurrentElement={handleCurrentElement}
+          thumbnailsOpacity={thumbnailsOpacity}
           currentId={id}
           elements={elements || []}
         />
@@ -238,24 +246,31 @@ SRLLightboxSlideComponent.propTypes = {
   handleCurrentElement: PropTypes.func,
   handleNextElement: PropTypes.func,
   handlePrevElement: PropTypes.func,
+  handlePanzoom: PropTypes.func,
   id: PropTypes.string,
+  SRLElementPanzoomRef: PropTypes.object,
+  panzoomEnabled: PropTypes.bool,
+  enablePanzoom: PropTypes.bool,
+  thumbnailsOpacity: PropTypes.number,
   options: PropTypes.shape({
-    overlayColor: PropTypes.string,
-    transitionSpeed: PropTypes.number,
-    transitionTimingFunction: PropTypes.string,
     autoplaySpeed: PropTypes.number,
-    slideTransitionSpeed: PropTypes.number,
-    showThumbnails: PropTypes.bool,
-    showCaption: PropTypes.bool,
-    captionColor: PropTypes.string,
-    captionFontFamily: PropTypes.string,
-    captionFontSize: PropTypes.string,
-    captionFontWeight: PropTypes.string,
-    captionFontStyle: PropTypes.string,
     buttonsBackgroundColor: PropTypes.string,
     buttonsIconColor: PropTypes.string,
     buttonsIconPadding: PropTypes.string,
-    buttonsSize: PropTypes.string
+    buttonsSize: PropTypes.string,
+    captionColor: PropTypes.string,
+    captionFontFamily: PropTypes.string,
+    captionFontSize: PropTypes.string,
+    captionFontStyle: PropTypes.string,
+    captionFontWeight: PropTypes.string,
+    enablePanzoom: PropTypes.bool,
+    overlayColor: PropTypes.string,
+    showCaption: PropTypes.bool,
+    showThumbnails: PropTypes.bool,
+    slideTransitionSpeed: PropTypes.number,
+    thumbnailsOpacity: PropTypes.number,
+    transitionSpeed: PropTypes.number,
+    transitionTimingFunction: PropTypes.string
   })
 }
 

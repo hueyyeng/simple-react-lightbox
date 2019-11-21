@@ -17,7 +17,7 @@ const SRLLightboxGallery = ({
   dispatch
 }) => {
   // Destructuring the options
-  const { autoplaySpeed } = options
+  const { autoplaySpeed, enablePanzoom } = options
 
   // In this component we set the state using the context.
   // We don't want to manipulate the context every time so we create a localized state
@@ -46,39 +46,45 @@ const SRLLightboxGallery = ({
       }
       return startPosition
     }
-    const x = window.matchMedia('(max-width: 768px)')
-    mediaQuery(x)
+    if (enablePanzoom) {
+      const x = window.matchMedia('(max-width: 768px)')
+      mediaQuery(x)
 
-    // if the state panzoom is enabled (so when the picture is cliked)
-    if (panzoomEnabled) {
-      const elementRef = SRLElementPanzoomRef.current
-      if (elementRef !== null || elementRef !== undefined) {
-        elementRef.classList.add('panzoom-enabled')
-      }
-      const panzoomElement = panzoom(elementRef, {
-        bounds: true,
-        boundsPadding: 0.6,
-        maxZoom: 3,
-        minZoom: 1
-      })
-      panzoomElement.pause()
-      if (elementRef !== undefined || elementRef !== null) {
-        panzoomElement.resume()
-        panzoomElement.zoomAbs(startPosition[0], startPosition[1], 2)
-        panzoomElement.moveTo(startPosition[0], startPosition[1])
+      // if the state panzoom is enabled (so when the picture is cliked)
+      if (panzoomEnabled) {
+        const elementRef = SRLElementPanzoomRef.current
+        if (elementRef !== null || elementRef !== undefined) {
+          elementRef.classList.add('panzoom-enabled')
+        }
+        const panzoomElement = panzoom(elementRef, {
+          bounds: true,
+          boundsPadding: 0.6,
+          maxZoom: 3,
+          minZoom: 1
+        })
+        panzoomElement.pause()
+        if (elementRef !== undefined || elementRef !== null) {
+          panzoomElement.resume()
+          panzoomElement.zoomAbs(startPosition[0], startPosition[1], 2)
+          panzoomElement.moveTo(startPosition[0], startPosition[1])
+        }
       }
     }
-  }, [panzoomEnabled])
+  }, [enablePanzoom, panzoomEnabled])
 
   // Handle Panzoom (set the state to true)
-  const handlePanzoom = () => {
-    setPanzoomEnabled(true)
-  }
+  const handlePanzoom = useCallback(() => {
+    if (enablePanzoom) {
+      setPanzoomEnabled(true)
+    }
+  }, [enablePanzoom])
 
   // Disable Panzoom (se the state to false)
-  const handleDisablePanzoom = () => {
-    setPanzoomEnabled(false)
-  }
+  const handleDisablePanzoom = useCallback(() => {
+    if (enablePanzoom) {
+      setPanzoomEnabled(false)
+    }
+  }, [enablePanzoom])
 
   // Handle Previous Element
   const handlePrevElement = useCallback(
@@ -103,7 +109,7 @@ const SRLLightboxGallery = ({
         height: prevElement.height
       })
     },
-    [elements]
+    [elements, handleDisablePanzoom]
   )
 
   // Handle Next element
@@ -127,7 +133,7 @@ const SRLLightboxGallery = ({
         height: nextElement.height
       })
     },
-    [elements]
+    [elements, handleDisablePanzoom]
   )
 
   // Handle Current Element
@@ -148,7 +154,7 @@ const SRLLightboxGallery = ({
         height: currentElement.height
       })
     },
-    [elements]
+    [elements, handleDisablePanzoom]
   )
 
   // Handle Close Lightbox

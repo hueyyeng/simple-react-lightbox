@@ -206,10 +206,12 @@ SRLWrapper.defaultProps = {
     captionFontSize: 'inherit',
     captionFontStyle: 'inherit',
     captionFontWeight: 'inherit',
+    enablePanzoom: true,
     overlayColor: 'rgba(0, 0, 0, 0.9)',
     showCaption: true,
     showThumbnails: true,
     slideTransitionSpeed: 600,
+    thumbnailsOpacity: 0.4,
     transitionSpeed: 500,
     transitionTimingFunction: 'ease'
   }

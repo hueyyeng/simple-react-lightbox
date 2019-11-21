@@ -141,7 +141,7 @@ const SRLLightboxImage = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  cursor: zoom-in;
+  cursor: ${props => (props.enablePanzoom ? 'zoom-in' : 'auto')};
 `
 
 const SRLLightboxPanzoomImage = styled(SRLLightboxImage)`
@@ -352,7 +352,8 @@ const SRLLightboxThubnailGalleryImage = styled.a`
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0 1px;
-  opacity: 0.4;
+  opacity: ${props =>
+    props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
   transition: opacity 0.3s ease;
   display: block;
   cursor: pointer;
