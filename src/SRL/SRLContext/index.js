@@ -16,6 +16,7 @@ const initialState = {
     captionFontStyle: 'inherit',
     captionFontWeight: 'inherit',
     enablePanzoom: 'true',
+    hideControlsAfter: 3000,
     overlayColor: 'rgba(0, 0, 0, 0.9)',
     showCaption: true,
     showThumbnails: true,

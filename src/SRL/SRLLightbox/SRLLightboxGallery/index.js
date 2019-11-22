@@ -18,7 +18,7 @@ const SRLLightboxGallery = ({
   dispatch
 }) => {
   // Destructuring the options
-  const { autoplaySpeed, enablePanzoom } = options
+  const { autoplaySpeed, enablePanzoom, hideControlsAfter } = options
 
   // In this component we set the state using the context.
   // We don't want to manipulate the context every time so we create a localized state
@@ -306,7 +306,7 @@ const SRLLightboxGallery = ({
         onActive={handleOnActive}
         onIdle={handleOnIdle}
         debounce={250}
-        timeout={3000}
+        timeout={hideControlsAfter}
       />
       <SRLLightboxControls {...buttonOptions} {...controls} />
       <SRLLightboxSlideComponent
@@ -323,6 +323,7 @@ SRLLightboxGallery.propTypes = {
   options: PropTypes.object,
   overlayColor: PropTypes.string,
   selectedElement: PropTypes.object,
+  hideControlsAfter: PropTypes.number,
   elements: PropTypes.array,
   isOpened: PropTypes.bool,
   dispatch: PropTypes.func
