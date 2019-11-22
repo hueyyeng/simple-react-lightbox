@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
+import imagesLoaded from 'imagesLoaded'
 
 const SRLWrapper = ({ options, children, defaultOptions }) => {
   // IsEqual from loadash to do a deep comparison of the objects
@@ -9,6 +10,8 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
 
   // Add a state to check if the event listenr is set
   const [listenerIsSet, setListenerIsSet] = useState(false)
+
+  const [imagesAreLoaded, setImagesAreLoaded] = useState(false)
 
   // Imports the context
   const context = useContext(SRLCtx)
@@ -87,36 +90,42 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
 
     // Loop through the elemenents or the links to add them to the context
     const handleElementsWithContext = array => {
-      if (array !== 0) {
-        const elements = array.map((e, index) => {
-          e.id = `element${index}`
+      const elements = array.map((e, index) => {
+        // If the images is loaded and not broken
+        if (e.isLoaded) {
+          e.img.id = `element${index}`
           // Check if it's an image
           const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(
-            e.currentSrc || e.src || e.href
+            e.img.currentSrc || e.img.src || e.img.href
           )
           // Creates an object for each element
           const element = {
             // Grabs the "src" attribute from the image/video.
             // If it's a link grabs the "href" attribute.
-            source: e.currentSrc || e.src || e.href || null,
+            source: e.img.currentSrc || e.img.src || e.img.href || null,
             // Grabs the "alt" attribute from the image or the "textContent" from the video.
             // If it's a link grabs the "alt" attribute from the children image.
-            caption: e.alt || e.textContent || e.children[0].alt || null,
+            caption:
+              e.img.alt || e.img.textContent || e.img.children[0].alt || null,
             // Grabs the newly created "id" attribute from the image/video
             // If it's a link grabs the "id" attribute from the children image.
-            id: e.id || e.children[0].id || null,
+            id: e.img.id || e.img.children[0].id || null,
             // Grabs the "width" from the image/video
             // If it's a link we can't grab the width and we will need to calculate it after
-            width: isImage ? e.naturalWidth || null : e.videoWidth || null,
+            width: isImage
+              ? e.img.naturalWidth || null
+              : e.img.videoWidth || null,
             // Grabs the "height" from the image/video
             // If it's a link we can't grab the height and we will need to calculate it after.
-            height: isImage ? e.naturalHeight || null : e.videoHeight || null
+            height: isImage
+              ? e.img.naturalHeight || null
+              : e.img.videoHeight || null
             // Generates a thumbnail image for the video otherwise set it to null
             // videoThumbnail: isImage ? null : generateScreen(e)
           }
 
           // Adds an event listerner that will trigger the function to open the lightbox (passed using the Context)
-          e.addEventListener('click', e => {
+          e.img.addEventListener('click', e => {
             // Prevent the image from opening
             e.preventDefault()
             // Run the function to handle the clicked item
@@ -125,10 +134,24 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
 
           // Return the image for the map function
           return element
-        })
-        setListenerIsSet(true)
-        grabElements(elements)
-      }
+        }
+      })
+      setListenerIsSet(true)
+      // Use filter to remove the undefined values
+      grabElements(elements.filter(e => e !== undefined))
+    }
+
+    // Check if the images are loaded using "imagesLoaded" by Desandro (LOVE)
+    // When te images are loaded set the state to TRUE and run the function to handle the context
+    function handleLoadedImages(array) {
+      imagesLoaded(array, function(instance) {
+        if (instance.isComplete) {
+          setImagesAreLoaded(true)
+          if (imagesAreLoaded) {
+            handleElementsWithContext(instance.images)
+          }
+        }
+      })
     }
 
     // Grabs the options set by the user first
@@ -139,27 +162,31 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     const collectedDataAttributes = imagesContainer.current.querySelectorAll(
       "a[data-attribute='SRL']"
     )
-    // Converts the HTMLCollections in to arrays
-    const elementsArray = Array.prototype.slice.call(collectedElements)
-    const dataAttributesArray = Array.prototype.slice.call(
-      collectedDataAttributes
-    )
+
     // Set "listenerIsSet" so that we know that the event listener is only set ONCE
     if (!listenerIsSet) {
       // Checks if the user is not using the "data-attribute"
       if (collectedDataAttributes.length === 0) {
-        handleElementsWithContext(elementsArray)
+        handleLoadedImages(collectedElements)
       } else if (collectedDataAttributes.length > 0) {
-        handleElementsWithContext(dataAttributesArray)
+        handleLoadedImages(collectedDataAttributes)
         // Throws a warning if the number of links is not equal to the number of images
-        if (dataAttributesArray.length !== elementsArray.length) {
+        if (collectedDataAttributes.length !== collectedElements.length) {
           console.warn(
-            `HEY!. You have ${dataAttributesArray.length} links and ${elementsArray.length} images. You likely forgot to add the data-attribute="SRL" to one of your link wrapping your image!`
+            `HEY!. You have ${collectedDataAttributes.length} links and ${collectedElements.length} images. You likely forgot to add the data-attribute="SRL" to one of your link wrapping your image!`
           )
         }
       }
     }
-  }, [options, isEqual, context, isEmpty, defaultOptions, listenerIsSet])
+  }, [
+    options,
+    isEqual,
+    context,
+    isEmpty,
+    defaultOptions,
+    listenerIsSet,
+    imagesAreLoaded
+  ])
 
   return <div ref={imagesContainer}>{children}</div>
 }

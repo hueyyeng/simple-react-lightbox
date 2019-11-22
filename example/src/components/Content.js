@@ -45,10 +45,7 @@ const Content = () => {
               </p>
             </div>
             <div className="col-md-6 col-12 col-image">
-              <img
-                src="http://fodfodsfds.jpg"
-                alt="New York City - Architecture"
-              />
+              <img src={img01} alt="New York City - Architecture" />
             </div>
             {/* <div className="col-6">
               <video width="100%" height="auto" controls>
