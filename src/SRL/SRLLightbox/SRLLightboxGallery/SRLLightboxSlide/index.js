@@ -108,6 +108,7 @@ function SRLLightboxSlideComponent({
         className="SRLElementContainer"
         onTouchStart={e => handleTouchStart(e)}
         onTouchEnd={e => handleTouchEnd(e)}
+        ref={SRLElementRef}
       >
         <ReactScrollWheelHandler
           upHandler={() => handleNextElement(id)}
@@ -123,7 +124,6 @@ function SRLLightboxSlideComponent({
             >
               <SRLElementWrapper
                 transitionSpeed={slideTransitionSpeed}
-                ref={SRLElementRef}
                 className="SRLElementWrapper"
               >
                 {panzoomEnabled ? (
@@ -190,6 +190,7 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains('SRLThumbnails') ||
             event.target.classList.contains('SRLThumb') ||
             event.target.classList.contains('SRLCaption') ||
+            event.target.classList.contains('panzoom-enabled ') ||
             event.target.classList.contains('element-transition-enter') ||
             event.target.classList.contains(
               'element-transition-enter-active'
