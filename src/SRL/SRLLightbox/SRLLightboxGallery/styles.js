@@ -234,6 +234,11 @@ const StyledButton = styled.button`
   margin: 0;
   visibility: inherit;
   z-index: 9992;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  .SRLIdle & {
+    opacity: 0;
+  }
   @media (max-width: 768px) {
     width: 30px;
     height: 30px;
@@ -340,6 +345,11 @@ const SRLLightboxThubnailGallery = styled.div`
   flex-wrap: nowrap;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  .SRLIdle & {
+    opacity: 0;
+  }
   @media (max-width: 768px) {
     justify-content: start;
   }

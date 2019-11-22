@@ -5,6 +5,7 @@ import SRLLightboxSlideComponent from './SRLLightboxSlide'
 import SRLLightboxControls from './SRLLightboxControls'
 import fscreen from 'fscreen'
 import panzoom from 'panzoom'
+import IdleTimer from 'react-idle-timer'
 
 const _findIndex = require('lodash/findIndex')
 const _find = require('lodash/find')
@@ -30,6 +31,10 @@ const SRLLightboxGallery = ({
 
   // Ref for the Element
   const SRLElementPanzoomRef = useRef()
+  // Ref for the SRLStage
+  const SRLStageRef = useRef()
+  // Ref for IdleTimer
+  const idleRef = useRef()
 
   useEffect(() => {
     // Calculates the start position for the panzoom
@@ -222,6 +227,20 @@ const SRLLightboxGallery = ({
     }
   }, [])
 
+  function handleOnActive() {
+    if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
+      if (SRLStageRef.current.classList.contains('SRLIdle')) {
+        SRLStageRef.current.classList.remove('SRLIdle')
+      }
+    }
+  }
+
+  function handleOnIdle() {
+    if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
+      SRLStageRef.current.classList.add('SRLIdle')
+    }
+  }
+
   useEffect(() => {
     // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
     if (currentElement.id === undefined) {
@@ -277,7 +296,18 @@ const SRLLightboxGallery = ({
   }
 
   return (
-    <SRLLightboxGalleryStage overlayColor={options.overlayColor}>
+    <SRLLightboxGalleryStage
+      ref={SRLStageRef}
+      overlayColor={options.overlayColor}
+    >
+      <IdleTimer
+        ref={idleRef.current}
+        element={document}
+        onActive={handleOnActive}
+        onIdle={handleOnIdle}
+        debounce={250}
+        timeout={3000}
+      />
       <SRLLightboxControls {...buttonOptions} {...controls} />
       <SRLLightboxSlideComponent
         {...currentElement}
