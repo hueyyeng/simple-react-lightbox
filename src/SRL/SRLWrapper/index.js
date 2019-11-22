@@ -22,7 +22,7 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
   useEffect(() => {
     // Dispatch the Action to grab the options
     const grabOptions = options => {
-      console.log('dispatched options')
+      // console.log('dispatched options')
       // We merge the options that we receive from the user via Props with the original ones (defaultOptions)
       // If the user hasn't provided any options via props we make mergedOptions use just the default options
       let mergedOptions = {}
@@ -47,7 +47,7 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     // Dispatch the Action the grab the elements
     const grabElements = elements => {
       if (!isEqual(elements, context.elements)) {
-        console.log('dispatched grab elements')
+        // console.log('dispatched grab elements')
         context.dispatch({
           type: 'GRAB_ELEMENTS',
           elements
@@ -59,7 +59,7 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     const handleElement = element => {
       // We don't want to dispatch the action if the selected image is already selected
       if (!isEqual(element, context.selectedElement)) {
-        console.log('dispatched grab element (single)')
+        // console.log('dispatched grab element (single)')
         context.dispatch({
           type: 'HANDLE_ELEMENT',
           element

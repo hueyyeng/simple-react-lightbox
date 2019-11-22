@@ -64,11 +64,6 @@ const SRLContextComponent = props => {
           ...state,
           isOpened: false
         }
-      case 'OPEN_LIGHTBOX':
-        return {
-          ...state,
-          isOpened: true
-        }
       default:
         return state
     }
