@@ -228,16 +228,20 @@ const SRLLightboxGallery = ({
   }, [])
 
   function handleOnActive() {
-    if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
-      if (SRLStageRef.current.classList.contains('SRLIdle')) {
-        SRLStageRef.current.classList.remove('SRLIdle')
+    if (hideControlsAfter !== 0) {
+      if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
+        if (SRLStageRef.current.classList.contains('SRLIdle')) {
+          SRLStageRef.current.classList.remove('SRLIdle')
+        }
       }
     }
   }
 
   function handleOnIdle() {
-    if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
-      SRLStageRef.current.classList.add('SRLIdle')
+    if (hideControlsAfter !== 0) {
+      if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
+        SRLStageRef.current.classList.add('SRLIdle')
+      }
     }
   }
 
