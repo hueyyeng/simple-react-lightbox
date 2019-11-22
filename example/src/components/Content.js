@@ -10,10 +10,10 @@ import img06 from '../assets/images/gallery/unsplash06.jpg'
 import img07 from '../assets/images/gallery/unsplash07.jpg'
 import img08 from '../assets/images/gallery/unsplash08.jpg'
 import img09 from '../assets/images/gallery/unsplash09.jpg'
-import bunnyMp4 from '../assets/images/gallery/video/big_buck_bunny.mp4'
-import bunnyOgv from '../assets/images/gallery/video/big_buck_bunny.ogv'
-import robotMp4 from '../assets/images/gallery/video/robot.mp4'
-import robotOgv from '../assets/images/gallery/video/robot.ogv'
+// import bunnyMp4 from '../assets/images/gallery/video/big_buck_bunny.mp4'
+// import bunnyOgv from '../assets/images/gallery/video/big_buck_bunny.ogv'
+// import robotMp4 from '../assets/images/gallery/video/robot.mp4'
+// import robotOgv from '../assets/images/gallery/video/robot.ogv'
 
 const options = {
   overlayColor: 'rgb(25, 136, 124)',
@@ -45,9 +45,12 @@ const Content = () => {
               </p>
             </div>
             <div className="col-md-6 col-12 col-image">
-              <img src={img01} alt="New York City - Architecture" />
+              <img
+                src="http://fodfodsfds.jpg"
+                alt="New York City - Architecture"
+              />
             </div>
-            <div className="col-6">
+            {/* <div className="col-6">
               <video width="100%" height="auto" controls>
                 <source src={bunnyMp4} type="video/mp4" />
                 <source src={bunnyOgv} type="video/ogg" />
@@ -60,7 +63,7 @@ const Content = () => {
                 <source src={robotOgv} type="video/ogg" />
                 Video 2
               </video>
-            </div>
+            </div> */}
             <div className="col-md-4 col-12 col-image-small">
               <img src={img02} alt="Between two mountains" />
             </div>

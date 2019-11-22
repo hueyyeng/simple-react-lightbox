@@ -64,26 +64,26 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
       }
     }
 
-    // Generate a canvas with a frame from the video
-    function capture(video) {
-      const scaleFactor = 1
-      var w = video.videoWidth * scaleFactor
-      var h = video.videoHeight * scaleFactor
-      var canvas = document.createElement('canvas')
-      canvas.width = w
-      canvas.height = h
-      var ctx = canvas.getContext('2d')
-      ctx.drawImage(video, 0, 0, w, h)
-      return canvas
-    }
+    // // Generate a canvas with a frame from the video
+    // function capture(video) {
+    //   const scaleFactor = 1
+    //   var w = video.videoWidth * scaleFactor
+    //   var h = video.videoHeight * scaleFactor
+    //   var canvas = document.createElement('canvas')
+    //   canvas.width = w
+    //   canvas.height = h
+    //   var ctx = canvas.getContext('2d')
+    //   ctx.drawImage(video, 0, 0, w, h)
+    //   return canvas
+    // }
 
-    // Takes the dataUrl from the canvas
-    function generateScreen(element) {
-      var video = element
-      var canvas = capture(video)
-      const dataUrl = canvas.toDataURL()
-      return dataUrl
-    }
+    // // Takes the dataUrl from the canvas
+    // function generateScreen(element) {
+    //   var video = element
+    //   var canvas = capture(video)
+    //   const dataUrl = canvas.toDataURL()
+    //   return dataUrl
+    // }
 
     // Loop through the elemenents or the links to add them to the context
     const handleElementsWithContext = array => {
@@ -110,9 +110,9 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
             width: isImage ? e.naturalWidth || null : e.videoWidth || null,
             // Grabs the "height" from the image/video
             // If it's a link we can't grab the height and we will need to calculate it after.
-            height: isImage ? e.naturalHeight || null : e.videoHeight || null,
+            height: isImage ? e.naturalHeight || null : e.videoHeight || null
             // Generates a thumbnail image for the video otherwise set it to null
-            videoThumbnail: isImage ? null : generateScreen(e)
+            // videoThumbnail: isImage ? null : generateScreen(e)
           }
 
           // Adds an event listerner that will trigger the function to open the lightbox (passed using the Context)
@@ -133,10 +133,8 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
 
     // Grabs the options set by the user first
     grabOptions({ ...options })
-    // Grabs images and videos
-    const collectedElements = imagesContainer.current.querySelectorAll(
-      'img,video'
-    )
+    // Grabs images and videos (REMOVES videos for now)
+    const collectedElements = imagesContainer.current.querySelectorAll('img')
     // Grabs data attributes (in links)
     const collectedDataAttributes = imagesContainer.current.querySelectorAll(
       "a[data-attribute='SRL']"

@@ -10,8 +10,8 @@ import {
   SRLLightboxElementContainer,
   SRLElementWrapper,
   SRLLightboxImage,
-  SRLLightboxPanzoomImage,
-  SRLLightboxVideo
+  SRLLightboxPanzoomImage
+  // SRLLightboxVideo
 } from '../styles'
 
 function SRLLightboxSlideComponent({
@@ -97,8 +97,8 @@ function SRLLightboxSlideComponent({
   // UseOnClickOutside
   useOnClickOutside(SRLElementRef, () => handleCloseLightbox())
 
-  // Check if it's an image to load the right content
-  const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(source)
+  // // Check if it's an image to load the right content
+  // const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(source)
 
   return (
     <SRLLightboxContent className="SRLContent">
@@ -126,39 +126,26 @@ function SRLLightboxSlideComponent({
                 ref={SRLElementRef}
                 className="SRLElementWrapper"
               >
-                {isImage ? (
-                  panzoomEnabled ? (
-                    <SRLLightboxPanzoomImage
-                      className="SRLPanzoomImage"
-                      ref={SRLElementPanzoomRef}
-                      width={width}
-                      height={height}
-                      onClick={handlePanzoom}
-                      src={typeof source === 'object' ? 'Loading...' : source}
-                      alt={caption}
-                    />
-                  ) : (
-                    <SRLLightboxImage
-                      className="SRLImage"
-                      enablePanzoom={enablePanzoom}
-                      width={width}
-                      height={height}
-                      onClick={handlePanzoom}
-                      src={typeof source === 'object' ? 'Loading...' : source}
-                      alt={caption}
-                    />
-                  )
-                ) : (
-                  <SRLLightboxVideo
-                    className="SRLVideo"
-                    transitionSpeed={slideTransitionSpeed}
+                {panzoomEnabled ? (
+                  <SRLLightboxPanzoomImage
+                    className="SRLPanzoomImage"
+                    ref={SRLElementPanzoomRef}
                     width={width}
                     height={height}
-                    controls
-                  >
-                    <source src={source} type="video/mp4" />
-                    <source src={source} type="video/ogg" />
-                  </SRLLightboxVideo>
+                    onClick={handlePanzoom}
+                    src={typeof source === 'object' ? 'Loading...' : source}
+                    alt={caption}
+                  />
+                ) : (
+                  <SRLLightboxImage
+                    className="SRLImage"
+                    enablePanzoom={enablePanzoom}
+                    width={width}
+                    height={height}
+                    onClick={handlePanzoom}
+                    src={typeof source === 'object' ? 'Loading...' : source}
+                    alt={caption}
+                  />
                 )}
               </SRLElementWrapper>
             </CSSTransition>
