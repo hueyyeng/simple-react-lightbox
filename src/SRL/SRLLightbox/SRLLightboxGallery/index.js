@@ -210,7 +210,10 @@ const SRLLightboxGallery = ({
   )
 
   const handleFullScreen = useCallback(() => {
-    const el = document.querySelector('.SRLImage')
+    const el =
+      document.querySelector('.SRLImage') ||
+      document.querySelector('.SRLPanzoomImage')
+    console.log(el)
     if (el !== null) {
       if (fscreen.fullscreenEnabled) {
         fscreen.addEventListener('fullscreenchange', null, false)
