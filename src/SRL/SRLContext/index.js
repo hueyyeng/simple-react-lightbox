@@ -1,104 +1,94 @@
-import React, { useReducer } from "react";
-import PropTypes from "prop-types";
-let isEqual = require("lodash/isEqual");
-export const SRLCtx = React.createContext();
+import React, { useReducer } from 'react'
+import PropTypes from 'prop-types'
+
+const initialState = {
+  elements: [],
+  isOpened: false,
+  options: {
+    autoplaySpeed: 3000,
+    buttonsIconPadding: '0px',
+    buttonsBackgroundColor: 'rgba(30,30,36,0.8)',
+    buttonsIconColor: 'rgba(255, 255, 255, 0.8)',
+    buttonsSize: '40px',
+    captionColor: '#FFFFFF',
+    captionFontFamily: 'inherit',
+    captionFontSize: 'inherit',
+    captionFontStyle: 'inherit',
+    captionFontWeight: 'inherit',
+    enablePanzoom: true,
+    hideControlsAfter: 3000,
+    overlayColor: 'rgba(0, 0, 0, 0.9)',
+    showCaption: true,
+    showThumbnails: true,
+    slideTransitionSpeed: 600,
+    thumbnailsOpacity: 0.4,
+    transitionSpeed: 600,
+    transitionTimingFunction: 'ease'
+  },
+  selectedElement: {
+    caption: undefined,
+    height: undefined,
+    id: undefined,
+    source: undefined,
+    width: undefined
+  }
+}
+
+const SRLCtx = React.createContext(initialState)
 
 const SRLContextComponent = props => {
-  const initialState = {
-    isOpened: false,
-    images: [],
-    selectedImage: {
-      source: "",
-      caption: "",
-      id: "",
-      width: "",
-      height: ""
-    }
-  };
-
-  function reducer(state, action) {
+  // Reducer
+  const reducer = (state, action) => {
     switch (action.type) {
-      case "handleLightbox":
+      case 'GRAB_OPTIONS':
+        return {
+          ...state,
+          options: {
+            ...action.mergedOptions
+          }
+        }
+      case 'GRAB_ELEMENTS':
+        return {
+          ...state,
+          elements: action.elements
+        }
+      case 'HANDLE_ELEMENT':
         return {
           ...state,
           isOpened: true,
-          selectedImage: {
-            source: action.payload.img,
-            caption: action.payload.alt,
-            id: action.payload.id,
-            width: action.payload.width,
-            height: action.payload.height
+          selectedElement: {
+            ...action.element
           }
-        };
-      case "grabImages":
-        return {
-          ...state,
-          images: action.images // IE 11 -_-
-        };
-      case "handleCloseLightbox":
+        }
+      case 'CLOSE_LIGHTBOX':
         return {
           ...state,
           isOpened: false
-        };
+        }
       default:
-        return state;
+        return state
     }
   }
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const handleLightbox = (img, alt, id, width, height) => {
-    const payload = { img, alt, id, width, height };
-    if (!state.isOpened) {
-      if (!isEqual(state.selectedImage, payload)) {
-        dispatch({ type: "handleLightbox", payload });
-      }
-    }
-  };
-
-  const grabImages = images => {
-    // IT'S CRUCIAL TO ADD THESE CONDITIONALS CHECK OR THE DISPATCH WILL RUN INFINITELY
-    /*
-    First: we compare the "prev state" with the new state from the context to see if the images is not an empty array
-    Second: we check if the two objects are different. In this case it means that there are multiple galleries and we want to grab the new images
-    */
-    if (!state.isOpened) {
-      if (
-        state.images.length < images.length ||
-        !isEqual(state.images, images)
-      ) {
-        dispatch({ type: "grabImages", images });
-      }
-    }
-  };
-
-  function handleCloseLightbox() {
-    if (state.isOpened) {
-      dispatch({ type: "handleCloseLightbox" });
-    }
-  }
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   return (
     <SRLCtx.Provider
       value={{
-        handleLightbox,
-        grabImages,
-        handleCloseLightbox,
         ...state,
-        // We spread the props so that we can pass the configuration set by the user :)
-        ...props
+        dispatch
       }}
     >
       {props.children}
     </SRLCtx.Provider>
-  );
-};
+  )
+}
 
-export default SRLContextComponent;
+export { SRLCtx }
+export default SRLContextComponent
 
 SRLContextComponent.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired
-};
+}

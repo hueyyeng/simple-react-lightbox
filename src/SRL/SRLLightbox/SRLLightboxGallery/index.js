@@ -1,217 +1,336 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
-import PropTypes from "prop-types";
-import { SRLLightboxGalleryStage } from "./styles";
-import SRLLightboxSlideComponent from "./SRLLightboxSlide";
-import SRLLightboxControls from "./SRLLightboxControls";
+import React, { useEffect, useState, useCallback, useRef } from 'react'
+import PropTypes from 'prop-types'
+import { SRLLightboxGalleryStage } from './styles'
+import SRLLightboxSlideComponent from './SRLLightboxSlide'
+import SRLLightboxControls from './SRLLightboxControls'
+import fscreen from 'fscreen'
+import panzoom from 'panzoom'
+import IdleTimer from 'react-idle-timer'
 
-let _findIndex = require("lodash/findIndex");
-let _find = require("lodash/find");
+const _findIndex = require('lodash/findIndex')
+const _find = require('lodash/find')
 
 const SRLLightboxGallery = ({
+  options,
+  selectedElement,
+  elements,
   isOpened,
-  handleCloseLightbox,
-  images,
-  selectedImage,
-  overlayColor,
-  captionStyle,
-  buttonsStyle,
-  autoplaySpeed,
-  transitionSpeed,
-  showCaption,
-  showThumbnails
+  dispatch
 }) => {
-  const [currentImage, setCurrentImage] = useState(selectedImage);
-  const [imagesGallery, ,] = useState(images);
-  const [autoplay, setAutoplay] = useState(false);
-  // Handle Current Image
-  const handleCurrentImage = useCallback(
+  // Destructuring the options
+  const { autoplaySpeed, enablePanzoom, hideControlsAfter } = options
+
+  // In this component we set the state using the context.
+  // We don't want to manipulate the context every time so we create a localized state
+  // The first element will be the one that is clicked
+  const [currentElement, setCurrentElement] = useState(selectedElement)
+  // Let's set a state for the "autoplay" option
+  const [autoplay, setAutoplay] = useState(false)
+  // Let's set a state fro the "panzoom" option
+  const [panzoomEnabled, setPanzoomEnabled] = useState(false)
+
+  // Ref for the Element
+  const SRLElementPanzoomRef = useRef()
+  // Ref for the SRLStage
+  const SRLStageRef = useRef()
+  // Ref for IdleTimer
+  const idleRef = useRef()
+
+  useEffect(() => {
+    // Calculates the start position for the panzoom
+    // It has to be different on mobile because the touch event won't zoom the image
+    // So the image start position has to be (-101,-101) (which is centered)
+    // On desktop we need to double it because the image scale is doubled
+    let startPosition
+    function mediaQuery(x) {
+      if (x.matches) {
+        // If media query matches
+        startPosition = [-101, -101]
+      } else {
+        startPosition = [-201, -201]
+      }
+      return startPosition
+    }
+    if (enablePanzoom) {
+      const x = window.matchMedia('(max-width: 768px)')
+      mediaQuery(x)
+
+      // if the state panzoom is enabled (so when the picture is cliked)
+      if (panzoomEnabled) {
+        const elementRef = SRLElementPanzoomRef.current
+        if (elementRef !== null || elementRef !== undefined) {
+          elementRef.classList.add('panzoom-enabled')
+        }
+        const panzoomElement = panzoom(elementRef, {
+          bounds: true,
+          boundsPadding: 0.6,
+          maxZoom: 3,
+          minZoom: 1
+        })
+        panzoomElement.pause()
+        if (elementRef !== undefined || elementRef !== null) {
+          panzoomElement.resume()
+          panzoomElement.zoomAbs(startPosition[0], startPosition[1], 2)
+          panzoomElement.moveTo(startPosition[0], startPosition[1])
+        }
+      }
+    }
+  }, [enablePanzoom, panzoomEnabled])
+
+  // Handle Panzoom (set the state to true)
+  const handlePanzoom = useCallback(() => {
+    if (enablePanzoom) {
+      setPanzoomEnabled(true)
+    }
+  }, [enablePanzoom])
+
+  // Disable Panzoom (se the state to false)
+  const handleDisablePanzoom = useCallback(() => {
+    if (enablePanzoom) {
+      setPanzoomEnabled(false)
+    }
+  }, [enablePanzoom])
+
+  // Handle Previous Element
+  const handlePrevElement = useCallback(
     id => {
-      const imageSelected = _find(imagesGallery, function(i) {
-        return i.id === id;
-      });
-      setCurrentImage({
-        source: imageSelected.src,
-        caption: imageSelected.alt,
-        id: imageSelected.id,
-        width: imageSelected.width,
-        height: imageSelected.height
-      });
+      // Reset the panzoom state
+      handleDisablePanzoom()
+      /* We receive the ID of the current element and we want the element after that.
+        Let's find the current position of the current element in the array */
+      // const currentPosition = imagesGallery.findIndex(i => i.id === id);
+      const currentPosition = _findIndex(elements, function(i) {
+        return i.id === id
+      })
+      /* The prev element will be the prev item in the array but it could be "undefined" as it goes negative. If it does we need to start from the last item. */
+      const prevElement =
+        elements[currentPosition - 1] || elements[elements.length - 1]
+      // Set the state with the new element
+      setCurrentElement({
+        source: prevElement.source,
+        caption: prevElement.caption,
+        id: prevElement.id,
+        width: prevElement.width,
+        height: prevElement.height
+      })
     },
-    [imagesGallery]
-  );
+    [elements, handleDisablePanzoom]
+  )
+
+  // Handle Next element
+  const handleNextElement = useCallback(
+    id => {
+      // Reset the panzoom state
+      handleDisablePanzoom()
+      /* We receive the ID of the current element and we want the element after that.
+      Let's find the current position of the current element in the array */
+      const currentPosition = _findIndex(elements, function(i) {
+        return i.id === id
+      })
+      /* The next element will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to the first item */
+      const nextElement = elements[currentPosition + 1] || elements[0]
+      // Set the state with the new element
+      setCurrentElement({
+        source: nextElement.source,
+        caption: nextElement.caption,
+        id: nextElement.id,
+        width: nextElement.width,
+        height: nextElement.height
+      })
+    },
+    [elements, handleDisablePanzoom]
+  )
+
+  // Handle Current Element
+  const handleCurrentElement = useCallback(
+    id => {
+      // Reset the panzoom state
+      handleDisablePanzoom()
+      // Grab the current element
+      const currentElement = _find(elements, function(i) {
+        return i.id === id
+      })
+      // Set the state with the new element
+      setCurrentElement({
+        source: currentElement.source,
+        caption: currentElement.caption,
+        id: currentElement.id,
+        width: currentElement.width,
+        height: currentElement.height
+      })
+    },
+    [elements, handleDisablePanzoom]
+  )
+
+  // Handle Close Lightbox
+  const handleCloseLightbox = useCallback(() => {
+    dispatch({
+      type: 'CLOSE_LIGHTBOX'
+    })
+  }, [dispatch])
 
   // Handle Autoplay
   function useInterval(callback, delay) {
-    const savedCallback = useRef();
+    const savedCallback = useRef()
 
     // Remember the latest callback.
     useEffect(() => {
-      savedCallback.current = callback;
-    }, [callback]);
+      savedCallback.current = callback
+    }, [callback])
 
     // Set up the interval.
     useEffect(() => {
       function tick() {
-        savedCallback.current();
+        savedCallback.current()
       }
       if (delay !== null) {
-        let id = setInterval(tick, delay);
-        return () => clearInterval(id);
+        const id = setInterval(tick, delay)
+        return () => clearInterval(id)
       }
-    }, [delay]);
+    }, [delay])
   }
-
-  useInterval(
-    () => handleNextImage(currentImage.id),
-    autoplay ? autoplaySpeed : null
-  );
-
-  // Handle Next Image
-  const handleNextImage = useCallback(
-    id => {
-      /* We receive the ID of the current image and we want the image after that.
-      Let's find the current position of the current image in the array */
-      const currentPosition = _findIndex(imagesGallery, function(i) {
-        return i.id === id;
-      });
-
-      /* The next image will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to he first image */
-      const nextImage = imagesGallery[currentPosition + 1] || imagesGallery[0];
-      setCurrentImage({
-        source: nextImage.src,
-        caption: nextImage.alt,
-        id: nextImage.id,
-        width: nextImage.width,
-        height: nextImage.height
-      });
-    },
-    [imagesGallery]
-  );
-
-  // Handle Previous Image
-  const handlePrevImage = useCallback(
-    id => {
-      /* We receive the ID of the current image and we want the image after that.
-        Let's find the current position of the current image in the array */
-      // const currentPosition = imagesGallery.findIndex(i => i.id === id);
-      const currentPosition = _findIndex(imagesGallery, function(i) {
-        return i.id === id;
-      });
-      /* The prev image will be the prev item in the array but it could be "undefined" as it goes negative. If it does we need to start from the last image. */
-      const prevImage =
-        imagesGallery[currentPosition - 1] ||
-        imagesGallery[imagesGallery.length - 1];
-      setCurrentImage({
-        source: prevImage.src,
-        caption: prevImage.alt,
-        id: prevImage.id,
-        width: prevImage.width,
-        height: prevImage.height
-      });
-    },
-    [imagesGallery]
-  );
 
   // Handle Navigation With Keys
   const handleLightboxWithKeys = useCallback(
     event => {
       if (event.keyCode === 39) {
-        handleNextImage(currentImage.id);
+        handleNextElement(currentElement.id)
       } else if (event.keyCode === 37) {
-        handlePrevImage(currentImage.id);
+        handlePrevElement(currentElement.id)
       } else if (event.keyCode === 27) {
-        handleCloseLightbox();
+        handleCloseLightbox()
       }
     },
-    [currentImage.id, handleCloseLightbox, handleNextImage, handlePrevImage]
-  );
+    [
+      currentElement.id,
+      handleCloseLightbox,
+      handleNextElement,
+      handlePrevElement
+    ]
+  )
 
-  // USE EFFECT
+  useInterval(
+    () => handleNextElement(currentElement.id),
+    autoplay ? autoplaySpeed : null
+  )
+
+  const handleFullScreen = useCallback(() => {
+    const el =
+      document.querySelector('.SRLImage') ||
+      document.querySelector('.SRLPanzoomImage')
+    console.log(el)
+    if (el !== null) {
+      if (fscreen.fullscreenEnabled) {
+        fscreen.addEventListener('fullscreenchange', null, false)
+        fscreen.requestFullscreen(el)
+      }
+    }
+  }, [])
+
+  function handleOnActive() {
+    if (hideControlsAfter !== 0) {
+      if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
+        if (SRLStageRef.current.classList.contains('SRLIdle')) {
+          SRLStageRef.current.classList.remove('SRLIdle')
+        }
+      }
+    }
+  }
+
+  function handleOnIdle() {
+    if (hideControlsAfter !== 0) {
+      if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
+        SRLStageRef.current.classList.add('SRLIdle')
+      }
+    }
+  }
+
   useEffect(() => {
-    // SETS THE CURRENT IMAGE TO THE BE THE FIRST IMAGE
-    // This is crucial in case the user uses the provided method to open the lightbox from a link or a button etc...
-    if (currentImage.id === undefined) {
-      setCurrentImage({
-        source: imagesGallery[0].src,
-        caption: imagesGallery[0].alt,
-        id: imagesGallery[0].id,
-        width: imagesGallery[0].width,
-        height: imagesGallery[0].height
-      });
+    // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
+    if (currentElement.id === undefined) {
+      setCurrentElement({
+        source: elements[0].source,
+        caption: elements[0].caption,
+        id: elements[0].id,
+        width: elements[0].width,
+        height: elements[0].height
+      })
     }
 
     // Adds a class to the body to remove the overflow and compensate for the scroll-bar margin
     if (isOpened) {
-      document.body.classList.add("SRLOpened");
+      document.body.classList.add('SRLOpened')
       document.addEventListener(
-        "keydown",
+        'keydown',
         handleLightboxWithKeys,
         { once: true },
         false
-      );
+      )
     }
-
     // Cleans up function to remove the class from the body
     return function cleanUp() {
-      document.body.classList.remove("SRLOpened");
-      document.removeEventListener("keydown", handleLightboxWithKeys, false);
-    };
-  }, [handleLightboxWithKeys, imagesGallery, isOpened, currentImage.id]);
+      document.body.classList.remove('SRLOpened')
+      document.removeEventListener('keydown', handleLightboxWithKeys, false)
+    }
+  }, [currentElement, elements, handleLightboxWithKeys, isOpened, options])
 
+  // Light-box controls
   const controls = {
-    currentImageId: currentImage.id,
-    handleCurrentImage,
-    handleNextImage,
-    handlePrevImage,
+    currentElementID: currentElement.id,
+    handleCurrentElement,
+    handleNextElement,
+    handlePrevElement,
     handleCloseLightbox,
+    handleFullScreen,
+    handlePanzoom,
+    handleDisablePanzoom,
     autoplay,
+    panzoomEnabled,
     autoplaySpeed,
-    setAutoplay
-  };
+    setAutoplay,
+    SRLElementPanzoomRef
+  }
+
+  // Light-box buttons options
+  const buttonOptions = {
+    buttonsBackgroundColor: options.buttonsBackgroundColor,
+    buttonsIconColor: options.buttonsIconColor,
+    buttonsSize: options.buttonsSize,
+    buttonsIconPadding: options.buttonsIconPadding
+  }
 
   return (
     <SRLLightboxGalleryStage
-      className="SRLOuterWrapper"
-      overlayColor={overlayColor}>
-      <SRLLightboxControls buttonsStyle={buttonsStyle} {...controls} />
+      ref={SRLStageRef}
+      overlayColor={options.overlayColor}
+    >
+      <IdleTimer
+        ref={idleRef.current}
+        element={document}
+        onActive={handleOnActive}
+        onIdle={handleOnIdle}
+        debounce={250}
+        timeout={hideControlsAfter}
+      />
+      <SRLLightboxControls {...buttonOptions} {...controls} />
       <SRLLightboxSlideComponent
-        showThumbnails={showThumbnails}
-        captionStyle={captionStyle}
-        showCaption={showCaption}
-        handleCloseLightbox={controls.handleCloseLightbox}
-        handleCurrentImage={controls.handleCurrentImage}
-        handleNextImage={controls.handleNextImage}
-        handlePrevImage={controls.handlePrevImage}
-        transitionSpeed={transitionSpeed}
-        images={images}
-        isopened={isOpened}
-        {...currentImage}
+        {...currentElement}
+        {...controls}
+        elements={elements}
+        options={options}
       />
     </SRLLightboxGalleryStage>
-  );
-};
+  )
+}
 
 SRLLightboxGallery.propTypes = {
-  isOpened: PropTypes.bool,
-  images: PropTypes.array,
+  options: PropTypes.object,
   overlayColor: PropTypes.string,
-  showThumbnails: PropTypes.bool,
-  showCaption: PropTypes.bool,
-  captionStyle: PropTypes.shape({
-    captionColor: PropTypes.string,
-    captionFontFamily: PropTypes.string,
-    captionFontSize: PropTypes.string,
-    captionFontWeight: PropTypes.string,
-    captionFontStyle: PropTypes.string
-  }),
-  buttonsStyle: PropTypes.shape({
-    buttonsBackgroundColor: PropTypes.string,
-    buttonsIconColor: PropTypes.string
-  }),
-  autoplaySpeed: PropTypes.number,
-  transitionSpeed: PropTypes.number,
-  selectedImage: PropTypes.object,
-  handleCloseLightbox: PropTypes.func
-};
+  selectedElement: PropTypes.object,
+  hideControlsAfter: PropTypes.number,
+  elements: PropTypes.array,
+  isOpened: PropTypes.bool,
+  dispatch: PropTypes.func
+}
 
-export default SRLLightboxGallery;
+export default SRLLightboxGallery

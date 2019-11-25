@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled'
 
 // Main div containing the light-box
 const SRLLightboxGalleryStage = styled.div`
@@ -9,7 +9,7 @@ const SRLLightboxGalleryStage = styled.div`
   top: 0;
   left: 0;
   z-index: 9991;
-`;
+`
 
 // The content of the light-box
 const SRLLightboxContent = styled.div`
@@ -24,30 +24,30 @@ const SRLLightboxContent = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
-`;
+`
 
 // The container for the image
-const SRLLightboxImageContainer = styled.div`
+const SRLLightboxElementContainer = styled.div`
   width: ${props => {
     if (props.showThumbnails === false && !!props.showCaption === false) {
-      return "90vw";
+      return '90vw'
     } else if (props.showThumbnails === false && props.showCaption === true) {
-      return "85vw";
+      return '85vw'
     } else if (props.showThumbnails === true && props.showCaption === false) {
-      return "75vw";
+      return '75vw'
     } else {
-      return "70vw";
+      return '70vw'
     }
   }};
   height: ${props => {
     if (props.showThumbnails === false && !!props.showCaption === false) {
-      return "90vh";
+      return '90vh'
     } else if (props.showThumbnails === false && props.showCaption === true) {
-      return "85vh";
+      return '85vh'
     } else if (props.showThumbnails === true && props.showCaption === false) {
-      return "75vh";
+      return '75vh'
     } else {
-      return "70vh";
+      return '70vh'
     }
   }};
   display: flex;
@@ -55,28 +55,106 @@ const SRLLightboxImageContainer = styled.div`
   flex-direction: column;
   margin-top: ${props => {
     if (props.showThumbnails === false && !!props.showCaption === false) {
-      return "0px";
+      return '0px'
     } else if (props.showThumbnails === false && props.showCaption === true) {
-      return "auto";
+      return 'auto'
     } else if (props.showThumbnails === true && props.showCaption === false) {
-      return "auto";
+      return 'auto'
     } else {
-      return "auto";
+      return 'auto'
     }
   }};
   position: relative;
   @media (max-width: 768px) {
     width: 100vw;
-    height: ${props => (props.showThumbnails ? "70vh" : "80vh")};
+    height: ${props => (props.showThumbnails ? '70vh' : '80vh')};
   }
+  > div,
   .SRLTransitionGroup {
     width: 100%;
     height: 100%;
+    outline: none;
   }
-`;
+`
 
-// The image itself
+// Element Wrapper
+
+const SRLElementWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  outline: none;
+  border: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  &.element-transition-enter {
+    opacity: 0;
+  }
+  &.element-transition-enter-active {
+    opacity: 1;
+    transition: ${props =>
+      props.transitionSpeed
+        ? `opacity ${props.transitionSpeed}ms ease`
+        : 'opacity 600ms ease'};
+  }
+  &.element-transition-exit {
+    opacity: 1;
+  }
+  &.element-transition-exit-active {
+    opacity: 0;
+    transition: ${props =>
+      props.transitionSpeed
+        ? `opacity ${props.transitionSpeed}ms ease`
+        : 'opacity 600ms ease;'};
+  }
+  &.element-transition-enter-done {
+    opacity: 1;
+    transition: ${props =>
+      props.transitionSpeed
+        ? `opacity ${props.transitionSpeed}ms ease`
+        : 'opacity 600ms ease;'};
+  }
+`
+
+// The Image
 const SRLLightboxImage = styled.img`
+  background: transparent;
+  border: 0;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: all 200ms ease;
+  opacity: 1;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: ${props => (props.enablePanzoom ? 'zoom-in' : 'auto')};
+`
+
+const SRLLightboxPanzoomImage = styled(SRLLightboxImage)`
+  position: static;
+  top: 0;
+  left: 0;
+  &.panzoom-enabled {
+    cursor: grab;
+  }
+`
+
+// The Video
+const SRLLightboxVideo = styled.video`
   background: transparent;
   border: 0;
   display: block;
@@ -95,36 +173,7 @@ const SRLLightboxImage = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  &.image-transition-enter {
-    opacity: 0;
-  }
-  &.image-transition-enter-active {
-    opacity: 1;
-    transition: ${props =>
-      props.transitionSpeed
-        ? `opacity ${props.transitionSpeed + 600}ms ease, transform ${
-            props.transitionSpeed
-          }ms ease`
-        : "opacity 1200ms ease, transform 600ms ease"};
-  }
-  &.image-transition-exit {
-    opacity: 1;
-  }
-  &.image-transition-exit-active {
-    opacity: 0;
-    transition: ${props =>
-      props.transitionSpeed
-        ? `opacity ${props.transitionSpeed}ms ease, transform ${props.transitionSpeed}ms ease`
-        : "opacity 600ms ease;"};
-  }
-  &.image-transition-enter-done {
-    opacity: 1;
-    transition: ${props =>
-      props.transitionSpeed
-        ? `opacity ${props.transitionSpeed}ms ease, transform ${props.transitionSpeed}ms ease`
-        : "opacity 600ms ease;"};
-  }
-`;
+`
 
 // The caption
 const SRRLLightboxCaption = styled.div`
@@ -147,37 +196,36 @@ const SRRLLightboxCaption = styled.div`
     font-weight: ${props =>
       props.captionStyle.captionFontWeight
         ? props.captionStyle.captionFontWeight
-        : "inherit"};
+        : 'inherit'};
     font-size: ${props =>
       props.captionStyle.captionFontSize
         ? props.captionStyle.captionFontSize
-        : "inherit"};
+        : 'inherit'};
     font-family: ${props =>
       props.captionStyle.captionColor
         ? props.captionStyle.captionFontFamily
-        : "inherit"};
+        : 'inherit'};
     color: ${props =>
       props.captionStyle.captionColor
         ? props.captionStyle.captionColor
-        : "white"};
+        : 'white'};
     text-transform: ${props =>
       props.captionStyle.captionFontStyle
         ? props.captionStyle.captionFontStyle
-        : "inherit"};
+        : 'inherit'};
   }
-`;
+`
 
 // The buttons
 const StyledButton = styled.button`
-  background-clip: content-box;
-  height: 70px;
   position: absolute;
-  width: 70px;
+  height: ${props => (props.buttonsSize ? props.buttonsSize : '30px')};
+  width: ${props => (props.buttonsSize ? props.buttonsSize : '30px')};
   transition: color 0.3s ease;
   background-color: ${props =>
-    props.buttonsStyle.buttonsBackgroundColor
-      ? props.buttonsStyle.buttonsBackgroundColor
-      : "rgba(30, 30, 36, 0.8)"};
+    props.buttonsBackgroundColor
+      ? props.buttonsBackgroundColor
+      : 'rgba(30, 30, 36, 0.8)'};
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -186,16 +234,22 @@ const StyledButton = styled.button`
   margin: 0;
   visibility: inherit;
   z-index: 9992;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  .SRLIdle & {
+    opacity: 0;
+  }
   @media (max-width: 768px) {
-    width: 35px;
-    height: 35px;
-    padding: 0;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
   }
   &:focus {
     outline: none;
   }
   div {
-    padding: 7px;
+    padding: ${props =>
+      props.buttonsIconPadding ? props.buttonsIconPadding : '0px'};
     height: 100%;
     box-sizing: border-box;
     svg {
@@ -207,65 +261,78 @@ const StyledButton = styled.button`
       path {
         transition: fill 0.3s ease;
         fill: ${props =>
-          props.buttonsStyle.buttonsIconColor
-            ? props.buttonsStyle.buttonsIconColor
-            : "rgba(255, 255, 255, 0.8)"};
+          props.buttonsIconColor
+            ? props.buttonsIconColor
+            : 'rgba(255, 255, 255, 0.8)'};
       }
     }
     &:hover {
       svg path {
         fill: ${props =>
-          props.buttonsStyle.buttonsIconColor &&
+          props.buttonsIconColor &&
           // REGEX TO THE RESCUE (converts the RGBA value to have the full opacity to have the nice "hover" effect)
-          props.buttonsStyle.buttonsIconColor.replace(/[\d\.]+\)$/g, "1)")};
+          props.buttonsIconColor.replace(/[\d\.]+\)$/g, '1)')};
       }
     }
   }
-`;
+`
+
+// Top right buttons
+
+const SRLLLightboxTopButtons = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  top: calc(env(safe-area-inset-top) + 5px);
+  right: calc(env(safe-area-inset-right) + 5px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`
 
 // The "close" button
 const SRRLLightboxCloseIcon = styled(StyledButton)`
-  top: 0;
-  right: 0;
-  padding: 15px;
-  @media (max-width: 768px) {
-    top: 5px;
-    right: 5px;
-  }
-`;
+  position: relative;
+`
+
+// The "close" button
+const SRRLExpandIcon = styled(StyledButton)`
+  position: relative;
+  margin-right: 5px;
+`
+
+// The "close" button
+const SRLZoomOutIcon = styled(StyledButton)`
+  position: relative;
+  margin-right: 5px;
+`
 
 // The "autoplay" button
 const SRRLLightboxAutoplayIcon = styled(StyledButton)`
-  top: 0;
-  right: 50px;
-  padding: 15px;
-  display: ${props => (props.autoplaySpeed === 0 ? "none" : "block")};
-  @media (max-width: 768px) {
-    top: 5px;
-  }
-`;
+  position: relative;
+  margin-right: 5px;
+  display: ${props => (props.autoplaySpeed === 0 ? 'none' : 'block')};
+`
 
 // The "next" button
 const SRLLightboxNextIcon = styled(StyledButton)`
   top: calc(50% - 50px);
-  padding: 15px;
-  right: 0;
-  right: env(safe-area-inset-right);
+  right: 5px;
+  right: calc(env(safe-area-inset-right) + 5px);
   @media (max-width: 768px) {
     display: none;
   }
-`;
+`
 
 // The "prev" button
 const SRLLightboxPrevIcon = styled(StyledButton)`
   top: calc(50% - 50px);
-  padding: 15px;
-  left: 0;
-  left: env(safe-area-inset-left);
+  left: 5px;
+  left: calc(env(safe-area-inset-left) + 5px);
   @media (max-width: 768px) {
     display: none;
   }
-`;
+`
 
 // The thumbnails galley
 const SRLLightboxThubnailGallery = styled.div`
@@ -278,10 +345,15 @@ const SRLLightboxThubnailGallery = styled.div`
   flex-wrap: nowrap;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  .SRLIdle & {
+    opacity: 0;
+  }
   @media (max-width: 768px) {
     justify-content: start;
   }
-`;
+`
 
 // The images on the thumbnail gallery
 const SRLLightboxThubnailGalleryImage = styled.a`
@@ -290,7 +362,8 @@ const SRLLightboxThubnailGalleryImage = styled.a`
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0 1px;
-  opacity: 0.4;
+  opacity: ${props =>
+    props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
   transition: opacity 0.3s ease;
   display: block;
   cursor: pointer;
@@ -304,19 +377,25 @@ const SRLLightboxThubnailGalleryImage = styled.a`
   &.SRLSelected {
     opacity: 1;
   }
-`;
+`
 
 // Export all of the above
 export {
   SRLLightboxGalleryStage,
   SRLLightboxContent,
-  SRLLightboxImageContainer,
+  SRLLightboxElementContainer,
+  SRLElementWrapper,
   SRLLightboxImage,
+  SRLLightboxPanzoomImage,
+  SRLLightboxVideo,
   SRRLLightboxCaption,
   SRRLLightboxCloseIcon,
   SRLLightboxNextIcon,
   SRLLightboxPrevIcon,
   SRRLLightboxAutoplayIcon,
+  SRRLExpandIcon,
+  SRLZoomOutIcon,
   SRLLightboxThubnailGallery,
-  SRLLightboxThubnailGalleryImage
-};
+  SRLLightboxThubnailGalleryImage,
+  SRLLLightboxTopButtons
+}

@@ -4,6 +4,21 @@
 
 [![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox.svg?token=RytKLBgaYszcR25z6ZLP&branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
+### What's new in Version 2.0
+A lot has changed, but the core functionallity remains the same.
+- Improved and optimised code
+- Each light-box is now individually configurable and can now have different styles and options! 🥳
+- Added validation for the images (If you have a broken image it will be ignored and won't trigger the light-box)
+- Added "pan & zoom"* functionality and an option to disable it [PanZoom Functionality](#panzoom-functionality)
+- Added an option to open the image in full-screen
+- Added an option to control the size of the buttons
+- Added an option to control the opacity of the thumbnails
+- Added an option to control the speed of the transition and the easing of the light-box when opened
+- Added an option to hide the controls after a certain amount of time
+
+### Migrating from Version 1.0
+Nothing has changed, you will only see your light-box with the default options. That's because the options have now changed. Don't pass the options to the ```<SimpleReactLightbox/>``` component. Just pass the [options](#options) to the ```<SRLWrapper>```
+
 #### A brief introduction 🧐
 
 It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend and I had no control over the content of each post (the content was in a WYSIWYG editor).
@@ -14,7 +29,7 @@ I checked online for some light-box for React but the way that they were working
 
 **Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, whether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app, define your options and then use the "SRLWrapper" component by wrapping it around the content in which you have or expect your images 😮!
 
-🆕 From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the "Gallery with links" example page on the CodeSandbox [demo](#demo)
+From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the "Gallery with links" example page on the CodeSandbox [demo](#demo)
 
 #### Packed with features 📦
 
@@ -41,7 +56,7 @@ yarn add simple-react-lightbox
 
 #### Demo
 
-I have provided a working demo on Codesandbox
+I have provided a working demo on Codesandbox where you can also play with the options and see the light-box in action. This is the same as runnin gthe demo locally.
 
 [![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
 
@@ -96,7 +111,7 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 
 #### 🆕 Custom gallery
 
-Due to popular demand I have now added the option to use the light-box in a more traditional way. If you want to create a gallery in which thumbnails are wrapped in a link that points to a full width image, now you can. (You can check the "Gallery with links" example page on the CodeSandbox [demo](#demo)).
+If you want to use the light-box in a more traditional way, like if you want to create a gallery in which thumbnails are wrapped in a link that points to a full width image, now you can. (You can check the "Gallery with links" example page on the CodeSandbox [demo](#demo)).
 
 Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the `alt` attribute for the images will be used as caption if declared.
 
@@ -124,7 +139,6 @@ export default MyComponent;
 ```
 
 #### Options
-
 I know what you are thinking.
 
 > "That's cool and all but the style of the light-box doesn't match the one of my project. That's ok though. I will use your classes and override everything with my custom styles..."
@@ -132,15 +146,25 @@ I know what you are thinking.
 ⚠️ **WAIT!** ⚠️ Despite the fact that I have made sure to define class names for each part of the light-box, I have provided all the options that you need to customize the light-box so that you don't have to add any additional logic. **You can customize everything!**
 Check the options below.
 
-| Option          | Type    | Default                                                                                                                                                           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Option | Type | Default | Description |
 | --------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| overlayColor    | string  | rgba(0, 0, 0, 0.9)                                                                                                                                                | Sets the background color of he light-box. You can set an rgba() value if you want to control the opacity. Any CSS Color value is valid.                                                                                                                                                                                                                                                                                                                                                   |
-| captionStyle    | object  | `captionStyle: { captionColor: "#FFFFFF", captionFontFamily: "inherit", captionFontSize: "inherit", captionFontWeight: "inherit", captionFontStyle: "inherit" },` | This is an object that defines the styles for the caption. You can control the color, size, font-family, weight and style of the font. Those values depends, of course, on the font that you are using. `captionFontStyle` is just the CSS property `text-transform` (none/capitalize/uppercase/lowercase/initial/inherit).                                                                                                                                                                |
-| buttonsStyle    | object  | `buttonsStyle: { buttonsBackgroundColor: "rgb(30,30,36,0.8)", buttonsIconColor: "rgba(255, 255, 255, 0.8)"}`,                                                     | This is an object that defines the style for the buttons and the icon inside the button. So you can control both of them easily. Any CSS Color value is valid **but there is some magic 🎩 happening in here**: if you use an rgba() value for the icon and set an opacity (like "0.8" as showed in the default value), when you hover with the mouse on the icon this will create a nice CSS hover effect by automatically changing the opacity to "1", regardless the colour you choose. |
-| autoplaySpeed   | number  | 3000                                                                                                                                                              | Controls the auto play change interval. **Set it to 0** if you don't want to use the auto play functionallity and you want to hide the button.                                                                                                                                                                                                                                                                                                                                             |
-| transitionSpeed | number  | 600                                                                                                                                                               | Controls the transition speed of when an image is swapped with another. **Be gentle** as using a really high value can potentially cause issues.                                                                                                                                                                                                                                                                                                                                           |
-| showCaption     | boolean | true                                                                                                                                                              | Shows/hides the caption. _The caption of the images is generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_                                                                                                                                                                                                                                                                                                                                            |
-| showThumbnails  | boolean | true                                                                                                                                                              | Shows/hides the thumbnail gallery.                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| autoplaySpeed   | number  | 3000 | Controls the auto play change interval. **Set it to 0** if you don't want to use the auto play functionallity and hide the button. |
+| buttonIconPadding | string  | '0px ' | Increases the padding between the icon and the sides of the button. The more padding you add the smaller the icon will look.
+| buttonsBackgroundColor | string  | 'rgba(0, 0, 0, 0.9)'  | Controls the background color of the buttons.  Any CSS Color value is valid.
+| buttonsIconColor | string  | 'rgba(255, 255, 255, 0.8)' | Controls the color of the icons inside the buttons.  Any CSS Color value is valid but there is some magic 🎩 happening in here: if you use an rgba() value set an opacity (like “0.8” as showed in the default value), when you hover with the mouse on the icon this will create a nice CSS hover effect by automatically changing the opacity to “1”, regardless the colour you choose.
+| buttonsSize | string | '40px' | Controls the size of the buttons.
+| captionFontFamily | string | 'inherit' | Controls the font family of the caption.
+| captionFontSize | string | 'inherit' | Controls the font size of the caption.
+| captionFontStyle | string | 'inherit' | Controls the font style of the caption. (This is just the CSS property text-transform (none/capitalize/uppercase/lowercase/initial/inherit))
+| captionFontWeight | string | 'inherit' | Controls the font weight of the caption.
+| enablePanzoom | boolean | true | Enables or disables the pan-zoom on the image. If you are having issues with the pan-zoom you can disable it from this option.
+| hideControlsAfter | number | 3000 | Controls after how long it will takes for the controls and thumbails to be hidden. By default all the controls and the thumbnails will be hidden after 3 seconds, to create a more immersive experience. If you want the controls and thumbnails to be always visible **set this to 0**. | overlayColor | string | 'rgba(0, 0, 0, 0.9)' | The background color for the light-box.
+| showCaption | boolean | true | Shows/hides the caption. _The caption of the images is generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
+| showThumbnails | boolean | true | Shows/hides the thumbnail gallery.
+| slideTransitionSpeed | number | 600 | Controls the transition speed of when an image is swapped with another. **Be gentle** as using a really high value can potentially cause issues. This value is in millisecond.
+| thumbnailsOpacity | number | 0.4 | Controls the opacity of the thumbnails.
+| transitionSpeed | number | 600 | Controls the transition speed of when the light-box is opened. This value is in millisecond.
+| transitionTimingFunction | string | 'ease' | Controls the transition timing function of when the light-box is opened. It supports all the value of the [css transition-timing-function options.](https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp)!_  |
 
 #### Yes, options! But how do I use them?
 
@@ -223,6 +247,9 @@ export withSRLContext(MyComponent);
 
 To be honest I don't really see a reason to use that, especially the "closeLightbox" method so I might consider to remove this in the near future.
 
+## PanZoom functionality
+I added this feature as I think is really cool but is not 100% perfect yet. So in case you have issues with it, just disable it from the [options](#options).
+
 ## Caveats 👮
 
 The images will have an `id` attribute assigned by **Simple React Lightbox**. Any other `id` attribute on the image will be removed. If you are using `id` attribute in the images, I suggest you use a `class` attribute instead. I don't think `id` attribute on images are used a lot but if this is the case let me know and I might adjust the code in the future.
@@ -235,5 +262,4 @@ The images will have an `id` attribute assigned by **Simple React Lightbox**. An
 
 ## What the future holds 🔮
 
-- Custom options for each light-box
 - Use TypeScript

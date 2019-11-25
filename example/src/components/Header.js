@@ -1,7 +1,7 @@
-import React from "react";
-import SRLLogo from "../assets/images/SRL_Logo.png";
-import { withSRLContext } from "simple-react-lightbox";
-import { Link } from "react-router-dom";
+import React from 'react'
+import SRLLogo from '../assets/images/SRL_Logo.png'
+import { withSRLContext } from 'simple-react-lightbox'
+import { Link } from 'react-router-dom'
 /*
 We can use an High Order Component to pass the context and use the methods provided
 in case we want to open the lightbox from a button or anything :)
@@ -23,10 +23,10 @@ const Header = props => {
             <nav>
               <ul>
                 <li>
-                  <Link to="/">Mixed content</Link>
+                  <Link to="/">Simple Gallery</Link>
                 </li>
                 <li>
-                  <Link to="/example-two/">Mixed content - Page 2</Link>
+                  <Link to="/example-two/">Mixed content</Link>
                 </li>
                 <li>
                   <Link to="/gallery-with-links/">Gallery with links</Link>
@@ -46,8 +46,8 @@ const Header = props => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Wrap your component using the provided HOC
-export default withSRLContext(Header);
+export default withSRLContext(Header)

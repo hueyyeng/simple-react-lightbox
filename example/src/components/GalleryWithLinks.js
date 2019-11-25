@@ -1,11 +1,21 @@
-import React from "react";
-import Layout from "./Layout";
-import { SRLWrapper } from "simple-react-lightbox";
+import React from 'react'
+import Layout from './Layout'
+import { SRLWrapper } from 'simple-react-lightbox'
+
+const options = {
+  overlayColor: 'rgb(200, 200, 200)',
+  showCaption: false,
+  buttonsBackgroundColor: 'rgba(140, 94, 88, 0.8)',
+  buttonsIconColor: 'rgba(219, 219, 219, 0.7)',
+  showThumbnails: false,
+  transitionSpeed: 1000,
+  transitionTimingFunction: 'linear'
+}
 
 function GalleryWithLinks() {
   return (
     <Layout>
-      <SRLWrapper>
+      <SRLWrapper options={options}>
         <div id="gallery-with-links" className="container content">
           <div className="row">
             <div className="col-md-4 col-6 col-image-with-link">
@@ -89,7 +99,7 @@ function GalleryWithLinks() {
         </div>
       </SRLWrapper>
     </Layout>
-  );
+  )
 }
 
-export default GalleryWithLinks;
+export default GalleryWithLinks

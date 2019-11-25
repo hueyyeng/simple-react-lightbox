@@ -1,37 +1,42 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   SRLLightboxThubnailGallery,
   SRLLightboxThubnailGalleryImage
-} from "../../styles";
+} from '../../styles'
 
 const SRLLightboxThubnailGalleryComponent = ({
-  images,
+  elements,
   currentId,
-  handleCurrentImage
+  handleCurrentElement,
+  thumbnailsOpacity
 }) => {
   return (
     <SRLLightboxThubnailGallery className="SRLThumbnails">
-      {images.map((i, index) => {
+      {elements.map((i, index) => {
         return (
           <SRLLightboxThubnailGalleryImage
-            onClick={() => handleCurrentImage(i.id)}
+            onClick={() => handleCurrentElement(i.id)}
+            thumbnailsOpacity={thumbnailsOpacity}
             key={index}
             className={`SRLThumb SRLThumb${index} ${
-              currentId === i.id ? "SRLSelected" : ""
+              currentId === i.id ? 'SRLSelected' : ''
             }`}
-            style={{ backgroundImage: `url("${i.src}")` }}
+            style={{
+              backgroundImage: `url(${i.source})`
+            }}
           />
-        );
+        )
       })}
     </SRLLightboxThubnailGallery>
-  );
-};
+  )
+}
 
-export default SRLLightboxThubnailGalleryComponent;
+export default SRLLightboxThubnailGalleryComponent
 
 SRLLightboxThubnailGalleryComponent.propTypes = {
-  images: PropTypes.array,
-  handleCurrentImage: PropTypes.func,
-  currentId: PropTypes.string
-};
+  elements: PropTypes.array,
+  handleCurrentElement: PropTypes.func,
+  currentId: PropTypes.string,
+  thumbnailsOpacity: PropTypes.number
+}
