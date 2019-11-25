@@ -176,11 +176,12 @@ Check the options below.
 | slideTransitionSpeed | number | 600 | Controls the transition speed of when an image is swapped with another. **Be gentle** as using a really high value can potentially cause issues. This value is in millisecond.
 | thumbnailsOpacity | number | 0.4 | Controls the opacity of the thumbnails.
 | transitionSpeed | number | 600 | Controls the transition speed of when the light-box is opened. This value is in millisecond.
-| transitionTimingFunction | string | 'ease' | Controls the transition timing function of when the light-box is opened. It supports all the value of the [css transition-timing-function options.](https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp)!_  |
+| transitionTimingFunction | string | 'ease' | Controls the transition timing function of when the light-box is opened. It supports all the value of the [css transition-timing-function options.](https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp)  |
 
 #### Yes, options! But how do I use them?
 
-Passing options is as simple as defining props for a React component. Actually, the options **are** props for the SimpleReactLightbox component. I will strongly recommend to create a constant with all the options and then [spread it](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) in the component. Is fast, readable and easy to change. Thanks ES6 😎
+Passing options is as simple as defining props for a React component. Actually, the options **are** props for the SRLWrapper component. I will strongly recommend to create a constant with all the options and then [spread it](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) in the component. Is fast, readable and easy to change. Thanks ES6 😎
+Remember that you can have as many light-box as you want. Just import the SRLWrapper and use it to wrap your images.
 
 ```jsx
 import React from "react";
@@ -204,7 +205,7 @@ const options = {
 
 function MyComponent() {
   return (
-    <div className="App">
+    <div className="MyComponent">
       /* Using the spread operator, we spread the options. */
      <SRLWrapper {...options}>
         // Your images here
