@@ -1,6 +1,6 @@
 # Simple React Light-box (SRL)
 
-![Simple React Light-box - Logo](https://www.simple-react-lightbox.dev/images/SRL_Logo_Git.jpeg?)
+![Simple React Light-box - Logo](https://www.simple-react-lightbox.dev/images/SRL_Logo_Git.jpeg)
 
 [![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox.svg?token=RytKLBgaYszcR25z6ZLP&branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
@@ -35,7 +35,7 @@ From version 1.3 you can create a gallery with links and images as thumbnail. Th
 
 **Simple React Lightbox** comes with many features: please check the [options](#options) section to learn more.
 
-![Simple React Lightbox - Features](https://www.simple-react-lightbox.dev/images/SRL_Icons_Git.jpeg?)
+![Simple React Lightbox - Features](https://www.simple-react-lightbox.dev/images/SRL_Icons_Git.jpeg)
 <br/>
 
 ---
@@ -56,7 +56,7 @@ yarn add simple-react-lightbox
 
 #### Demo
 
-I have provided a working demo on Codesandbox where you can also play with the options and see the light-box in action. This is the same as runnin gthe demo locally.
+I have provided a working demo on Codesandbox where you can also play with the options and see the light-box in action. This is the same as runnin the demo locally.
 
 [![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
 
