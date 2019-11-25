@@ -56,7 +56,7 @@ yarn add simple-react-lightbox
 
 #### Demo
 
-I have provided a working demo on Codesandbox where you can also play with the options and see the light-box in action. This is the same as runnin the demo locally.
+I have provided a working demo on Codesandbox where you can also play with the options and see the light-box in action. This is the same as running the demo locally.
 
 [![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
 
@@ -85,7 +85,6 @@ export default App;
 Next you want to import and use the **SRLWrapper** component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
 
 ```jsx
-import React from "react";
 import { SRLWrapper } from "simple-react-lightbox"; // Import SRLWrapper
 
 function MyComponent() {
@@ -108,6 +107,19 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 ![Simple React Lightbox - Default options](https://www.simple-react-lightbox.dev/images/SRL_Example1_Git.jpeg)
 
 ###### The light-box with the default options
+
+#### Using it with Gatbsy
+If you want to use it with Gatbsy, make sure to check the [wrapRootElement api](https://www.gatsbyjs.org/docs/browser-apis/#wrapRootElement) from Gatsby documentation.
+Just edit the "gatsby-browser.js" and "gatsby-ssr.js" file to wrap everything with the SimpleReactLightbox component.
+
+```jsx
+import React from "react"
+import SimpleReactLightbox from "simple-react-lightbox"
+
+export const wrapRootElement = ({ element }) => {
+  return <SimpleReactLightbox>{element}</SimpleReactLightbox>
+}
+```
 
 #### Custom gallery
 
@@ -148,7 +160,7 @@ Check the options below.
 
 | Option | Type | Default | Description |
 | --------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| autoplaySpeed   | number  | 3000 | Controls the auto play change interval. **Set it to 0** if you don't want to use the auto play functionallity and hide the button. |
+| autoplaySpeed   | number  | 3000 | Controls the auto play change interval. **Set it to 0** if you don't want to use the auto play functionality and hide the button. |
 | buttonIconPadding | string  | '0px ' | Increases the padding between the icon and the sides of the button. The more padding you add the smaller the icon will look.
 | buttonsBackgroundColor | string  | 'rgba(0, 0, 0, 0.9)'  | Controls the background color of the buttons.  Any CSS Color value is valid.
 | buttonsIconColor | string  | 'rgba(255, 255, 255, 0.8)' | Controls the color of the icons inside the buttons.  Any CSS Color value is valid but there is some magic 🎩 happening in here: if you use an rgba() value set an opacity (like “0.8” as showed in the default value), when you hover with the mouse on the icon this will create a nice CSS hover effect by automatically changing the opacity to “1”, regardless the colour you choose.
@@ -158,7 +170,7 @@ Check the options below.
 | captionFontStyle | string | 'inherit' | Controls the font style of the caption. (This is just the CSS property text-transform (none/capitalize/uppercase/lowercase/initial/inherit))
 | captionFontWeight | string | 'inherit' | Controls the font weight of the caption.
 | enablePanzoom | boolean | true | Enables or disables the pan-zoom on the image. If you are having issues with the pan-zoom you can disable it from this option.
-| hideControlsAfter | number | 3000 | Controls after how long it will takes for the controls and thumbails to be hidden. By default all the controls and the thumbnails will be hidden after 3 seconds, to create a more immersive experience. If you want the controls and thumbnails to be always visible **set this to 0**. | overlayColor | string | 'rgba(0, 0, 0, 0.9)' | The background color for the light-box.
+| hideControlsAfter | number | 3000 | Controls after how long it will takes for the controls and thumbnails to be hidden. By default all the controls and the thumbnails will be hidden after 3 seconds, to create a more immersive experience. If you want the controls and thumbnails to be always visible **set this to 0**. | overlayColor | string | 'rgba(0, 0, 0, 0.9)' | The background color for the light-box.
 | showCaption | boolean | true | Shows/hides the caption. _The caption of the images is generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
 | showThumbnails | boolean | true | Shows/hides the thumbnail gallery.
 | slideTransitionSpeed | number | 600 | Controls the transition speed of when an image is swapped with another. **Be gentle** as using a really high value can potentially cause issues. This value is in millisecond.
@@ -168,48 +180,40 @@ Check the options below.
 
 #### Yes, options! But how do I use them?
 
-Passing options is as simple as defining props for a React component. Actually, the options **are** props for the SimpleReactLightbox component. I will strongely reccomend to create a constant with all the options and then [spread it](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) in the component. Is fast, readable and easy to change. Thanks ES6 😎
+Passing options is as simple as defining props for a React component. Actually, the options **are** props for the SimpleReactLightbox component. I will strongly recommend to create a constant with all the options and then [spread it](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) in the component. Is fast, readable and easy to change. Thanks ES6 😎
 
 ```jsx
 import React from "react";
 import MyComponent from "./components/MyComponent";
-// Import Simple React Lightbox
-import SimpleReactLightbox from "simple-react-lightbox";
+// Import SRLWrapper
+import {SRLWrapper} from "simple-react-lightbox";
 
 // Create an object with the options that we want to use
 const options = {
   overlayColor: "rgb(25, 136, 124)",
-  captionStyle: {
-    captionColor: "#a6cfa5",
-    captionFontFamily: "Raleway, sans-serif",
-    captionFontSize: "22px",
-    captionFontWeight: "300",
-    captionFontStyle: "capitalize"
-  },
-  buttonsStyle: {
-    buttonsBackgroundColor: "#1b5245",
-    buttonsIconColor: "rgba(126, 172, 139, 0.8)"
-  },
+  captionColor: "#a6cfa5",
+  captionFontFamily: "Raleway, sans-serif",
+  captionFontSize: "22px",
+  captionFontWeight: "300",
+  captionFontStyle: "capitalize"
+  buttonsBackgroundColor: "#1b5245",
+  buttonsIconColor: "rgba(126, 172, 139, 0.8)"
   autoplaySpeed: 1500,
   transitionSpeed: 900,
 };
 
-function App() {
+function MyComponent() {
   return (
     <div className="App">
-      /* Using the spread operator, we spread the options.
-      You could also define the options one by one like
-     <SimpleReactLightbox overlayColor={"rgba(255,255,255,0.9)"} captionStyle={{captionColor: "red"}}
-     But...why?
-     */
-     <SimpleReactLightbox {...options}>
-        <MyComponent /> // Your App logic
-      </SimpleReactLightbox>
+      /* Using the spread operator, we spread the options. */
+     <SRLWrapper {...options}>
+        // Your images here
+      </SRLWrapper>
     </div>
   );
 }
 
-export default App;
+export default MyComponent;
 ```
 
 ![Simple React Lightbox - Default options](https://www.simple-react-lightbox.dev/images/SRL_Example2_Git.jpeg)
@@ -243,7 +247,7 @@ const MyComponent = props => {
 export withSRLContext(MyComponent);
 ```
 
-To be honest I don't really see a reason to use that, especially the "closeLightbox" method so I might consider to remove this in the near future.
+To be honest I don't really see a reason to use that so I might consider to remove this in the near future.
 
 ## PanZoom functionality
 I added this feature as I think is really cool but is not 100% perfect yet. So in case you have issues with it, just disable it from the [options](#options).
