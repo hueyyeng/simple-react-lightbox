@@ -5,7 +5,7 @@
 [![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox.svg?token=RytKLBgaYszcR25z6ZLP&branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
 ### What's new in Version 2.0
-A lot has changed, but the core functionallity remains the same.
+A lot has changed, but the core functionality remains the same.
 - Improved and optimised code
 - Each light-box is now individually configurable and can now have different styles and options! 🥳
 - Added validation for the images (If you have a broken image it will be ignored and won't trigger the light-box)
