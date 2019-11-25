@@ -222,7 +222,7 @@ SRLWrapper.propTypes = {
 SRLWrapper.defaultProps = {
   defaultOptions: {
     autoplaySpeed: 3000,
-    buttonIconPadding: '0px',
+    buttonsIconPadding: '0px',
     buttonsBackgroundColor: 'rgba(30,30,36,0.8)',
     buttonsIconColor: 'rgba(255, 255, 255, 0.8)',
     buttonsSize: '40px',
