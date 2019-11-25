@@ -5,10 +5,10 @@
       text-align: center;
     }
     img {
-      width: 125px;
+      width: 200px;
       height: auto;
       @media (max-width: 768px) {
-        width: 100px;
+        width: 150px;
         height: auto;
       }
     }
@@ -31,7 +31,6 @@
           margin: 0 auto;
         }
         &:last-child {
-          margin-left: 20px;
           @media (max-width: 768px) {
             margin: 0 auto;
           }

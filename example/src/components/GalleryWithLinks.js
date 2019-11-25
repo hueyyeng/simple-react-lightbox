@@ -4,7 +4,12 @@ import { SRLWrapper } from 'simple-react-lightbox'
 
 const options = {
   overlayColor: 'rgb(200, 200, 200)',
-  showCaption: false
+  showCaption: false,
+  buttonsBackgroundColor: 'rgba(140, 94, 88, 0.8)',
+  buttonsIconColor: 'rgba(219, 219, 219, 0.7)',
+  showThumbnails: false,
+  transitionSpeed: 1000,
+  transitionTimingFunction: 'linear'
 }
 
 function GalleryWithLinks() {
