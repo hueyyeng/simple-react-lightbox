@@ -16,6 +16,8 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
   // Imports the context
   const context = useContext(SRLCtx)
 
+  // console.log(context)
+
   // Sets a new Ref which will be used to target the div with the images
   const imagesContainer = useRef(null)
 
@@ -89,7 +91,7 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     // }
 
     // Loop through the elemenents or the links to add them to the context
-    const handleElementsWithContext = array => {
+    const handleElementsWithContext = (array, elementType) => {
       const elements = array.map((e, index) => {
         // If the images is loaded and not broken
         if (e.isLoaded) {
@@ -102,7 +104,10 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
           const element = {
             // Grabs the "src" attribute from the image/video.
             // If it's a link grabs the "href" attribute.
-            source: e.img.currentSrc || e.img.src || e.img.href || null,
+            source:
+              elementType === 'IMG'
+                ? e.img.currentSrc || e.img.src || e.img.href || null
+                : e.img.parentElement.href || null,
             // Grabs the "alt" attribute from the image or the "textContent" from the video.
             // If it's a link grabs the "alt" attribute from the children image.
             caption:
@@ -143,12 +148,15 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
 
     // Check if the images are loaded using "imagesLoaded" by Desandro (LOVE)
     // When te images are loaded set the state to TRUE and run the function to handle the context
-    function handleLoadedImages(array) {
+    function handleLoadedImages(array, elementsAreLinks) {
       imagesLoaded(array, function(instance) {
+        // Checks if the element (the first one) is an image or a link. If it's a link, the user is using the gallery
+        // And we need to grab the correct source of the image, not the thumbnail
+        const elementType = instance.elements[0].nodeName
         if (instance.isComplete) {
           setImagesAreLoaded(true)
           if (imagesAreLoaded) {
-            handleElementsWithContext(instance.images)
+            handleElementsWithContext(instance.images, elementType)
           }
         }
       })
