@@ -109,7 +109,7 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 
 ###### The light-box with the default options
 
-#### 🆕 Custom gallery
+#### Custom gallery
 
 If you want to use the light-box in a more traditional way, like if you want to create a gallery in which thumbnails are wrapped in a link that points to a full width image, now you can. (You can check the "Gallery with links" example page on the CodeSandbox [demo](#demo)).
 
@@ -224,7 +224,6 @@ Sometimes you may have a lot of images and yes, the user could open the light-bo
 | Method        | Description                                        |
 | ------------- | -------------------------------------------------- |
 | openLightbox  | Opens the light-box starting from the first image. |
-| closeLightbox | Closes the light-box.                              |
 
 and this is how you use the High Order Component
 
@@ -237,7 +236,6 @@ const MyComponent = props => {
   // We have access to the methods inside the props
   <div>
     <button onClick={props.openLightbox}>Open lightbox</button>
-    <a onClick={props.closeLightbox}>Close lightbox</a>
   </div>
 }
 
