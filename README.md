@@ -1,6 +1,6 @@
-# Simple-React-Lightbox (SRL)
+# Simple React Light-box (SRL)
 
-![Simple React Lightbox - Logo](https://www.simple-react-lightbox.dev/images/SRL_Logo_Git.jpeg)
+![Simple React Light-box - Logo](https://www.simple-react-lightbox.dev/images/SRL_Logo_Git.jpeg?)
 
 [![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox.svg?token=RytKLBgaYszcR25z6ZLP&branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
@@ -35,7 +35,7 @@ From version 1.3 you can create a gallery with links and images as thumbnail. Th
 
 **Simple React Lightbox** comes with many features: please check the [options](#options) section to learn more.
 
-![Simple React Lightbox - Features](https://www.simple-react-lightbox.dev/images/SRL_Icons_Git.jpeg)
+![Simple React Lightbox - Features](https://www.simple-react-lightbox.dev/images/SRL_Icons_Git.jpeg?)
 <br/>
 
 ---
