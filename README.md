@@ -196,7 +196,7 @@ const options = {
   captionFontFamily: "Raleway, sans-serif",
   captionFontSize: "22px",
   captionFontWeight: "300",
-  captionFontStyle: "capitalize"
+  captionFontStyle: "capitalize",
   buttonsBackgroundColor: "#1b5245",
   buttonsIconColor: "rgba(126, 172, 139, 0.8)"
   autoplaySpeed: 1500,
