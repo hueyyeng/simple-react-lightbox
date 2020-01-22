@@ -198,7 +198,7 @@ const options = {
   captionFontWeight: "300",
   captionFontStyle: "capitalize",
   buttonsBackgroundColor: "#1b5245",
-  buttonsIconColor: "rgba(126, 172, 139, 0.8)"
+  buttonsIconColor: "rgba(126, 172, 139, 0.8)",
   autoplaySpeed: 1500,
   transitionSpeed: 900,
 };
