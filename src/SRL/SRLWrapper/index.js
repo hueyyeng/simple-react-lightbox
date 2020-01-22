@@ -110,11 +110,10 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
                 : e.img.parentElement.href || null,
             // Grabs the "alt" attribute from the image or the "textContent" from the video.
             // If it's a link grabs the "alt" attribute from the children image.
-            caption:
-              e.img.alt || e.img.textContent || e.img.children[0].alt || null,
+            caption: e.img.alt || e.img.textContent || null,
             // Grabs the newly created "id" attribute from the image/video
             // If it's a link grabs the "id" attribute from the children image.
-            id: e.img.id || e.img.children[0].id || null,
+            id: e.img.id || null,
             // Grabs the "width" from the image/video
             // If it's a link we can't grab the width and we will need to calculate it after
             width: isImage
