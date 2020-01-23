@@ -94,6 +94,8 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     const handleElementsWithContext = (array, elementType) => {
       const elements = array.map((e, index) => {
         // If the images is loaded and not broken
+        // Also checks if the image is a Base64 image
+        // const isBase64Image = e.img.src.includes("base64")
         if (e.isLoaded) {
           e.img.id = `element${index}`
           // Check if it's an image
@@ -202,22 +204,25 @@ export default SRLWrapper
 
 SRLWrapper.propTypes = {
   defaultOptions: PropTypes.shape({
-    overlayColor: PropTypes.string,
-    transitionSpeed: PropTypes.number,
-    transitionTimingFunction: PropTypes.string,
     autoplaySpeed: PropTypes.number,
-    slidesTransitionSpeed: PropTypes.number,
-    showThumbnails: PropTypes.bool,
-    showCaption: PropTypes.bool,
+    buttonsIconPadding: PropTypes.string,
+    buttonsBackgroundColor: PropTypes.string,
+    buttonsIconColor: PropTypes.string,
+    buttonsSize: PropTypes.string,
     captionColor: PropTypes.string,
     captionFontFamily: PropTypes.string,
     captionFontSize: PropTypes.string,
-    captionFontWeight: PropTypes.string,
     captionFontStyle: PropTypes.string,
-    buttonsBackgroundColor: PropTypes.string,
-    buttonsIconColor: PropTypes.string,
-    buttonsIconPadding: PropTypes.string,
-    buttonsSize: PropTypes.string
+    captionFontWeight: PropTypes.string,
+    enablePanzoom: PropTypes.bool,
+    hideControlsAfter: PropTypes.number,
+    overlayColor: PropTypes.string,
+    showCaption: PropTypes.bool,
+    showThumbnails: PropTypes.bool,
+    slideTransitionSpeed: PropTypes.number,
+    thumbnailsOpacity: PropTypes.number,
+    transitionSpeed: PropTypes.number,
+    transitionTimingFunction: PropTypes.string
   }),
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -239,6 +244,7 @@ SRLWrapper.defaultProps = {
     captionFontStyle: 'inherit',
     captionFontWeight: 'inherit',
     enablePanzoom: true,
+    hideControlsAfter: 3000,
     overlayColor: 'rgba(0, 0, 0, 0.9)',
     showCaption: true,
     showThumbnails: true,

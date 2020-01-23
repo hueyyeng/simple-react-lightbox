@@ -5,7 +5,7 @@ import SRLLightboxSlideComponent from './SRLLightboxSlide'
 import SRLLightboxControls from './SRLLightboxControls'
 import fscreen from 'fscreen'
 import panzoom from 'panzoom'
-import IdleTimer from 'react-idle-timer'
+import createActivityDetector from 'activity-detector'
 
 const _findIndex = require('lodash/findIndex')
 const _find = require('lodash/find')
@@ -33,8 +33,6 @@ const SRLLightboxGallery = ({
   const SRLElementPanzoomRef = useRef()
   // Ref for the SRLStage
   const SRLStageRef = useRef()
-  // Ref for IdleTimer
-  const idleRef = useRef()
 
   useEffect(() => {
     // Calculates the start position for the panzoom
@@ -75,7 +73,7 @@ const SRLLightboxGallery = ({
         }
       }
     }
-  }, [enablePanzoom, panzoomEnabled])
+  }, [enablePanzoom, hideControlsAfter, panzoomEnabled])
 
   // Handle Panzoom (set the state to true)
   const handlePanzoom = useCallback(() => {
@@ -245,6 +243,17 @@ const SRLLightboxGallery = ({
     }
   }
 
+  function useIdle(options) {
+    useEffect(() => {
+      const activityDetector = createActivityDetector(options)
+      activityDetector.on('idle', handleOnIdle)
+      activityDetector.on('active', handleOnActive)
+      return () => activityDetector.stop()
+    }, [options])
+  }
+
+  useIdle({ timeToIdle: hideControlsAfter, ignoredEventsWhenIdle: [] })
+
   useEffect(() => {
     // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
     if (currentElement.id === undefined) {
@@ -304,14 +313,6 @@ const SRLLightboxGallery = ({
       ref={SRLStageRef}
       overlayColor={options.overlayColor}
     >
-      <IdleTimer
-        ref={idleRef.current}
-        element={document}
-        onActive={handleOnActive}
-        onIdle={handleOnIdle}
-        debounce={250}
-        timeout={hideControlsAfter}
-      />
       <SRLLightboxControls {...buttonOptions} {...controls} />
       <SRLLightboxSlideComponent
         {...currentElement}

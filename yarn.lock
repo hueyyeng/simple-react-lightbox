@@ -1845,6 +1845,11 @@ acorn@^7.0.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.0.tgz#949d36f2c292535da602283586c2477c57eb2d6c"
   integrity sha512-kL5CuoXA/dgxlBbVrflsflzQ3PAas7RYZB52NOm/6839iVYJgKMJ3cQJD+t2i5+qFa8h3MDpEOJiS64E8JLnSQ==
 
+activity-detector@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/activity-detector/-/activity-detector-3.0.0.tgz#e46696d137c5946b9b1e22c26f4671c630d7616b"
+  integrity sha512-N1fl3FEAjh8jZcYZQHVOsziWFk3U6xXHIUPATTOChYvlTBJbnW9Y5A2PlVAxJFQKLqZRLS5G/hP5qh9oXQktdw==
+
 address@1.1.2, address@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/address/-/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
@@ -8759,11 +8764,6 @@ react-error-overlay@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.2.tgz#642bd6157c6a4b6e9ca4a816f7ed30b868c47f81"
   integrity sha512-DHRuRk3K4Lg9obI6J4Y+nKvtwjasYRU9CFL3ud42x9YJG1HbQjSNublapC/WBJOA726gNUbqbj0U2df9+uzspQ==
-
-react-idle-timer@^4.2.12:
-  version "4.2.12"
-  resolved "https://registry.yarnpkg.com/react-idle-timer/-/react-idle-timer-4.2.12.tgz#3756e3256cd225f319ed093b3d5ebe0d98fcc498"
-  integrity sha512-YD/2Oe4PU5uRv/TH6zTxykKMHpRHWHPEWCUohda81o/jzsrlgyUrklfy46fd8WjgYhlNkJKsiX/GXJAQQC1hcQ==
 
 react-is@^16.8.1, react-is@^16.8.4:
   version "16.9.0"
