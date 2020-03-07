@@ -3,12 +3,18 @@ import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
 import imagesLoaded from 'imagesLoaded'
 
-const SRLWrapper = ({ options, children, defaultOptions }) => {
-  // IsEqual from loadash to do a deep comparison of the objects
+const SRLWrapper = ({
+  options,
+  callbacks,
+  children,
+  defaultOptions,
+  defaultCallbacks
+}) => {
+  // IsEqual from lodash to do a deep comparison of the objects
   const isEqual = require('lodash/isEqual')
   const isEmpty = require('lodash/isEmpty')
 
-  // Add a state to check if the event listenr is set
+  // Add a state to check if the event listener is set
   const [listenerIsSet, setListenerIsSet] = useState(false)
 
   const [imagesAreLoaded, setImagesAreLoaded] = useState(false)
@@ -16,32 +22,41 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
   // Imports the context
   const context = useContext(SRLCtx)
 
-  // console.log(context)
-
   // Sets a new Ref which will be used to target the div with the images
   const imagesContainer = useRef(null)
 
   useEffect(() => {
     // Dispatch the Action to grab the options
-    const grabOptions = options => {
+    const grabSettings = (options, callbacks) => {
       // console.log('dispatched options')
-      // We merge the options that we receive from the user via Props with the original ones (defaultOptions)
-      // If the user hasn't provided any options via props we make mergedOptions use just the default options
-      let mergedOptions = {}
-      if (isEmpty(options)) {
-        mergedOptions = {
-          ...defaultOptions
+      // We merge the settings that we receive from the user via the props with the original ones (defaultOptions and defaultCallbacks)
+      // If the user hasn't provided any options/callbacks via props we make mergedSettings use just the default options/callbacks
+      let mergedSettings = {}
+      if (isEmpty(options) && isEmpty(callbacks)) {
+        mergedSettings = {
+          options: {
+            ...defaultOptions
+          },
+          callbacks: {
+            ...defaultCallbacks
+          }
         }
       } else {
-        mergedOptions = {
-          ...defaultOptions,
-          ...options
+        mergedSettings = {
+          options: {
+            ...defaultOptions,
+            ...options
+          },
+          callbacks: {
+            ...defaultCallbacks,
+            ...callbacks
+          }
         }
       }
-      if (!isEqual(mergedOptions, context.options)) {
+      if (!isEqual(mergedSettings.options, context.options)) {
         context.dispatch({
-          type: 'GRAB_OPTIONS',
-          mergedOptions
+          type: 'GRAB_SETTINGS',
+          mergedSettings
         })
       }
     }
@@ -90,7 +105,7 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     //   return dataUrl
     // }
 
-    // Loop through the elemenents or the links to add them to the context
+    // Loop through the elements or the links to add them to the context
     const handleElementsWithContext = (array, elementType) => {
       const elements = array.map((e, index) => {
         // If the images is loaded and not broken
@@ -134,7 +149,7 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
             // videoThumbnail: isImage ? null : generateScreen(e)
           }
 
-          // Adds an event listerner that will trigger the function to open the lightbox (passed using the Context)
+          // Adds an event listener that will trigger the function to open the lightbox (passed using the Context)
           e.img.addEventListener('click', e => {
             // Prevent the image from opening
             e.preventDefault()
@@ -168,7 +183,7 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     }
 
     // Grabs the options set by the user first
-    grabOptions({ ...options })
+    grabSettings(options, callbacks)
     // Grabs images and videos (REMOVES videos for now)
     const collectedElements = imagesContainer.current.querySelectorAll('img')
     // Grabs data attributes (in links)
@@ -198,7 +213,9 @@ const SRLWrapper = ({ options, children, defaultOptions }) => {
     isEmpty,
     defaultOptions,
     listenerIsSet,
-    imagesAreLoaded
+    imagesAreLoaded,
+    defaultCallbacks,
+    callbacks
   ])
 
   return <div ref={imagesContainer}>{children}</div>
@@ -226,13 +243,19 @@ SRLWrapper.propTypes = {
     slideTransitionSpeed: PropTypes.number,
     thumbnailsOpacity: PropTypes.number,
     transitionSpeed: PropTypes.number,
-    transitionTimingFunction: PropTypes.string
+    transitionTimingFunction: PropTypes.string,
+    onSlideChange: PropTypes.func
+  }),
+  defaultCallbacks: PropTypes.shape({
+    onSlideChange: PropTypes.func,
+    onLightboxClosed: PropTypes.func
   }),
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
-  options: PropTypes.object
+  options: PropTypes.object,
+  callbacks: PropTypes.object
 }
 
 SRLWrapper.defaultProps = {
@@ -256,5 +279,11 @@ SRLWrapper.defaultProps = {
     thumbnailsOpacity: 0.4,
     transitionSpeed: 500,
     transitionTimingFunction: 'ease'
+  },
+  defaultCallbacks: {
+    onCountSlides: () => {},
+    onSlideChange: () => {},
+    onLightboxClosed: () => {},
+    onLightboxOpened: () => {}
   }
 }

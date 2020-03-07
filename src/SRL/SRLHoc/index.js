@@ -9,6 +9,9 @@ export function withSRLContext(Component) {
           <Component
             {...props}
             openLightbox={() => state.dispatch({ type: 'HANDLE_ELEMENT' })}
+            openAtIndex={index =>
+              state.dispatch({ type: 'OPEN_AT_INDEX', index: index })
+            }
           />
         )}
       </SRLCtx.Consumer>

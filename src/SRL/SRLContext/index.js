@@ -26,11 +26,18 @@ const initialState = {
     transitionTimingFunction: 'ease'
   },
   selectedElement: {
-    caption: undefined,
-    height: undefined,
-    id: undefined,
-    source: undefined,
-    width: undefined
+    caption: '',
+    height: 0,
+    id: '',
+    source: '',
+    thumbnail: '',
+    width: ''
+  },
+  callbacks: {
+    onCountSlides: () => {},
+    onSlideChange: () => {},
+    onLightboxClosed: () => {},
+    onLightboxOpened: () => {}
   }
 }
 
@@ -40,12 +47,10 @@ const SRLContextComponent = props => {
   // Reducer
   const reducer = (state, action) => {
     switch (action.type) {
-      case 'GRAB_OPTIONS':
+      case 'GRAB_SETTINGS':
         return {
           ...state,
-          options: {
-            ...action.mergedOptions
-          }
+          ...action.mergedSettings
         }
       case 'GRAB_ELEMENTS':
         return {
@@ -58,6 +63,14 @@ const SRLContextComponent = props => {
           isOpened: true,
           selectedElement: {
             ...action.element
+          }
+        }
+      case 'OPEN_AT_INDEX':
+        return {
+          ...state,
+          isOpened: true,
+          selectedElement: {
+            ...state.elements[action.index]
           }
         }
       case 'CLOSE_LIGHTBOX':

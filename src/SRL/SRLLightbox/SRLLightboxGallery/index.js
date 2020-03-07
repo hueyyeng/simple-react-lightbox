@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useContext
+} from 'react'
 import PropTypes from 'prop-types'
 import { SRLLightboxGalleryStage } from './styles'
 import SRLLightboxSlideComponent from './SRLLightboxSlide'
@@ -6,19 +12,29 @@ import SRLLightboxControls from './SRLLightboxControls'
 import fscreen from 'fscreen'
 import panzoom from 'panzoom'
 import createActivityDetector from 'activity-detector'
+import { SRLCtx } from '../../SRLContext'
 
 const _findIndex = require('lodash/findIndex')
-const _find = require('lodash/find')
 
 const SRLLightboxGallery = ({
   options,
+  callbacks,
   selectedElement,
   elements,
-  isOpened,
   dispatch
 }) => {
+  // Context
+  const ctx = useContext(SRLCtx)
+
   // Destructuring the options
   const { autoplaySpeed, enablePanzoom, hideControlsAfter } = options
+  // Destructuring the callbacks passed by user and we need to check if those are functions
+  const {
+    onCountSlides,
+    onSlideChange,
+    onLightboxClosed,
+    onLightboxOpened
+  } = callbacks
 
   // In this component we set the state using the context.
   // We don't want to manipulate the context every time so we create a localized state
@@ -33,6 +49,16 @@ const SRLLightboxGallery = ({
   const SRLElementPanzoomRef = useRef()
   // Ref for the SRLStage
   const SRLStageRef = useRef()
+
+  const getElementIndex = useCallback(
+    id => {
+      const elIndex = _findIndex(elements, function(el) {
+        return el.id === id
+      })
+      return elIndex
+    },
+    [elements]
+  )
 
   useEffect(() => {
     // Calculates the start position for the panzoom
@@ -73,7 +99,17 @@ const SRLLightboxGallery = ({
         }
       }
     }
-  }, [enablePanzoom, hideControlsAfter, panzoomEnabled])
+  }, [
+    ctx,
+    ctx.callbacks,
+    currentElement,
+    elements.length,
+    enablePanzoom,
+    hideControlsAfter,
+    onCountSlides,
+    panzoomEnabled,
+    selectedElement
+  ])
 
   // Handle Panzoom (set the state to true)
   const handlePanzoom = useCallback(() => {
@@ -89,65 +125,18 @@ const SRLLightboxGallery = ({
     }
   }, [enablePanzoom])
 
-  // Handle Previous Element
-  const handlePrevElement = useCallback(
-    id => {
-      // Reset the panzoom state
-      handleDisablePanzoom()
-      /* We receive the ID of the current element and we want the element after that.
-        Let's find the current position of the current element in the array */
-      // const currentPosition = imagesGallery.findIndex(i => i.id === id);
-      const currentPosition = _findIndex(elements, function(i) {
-        return i.id === id
-      })
-      /* The prev element will be the prev item in the array but it could be "undefined" as it goes negative. If it does we need to start from the last item. */
-      const prevElement =
-        elements[currentPosition - 1] || elements[elements.length - 1]
-      // Set the state with the new element
-      setCurrentElement({
-        source: prevElement.source,
-        caption: prevElement.caption,
-        id: prevElement.id,
-        width: prevElement.width,
-        height: prevElement.height
-      })
-    },
-    [elements, handleDisablePanzoom]
-  )
-
-  // Handle Next element
-  const handleNextElement = useCallback(
-    id => {
-      // Reset the panzoom state
-      handleDisablePanzoom()
-      /* We receive the ID of the current element and we want the element after that.
-      Let's find the current position of the current element in the array */
-      const currentPosition = _findIndex(elements, function(i) {
-        return i.id === id
-      })
-      /* The next element will be the next item in the array but it could be "undefined". If it's undefined we know we have reached the end and we go back to the first item */
-      const nextElement = elements[currentPosition + 1] || elements[0]
-      // Set the state with the new element
-      setCurrentElement({
-        source: nextElement.source,
-        caption: nextElement.caption,
-        id: nextElement.id,
-        width: nextElement.width,
-        height: nextElement.height
-      })
-    },
-    [elements, handleDisablePanzoom]
-  )
-
   // Handle Current Element
   const handleCurrentElement = useCallback(
     id => {
       // Reset the panzoom state
       handleDisablePanzoom()
+
+      // Grab the current element index
+      const currentElementIndex = getElementIndex(id)
+
       // Grab the current element
-      const currentElement = _find(elements, function(i) {
-        return i.id === id
-      })
+      const currentElement = elements[currentElementIndex]
+
       // Set the state with the new element
       setCurrentElement({
         source: currentElement.source,
@@ -156,8 +145,117 @@ const SRLLightboxGallery = ({
         width: currentElement.width,
         height: currentElement.height
       })
+
+      // Callback
+      if (typeof onSlideChange === 'function') {
+        ctx.callbacks.onSlideChange({
+          direction: 'selected',
+          slides: {
+            previous: elements[currentElementIndex - 1],
+            current: currentElement,
+            next: elements[currentElementIndex + 1]
+          },
+          index: currentElementIndex
+        })
+      }
     },
-    [elements, handleDisablePanzoom]
+
+    [
+      ctx.callbacks,
+      elements,
+      getElementIndex,
+      handleDisablePanzoom,
+      onSlideChange
+    ]
+  )
+
+  // Handle Previous Element
+  const handlePrevElement = useCallback(
+    id => {
+      // Reset the panzoom state
+      handleDisablePanzoom()
+
+      // Get the current element index
+      const currentElementIndex = getElementIndex(id)
+
+      /* The prev element will be the prev item in the array but it could be "undefined" as it goes negative.
+      If it does we need to start from the last item. */
+      const prevElement =
+        elements[currentElementIndex - 1] || elements[elements.length - 1]
+
+      setCurrentElement({
+        ...prevElement
+      })
+
+      // Callback
+      const index =
+        currentElementIndex - 1 === -1
+          ? elements.length - 1
+          : currentElementIndex - 1
+
+      if (typeof onSlideChange === 'function') {
+        ctx.callbacks.onSlideChange({
+          direction: 'left',
+          slides: {
+            previous: elements[index - 1],
+            current: prevElement,
+            next: elements[index + 1]
+          },
+          index
+        })
+      }
+    },
+    [
+      ctx.callbacks,
+      elements,
+      getElementIndex,
+      handleDisablePanzoom,
+      onSlideChange
+    ]
+  )
+
+  // Handle Next element
+  const handleNextElement = useCallback(
+    id => {
+      // Reset the panzoom state
+      handleDisablePanzoom()
+
+      // Get the current element index
+      const currentElementIndex = getElementIndex(id)
+
+      /* The next element will be the next item in the array but it could be "undefined".
+      If it's undefined we know we have reached the end and we go back to the first item */
+      const nextElement = elements[currentElementIndex + 1] || elements[0]
+
+      // Set the state with the new element
+      setCurrentElement({
+        ...nextElement
+      })
+
+      // Callback
+      const index =
+        currentElementIndex + 1 === elements.length
+          ? 0
+          : currentElementIndex + 1
+      if (typeof onSlideChange === 'function') {
+        ctx.callbacks.onSlideChange({
+          direction: 'right',
+          slides: {
+            previous: elements[index - 1],
+            current: nextElement,
+            next: elements[index + 1]
+          },
+          index
+        })
+      }
+    },
+    [
+      ctx.callbacks,
+      elements,
+      getElementIndex,
+      handleDisablePanzoom,
+      onSlideChange
+    ]
   )
 
   // Handle Close Lightbox
@@ -165,7 +263,11 @@ const SRLLightboxGallery = ({
     dispatch({
       type: 'CLOSE_LIGHTBOX'
     })
-  }, [dispatch])
+    // Callback
+    if (typeof onLightboxClosed === 'function') {
+      ctx.callbacks.onLightboxClosed()
+    }
+  }, [ctx.callbacks, dispatch, onLightboxClosed])
 
   // Handle Autoplay
   function useInterval(callback, delay) {
@@ -253,6 +355,7 @@ const SRLLightboxGallery = ({
 
   useIdle({ timeToIdle: hideControlsAfter, ignoredEventsWhenIdle: [] })
 
+  // This useEffect should only run once!
   useEffect(() => {
     // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
     if (currentElement.id === undefined) {
@@ -266,21 +369,31 @@ const SRLLightboxGallery = ({
     }
 
     // Adds a class to the body to remove the overflow and compensate for the scroll-bar margin
-    if (isOpened) {
-      document.body.classList.add('SRLOpened')
-      document.addEventListener(
-        'keydown',
-        handleLightboxWithKeys,
-        { once: true },
-        false
-      )
+    document.body.classList.add('SRLOpened')
+    document.addEventListener(
+      'keydown',
+      handleLightboxWithKeys,
+      { once: true },
+      false
+    )
+
+    // Callback
+    if (typeof onLightboxOpened === 'function') {
+      ctx.callbacks.onLightboxOpened()
     }
+
+    // Callback to count slides
+    if (typeof onCountSlides === 'function') {
+      ctx.callbacks.onCountSlides(elements.length)
+    }
+
     // Cleans up function to remove the class from the body
     return function cleanUp() {
       document.body.classList.remove('SRLOpened')
       document.removeEventListener('keydown', handleLightboxWithKeys, false)
     }
-  }, [currentElement, elements, handleLightboxWithKeys, isOpened, options])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Light-box controls
   const controls = {
@@ -325,6 +438,7 @@ const SRLLightboxGallery = ({
 
 SRLLightboxGallery.propTypes = {
   options: PropTypes.object,
+  callbacks: PropTypes.object,
   overlayColor: PropTypes.string,
   selectedElement: PropTypes.object,
   hideControlsAfter: PropTypes.number,
