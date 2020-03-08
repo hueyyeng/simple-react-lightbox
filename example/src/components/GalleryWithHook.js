@@ -55,7 +55,7 @@ const Content = () => {
                 />
                 <Button imageToOpen={value} light />
                 <a
-                  href="https://github.com/michelecocuccio/simple-react-lightbox#with-custom-hook"
+                  href="https://github.com/michelecocuccio/simple-react-lightbox#hook"
                   target="__blank"
                 >
                   Documentation on how to use

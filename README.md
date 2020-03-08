@@ -4,23 +4,24 @@
 
 [![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox.svg?token=RytKLBgaYszcR25z6ZLP&branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
-### What's new in Version 2.0
-A lot has changed, but the core functionality remains the same.
-- Improved and optimised code
-- Each light-box is now individually configurable and can now have different styles and options! 🥳
-- Added validation for the images (If you have a broken image it will be ignored and won't trigger the light-box)
-- Added "pan & zoom"* functionality and an option to disable it [PanZoom Functionality](#panzoom-functionality)
-- Added an option to open the image in full-screen
-- Added an option to control the size of the buttons
-- Added an option to control the opacity of the thumbnails
-- Added an option to control the speed of the transition and the easing of the light-box when opened
-- Added an option to hide the controls after a certain amount of time
+### Documentation: quick links
+- [A brief introduction](#a-brief-introduction)
+- [Get started](#how-to-use)
+- [Options](#options)
+- [Callbacks](#callbacks)
+- [Custom Hook](#hook)
+- [Panzoom functionality](#panzoom-functionality)
+
+### What's new in Version 2.5
+- Added a [custom hook](#hook)  to open the light-box from anywhere. You can just open the light-box or open it starting from a specific image.
+- Added [callbacks](#callbacks) that can be used when combining the light-box with other libraries. Check the example with Slick Carousel to sync the carousel and the slider.
+- **The High Order Component has been deprecated** in favour of the custom hook. If you were using it and updated the light-box to version 2.5 you might want to use the [custom hook](#hook) instead.
+
 
 ### Migrating from Version 1.0
 Nothing has changed, you will only see your light-box with the default options. That's because the options have now changed. Don't pass the options to the ```<SimpleReactLightbox/>``` component. Just pass the [options](#options) to the ```<SRLWrapper>```
 
-#### A brief introduction 🧐
-
+#### A brief introduction
 It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend and I had no control over the content of each post (the content was in a WYSIWYG editor).
 
 I checked online for some light-box for React but the way that they were working was that I had to declare the images beforehand in either an array, an object etc...but what if you don't know about the content and you just want to add a light-box to the images? 😞
@@ -52,13 +53,13 @@ or with Yarn
 yarn add simple-react-lightbox
 ```
 
-## How to use
+## Demo
 
-#### Demo
-
-I have provided a working demo on Codesandbox where you can also play with the options and see the light-box in action. This is the same as running the demo locally.
+I have provided a **full working demo** on CodeSandbox where you can also play with the options and see the light-box in action. This is the same as running the demo locally.
 
 [![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
+
+## How to use
 
 #### Instructions
 
@@ -108,18 +109,6 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 
 ###### The light-box with the default options
 
-#### Using it with Gatbsy
-If you want to use it with Gatbsy, make sure to check the [wrapRootElement api](https://www.gatsbyjs.org/docs/browser-apis/#wrapRootElement) from Gatsby documentation.
-Just edit the "gatsby-browser.js" and "gatsby-ssr.js" file to wrap everything with the SimpleReactLightbox component.
-
-```jsx
-import React from "react"
-import SimpleReactLightbox from "simple-react-lightbox"
-
-export const wrapRootElement = ({ element }) => {
-  return <SimpleReactLightbox>{element}</SimpleReactLightbox>
-}
-```
 
 #### Custom gallery
 
@@ -180,8 +169,7 @@ Check the options below.
 
 #### Yes, options! But how do I use them?
 
-Passing options is as simple as defining props for a React component. Actually, the options **are** props for the SRLWrapper component. I will strongly recommend to create a constant with all the options and then [spread it](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) in the component. Is fast, readable and easy to change. Thanks ES6 😎
-Remember that you can have as many light-box as you want. Just import the SRLWrapper and use it to wrap your images.
+Passing options is as simple as defining props for a React component. Actually, the options **are** props for the SRLWrapper component. I will strongly recommend to create a constant with all the options and then pass it to the component with the prop **options**.
 
 ```jsx
 import React from "react";
@@ -206,8 +194,7 @@ const options = {
 function MyComponent() {
   return (
     <div className="MyComponent">
-      /* Using the spread operator, we spread the options. */
-     <SRLWrapper {...options}>
+     <SRLWrapper options={options}>
         // Your images here
       </SRLWrapper>
     </div>
@@ -221,34 +208,84 @@ export default MyComponent;
 
 ###### The light-box with the custom options
 
-#### High Order Component
+#### Callbacks
+Callbacks can be used in case you need some information about the state of the light-box or to access the different slides (images). A good example of this could be if you, for example, wanted to sync a carousel with the light-box so that when you go through the images, your carousel is synced. (Check the example on )
 
-⚠️ **_Please note this feature might be removed in the future_** ⚠️
-Sometimes you may have a lot of images and yes, the user could open the light-box by clicking on the first one. But every website is designed differently and UI / UX play a big part when designing and coding a website. So I created a HOC _[High Order Component](https://reactjs.org/docs/higher-order-components.html)_ that you can use to get access to two methods:
+| Callback | Args | Return | Usage | Description |
+|--------------------------------------------------------------------------------------------------------------|--------------------------------------|----------------------------------|------------------------------|-------------------------------------|
+| onCountSlides | total | integer | (total) => yourFunction(total) | Use this to get the total of the slides. You can pass the total to your function and it will give back an **integer** with the total count of the slides/images on your light-box.
+| onSlideChange | object | object | (object) => yourFunction(object) | Use this every time a slide changes on the light-box. This function will give back an **object** with the followings: the **direction** of the slide, the **previous**, the **current** and the **next** slide (as an object) and an **index** (as an integer) with the index of the current slide.
+| onLightboxClosed | none | none | () => yourFunction() | Use this to detect when the light-box is closed
+| onLightboxOpened| none | none | () => yourFunction() | Use this to detect when the light-box is opened |
 
-| Method        | Description                                        |
-| ------------- | -------------------------------------------------- |
-| openLightbox  | Opens the light-box starting from the first image. |
-
-and this is how you use the High Order Component
+#### Yes, callbacks! But how do I use them?
+Callbacks are passed with the **callbacks** prop to the SRLWrapper.
+I will strongly recommend to create a constant with all of your callbacks and then pass it to the component with the prop **callbacks**.
 
 ```jsx
 import React from "react";
-// Import the High Order Component
-import { withSRLContext } from "simple-react-lightbox";
+import MyComponent from "./components/MyComponent";
+// Import SRLWrapper
+import {SRLWrapper} from "simple-react-lightbox";
 
-const MyComponent = props => {
-  // We have access to the methods inside the props
-  <div>
-    <button onClick={props.openLightbox}>Open lightbox</button>
-  </div>
+// Create an object with the callbacks that you want to use
+const callbacks = {
+    onCountSlides: total => countSlides(total),
+    onSlideChange: object => handleSlideChange(object),
+    onLightboxClosed: () => {},
+    onLightboxOpened: () => {}
+};
+
+function countSlides(total) {
+  console.log(total);
+  return total;
 }
 
-// Wrap your component with the High Order Component
-export withSRLContext(MyComponent);
+function handleSlideChange(object) {
+  console.log(object);
+  return object;
+}
+
+function MyComponent() {
+  return (
+    <div className="MyComponent">
+     <SRLWrapper callbacks={callbacks}>
+        // Your images here
+      </SRLWrapper>
+    </div>
+  );
+}
+
+export default MyComponent;
 ```
 
-To be honest I don't really see a reason to use that so I might consider to remove this in the near future.
+## Hook
+You can use a custom hook to open the light-box even by selecting a specific image. If you don't provide any argument to the function the light-box will just open it from the first image. Check the [demo](#demo) to see it in action. In the example below we are creating a **reusable** React component (a button) that can open the light-box from anywhere in your app.
+
+```jsx
+import React from 'react'
+import { useLightbox } from 'simple-react-lightbox'
+
+/*
+We can use the provided hook in case you want
+to open the lightbox from a button or anything :)
+*/
+
+const Button = props => {
+  const openLightbox = useLightbox()
+
+  return (
+    <button
+      onClick={() => openLightbox(props.imageToOpen)}
+    >
+      Open the lightbox
+    </button>
+  )
+}
+
+export default Button
+```
+
 
 ## PanZoom functionality
 I added this feature as I think is really cool but is not 100% perfect yet. So in case you have issues with it, just disable it from the [options](#options).
