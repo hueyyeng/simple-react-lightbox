@@ -1,47 +1,43 @@
 import React from 'react'
 import SRLLogo from '../assets/images/SRL_Logo.png'
-import { withSRLContext } from 'simple-react-lightbox'
+import Button from './Button'
 import { Link } from 'react-router-dom'
-/*
-We can use an High Order Component to pass the context and use the methods provided
-in case we want to open the lightbox from a button or anything :)
-*/
 
-// Pass the props as an argument
-const Header = props => {
+const Header = () => {
   return (
     <div id="header">
       <div className="container">
-        <div className="row align-items-end">
-          <div className="SRL_Logo col-md-6 col-12">
+        <div className="row">
+          <div className="SRL_Logo col-12">
             <img
               src={SRLLogo}
               alt="Simple React Lightbox - A simple but functional light-box for React"
             />
           </div>
-          <div className="col-md-6 col-12">
+          <div className="col-md-8 col-12">
             <nav>
               <ul>
                 <li>
-                  <Link to="/">Simple Gallery</Link>
+                  <Link to="/">Gallery</Link>
                 </li>
                 <li>
-                  <Link to="/example-two/">Mixed content</Link>
+                  <Link to="/with-text/">Gallery and text</Link>
                 </li>
                 <li>
-                  <Link to="/gallery-with-links/">Gallery with links</Link>
+                  <Link to="/with-thumbs/">Gallery with thumbs</Link>
+                </li>
+                <li>
+                  <Link to="/with-hook/">With Hook</Link>
+                </li>
+                <li>
+                  <Link to="/with-callbacks/">With Callbacks</Link>
                 </li>
               </ul>
             </nav>
-            <div className="SRL_CTA">
-              <button
-                className="SRL_CTA-OpenLightbox"
-                // Pass the method that you receive with the HOC
-                onClick={props.openLightbox}
-              >
-                Open the lightbox
-              </button>
-            </div>
+          </div>
+          <div className="col-md-4 col-12 align-self-center">
+            {/* Check the Button component to see how it implements the High Order Component */}
+            <Button />
           </div>
         </div>
       </div>
@@ -49,5 +45,4 @@ const Header = props => {
   )
 }
 
-// Wrap your component using the provided HOC
-export default withSRLContext(Header)
+export default Header

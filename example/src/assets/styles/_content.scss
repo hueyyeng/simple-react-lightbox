@@ -1,9 +1,13 @@
 .content {
-  margin-top: 60px;
+  margin: 60px auto;
+  @media (max-width: 768px) {
+    margin: 20px auto;
+  }
 
   img {
     cursor: pointer;
   }
+
 
   .col-text {
     h1 {
@@ -18,6 +22,11 @@
         line-height: 2rem;
       }
     }
+  }
+
+  .col-text-broken,
+  .col-image-broken {
+    margin: 30px 0;
   }
 
   .col-image {
@@ -58,5 +67,49 @@
   // Gallery with link
   .col-image-with-link {
     margin-bottom: 20px;
+    a {
+      display: block;
+    }
+  }
+}
+
+// Wrapper for instructions
+.instructions {
+  padding: 30px 0;
+  background-color: lighten(#313e50, 0);
+  color: white;
+  .instruction {
+    border-left: 3px solid var(--light-color);
+    padding-left: 15px;
+    @media (max-width: 768px) {
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: auto;
+      margin: 10px 0;
+      border: 2px solid var(--light-color);
+      padding: 5px;
+    }
+
+    a {
+      color: var(--light-color);
+      margin: 15px 0;
+      font-weight: bold;
+      display: block;
+      text-decoration: underline;
+      &:hover {
+        color: darken(#F4F4F4, 30%);
+      }
+    }
+  }
+}
+
+// Slick demo
+#container-with-slick {
+  .slick-prev, .slick-next {
+    &:before {
+      color: var(--dark-color);
+    }
   }
 }

@@ -1,18 +1,75 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap|Raleway:300,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 @import "~bootstrap/scss/bootstrap";
 
+:root {
+  --light-color: #F4F4F4;
+  --dark-color: #313e50;
+}
+
 body {
-  font-family: "Roboto", sans-serif;
-  background-color: white;
-  font-weight: 300;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  background-color: var(--light-color);
+  color: var(--dark-color);
   p {
-    line-height: 1.5rem;
+    line-height: 1.4rem;
     margin: 0 0 20px 0;
+    font-size: 0.9rem;
   }
   strong {
     font-weight: 700;
   }
+
+  a {
+    color: var(--dark-color);
+    font-weight: bold;
+    &:hover {
+      color: lighten(#313e50, 30%);
+    }
+  }
+
 }
+
+
+.SRL_CTA-OpenLightbox {
+  display: block;
+  font-size: 0.875rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  color: var(--light-color);
+  background-color: var(--dark-color);
+  padding: 10px 15px;
+  text-transform: uppercase;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+    padding: 7.5px;
+  }
+  &:hover {
+    background-color: lighten(#313e50, 10%);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25),
+      0 10px 10px rgba(0, 0, 0, 0.22);
+  }
+  &.light {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    &:hover {
+      background-color: darken(#F4F4F4, 10%);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25),
+        0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+  }
+}
+
+#header .SRL_CTA-OpenLightbox {
+  margin-left: auto !important;
+  @media (max-width: 768px) {
+    margin: 0 auto;
+  }
+}
+
 
 img {
   width: 100%;

@@ -1,6 +1,6 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 
 const Portal = ({ isOpened, selector, children, className }) => {
   // ClassName comes from the Styled Component
@@ -8,14 +8,14 @@ const Portal = ({ isOpened, selector, children, className }) => {
     <div id={selector} className={className}>
       {children}
     </div>
-  );
+  )
   if (!isOpened || selector === undefined) {
-    return null;
+    return null
   }
-  return ReactDOM.createPortal(modalMarkup, document.body);
-};
+  return ReactDOM.createPortal(modalMarkup, document.body)
+}
 
-export default Portal;
+export default Portal
 
 Portal.propTypes = {
   selector: PropTypes.string,
@@ -24,4 +24,4 @@ Portal.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired
-};
+}

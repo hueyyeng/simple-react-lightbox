@@ -1,5 +1,9 @@
 import React from 'react'
 import Layout from './Layout'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { snippets } from '../snippets'
+
 import { SRLWrapper } from 'simple-react-lightbox'
 
 const options = {
@@ -15,6 +19,33 @@ const options = {
 function GalleryWithLinks() {
   return (
     <Layout>
+      <div className="instructions">
+        <div className="container content">
+          <div className="row">
+            <div className=" col-md-4 col-12">
+              <div className="instruction">
+                <p>
+                  This examples shows how you can create a gallery with
+                  thumbnails. By using the <strong>data-attribute="SRL"</strong>{' '}
+                  you can select the image that you want to open (which is going
+                  to be the link that wraps the thumbnail).
+                </p>
+                <a
+                  href="https://github.com/michelecocuccio/simple-react-lightbox#custom-gallery"
+                  target="__blank"
+                >
+                  Documentation on how to use it
+                </a>
+              </div>
+            </div>
+            <div className=" col-md-8 col-12">
+              <SyntaxHighlighter language="jsx" style={darcula}>
+                {snippets.withDataAttribute}
+              </SyntaxHighlighter>
+            </div>
+          </div>
+        </div>
+      </div>
       <SRLWrapper options={options}>
         <div id="gallery-with-links" className="container content">
           <div className="row">

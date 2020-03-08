@@ -1,11 +1,10 @@
 #header {
   padding: 20px 0;
   .SRL_Logo {
-    @media (max-width: 768px) {
       text-align: center;
-    }
+      margin: 30px 0;
     img {
-      width: 200px;
+      width: 180px;
       height: auto;
       @media (max-width: 768px) {
         width: 150px;
@@ -14,62 +13,60 @@
     }
   }
   nav {
-    margin-left: auto;
+    margin: 30px 0;
     display: block;
+    text-align: center;
     ul {
       list-style: none;
       display: flex;
       margin: 0;
       padding: 0;
+      margin-bottom: 15px;
       @media (max-width: 768px) {
         margin: 20px auto;
+        flex-direction: column;
       }
       li {
-        margin-left: auto;
-        margin-bottom: 15px;
+        margin-left: 20px;
+        position: relative;
         @media (max-width: 768px) {
           margin: 0 auto;
+        }
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: -10px;
+          height: 100%;
+          width: 1px;
+          background-color: lighten(#313e50, 60%);
+          @media (max-width: 768px) {
+            content: none;
+          }
         }
         &:last-child {
           @media (max-width: 768px) {
             margin: 0 auto;
           }
+          &:after {
+            content: none;
+          }
         }
         a {
-          color: #313e50;
+          color: var(--dark-color);
+          letter-spacing: 1px;
+          font-size: 0.875rem;
           text-transform: uppercase;
           font-weight: 700;
+          transition: color 0.6s ease;
+          &:hover {
+            color: lighten(#313e50, 30%);
+            text-decoration: none;
+          }
         }
       }
     }
   }
 
-  .SRL_CTA {
-    margin-bottom: 10px;
-    .SRL_CTA-OpenLightbox {
-      display: block;
-      margin-left: auto;
-      @media (max-width: 768px) {
-        margin: 0 auto;
-      }
-      font-family: "Roboto", sans-serif;
-      font-weight: 700;
-      color: white;
-      background-color: #313e50;
-      padding: 10px 15px;
-      text-transform: uppercase;
-      border: none;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      @media (max-width: 768px) {
-        font-size: 0.875rem;
-        padding: 7.5px;
-      }
-      &:hover {
-        background-color: lighten(#313e50, 10%);
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
-          0 10px 10px rgba(0, 0, 0, 0.22);
-      }
-    }
-  }
+
 }
