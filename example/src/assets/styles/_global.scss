@@ -23,6 +23,8 @@ body {
   a {
     color: var(--dark-color);
     font-weight: bold;
+    line-height: 1rem;
+    display: block;
     &:hover {
       color: lighten(#313e50, 30%);
     }
