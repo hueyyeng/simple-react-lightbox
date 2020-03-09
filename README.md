@@ -6,6 +6,7 @@
 
 ### Documentation: quick links
 - [A brief introduction](#a-brief-introduction)
+- [Demo on CodeSandbox](#demo)
 - [Get started](#how-to-use)
 - [Options](#options)
 - [Callbacks](#callbacks)
