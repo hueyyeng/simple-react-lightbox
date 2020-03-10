@@ -106,7 +106,7 @@ export default MyComponent;
 
 That's it 🥳 As we are not passing any [options](#options) you should have a working light-box with the default options like the image below:
 
-![Simple React Lightbox - Default options](http://206.189.116.51/images/docs/images/SRL_Example1_Git.jpeg)
+![Simple React Lightbox - Default options](http://206.189.116.51/images/docs/SRL_Example1_Git.jpeg)
 
 ###### The light-box with the default options
 
@@ -205,7 +205,7 @@ function MyComponent() {
 export default MyComponent;
 ```
 
-![Simple React Lightbox - Default options](http://206.189.116.51/images/docs/images/SRL_Example2_Git.jpeg)
+![Simple React Lightbox - Default options](http://206.189.116.51/images/docs/SRL_Example2_Git.jpeg)
 
 ###### The light-box with the custom options
 
