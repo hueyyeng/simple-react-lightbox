@@ -1,6 +1,6 @@
 # Simple React Light-box (SRL)
 
-![Simple React Light-box - Logo](http://206.189.116.51/images/docs/SRL_Logo_Git.jpeg?)
+![Simple React Light-box - Logo](https://simple-react-lightbox.dev/docs/SRL_Logo_Git.jpeg?)
 
 [![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox.svg?token=RytKLBgaYszcR25z6ZLP&branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
@@ -37,7 +37,7 @@ From version 1.3 you can create a gallery with links and images as thumbnail. Th
 
 **Simple React Lightbox** comes with many features: please check the [options](#options) section to learn more.
 
-![Simple React Lightbox - Features](http://206.189.116.51/images/docs/SRL_Icons_Git.jpeg?)
+![Simple React Lightbox - Features](https://simple-react-lightbox.dev/docs/SRL_Icons_Git.jpeg?)
 <br/>
 
 ---
@@ -106,7 +106,7 @@ export default MyComponent;
 
 That's it 🥳 As we are not passing any [options](#options) you should have a working light-box with the default options like the image below:
 
-![Simple React Lightbox - Default options](http://206.189.116.51/images/docs/SRL_Example1_Git.jpeg)
+![Simple React Lightbox - Default options](https://simple-react-lightbox.dev/docs/SRL_Example1_Git.jpeg)
 
 ###### The light-box with the default options
 
@@ -205,7 +205,7 @@ function MyComponent() {
 export default MyComponent;
 ```
 
-![Simple React Lightbox - Default options](http://206.189.116.51/images/docs/SRL_Example2_Git.jpeg)
+![Simple React Lightbox - Default options](https://simple-react-lightbox.dev/docs/SRL_Example2_Git.jpeg)
 
 ###### The light-box with the custom options
 
