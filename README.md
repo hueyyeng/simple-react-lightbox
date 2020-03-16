@@ -18,7 +18,6 @@
 - Added [callbacks](#callbacks) that can be used when combining the light-box with other libraries. Check the example with Slick Carousel to sync the carousel and the slider.
 - **The High Order Component has been deprecated** in favour of the custom hook. If you were using it and updated the light-box to version 2.5 you might want to use the [custom hook](#hook) instead.
 
-
 ### Migrating from Version 1.0
 Nothing has changed, you will only see your light-box with the default options. That's because the options have now changed. Don't pass the options to the ```<SimpleReactLightbox/>``` component. Just pass the [options](#options) to the ```<SRLWrapper>```
 
@@ -56,9 +55,15 @@ yarn add simple-react-lightbox
 
 ## Demo
 
-I have provided a **full working demo** on CodeSandbox where you can also play with the options and see the light-box in action. This is the same as running the demo locally.
+I have provided a **full working demo** on CodeSandbox where you can also play with the options and see the light-box in action.
 
 [![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
+
+## Demo website
+
+I have provided a **full working website** where you can see the light-box in action. If you want to play with the options, use the CodeSandbox link above.
+
+[Simple React Lightbox - Website](https://simple-react-lightbox.dev)
 
 ## How to use
 
