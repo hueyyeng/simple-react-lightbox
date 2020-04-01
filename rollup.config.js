@@ -16,12 +16,12 @@ export default {
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true
+      sourcemap: false
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: true
+      sourcemap: false
     }
   ],
   plugins: [
