@@ -315,9 +315,13 @@ const SRLLightboxGallery = ({
   )
 
   const handleFullScreen = useCallback(() => {
-    const el =
-      document.querySelector('.SRLImage') ||
-      document.querySelector('.SRLPanzoomImage')
+    let el = ''
+    if (typeof window !== 'undefined') {
+      el =
+        document.querySelector('.SRLImage') ||
+        document.querySelector('.SRLPanzoomImage')
+    }
+
     if (el !== null) {
       if (fscreen.fullscreenEnabled) {
         fscreen.addEventListener('fullscreenchange', null, false)
@@ -369,13 +373,15 @@ const SRLLightboxGallery = ({
     }
 
     // Adds a class to the body to remove the overflow and compensate for the scroll-bar margin
-    document.body.classList.add('SRLOpened')
-    document.addEventListener(
-      'keydown',
-      handleLightboxWithKeys,
-      { once: true },
-      false
-    )
+    if (typeof window !== 'undefined') {
+      document.body.classList.add('SRLOpened')
+      document.addEventListener(
+        'keydown',
+        handleLightboxWithKeys,
+        { once: true },
+        false
+      )
+    }
 
     // Callback
     if (typeof onLightboxOpened === 'function') {
@@ -389,11 +395,19 @@ const SRLLightboxGallery = ({
 
     // Cleans up function to remove the class from the body
     return function cleanUp() {
-      document.body.classList.remove('SRLOpened')
-      document.removeEventListener('keydown', handleLightboxWithKeys, false)
+      if (typeof window !== 'undefined') {
+        document.body.classList.remove('SRLOpened')
+        document.removeEventListener('keydown', handleLightboxWithKeys, false)
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [
+    ctx.callbacks,
+    currentElement.id,
+    elements,
+    handleLightboxWithKeys,
+    onCountSlides,
+    onLightboxOpened
+  ])
 
   // Light-box controls
   const controls = {
