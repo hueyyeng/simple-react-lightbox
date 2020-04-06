@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 
 // Main div containing the light-box
 const SRLLightboxGalleryStage = styled.div`
-  background-color: ${props => props.overlayColor};
+  background-color: ${(props) => props.overlayColor};
   position: fixed;
   width: 100%;
   height: 100%;
@@ -28,7 +28,7 @@ const SRLLightboxContent = styled.div`
 
 // The container for the image
 const SRLLightboxElementContainer = styled.div`
-  width: ${props => {
+  width: ${(props) => {
     if (props.showThumbnails === false && !!props.showCaption === false) {
       return '90vw'
     } else if (props.showThumbnails === false && props.showCaption === true) {
@@ -39,7 +39,7 @@ const SRLLightboxElementContainer = styled.div`
       return '70vw'
     }
   }};
-  height: ${props => {
+  height: ${(props) => {
     if (props.showThumbnails === false && !!props.showCaption === false) {
       return '90vh'
     } else if (props.showThumbnails === false && props.showCaption === true) {
@@ -53,7 +53,7 @@ const SRLLightboxElementContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: ${props => {
+  margin-top: ${(props) => {
     if (props.showThumbnails === false && !!props.showCaption === false) {
       return '0px'
     } else if (props.showThumbnails === false && props.showCaption === true) {
@@ -67,7 +67,7 @@ const SRLLightboxElementContainer = styled.div`
   position: relative;
   @media (max-width: 768px) {
     width: 100vw;
-    height: ${props => (props.showThumbnails ? '70vh' : '80vh')};
+    height: ${(props) => (props.showThumbnails ? '70vh' : '80vh')};
   }
   > div,
   .SRLTransitionGroup {
@@ -78,7 +78,6 @@ const SRLLightboxElementContainer = styled.div`
 `
 
 // Element Wrapper
-
 const SRLElementWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -97,7 +96,7 @@ const SRLElementWrapper = styled.div`
   }
   &.element-transition-enter-active {
     opacity: 1;
-    transition: ${props =>
+    transition: ${(props) =>
       props.transitionSpeed
         ? `opacity ${props.transitionSpeed}ms ease`
         : 'opacity 600ms ease'};
@@ -107,14 +106,14 @@ const SRLElementWrapper = styled.div`
   }
   &.element-transition-exit-active {
     opacity: 0;
-    transition: ${props =>
+    transition: ${(props) =>
       props.transitionSpeed
         ? `opacity ${props.transitionSpeed}ms ease`
         : 'opacity 600ms ease;'};
   }
   &.element-transition-enter-done {
     opacity: 1;
-    transition: ${props =>
+    transition: ${(props) =>
       props.transitionSpeed
         ? `opacity ${props.transitionSpeed}ms ease`
         : 'opacity 600ms ease;'};
@@ -141,16 +140,15 @@ const SRLLightboxImage = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  cursor: ${props => (props.enablePanzoom ? 'zoom-in' : 'auto')};
+  cursor: ${(props) => (props.enablePanzoom ? 'zoom-in' : 'auto')};
 `
 
 const SRLLightboxPanzoomImage = styled(SRLLightboxImage)`
-  position: static;
   top: 0;
   left: 0;
-  &.panzoom-enabled {
-    cursor: grab;
-  }
+  position: relative;
+  transform-origin: 50% 50% !important;
+  cursor: grab;
 `
 
 // The Video
@@ -193,23 +191,23 @@ const SRRLLightboxCaption = styled.div`
     @media (max-width: 768px) {
       padding: 0 15px;
     }
-    font-weight: ${props =>
+    font-weight: ${(props) =>
       props.captionStyle.captionFontWeight
         ? props.captionStyle.captionFontWeight
         : 'inherit'};
-    font-size: ${props =>
+    font-size: ${(props) =>
       props.captionStyle.captionFontSize
         ? props.captionStyle.captionFontSize
         : 'inherit'};
-    font-family: ${props =>
+    font-family: ${(props) =>
       props.captionStyle.captionColor
         ? props.captionStyle.captionFontFamily
         : 'inherit'};
-    color: ${props =>
+    color: ${(props) =>
       props.captionStyle.captionColor
         ? props.captionStyle.captionColor
         : 'white'};
-    text-transform: ${props =>
+    text-transform: ${(props) =>
       props.captionStyle.captionFontStyle
         ? props.captionStyle.captionFontStyle
         : 'inherit'};
@@ -219,10 +217,10 @@ const SRRLLightboxCaption = styled.div`
 // The buttons
 const StyledButton = styled.button`
   position: absolute;
-  height: ${props => (props.buttonsSize ? props.buttonsSize : '30px')};
-  width: ${props => (props.buttonsSize ? props.buttonsSize : '30px')};
+  height: ${(props) => (props.buttonsSize ? props.buttonsSize : '30px')};
+  width: ${(props) => (props.buttonsSize ? props.buttonsSize : '30px')};
   transition: color 0.3s ease;
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.buttonsBackgroundColor
       ? props.buttonsBackgroundColor
       : 'rgba(30, 30, 36, 0.8)'};
@@ -248,7 +246,7 @@ const StyledButton = styled.button`
     outline: none;
   }
   div {
-    padding: ${props =>
+    padding: ${(props) =>
       props.buttonsIconPadding ? props.buttonsIconPadding : '0px'};
     height: 100%;
     box-sizing: border-box;
@@ -260,7 +258,7 @@ const StyledButton = styled.button`
       width: 100%;
       path {
         transition: fill 0.3s ease;
-        fill: ${props =>
+        fill: ${(props) =>
           props.buttonsIconColor
             ? props.buttonsIconColor
             : 'rgba(255, 255, 255, 0.8)'};
@@ -268,7 +266,7 @@ const StyledButton = styled.button`
     }
     &:hover {
       svg path {
-        fill: ${props =>
+        fill: ${(props) =>
           props.buttonsIconColor &&
           // REGEX TO THE RESCUE (converts the RGBA value to have the full opacity to have the nice "hover" effect)
           props.buttonsIconColor.replace(/[\d\.]+\)$/g, '1)')};
@@ -311,7 +309,7 @@ const SRLZoomOutIcon = styled(StyledButton)`
 const SRRLLightboxAutoplayIcon = styled(StyledButton)`
   position: relative;
   margin-right: 5px;
-  display: ${props => (props.autoplaySpeed === 0 ? 'none' : 'block')};
+  display: ${(props) => (props.autoplaySpeed === 0 ? 'none' : 'block')};
 `
 
 // The "next" button
@@ -362,7 +360,7 @@ const SRLLightboxThubnailGalleryImage = styled.a`
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0 1px;
-  opacity: ${props =>
+  opacity: ${(props) =>
     props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
   transition: opacity 0.3s ease;
   display: block;

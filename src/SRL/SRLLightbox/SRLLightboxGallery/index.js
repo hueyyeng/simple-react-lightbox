@@ -9,12 +9,14 @@ import PropTypes from 'prop-types'
 import { SRLLightboxGalleryStage } from './styles'
 import SRLLightboxSlideComponent from './SRLLightboxSlide'
 import SRLLightboxControls from './SRLLightboxControls'
-import fscreen from 'fscreen'
-import panzoom from 'panzoom'
-import createActivityDetector from 'activity-detector'
 import { SRLCtx } from '../../SRLContext'
+import panzoom from 'panzoom'
+import fscreen from 'fscreen'
+import { useIdle, useKeyPressEvent } from 'react-use'
 
-const _findIndex = require('lodash/findIndex')
+// Lodash helper
+import findIndex from 'lodash/findIndex'
+const _findIndex = findIndex
 
 const SRLLightboxGallery = ({
   options,
@@ -26,8 +28,18 @@ const SRLLightboxGallery = ({
   // Context
   const ctx = useContext(SRLCtx)
 
+  // Ref for the Image with the panzoom (we define it here as we need it here, but the ref is inside the SRLLightboxSlide component)
+  const SRLLightboxImageRef = useRef()
+
+  // Ref for the Image with the panzoom (we define it here as we need it here, but the ref is inside the SRLLightboxSlide component)
+  const SRLLightboxPanzoomImageRef = useRef()
+
+  // Ref for the SRLStage
+  const SRLStageRef = useRef()
+
   // Destructuring the options
   const { autoplaySpeed, enablePanzoom, hideControlsAfter } = options
+
   // Destructuring the callbacks passed by user and we need to check if those are functions
   const {
     onCountSlides,
@@ -42,17 +54,16 @@ const SRLLightboxGallery = ({
   const [currentElement, setCurrentElement] = useState(selectedElement)
   // Let's set a state for the "autoplay" option
   const [autoplay, setAutoplay] = useState(false)
-  // Let's set a state fro the "panzoom" option
+  // Let's set a state for the "panzoom" option
   const [panzoomEnabled, setPanzoomEnabled] = useState(false)
 
-  // Ref for the Element
-  const SRLElementPanzoomRef = useRef()
-  // Ref for the SRLStage
-  const SRLStageRef = useRef()
+  // Check if the user is not taking any action
+  const isIdle = useIdle(hideControlsAfter)
 
+  // Method to get the index of a slide
   const getElementIndex = useCallback(
-    id => {
-      const elIndex = _findIndex(elements, function(el) {
+    (id) => {
+      const elIndex = _findIndex(elements, function (el) {
         return el.id === id
       })
       return elIndex
@@ -60,76 +71,21 @@ const SRLLightboxGallery = ({
     [elements]
   )
 
-  useEffect(() => {
-    // Calculates the start position for the panzoom
-    // It has to be different on mobile because the touch event won't zoom the image
-    // So the image start position has to be (-101,-101) (which is centered)
-    // On desktop we need to double it because the image scale is doubled
-    let startPosition
-    function mediaQuery(x) {
-      if (x.matches) {
-        // If media query matches
-        startPosition = [-101, -101]
-      } else {
-        startPosition = [-201, -201]
-      }
-      return startPosition
-    }
-    if (enablePanzoom) {
-      const x = window.matchMedia('(max-width: 768px)')
-      mediaQuery(x)
-
-      // if the state panzoom is enabled (so when the picture is cliked)
-      if (panzoomEnabled) {
-        const elementRef = SRLElementPanzoomRef.current
-        if (elementRef !== null || elementRef !== undefined) {
-          elementRef.classList.add('panzoom-enabled')
-        }
-        const panzoomElement = panzoom(elementRef, {
-          bounds: true,
-          boundsPadding: 0.6,
-          maxZoom: 3,
-          minZoom: 1
-        })
-        panzoomElement.pause()
-        if (elementRef !== undefined || elementRef !== null) {
-          panzoomElement.resume()
-          panzoomElement.zoomAbs(startPosition[0], startPosition[1], 2)
-          panzoomElement.moveTo(startPosition[0], startPosition[1])
-        }
-      }
-    }
-  }, [
-    ctx,
-    ctx.callbacks,
-    currentElement,
-    elements.length,
-    enablePanzoom,
-    hideControlsAfter,
-    onCountSlides,
-    panzoomEnabled,
-    selectedElement
-  ])
-
   // Handle Panzoom (set the state to true)
-  const handlePanzoom = useCallback(() => {
-    if (enablePanzoom) {
-      setPanzoomEnabled(true)
-    }
-  }, [enablePanzoom])
-
-  // Disable Panzoom (se the state to false)
-  const handleDisablePanzoom = useCallback(() => {
-    if (enablePanzoom) {
-      setPanzoomEnabled(false)
-    }
-  }, [enablePanzoom])
+  const handlePanzoom = useCallback(
+    (value) => {
+      if (enablePanzoom) {
+        setPanzoomEnabled(value)
+      }
+    },
+    [enablePanzoom]
+  )
 
   // Handle Current Element
   const handleCurrentElement = useCallback(
-    id => {
+    (id) => {
       // Reset the panzoom state
-      handleDisablePanzoom()
+      handlePanzoom(false)
 
       // Grab the current element index
       const currentElementIndex = getElementIndex(id)
@@ -160,20 +116,14 @@ const SRLLightboxGallery = ({
       }
     },
 
-    [
-      ctx.callbacks,
-      elements,
-      getElementIndex,
-      handleDisablePanzoom,
-      onSlideChange
-    ]
+    [ctx.callbacks, elements, getElementIndex, handlePanzoom, onSlideChange]
   )
 
   // Handle Previous Element
   const handlePrevElement = useCallback(
-    id => {
+    (id) => {
       // Reset the panzoom state
-      handleDisablePanzoom()
+      handlePanzoom(false)
 
       // Get the current element index
       const currentElementIndex = getElementIndex(id)
@@ -205,20 +155,14 @@ const SRLLightboxGallery = ({
         })
       }
     },
-    [
-      ctx.callbacks,
-      elements,
-      getElementIndex,
-      handleDisablePanzoom,
-      onSlideChange
-    ]
+    [ctx.callbacks, elements, getElementIndex, handlePanzoom, onSlideChange]
   )
 
   // Handle Next element
   const handleNextElement = useCallback(
-    id => {
+    (id) => {
       // Reset the panzoom state
-      handleDisablePanzoom()
+      handlePanzoom(false)
 
       // Get the current element index
       const currentElementIndex = getElementIndex(id)
@@ -249,13 +193,7 @@ const SRLLightboxGallery = ({
         })
       }
     },
-    [
-      ctx.callbacks,
-      elements,
-      getElementIndex,
-      handleDisablePanzoom,
-      onSlideChange
-    ]
+    [ctx.callbacks, elements, getElementIndex, handlePanzoom, onSlideChange]
   )
 
   // Handle Close Lightbox
@@ -290,31 +228,19 @@ const SRLLightboxGallery = ({
     }, [delay])
   }
 
-  // Handle Navigation With Keys
-  const handleLightboxWithKeys = useCallback(
-    event => {
-      if (event.keyCode === 39) {
-        handleNextElement(currentElement.id)
-      } else if (event.keyCode === 37) {
-        handlePrevElement(currentElement.id)
-      } else if (event.keyCode === 27) {
-        handleCloseLightbox()
-      }
-    },
-    [
-      currentElement.id,
-      handleCloseLightbox,
-      handleNextElement,
-      handlePrevElement
-    ]
-  )
-
   useInterval(
     () => handleNextElement(currentElement.id),
     autoplay ? autoplaySpeed : null
   )
 
-  const handleFullScreen = useCallback(() => {
+  // Handle Navigation With Keys
+  useKeyPressEvent('ArrowRight', () => handleNextElement(currentElement.id))
+  useKeyPressEvent('ArrowUp', () => handleNextElement(currentElement.id))
+  useKeyPressEvent('ArrowLeft', () => handlePrevElement(currentElement.id))
+  useKeyPressEvent('ArrowDown', () => handlePrevElement(currentElement.id))
+
+  // Handle FullScreen
+  function handleFullScreen() {
     let el = ''
     if (typeof window !== 'undefined') {
       el =
@@ -328,39 +254,53 @@ const SRLLightboxGallery = ({
         fscreen.requestFullscreen(el)
       }
     }
-  }, [])
+  }
 
+  // Handle Idle Off
   function handleOnActive() {
+    if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
+      if (SRLStageRef.current.classList.contains('SRLIdle')) {
+        SRLStageRef.current.classList.remove('SRLIdle')
+      }
+    }
+  }
+
+  // Handle Idle On
+  function handleOnIdle() {
+    if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
+      SRLStageRef.current.classList.add('SRLIdle')
+    }
+  }
+
+  useEffect(() => {
+    // Initialize the Idle functionality
     if (hideControlsAfter !== 0) {
-      if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
-        if (SRLStageRef.current.classList.contains('SRLIdle')) {
-          SRLStageRef.current.classList.remove('SRLIdle')
+      if (isIdle) {
+        handleOnIdle()
+      } else {
+        handleOnActive()
+      }
+    }
+
+    // Initialize the panzoom functionality
+    if (enablePanzoom) {
+      if (panzoomEnabled) {
+        const panzoomElementRef = SRLLightboxPanzoomImageRef.current
+        const INITIAL_ZOOM = 1.5
+
+        const panZoomController = panzoom(panzoomElementRef, {
+          bounds: true,
+          maxZoom: 3,
+          minZoom: 0.9
+        })
+
+        if (panzoomElementRef !== undefined || panzoomElementRef !== null) {
+          // Zoom the image
+          panZoomController.zoomAbs(0, 0, INITIAL_ZOOM)
         }
       }
     }
-  }
 
-  function handleOnIdle() {
-    if (hideControlsAfter !== 0) {
-      if (SRLStageRef.current !== null && SRLStageRef.current !== undefined) {
-        SRLStageRef.current.classList.add('SRLIdle')
-      }
-    }
-  }
-
-  function useIdle(options) {
-    useEffect(() => {
-      const activityDetector = createActivityDetector(options)
-      activityDetector.on('idle', handleOnIdle)
-      activityDetector.on('active', handleOnActive)
-      return () => activityDetector.stop()
-    }, [options])
-  }
-
-  useIdle({ timeToIdle: hideControlsAfter, ignoredEventsWhenIdle: [] })
-
-  // This useEffect should only run once!
-  useEffect(() => {
     // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
     if (currentElement.id === undefined) {
       setCurrentElement({
@@ -372,15 +312,10 @@ const SRLLightboxGallery = ({
       })
     }
 
-    // Adds a class to the body to remove the overflow and compensate for the scroll-bar margin
+    // Adds a class to the body to remove the overflow
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
-      document.addEventListener(
-        'keydown',
-        handleLightboxWithKeys,
-        { once: true },
-        false
-      )
+      document.body.style.overflow = 'hidden'
     }
 
     // Callback
@@ -397,16 +332,19 @@ const SRLLightboxGallery = ({
     return function cleanUp() {
       if (typeof window !== 'undefined') {
         document.body.classList.remove('SRLOpened')
-        document.removeEventListener('keydown', handleLightboxWithKeys, false)
+        document.body.style.overflow = null
       }
     }
   }, [
     ctx.callbacks,
     currentElement.id,
     elements,
-    handleLightboxWithKeys,
     onCountSlides,
-    onLightboxOpened
+    onLightboxOpened,
+    enablePanzoom,
+    panzoomEnabled,
+    hideControlsAfter,
+    isIdle
   ])
 
   // Light-box controls
@@ -418,12 +356,12 @@ const SRLLightboxGallery = ({
     handleCloseLightbox,
     handleFullScreen,
     handlePanzoom,
-    handleDisablePanzoom,
     autoplay,
     panzoomEnabled,
     autoplaySpeed,
     setAutoplay,
-    SRLElementPanzoomRef
+    SRLLightboxImageRef,
+    SRLLightboxPanzoomImageRef
   }
 
   // Light-box buttons options
@@ -438,6 +376,7 @@ const SRLLightboxGallery = ({
     <SRLLightboxGalleryStage
       ref={SRLStageRef}
       overlayColor={options.overlayColor}
+      className="SRLStage"
     >
       <SRLLightboxControls {...buttonOptions} {...controls} />
       <SRLLightboxSlideComponent

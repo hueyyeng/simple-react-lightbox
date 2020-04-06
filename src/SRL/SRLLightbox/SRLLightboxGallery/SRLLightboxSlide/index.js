@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import SRLLightboxThubnailGallery from './SRLLightboxThubnailGallery'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
-import ReactScrollWheelHandler from 'react-scroll-wheel-handler'
+import { useSwipeable } from 'react-swipeable'
+import { useDebouncedCallback } from 'use-debounce'
 
 import {
   SRLLightboxContent,
@@ -27,7 +28,7 @@ function SRLLightboxSlideComponent({
   options,
   panzoomEnabled,
   source,
-  SRLElementPanzoomRef,
+  SRLLightboxPanzoomImageRef,
   width
 }) {
   const {
@@ -38,8 +39,45 @@ function SRLLightboxSlideComponent({
     thumbnailsOpacity
   } = options
 
+  // Swipe Handlers
+  const handlers = useSwipeable({
+    onSwipedLeft: () => handleNextElement(id),
+    onSwipedRight: () => handlePrevElement(id)
+  })
+
+  // Debounce callback
+  const [debouncedCallback] = useDebouncedCallback(
+    // function
+    (e) => {
+      if (e.deltaY > 0) {
+        handleNextElement(id)
+      } else if (e.deltaY < 0) {
+        handlePrevElement(id)
+      }
+    },
+    // delay in ms
+    150
+  )
+
+  // Ref for the Content
+  const SRLLightboxContentRef = useRef()
   // Ref for the Element
   const SRLElementRef = useRef()
+
+  // Handle scrollwheel
+  useEffect(() => {
+    // const unsubscribe = subscribe(window, 'wheel', debouncedCallback)
+    document.addEventListener('wheel', debouncedCallback)
+    return () => {
+      document.removeEventListener('wheel', debouncedCallback)
+    }
+  }, [debouncedCallback])
+
+  // UseOnClickOutside
+  useOnClickOutside(SRLElementRef, () => handleCloseLightbox())
+
+  // // Check if it's an image to load the right content
+  // const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(source)
 
   // Light-box captions options
   const captionOptions = {
@@ -50,107 +88,52 @@ function SRLLightboxSlideComponent({
     captionFontWeight: options.captionFontWeight
   }
 
-  // credit: http://www.javascriptkit.com/javatutors/touchevents2.shtml
-  let startX
-  let startY
-  let distX
-  let distY
-  const threshold = 150 // required min distance traveled to be considered swipe
-  const restraint = 100 // maximum distance allowed at the same time in perpendicular direction
-  const allowedTime = 300 // maximum time allowed to travel that distance
-  let elapsedTime
-  let startTime
-
-  function handleTouchChange(x, y, t, r) {
-    // FIRST CONDITION
-    /* This is, in a way, a method to check if the action is a Swipe...
-       if the finger is held by more than 400 milliseconds, maybe that wasn't a swipe */
-    if (elapsedTime <= allowedTime) {
-      // SECOND CONDITION
-      if (Math.abs(x) >= t) {
-        if (x <= 0) {
-          handleNextElement(id)
-        } else if (x >= 0) {
-          handlePrevElement(id)
-        }
-      }
-    }
-  }
-
-  function handleTouchStart(e) {
-    const touchObject = e.changedTouches[0]
-    startX = touchObject.pageX
-    startY = touchObject.pageY
-    startTime = new Date().getTime()
-  }
-
-  function handleTouchEnd(e) {
-    const touchObject = e.changedTouches[0]
-    distX = touchObject.pageX - startX
-    distY = touchObject.pageX - startY
-    elapsedTime = new Date().getTime() - startTime
-
-    // Run the function on touchend
-    handleTouchChange(distX, distY, threshold, restraint)
-  }
-
-  // UseOnClickOutside
-  useOnClickOutside(SRLElementRef, () => handleCloseLightbox())
-
-  // // Check if it's an image to load the right content
-  // const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(source)
-
   return (
-    <SRLLightboxContent className="SRLContent">
+    <SRLLightboxContent
+      className="SRLContent"
+      onWheel={(e) => debouncedCallback(e)}
+      ref={SRLLightboxContentRef}
+      {...handlers}
+    >
       <SRLLightboxElementContainer
         showThumbnails={showThumbnails}
         showCaption={showCaption}
         className="SRLElementContainer"
-        onTouchStart={e => handleTouchStart(e)}
-        onTouchEnd={e => handleTouchEnd(e)}
         ref={SRLElementRef}
       >
-        <ReactScrollWheelHandler
-          upHandler={() => handleNextElement(id)}
-          downHandler={() => handlePrevElement(id)}
-          disableKeyboard={true}
-          pauseListeners={panzoomEnabled}
-        >
-          <TransitionGroup className="SRLTransitionGroup">
-            <CSSTransition
-              key={id}
-              classNames="element-transition"
-              timeout={slideTransitionSpeed}
+        <TransitionGroup className="SRLTransitionGroup">
+          <CSSTransition
+            key={id}
+            classNames="element-transition"
+            timeout={slideTransitionSpeed}
+          >
+            <SRLElementWrapper
+              transitionSpeed={slideTransitionSpeed}
+              className="SRLElementWrapper"
             >
-              <SRLElementWrapper
-                transitionSpeed={slideTransitionSpeed}
-                className="SRLElementWrapper"
-              >
-                {panzoomEnabled ? (
-                  <SRLLightboxPanzoomImage
-                    className="SRLPanzoomImage"
-                    ref={SRLElementPanzoomRef}
-                    width={width}
-                    height={height}
-                    onClick={handlePanzoom}
-                    src={typeof source === 'object' ? 'Loading...' : source}
-                    alt={caption}
-                  />
-                ) : (
-                  <SRLLightboxImage
-                    className="SRLImage"
-                    enablePanzoom={enablePanzoom}
-                    width={width}
-                    height={height}
-                    onClick={handlePanzoom}
-                    src={typeof source === 'object' ? 'Loading...' : source}
-                    alt={caption}
-                  />
-                )}
-              </SRLElementWrapper>
-            </CSSTransition>
-          </TransitionGroup>
-        </ReactScrollWheelHandler>
+              {panzoomEnabled ? (
+                <SRLLightboxPanzoomImage
+                  className="SRLPanzoomImage"
+                  ref={SRLLightboxPanzoomImageRef}
+                  width={width}
+                  height={height}
+                  src={typeof source === 'object' ? 'Loading...' : source}
+                  alt={caption}
+                />
+              ) : (
+                <SRLLightboxImage
+                  className="SRLImage"
+                  enablePanzoom={enablePanzoom}
+                  width={width}
+                  height={height}
+                  onClick={() => handlePanzoom(true)}
+                  src={typeof source === 'object' ? 'Loading...' : source}
+                  alt={caption}
+                />
+              )}
+            </SRLElementWrapper>
+          </CSSTransition>
+        </TransitionGroup>
       </SRLLightboxElementContainer>
 
       {showCaption && (
@@ -176,7 +159,7 @@ function SRLLightboxSlideComponent({
   function useOnClickOutside(ref, handler) {
     useEffect(
       () => {
-        const listener = event => {
+        const listener = (event) => {
           // Do nothing if clicking ref's element or descendent elements
           if (
             !ref.current ||
@@ -239,7 +222,7 @@ SRLLightboxSlideComponent.propTypes = {
   handlePrevElement: PropTypes.func,
   handlePanzoom: PropTypes.func,
   id: PropTypes.string,
-  SRLElementPanzoomRef: PropTypes.object,
+  SRLLightboxPanzoomImageRef: PropTypes.object,
   panzoomEnabled: PropTypes.bool,
   enablePanzoom: PropTypes.bool,
   thumbnailsOpacity: PropTypes.number,

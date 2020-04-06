@@ -24,11 +24,11 @@ const SRLLightboxControls = ({
   buttonsSize,
   buttonsIconPadding,
   panzoomEnabled,
-  handleDisablePanzoom
+  handlePanzoom
 }) => {
   return (
     <>
-      <SRLLLightboxTopButtons>
+      <SRLLLightboxTopButtons className="SRLControls">
         <SRRLLightboxAutoplayIcon
           buttonsBackgroundColor={buttonsBackgroundColor}
           buttonsIconColor={buttonsIconColor}
@@ -73,7 +73,7 @@ const SRLLightboxControls = ({
             buttonsIconPadding={buttonsIconPadding}
             title="Zoom Out"
             className="SRLZoomOutButton"
-            onClick={handleDisablePanzoom}
+            onClick={() => handlePanzoom(false)}
           >
             <div className="SRLZoomOutButton">
               <svg
@@ -191,7 +191,7 @@ SRLLightboxControls.propTypes = {
   handleNextElement: PropTypes.func,
   handlePrevElement: PropTypes.func,
   handleFullScreen: PropTypes.func,
-  handleDisablePanzoom: PropTypes.func,
+  handlePanzoom: PropTypes.func,
   panzoomEnabled: PropTypes.bool,
   setAutoplay: PropTypes.func,
   autoplay: PropTypes.bool,

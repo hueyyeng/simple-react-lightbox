@@ -7,21 +7,27 @@ import { SRLCtx } from '../SRLContext'
 import styled from '@emotion/styled'
 
 const PortalWithTransitionStyles = styled(Portal)`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+
   &.portal-transition-enter {
     opacity: 0;
   }
   &.portal-transition-enter-active {
     opacity: 1;
-    transition: opacity ${props => props.transitionSpeed}ms
-      ${props => props.transitionTimingFunction};
+    transition: opacity ${(props) => props.transitionSpeed}ms
+      ${(props) => props.transitionTimingFunction};
   }
   &.portal-transition-exit {
     opacity: 1;
   }
   &.portal-transition-exit-active {
     opacity: 0;
-    transition: opacity ${props => props.transitionSpeed}ms
-      ${props => props.transitionTimingFunction};
+    transition: opacity ${(props) => props.transitionSpeed}ms
+      ${(props) => props.transitionTimingFunction};
   }
 `
 
