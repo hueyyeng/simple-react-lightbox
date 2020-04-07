@@ -66,12 +66,13 @@ function SRLLightboxSlideComponent({
 
   // Handle scrollwheel
   useEffect(() => {
-    // const unsubscribe = subscribe(window, 'wheel', debouncedCallback)
-    document.addEventListener('wheel', debouncedCallback)
-    return () => {
-      document.removeEventListener('wheel', debouncedCallback)
+    if (!panzoomEnabled) {
+      document.addEventListener('wheel', debouncedCallback)
+      return () => {
+        document.removeEventListener('wheel', debouncedCallback)
+      }
     }
-  }, [debouncedCallback])
+  }, [debouncedCallback, panzoomEnabled])
 
   // UseOnClickOutside
   useOnClickOutside(SRLElementRef, () => handleCloseLightbox())
