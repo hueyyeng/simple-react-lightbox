@@ -15,7 +15,7 @@ import fscreen from 'fscreen'
 import { useIdle, useKeyPressEvent } from 'react-use'
 
 // Lodash helper
-const findIndex = require('lodash/isEqual')
+const findIndex = require('lodash/findIndex')
 
 const SRLLightboxGallery = ({
   options,
