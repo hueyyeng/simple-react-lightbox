@@ -23,7 +23,7 @@ const SRLLightboxThubnailGalleryComponent = ({
               currentId === i.id ? 'SRLSelected' : ''
             }`}
             style={{
-              backgroundImage: `url(${i.thumbnail})`
+              backgroundImage: `url('${i.thumbnail}')`
             }}
           />
         )
