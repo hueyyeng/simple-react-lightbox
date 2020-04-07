@@ -4,10 +4,8 @@ import { SRLCtx } from '../SRLContext'
 import imagesLoaded from 'imagesLoaded'
 
 // IsEqual from lodash to do a deep comparison of the objects
-import isEqual from 'lodash/isEqual'
-import isEmpty from 'lodash/isEmpty'
-const _isEqual = isEqual
-const _isEmpty = isEmpty
+const isEqual = require('lodash/isEqual')
+const isEmpty = require('lodash/isEmpty')
 
 const SRLWrapper = ({
   options,
@@ -34,7 +32,7 @@ const SRLWrapper = ({
       // We merge the settings that we receive from the user via the props with the original ones (defaultOptions and defaultCallbacks)
       // If the user hasn't provided any options/callbacks via props we make mergedSettings use just the default options/callbacks
       let mergedSettings = {}
-      if (_isEmpty(options) && _isEmpty(callbacks)) {
+      if (isEmpty(options) && isEmpty(callbacks)) {
         mergedSettings = {
           options: {
             ...defaultOptions
@@ -55,7 +53,7 @@ const SRLWrapper = ({
           }
         }
       }
-      if (!_isEqual(mergedSettings.options, context.options)) {
+      if (!isEqual(mergedSettings.options, context.options)) {
         context.dispatch({
           type: 'GRAB_SETTINGS',
           mergedSettings
@@ -65,7 +63,7 @@ const SRLWrapper = ({
 
     // Dispatch the Action the grab the elements
     const grabElements = (elements) => {
-      if (!_isEqual(elements, context.elements)) {
+      if (!isEqual(elements, context.elements)) {
         // console.log('dispatched grab elements')
         context.dispatch({
           type: 'GRAB_ELEMENTS',
@@ -77,7 +75,7 @@ const SRLWrapper = ({
     // Dispatch the Action to handle the clicked item
     const handleElement = (element) => {
       // We don't want to dispatch the action if the selected image is already selected
-      if (!_isEqual(element, context.selectedElement)) {
+      if (!isEqual(element, context.selectedElement)) {
         // console.log('dispatched grab element (single)')
         context.dispatch({
           type: 'HANDLE_ELEMENT',

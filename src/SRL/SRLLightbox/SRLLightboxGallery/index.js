@@ -15,8 +15,7 @@ import fscreen from 'fscreen'
 import { useIdle, useKeyPressEvent } from 'react-use'
 
 // Lodash helper
-import findIndex from 'lodash/findIndex'
-const _findIndex = findIndex
+const findIndex = require('lodash/isEqual')
 
 const SRLLightboxGallery = ({
   options,
@@ -63,7 +62,7 @@ const SRLLightboxGallery = ({
   // Method to get the index of a slide
   const getElementIndex = useCallback(
     (id) => {
-      const elIndex = _findIndex(elements, function (el) {
+      const elIndex = findIndex(elements, function (el) {
         return el.id === id
       })
       return elIndex
