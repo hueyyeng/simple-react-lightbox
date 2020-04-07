@@ -52,7 +52,7 @@
     "@babel/preset-react": "^7.0.0",
     "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.17",
-    "@svgr/rollup": "^5.3.1",
+    "@svgr/rollup": "^4.3.3",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "eslint": "6.8.0",
