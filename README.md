@@ -13,10 +13,10 @@
 - [Custom Hook](#hook)
 - [Panzoom functionality](#panzoom-functionality)
 
-### What's new in Version 2.5
-- Added a [custom hook](#hook)  to open the light-box from anywhere. You can just open the light-box or open it starting from a specific image.
-- Added [callbacks](#callbacks) that can be used when combining the light-box with other libraries. Check the example with Slick Carousel to sync the carousel and the slider.
-- **The High Order Component has been deprecated** in favour of the custom hook. If you were using it and updated the light-box to version 2.5 you might want to use the [custom hook](#hook) instead.
+### What's new in Version 2.6
+- ⚠️ Version 2.6 now **supports Gatsby and NextJS**. You don't need to do anything in particular apart from wrapping your main component using the `<SimpleReactLightbox>` component. I haven't fully tested using "[gatsby-browser.js](https://www.gatsbyjs.org/docs/browser-apis/)" or ["_document.js"](https://nextjs.org/docs/advanced-features/custom-document) but it works normally outside this two cases.
+- Improved **panzoom** functionality. Please consider this as an "experimental" feature although is now more stable.
+- Added a few more classes to the document in case you need to customize the style although this is not recommended as you have the [options](#options) to do so.
 
 ### Migrating from Version 1.0
 Nothing has changed, you will only see your light-box with the default options. That's because the options have now changed. Don't pass the options to the ```<SimpleReactLightbox/>``` component. Just pass the [options](#options) to the ```<SRLWrapper>```

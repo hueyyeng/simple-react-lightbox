@@ -1,29 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-const Portal = ({ isOpened, selector, children, className }) => {
-  const [body, setBody] = useState()
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setBody(document.body)
-    } else {
-      setBody(null)
-    }
-  }, [body])
-
+const Portal = ({ isOpened, children, className }) => {
   // ClassName comes from the Styled Component
   const modalMarkup = (
-    <div id={selector} className={className}>
+    <div id="SRLLightbox" className={className}>
       {children}
     </div>
   )
-  if (!isOpened || selector === undefined) {
+  if (!isOpened || typeof window === 'undefined') {
     return null
   }
 
-  return ReactDOM.createPortal(modalMarkup, body)
+  return ReactDOM.createPortal(modalMarkup, document.body)
 }
 
 export default Portal

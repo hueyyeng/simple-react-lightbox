@@ -3,6 +3,12 @@ import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
 import imagesLoaded from 'imagesLoaded'
 
+// IsEqual from lodash to do a deep comparison of the objects
+import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
+const _isEqual = isEqual
+const _isEmpty = isEmpty
+
 const SRLWrapper = ({
   options,
   callbacks,
@@ -10,10 +16,6 @@ const SRLWrapper = ({
   defaultOptions,
   defaultCallbacks
 }) => {
-  // IsEqual from lodash to do a deep comparison of the objects
-  const isEqual = require('lodash/isEqual')
-  const isEmpty = require('lodash/isEmpty')
-
   // Add a state to check if the event listener is set
   const [listenerIsSet, setListenerIsSet] = useState(false)
 
@@ -32,7 +34,7 @@ const SRLWrapper = ({
       // We merge the settings that we receive from the user via the props with the original ones (defaultOptions and defaultCallbacks)
       // If the user hasn't provided any options/callbacks via props we make mergedSettings use just the default options/callbacks
       let mergedSettings = {}
-      if (isEmpty(options) && isEmpty(callbacks)) {
+      if (_isEmpty(options) && _isEmpty(callbacks)) {
         mergedSettings = {
           options: {
             ...defaultOptions
@@ -53,7 +55,7 @@ const SRLWrapper = ({
           }
         }
       }
-      if (!isEqual(mergedSettings.options, context.options)) {
+      if (!_isEqual(mergedSettings.options, context.options)) {
         context.dispatch({
           type: 'GRAB_SETTINGS',
           mergedSettings
@@ -62,8 +64,8 @@ const SRLWrapper = ({
     }
 
     // Dispatch the Action the grab the elements
-    const grabElements = elements => {
-      if (!isEqual(elements, context.elements)) {
+    const grabElements = (elements) => {
+      if (!_isEqual(elements, context.elements)) {
         // console.log('dispatched grab elements')
         context.dispatch({
           type: 'GRAB_ELEMENTS',
@@ -73,9 +75,9 @@ const SRLWrapper = ({
     }
 
     // Dispatch the Action to handle the clicked item
-    const handleElement = element => {
+    const handleElement = (element) => {
       // We don't want to dispatch the action if the selected image is already selected
-      if (!isEqual(element, context.selectedElement)) {
+      if (!_isEqual(element, context.selectedElement)) {
         // console.log('dispatched grab element (single)')
         context.dispatch({
           type: 'HANDLE_ELEMENT',
@@ -150,7 +152,7 @@ const SRLWrapper = ({
           }
 
           // Adds an event listener that will trigger the function to open the lightbox (passed using the Context)
-          e.img.addEventListener('click', e => {
+          e.img.addEventListener('click', (e) => {
             // Prevent the image from opening
             e.preventDefault()
             // Run the function to handle the clicked item
@@ -163,13 +165,13 @@ const SRLWrapper = ({
       })
       setListenerIsSet(true)
       // Use filter to remove the undefined values
-      grabElements(elements.filter(e => e !== undefined))
+      grabElements(elements.filter((e) => e !== undefined))
     }
 
     // Check if the images are loaded using "imagesLoaded" by Desandro (LOVE)
     // When te images are loaded set the state to TRUE and run the function to handle the context
     function handleLoadedImages(array, elementsAreLinks) {
-      imagesLoaded(array, function(instance) {
+      imagesLoaded(array, function (instance) {
         // Checks if the element (the first one) is an image or a link. If it's a link, the user is using the gallery
         // And we need to grab the correct source of the image, not the thumbnail
         const elementType = instance.elements[0].nodeName
@@ -207,10 +209,8 @@ const SRLWrapper = ({
       }
     }
   }, [
-    options,
-    isEqual,
     context,
-    isEmpty,
+    options,
     defaultOptions,
     listenerIsSet,
     imagesAreLoaded,
