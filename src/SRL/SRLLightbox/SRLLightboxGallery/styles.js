@@ -375,7 +375,7 @@ const SRLLightboxThubnailGalleryImage = styled.a`
     props.thumbnailsSize ? props.thumbnailsSize[1] : '80px'};
   background-repeat: no-repeat;
   background-size: cover;
-  margin: 0 1px;
+  margin: 1px;
   opacity: ${(props) =>
     props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
   transition: opacity 0.3s ease;
