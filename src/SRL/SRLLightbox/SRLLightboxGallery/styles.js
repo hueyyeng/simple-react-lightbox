@@ -351,17 +351,8 @@ const SRLLightboxThubnailGallery = styled.div`
   opacity: 1;
   transition: opacity 0.3s ease;
 
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-
-  &::-webkit-scrollbar {
-    height: 10px;
-    background-color: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #000000;
+  @media (max-width: 768px) {
+    flex-wrap: nowrap;
   }
 
   .SRLIdle & {
