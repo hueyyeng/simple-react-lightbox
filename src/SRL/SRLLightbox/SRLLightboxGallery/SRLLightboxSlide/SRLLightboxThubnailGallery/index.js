@@ -9,7 +9,8 @@ const SRLLightboxThubnailGalleryComponent = ({
   elements,
   currentId,
   handleCurrentElement,
-  thumbnailsOpacity
+  thumbnailsOpacity,
+  thumbnailsSize
 }) => {
   return (
     <SRLLightboxThubnailGallery className="SRLThumbnails">
@@ -18,6 +19,7 @@ const SRLLightboxThubnailGalleryComponent = ({
           <SRLLightboxThubnailGalleryImage
             onClick={() => handleCurrentElement(i.id)}
             thumbnailsOpacity={thumbnailsOpacity}
+            thumbnailsSize={thumbnailsSize}
             key={index}
             className={`SRLThumb SRLThumb${index} ${
               currentId === i.id ? 'SRLSelected' : ''
@@ -38,5 +40,6 @@ SRLLightboxThubnailGalleryComponent.propTypes = {
   elements: PropTypes.array,
   handleCurrentElement: PropTypes.func,
   currentId: PropTypes.string,
-  thumbnailsOpacity: PropTypes.number
+  thumbnailsOpacity: PropTypes.number,
+  thumbnailsSize: PropTypes.array
 }

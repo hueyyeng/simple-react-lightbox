@@ -36,7 +36,8 @@ function SRLLightboxSlideComponent({
     showCaption,
     showThumbnails,
     slideTransitionSpeed,
-    thumbnailsOpacity
+    thumbnailsOpacity,
+    thumbnailsSize
   } = options
 
   // Swipe Handlers
@@ -150,6 +151,7 @@ function SRLLightboxSlideComponent({
         <SRLLightboxThubnailGallery
           handleCurrentElement={handleCurrentElement}
           thumbnailsOpacity={thumbnailsOpacity}
+          thumbnailsSize={thumbnailsSize}
           currentId={id}
           elements={elements || []}
         />
@@ -171,6 +173,7 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains('SRLAutoplayButton') ||
             event.target.classList.contains('SRLExpandButton') ||
             event.target.classList.contains('SRLZoomOutButton') ||
+            event.target.classList.contains('SRLDownloadButton') ||
             event.target.classList.contains('SRLThumbnails') ||
             event.target.classList.contains('SRLThumb') ||
             event.target.classList.contains('SRLCaption') ||
@@ -242,8 +245,10 @@ SRLLightboxSlideComponent.propTypes = {
     overlayColor: PropTypes.string,
     showCaption: PropTypes.bool,
     showThumbnails: PropTypes.bool,
+    showDownloadButton: PropTypes.bool,
     slideTransitionSpeed: PropTypes.number,
     thumbnailsOpacity: PropTypes.number,
+    thumbnailsSize: PropTypes.array,
     transitionSpeed: PropTypes.number,
     transitionTimingFunction: PropTypes.string
   })

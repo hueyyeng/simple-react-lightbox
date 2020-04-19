@@ -248,14 +248,13 @@ const StyledButton = styled.button`
   div {
     padding: ${(props) =>
       props.buttonsIconPadding ? props.buttonsIconPadding : '0px'};
-    height: 100%;
     box-sizing: border-box;
     svg {
       display: block;
       height: 100%;
+      width: auto;
       overflow: visible;
       position: relative;
-      width: 100%;
       path {
         transition: fill 0.3s ease;
         fill: ${(props) =>
@@ -276,7 +275,6 @@ const StyledButton = styled.button`
 `
 
 // Top right buttons
-
 const SRLLLightboxTopButtons = styled.div`
   position: absolute;
   top: 5px;
@@ -293,13 +291,13 @@ const SRRLLightboxCloseIcon = styled(StyledButton)`
   position: relative;
 `
 
-// The "close" button
+// The "expand" button
 const SRRLExpandIcon = styled(StyledButton)`
   position: relative;
   margin-right: 5px;
 `
 
-// The "close" button
+// The "zoomOut" button
 const SRLZoomOutIcon = styled(StyledButton)`
   position: relative;
   margin-right: 5px;
@@ -310,6 +308,12 @@ const SRRLLightboxAutoplayIcon = styled(StyledButton)`
   position: relative;
   margin-right: 5px;
   display: ${(props) => (props.autoplaySpeed === 0 ? 'none' : 'block')};
+`
+
+// The "download" button
+const SRRLDownloadIcon = styled(StyledButton)`
+  position: relative;
+  margin-right: 5px;
 `
 
 // The "next" button
@@ -336,15 +340,30 @@ const SRLLightboxPrevIcon = styled(StyledButton)`
 const SRLLightboxThubnailGallery = styled.div`
   display: flex;
   color: white;
-  height: 80px;
+  height: auto;
   width: 100%;
   justify-content: center;
   align-self: flex-end;
-  flex-wrap: nowrap;
-  overflow: auto;
+  flex-wrap: wrap;
+  overflow-y: hidden;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   opacity: 1;
   transition: opacity 0.3s ease;
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar {
+    height: 10px;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #000000;
+  }
+
   .SRLIdle & {
     opacity: 0;
   }
@@ -355,8 +374,10 @@ const SRLLightboxThubnailGallery = styled.div`
 
 // The images on the thumbnail gallery
 const SRLLightboxThubnailGalleryImage = styled.a`
-  width: 100px;
-  height: 80px;
+  width: ${(props) =>
+    props.thumbnailsSize ? props.thumbnailsSize[0] : '80px'};
+  height: ${(props) =>
+    props.thumbnailsSize ? props.thumbnailsSize[1] : '80px'};
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0 1px;
@@ -391,6 +412,7 @@ export {
   SRLLightboxNextIcon,
   SRLLightboxPrevIcon,
   SRRLLightboxAutoplayIcon,
+  SRRLDownloadIcon,
   SRRLExpandIcon,
   SRLZoomOutIcon,
   SRLLightboxThubnailGallery,
