@@ -6,6 +6,7 @@ import {
   SRLLightboxPrevIcon,
   SRLLLightboxTopButtons,
   SRRLLightboxAutoplayIcon,
+  SRRLDownloadIcon,
   SRRLExpandIcon,
   SRLZoomOutIcon
 } from '../styles'
@@ -15,6 +16,8 @@ const SRLLightboxControls = ({
   handleNextElement,
   handlePrevElement,
   handleFullScreen,
+  handleImageDownload,
+  showDownloadButton,
   autoplay,
   autoplaySpeed,
   setAutoplay,
@@ -65,6 +68,33 @@ const SRLLightboxControls = ({
             )}
           </div>
         </SRRLLightboxAutoplayIcon>
+
+        {showDownloadButton && (
+          <SRRLDownloadIcon
+            buttonsBackgroundColor={buttonsBackgroundColor}
+            buttonsIconColor={buttonsIconColor}
+            buttonsSize={buttonsSize}
+            buttonsIconPadding={buttonsIconPadding}
+            autoplaySpeed={autoplaySpeed}
+            title="Download"
+            className="SRLDownloadButton"
+            onClick={handleImageDownload}
+          >
+            <div className="SRLDownloadButton">
+              <svg
+                className="SRLDownloadButton"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 50 50"
+              >
+                <path
+                  className="SRLDownloadButton"
+                  d="M35.7 34.1c0 .6-.5 1-1.1 1-.6 0-1.1-.5-1.1-1s.5-1 1.1-1c.6 0 1.1.5 1.1 1zm-4.6-1c-.6 0-1.1.5-1.1 1s.5 1 1.1 1c.6 0 1.1-.5 1.1-1s-.5-1-1.1-1zm7.8-2.5V36c0 1.3-1.1 2.3-2.4 2.3h-23c-1.3 0-2.4-1-2.4-2.3v-5.4c0-1.3 1.1-2.3 2.4-2.3h5.4l-3.1-2.9c-1.4-1.3-.4-3.5 1.5-3.5h2.9v-8.1c0-1.1 1-2.1 2.2-2.1h5.2c1.2 0 2.2.9 2.2 2.1v8.1h2.9c1.9 0 2.9 2.2 1.5 3.5l-3.1 2.9h5.4c1.3 0 2.4 1 2.4 2.3zm-14.2.9c.2.2.4.2.6 0l7.6-7.3c.3-.3.1-.7-.3-.7H28v-9.7c0-.2-.2-.4-.4-.4h-5.2c-.2 0-.4.2-.4.4v9.7h-4.6c-.4 0-.6.4-.3.7l7.6 7.3zm12.5-.9c0-.3-.3-.6-.7-.6h-7.1l-2.8 2.7c-.8.8-2.2.8-3.1 0L20.6 30h-7.1c-.4 0-.7.3-.7.6V36c0 .3.3.6.7.6h23c.4 0 .7-.3.7-.6v-5.4z"
+                />
+              </svg>
+            </div>
+          </SRRLDownloadIcon>
+        )}
+
         {panzoomEnabled ? (
           <SRLZoomOutIcon
             buttonsBackgroundColor={buttonsBackgroundColor}
@@ -191,6 +221,7 @@ SRLLightboxControls.propTypes = {
   handleNextElement: PropTypes.func,
   handlePrevElement: PropTypes.func,
   handleFullScreen: PropTypes.func,
+  handleImageDownload: PropTypes.func,
   handlePanzoom: PropTypes.func,
   panzoomEnabled: PropTypes.bool,
   setAutoplay: PropTypes.func,
@@ -200,5 +231,6 @@ SRLLightboxControls.propTypes = {
   buttonsBackgroundColor: PropTypes.string,
   buttonsIconColor: PropTypes.string,
   buttonsSize: PropTypes.string,
-  buttonsIconPadding: PropTypes.string
+  buttonsIconPadding: PropTypes.string,
+  showDownloadButton: PropTypes.bool
 }

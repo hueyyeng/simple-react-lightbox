@@ -4,6 +4,9 @@
 
 [![NPM](https://img.shields.io/npm/v/simple-react-lightbox.svg)](https://www.npmjs.com/package/simple-react-lightbox) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.com/michelecocuccio/simple-react-lightbox.svg?token=RytKLBgaYszcR25z6ZLP&branch=master)](https://travis-ci.com/michelecocuccio/simple-react-lightbox)
 
+[![paypal](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=846H2KJ6AUL48)
+
+
 ### Documentation: quick links
 - [A brief introduction](#a-brief-introduction)
 - [Demo on CodeSandbox](#demo)
@@ -13,13 +16,16 @@
 - [Custom Hook](#hook)
 - [Panzoom functionality](#panzoom-functionality)
 
-### What's new in Version 2.6
-- ⚠️ Version 2.6 now **supports Gatsby and NextJS**. You don't need to do anything in particular apart from wrapping your main component using the `<SimpleReactLightbox>` component. I haven't fully tested using "[gatsby-browser.js](https://www.gatsbyjs.org/docs/browser-apis/)" or ["_document.js"](https://nextjs.org/docs/advanced-features/custom-document) but it works normally outside this two cases.
-- Improved **panzoom** functionality. Please consider this as an "experimental" feature although is now more stable.
-- Added a few more classes to the document in case you need to customize the style although this is not recommended as you have the [options](#options) to do so.
+### What's new in Version 2.7
+- Simple React Lightbox now works better with images fetched from an API. Please check the updated [demo](#demo). For this reason (because you could potentially have a lot of images) a new [option](#options) to customize the size of the thumbnails has been added. It's called ``thumbnailsSize`` and it's an array.
+- A "download" button has been added that allows the image to be downloaded. It can be enabled or disabled using the new [option](#options) `showDownloadButton`.
+- The `hideControlsAfter` [option](#options) has been updated. You can now set it to `FALSE` and the controls will never be disabled. If you were using `0` as value previously you can keep the same configuration.
+- I wanted to say thanks to anyone who's contributing by finding issues and suggesting improvements. I am working on this project ALONE so it's difficult to keep track of everything. I try my best to implement a fix as soon as I can. I have also setup a **donation** button in case you want to make a donation.
+- ⚠️ Remember that from version 2.6  **Gatsby and NextJS are supported**. You don't need to do anything in particular apart from wrapping your main component using the `<SimpleReactLightbox>` component. I haven't fully tested using "[gatsby-browser.js](https://www.gatsbyjs.org/docs/browser-apis/)" or ["_document.js"](https://nextjs.org/docs/advanced-features/custom-document) but it works normally outside this two cases.
+
 
 ### Migrating from Version 1.0
-Nothing has changed, you will only see your light-box with the default options. That's because the options have now changed. Don't pass the options to the ```<SimpleReactLightbox/>``` component. Just pass the [options](#options) to the ```<SRLWrapper>```
+Nothing has changed. If you migrate your light-box will be displayed with the default options. That's because the way options are passed has now changed. Don't pass the options to the `<SimpleReactLightbox />` component. Just pass the [options](#options) to the `<SRLWrapper />`
 
 #### A brief introduction
 It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend and I had no control over the content of each post (the content was in a WYSIWYG editor).
@@ -158,18 +164,20 @@ Check the options below.
 | autoplaySpeed   | number  | 3000 | Controls the auto play change interval. **Set it to 0** if you don't want to use the auto play functionality and hide the button. |
 | buttonIconPadding | string  | '0px ' | Increases the padding between the icon and the sides of the button. The more padding you add the smaller the icon will look.
 | buttonsBackgroundColor | string  | 'rgba(0, 0, 0, 0.9)'  | Controls the background color of the buttons.  Any CSS Color value is valid.
-| buttonsIconColor | string  | 'rgba(255, 255, 255, 0.8)' | Controls the color of the icons inside the buttons.  Any CSS Color value is valid but there is some magic 🎩 happening in here: if you use an rgba() value set an opacity (like “0.8” as showed in the default value), when you hover with the mouse on the icon this will create a nice CSS hover effect by automatically changing the opacity to “1”, regardless the colour you choose.
+| buttonsIconColor | string  | 'rgba(255, 255, 255, 0.8)' | Controls the color of the icons inside the buttons.  Any CSS Color value is valid but there is some magic 🎩 happening in here: if you use an rgba() value and set an opacity (like “0.8” as showed in the default value), when you hover with the mouse on the icon this will create a nice CSS hover effect by automatically changing the opacity to “1”, regardless the colour you choose.
 | buttonsSize | string | '40px' | Controls the size of the buttons.
 | captionFontFamily | string | 'inherit' | Controls the font family of the caption.
 | captionFontSize | string | 'inherit' | Controls the font size of the caption.
 | captionFontStyle | string | 'inherit' | Controls the font style of the caption. (This is just the CSS property text-transform (none/capitalize/uppercase/lowercase/initial/inherit))
 | captionFontWeight | string | 'inherit' | Controls the font weight of the caption.
 | enablePanzoom | boolean | true | Enables or disables the pan-zoom on the image. If you are having issues with the pan-zoom you can disable it from this option.
-| hideControlsAfter | number | 3000 | Controls after how long it will takes for the controls and thumbnails to be hidden. By default all the controls and the thumbnails will be hidden after 3 seconds, to create a more immersive experience. If you want the controls and thumbnails to be always visible **set this to 0**. | overlayColor | string | 'rgba(0, 0, 0, 0.9)' | The background color for the light-box.
+| hideControlsAfter | number/boolean | 3000/false | Controls after how long it will takes for the controls and thumbnails to be hidden. By default all the controls and the thumbnails will be hidden after 3 seconds, to create a more immersive experience. **This value can't be less then 1000** If you want the controls and thumbnails to be always visible **set this to FALSE**. | overlayColor | string | 'rgba(0, 0, 0, 0.9)' | The background color for the light-box.
 | showCaption | boolean | true | Shows/hides the caption. _The caption of the images is generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
 | showThumbnails | boolean | true | Shows/hides the thumbnail gallery.
+| 🆕showDownloadButton| boolean | true | Shows/hides the button that allows to download an image.
 | slideTransitionSpeed | number | 600 | Controls the transition speed of when an image is swapped with another. **Be gentle** as using a really high value can potentially cause issues. This value is in millisecond.
 | thumbnailsOpacity | number | 0.4 | Controls the opacity of the thumbnails.
+| 🆕thumbnailsSize | array | ["100px", "80px"] | Controls the size of the thumbnail. First value in the array is **width** and the second is **height**.
 | transitionSpeed | number | 600 | Controls the transition speed of when the light-box is opened. This value is in millisecond.
 | transitionTimingFunction | string | 'ease' | Controls the transition timing function of when the light-box is opened. It supports all the value of the [css transition-timing-function options.](https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp)  |
 
@@ -273,7 +281,7 @@ import React from 'react'
 import { useLightbox } from 'simple-react-lightbox'
 
 /*
-We can use the provided hook in case you want
+You can use the provided hook in case you want
 to open the lightbox from a button or anything :)
 */
 

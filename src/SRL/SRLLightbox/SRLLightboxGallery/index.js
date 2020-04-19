@@ -37,7 +37,12 @@ const SRLLightboxGallery = ({
   const SRLStageRef = useRef()
 
   // Destructuring the options
-  const { autoplaySpeed, enablePanzoom, hideControlsAfter } = options
+  const {
+    autoplaySpeed,
+    enablePanzoom,
+    hideControlsAfter,
+    showDownloadButton
+  } = options
 
   // Destructuring the callbacks passed by user and we need to check if those are functions
   const {
@@ -57,7 +62,7 @@ const SRLLightboxGallery = ({
   const [panzoomEnabled, setPanzoomEnabled] = useState(false)
 
   // Check if the user is not taking any action
-  const isIdle = useIdle(hideControlsAfter)
+  const isIdle = useIdle(hideControlsAfter < 1000 ? 9999999 : hideControlsAfter)
 
   // Method to get the index of a slide
   const getElementIndex = useCallback(
@@ -79,6 +84,27 @@ const SRLLightboxGallery = ({
     },
     [enablePanzoom]
   )
+
+  // Handle Image Download
+  // Handle Image Download
+  function toDataURL(url) {
+    return fetch(url)
+      .then((response) => {
+        return response.blob()
+      })
+      .then((blob) => {
+        return URL.createObjectURL(blob)
+      })
+  }
+
+  async function handleImageDownload() {
+    const a = document.createElement('a')
+    a.href = await toDataURL(currentElement.source)
+    a.download = ''
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+  }
 
   // Handle Current Element
   const handleCurrentElement = useCallback(
@@ -273,7 +299,7 @@ const SRLLightboxGallery = ({
 
   useEffect(() => {
     // Initialize the Idle functionality
-    if (hideControlsAfter !== 0) {
+    if (hideControlsAfter !== 0 || !hideControlsAfter) {
       if (isIdle) {
         handleOnIdle()
       } else {
@@ -296,6 +322,7 @@ const SRLLightboxGallery = ({
         if (panzoomElementRef !== undefined || panzoomElementRef !== null) {
           // Zoom the image
           panZoomController.zoomAbs(0, 0, INITIAL_ZOOM)
+          panZoomController.moveTo(0, 0)
         }
       }
     }
@@ -354,10 +381,12 @@ const SRLLightboxGallery = ({
     handlePrevElement,
     handleCloseLightbox,
     handleFullScreen,
+    handleImageDownload,
     handlePanzoom,
     autoplay,
     panzoomEnabled,
     autoplaySpeed,
+    showDownloadButton,
     setAutoplay,
     SRLLightboxImageRef,
     SRLLightboxPanzoomImageRef
@@ -393,7 +422,8 @@ SRLLightboxGallery.propTypes = {
   callbacks: PropTypes.object,
   overlayColor: PropTypes.string,
   selectedElement: PropTypes.object,
-  hideControlsAfter: PropTypes.number,
+  hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  showDownloadButton: PropTypes.bool,
   elements: PropTypes.array,
   isOpened: PropTypes.bool,
   dispatch: PropTypes.func

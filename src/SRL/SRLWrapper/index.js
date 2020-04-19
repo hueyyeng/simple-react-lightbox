@@ -14,20 +14,35 @@ const SRLWrapper = ({
   defaultOptions,
   defaultCallbacks
 }) => {
-  // Add a state to check if the event listener is set
-  const [listenerIsSet, setListenerIsSet] = useState(false)
-
-  const [imagesAreLoaded, setImagesAreLoaded] = useState(false)
-
   // Imports the context
   const context = useContext(SRLCtx)
 
   // Sets a new Ref which will be used to target the div with the images
-  const imagesContainer = useRef(null)
+  const elementsContainer = useRef(null)
+  // Ref for the mutation
+  const mutationRef = useRef()
+
+  const [imagesAreLoaded, setImagesAreLoaded] = useState(false)
+  const [lightboxIsInit, setLightboxIsInit] = useState(false)
 
   useEffect(() => {
-    // Dispatch the Action to grab the options
-    const grabSettings = (options, callbacks) => {
+    // Mutation Observer
+    mutationRef.current = new MutationObserver(detectChanges)
+
+    // Detect if there are mutations in the SRLWrapper ref
+    function detectChanges(mutations) {
+      // if this runs there has been a mutation
+      handleDetectTypeOfElements(elementsContainer.current)
+    }
+
+    // Declare what to observe
+    mutationRef.current.observe(elementsContainer.current, {
+      childList: true,
+      subtree: true
+    })
+
+    // 4.5) Dispatch the action to grab the options
+    function dispatchGrabSettings(options, callbacks) {
       // console.log('dispatched options')
       // We merge the settings that we receive from the user via the props with the original ones (defaultOptions and defaultCallbacks)
       // If the user hasn't provided any options/callbacks via props we make mergedSettings use just the default options/callbacks
@@ -53,6 +68,7 @@ const SRLWrapper = ({
           }
         }
       }
+
       if (!isEqual(mergedSettings.options, context.options)) {
         context.dispatch({
           type: 'GRAB_SETTINGS',
@@ -61,8 +77,8 @@ const SRLWrapper = ({
       }
     }
 
-    // Dispatch the Action the grab the elements
-    const grabElements = (elements) => {
+    // 4.5) Dispatch the action to handle the elements
+    function dispatchAddElements(elements) {
       if (!isEqual(elements, context.elements)) {
         // console.log('dispatched grab elements')
         context.dispatch({
@@ -72,7 +88,22 @@ const SRLWrapper = ({
       }
     }
 
-    // Dispatch the Action to handle the clicked item
+    // 4) Finally handle the lightbox by dispatching the actions to the context
+    function handleLightBox(elements) {
+      // Set the lightbox to be successfully initialized
+      setLightboxIsInit(true)
+
+      if (!lightboxIsInit) {
+        // Dispatch the actions to grab settings and elements
+        // console.log('light-box is initialized')
+        return (
+          dispatchAddElements(elements.filter((e) => e !== undefined)),
+          dispatchGrabSettings(options, callbacks)
+        )
+      }
+    }
+
+    // 3.5) Dispatch the Action to handle the clicked item
     const handleElement = (element) => {
       // We don't want to dispatch the action if the selected image is already selected
       if (!isEqual(element, context.selectedElement)) {
@@ -84,29 +115,8 @@ const SRLWrapper = ({
       }
     }
 
-    // // Generate a canvas with a frame from the video
-    // function capture(video) {
-    //   const scaleFactor = 1
-    //   var w = video.videoWidth * scaleFactor
-    //   var h = video.videoHeight * scaleFactor
-    //   var canvas = document.createElement('canvas')
-    //   canvas.width = w
-    //   canvas.height = h
-    //   var ctx = canvas.getContext('2d')
-    //   ctx.drawImage(video, 0, 0, w, h)
-    //   return canvas
-    // }
-
-    // // Takes the dataUrl from the canvas
-    // function generateScreen(element) {
-    //   var video = element
-    //   var canvas = capture(video)
-    //   const dataUrl = canvas.toDataURL()
-    //   return dataUrl
-    // }
-
-    // Loop through the elements or the links to add them to the context
-    const handleElementsWithContext = (array, elementType) => {
+    // 3) Adds the elements to the "context" and add the eventListener to open the lightbox to each element
+    function handleImagesWithContext(array, elementType) {
       const elements = array.map((e, index) => {
         // If the images is loaded and not broken
         // Also checks if the image is a Base64 image
@@ -161,62 +171,69 @@ const SRLWrapper = ({
           return element
         }
       })
-      setListenerIsSet(true)
-      // Use filter to remove the undefined values
-      grabElements(elements.filter((e) => e !== undefined))
+
+      // Function that handle the lightbox
+      return handleLightBox(elements)
     }
 
-    // Check if the images are loaded using "imagesLoaded" by Desandro (LOVE)
-    // When te images are loaded set the state to TRUE and run the function to handle the context
-    function handleLoadedImages(array, elementsAreLinks) {
+    // 2) Detected if images are loaded in the DOM
+    function handleImagesLoaded(array) {
+      // Checks if the images are loaded using "imagesLoaded" by Desandro (❤️)
+      // When te images are loaded set the state to TRUE and run the function to handle the context
       imagesLoaded(array, function (instance) {
-        // Checks if the element (the first one) is an image or a link. If it's a link, the user is using the gallery
-        // And we need to grab the correct source of the image, not the thumbnail
-        const elementType = instance.elements[0].nodeName
         if (instance.isComplete) {
-          setImagesAreLoaded(true)
-          if (imagesAreLoaded) {
-            handleElementsWithContext(instance.images, elementType)
+          // Checks if the element (the first one) is an image or a link. If it's a link, the user is using the gallery
+          // And we need to grab the correct source of the image, not the thumbnail
+          const elementType = instance.elements[0].nodeName
+          if (!imagesAreLoaded) {
+            setImagesAreLoaded(true)
+            handleImagesWithContext(instance.images, elementType)
           }
         }
       })
     }
 
-    // Grabs the options set by the user first
-    grabSettings(options, callbacks)
-    // Grabs images and videos (REMOVES videos for now)
-    const collectedElements = imagesContainer.current.querySelectorAll('img')
-    // Grabs data attributes (in links)
-    const collectedDataAttributes = imagesContainer.current.querySelectorAll(
-      "a[data-attribute='SRL']"
-    )
+    // 1) Detected the type of element (if the user is using the "GALLERY" approach)
+    function handleDetectTypeOfElements(array) {
+      // Grabs images in the ref
+      const collectedElements = array.querySelectorAll('img')
+      // Grabs data attributes (in links) in the ref
+      const collectedDataAttributes = array.querySelectorAll(
+        "a[data-attribute='SRL']"
+      )
 
-    // Set "listenerIsSet" so that we know that the event listener is only set ONCE
-    if (!listenerIsSet) {
-      // Checks if the user is not using the "data-attribute"
-      if (collectedDataAttributes.length === 0) {
-        handleLoadedImages(collectedElements)
-      } else if (collectedDataAttributes.length > 0) {
-        handleLoadedImages(collectedDataAttributes)
-        // Throws a warning if the number of links is not equal to the number of images
-        if (collectedDataAttributes.length !== collectedElements.length) {
-          console.warn(
-            `HEY!. You have ${collectedDataAttributes.length} links and ${collectedElements.length} images. You likely forgot to add the data-attribute="SRL" to one of your link wrapping your image!`
-          )
+      // Checks if the are elements in the DOM first of all
+      if (collectedElements.length !== 0) {
+        if (collectedDataAttributes.length === 0) {
+          // USER IS NOT USING DATA ATTRIBUTES
+          handleImagesLoaded(collectedElements)
+        } else if (collectedDataAttributes.length > 0) {
+          // USER *IS* USING DATA ATTRIBUTES
+          handleImagesLoaded(collectedDataAttributes)
+          /* Throws a warning if the number of links is not equal to the number of images so that means
+          that the user has forgot to add a "a[data-attribute='SRL']" to one or more images */
+          if (collectedDataAttributes.length !== collectedElements.length) {
+            console.warn(
+              `HEY!. You have ${collectedDataAttributes.length} links and ${collectedElements.length} images. You likely forgot to add the ** data-attribute="SRL" ** to one of your link wrapping your image!`
+            )
+          }
         }
       }
     }
+
+    // RUN THE LIGHTBOX
+    handleDetectTypeOfElements(elementsContainer.current)
   }, [
+    lightboxIsInit,
     context,
-    options,
-    defaultOptions,
-    listenerIsSet,
     imagesAreLoaded,
     defaultCallbacks,
+    defaultOptions,
+    options,
     callbacks
   ])
 
-  return <div ref={imagesContainer}>{children}</div>
+  return <div ref={elementsContainer}>{children}</div>
 }
 
 export default SRLWrapper
@@ -234,12 +251,14 @@ SRLWrapper.propTypes = {
     captionFontStyle: PropTypes.string,
     captionFontWeight: PropTypes.string,
     enablePanzoom: PropTypes.bool,
-    hideControlsAfter: PropTypes.number,
+    hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
     overlayColor: PropTypes.string,
     showCaption: PropTypes.bool,
     showThumbnails: PropTypes.bool,
+    showDownloadButton: PropTypes.bool,
     slideTransitionSpeed: PropTypes.number,
     thumbnailsOpacity: PropTypes.number,
+    thumbnailsSize: PropTypes.array,
     transitionSpeed: PropTypes.number,
     transitionTimingFunction: PropTypes.string,
     onSlideChange: PropTypes.func
@@ -259,10 +278,10 @@ SRLWrapper.propTypes = {
 SRLWrapper.defaultProps = {
   defaultOptions: {
     autoplaySpeed: 3000,
-    buttonsIconPadding: '0px',
     buttonsBackgroundColor: 'rgba(30,30,36,0.8)',
     buttonsIconColor: 'rgba(255, 255, 255, 0.8)',
     buttonsSize: '40px',
+    buttonsIconPadding: '0px',
     captionColor: '#FFFFFF',
     captionFontFamily: 'inherit',
     captionFontSize: 'inherit',
@@ -273,8 +292,10 @@ SRLWrapper.defaultProps = {
     overlayColor: 'rgba(0, 0, 0, 0.9)',
     showCaption: true,
     showThumbnails: true,
+    showDownloadButton: true,
     slideTransitionSpeed: 600,
     thumbnailsOpacity: 0.4,
+    thumbnailsSize: ['100px', '80px'],
     transitionSpeed: 500,
     transitionTimingFunction: 'ease'
   },

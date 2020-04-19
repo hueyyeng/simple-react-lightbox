@@ -20,8 +20,10 @@ const initialState = {
     overlayColor: 'rgba(0, 0, 0, 0.9)',
     showCaption: true,
     showThumbnails: true,
+    showDownloadButton: true,
     slideTransitionSpeed: 600,
     thumbnailsOpacity: 0.4,
+    thumbnailsSize: ['100px', '80px'],
     transitionSpeed: 600,
     transitionTimingFunction: 'ease'
   },
@@ -43,7 +45,7 @@ const initialState = {
 
 const SRLCtx = React.createContext(initialState)
 
-const SRLContextComponent = props => {
+const SRLContextComponent = (props) => {
   // Reducer
   const reducer = (state, action) => {
     switch (action.type) {
