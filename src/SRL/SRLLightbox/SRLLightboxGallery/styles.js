@@ -251,7 +251,7 @@ const StyledButton = styled.button`
     height: 100%;
     width: 100%;
     padding: ${(props) =>
-      props.buttonsIconPadding ? props.buttonsIconPadding : '0px'};
+      props.buttonsIconPadding ? props.buttonsIconPadding : '5px'};
     box-sizing: border-box;
     svg {
       display: block;
