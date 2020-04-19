@@ -246,6 +246,10 @@ const StyledButton = styled.button`
     outline: none;
   }
   div {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
     padding: ${(props) =>
       props.buttonsIconPadding ? props.buttonsIconPadding : '0px'};
     box-sizing: border-box;
