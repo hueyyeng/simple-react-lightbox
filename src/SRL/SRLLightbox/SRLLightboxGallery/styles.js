@@ -238,9 +238,14 @@ const StyledButton = styled.button`
     opacity: 0;
   }
   @media (max-width: 768px) {
-    width: 30px;
-    height: 30px;
-    padding: 5px;
+    height: ${(props) =>
+      props.buttonsSize
+        ? Math.round(parseInt(props.buttonsSize, 10) / 1.3) + 'px'
+        : '30px'};
+    width: ${(props) =>
+      props.buttonsSize
+        ? Math.round(parseInt(props.buttonsSize, 10) / 1.3) + 'px'
+        : '30px'};
   }
   &:focus {
     outline: none;

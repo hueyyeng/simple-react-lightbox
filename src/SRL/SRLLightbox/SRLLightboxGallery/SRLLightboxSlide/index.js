@@ -95,13 +95,13 @@ function SRLLightboxSlideComponent({
       className="SRLContent"
       onWheel={(e) => debouncedCallback(e)}
       ref={SRLLightboxContentRef}
-      {...handlers}
     >
       <SRLLightboxElementContainer
         showThumbnails={showThumbnails}
         showCaption={showCaption}
         className="SRLElementContainer"
         ref={SRLElementRef}
+        {...handlers}
       >
         <TransitionGroup className="SRLTransitionGroup">
           <CSSTransition
