@@ -95,6 +95,8 @@ function App() {
 export default App;
 ```
 
+Note: If you need multiple instances of Sliders, at one page, you should wrap each one with <SimpleReactLightbox>
+
 Next you want to import and use the **SRLWrapper** component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
 
 ```jsx
