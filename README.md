@@ -34,7 +34,7 @@ I checked online for some light-box for React but the way that they were working
 
 #### My Idea 💡
 
-**Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, whether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app, define your options and then use the "SRLWrapper" component by wrapping it around the content in which you have or expect your images 😮!
+**Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, whether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app, define your options and then use the `<SRLWrapper>`  component by wrapping it around the content in which you have or expect your images 😮!
 
 From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the "Gallery with links" example page on the CodeSandbox [demo](#demo)
 
@@ -95,9 +95,9 @@ function App() {
 export default App;
 ```
 
-Note: if you need multiple instance of the light-box in one page you should wrap each one in it's own **SimpleReactLightbox** component.
+Note: if you need multiple instance of the light-box in one page you should wrap each one in it's own  `<SimpleReactLightbox>` component.
 
-Next you want to import and use the **SRLWrapper** component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
+Next you want to import and use the `<SRLWrapper>` component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
 
 ```jsx
 import { SRLWrapper } from "simple-react-lightbox"; // Import SRLWrapper
