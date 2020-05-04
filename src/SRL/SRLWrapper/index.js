@@ -260,12 +260,13 @@ SRLWrapper.propTypes = {
     thumbnailsOpacity: PropTypes.number,
     thumbnailsSize: PropTypes.array,
     transitionSpeed: PropTypes.number,
-    transitionTimingFunction: PropTypes.string,
-    onSlideChange: PropTypes.func
+    transitionTimingFunction: PropTypes.string
   }),
   defaultCallbacks: PropTypes.shape({
     onSlideChange: PropTypes.func,
-    onLightboxClosed: PropTypes.func
+    onLightboxClosed: PropTypes.func,
+    onCountSlides: PropTypes.func,
+    onLightboxOpened: PropTypes.func
   }),
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
