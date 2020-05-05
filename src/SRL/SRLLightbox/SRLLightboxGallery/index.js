@@ -44,13 +44,66 @@ const SRLLightboxGallery = ({
     showDownloadButton
   } = options
 
-  // Destructuring the callbacks passed by user and we need to check if those are functions
+  // Destructuring the callbacks !!!passed by user!!! and we need to check if those are functions
   const {
     onCountSlides,
     onSlideChange,
     onLightboxClosed,
     onLightboxOpened
   } = callbacks
+
+  // Callbacks functions
+  const onChange = useCallback(
+    (object) => {
+      if (typeof onSlideChange === 'function') {
+        return ctx.callbacks.onSlideChange(object)
+      } else {
+        console.error(
+          `Simple React Lightbox error: you are not passing a function in your "onSlideChange" callback! You are passing a ${typeof onSlideChange}.`
+        )
+      }
+    },
+    [ctx.callbacks, onSlideChange]
+  )
+
+  const onOpened = useCallback(
+    (current) => {
+      if (typeof onLightboxOpened === 'function') {
+        ctx.callbacks.onLightboxOpened(current)
+      } else {
+        console.error(
+          `Simple React Lightbox error: you are not passing a function in your "onLightboxOpened" callback! You are passing a ${typeof onLightboxOpened}.`
+        )
+      }
+    },
+    [ctx.callbacks, onLightboxOpened]
+  )
+
+  const onClosed = useCallback(
+    (current) => {
+      if (typeof onLightboxClosed === 'function') {
+        ctx.callbacks.onLightboxClosed(current)
+      } else {
+        console.error(
+          `Simple React Lightbox error: you are not passing a function in your "onLightboxClosed" callback! You are passing a ${typeof onLightboxClosed}.`
+        )
+      }
+    },
+    [ctx.callbacks, onLightboxClosed]
+  )
+
+  const onCount = useCallback(
+    (total) => {
+      if (typeof onCountSlides === 'function') {
+        ctx.callbacks.onCountSlides(total)
+      } else {
+        console.error(
+          `Simple React Lightbox error: you are not passing a function in your "onCountSlides" callback! You are passing a ${typeof onCountSlides}.`
+        )
+      }
+    },
+    [ctx.callbacks, onCountSlides]
+  )
 
   // In this component we set the state using the context.
   // We don't want to manipulate the context every time so we create a localized state
@@ -85,7 +138,6 @@ const SRLLightboxGallery = ({
     [enablePanzoom]
   )
 
-  // Handle Image Download
   // Handle Image Download
   function toDataURL(url) {
     return fetch(url)
@@ -128,20 +180,18 @@ const SRLLightboxGallery = ({
       })
 
       // Callback
-      if (typeof onSlideChange === 'function') {
-        ctx.callbacks.onSlideChange({
-          direction: 'selected',
-          slides: {
-            previous: elements[currentElementIndex - 1],
-            current: currentElement,
-            next: elements[currentElementIndex + 1]
-          },
-          index: currentElementIndex
-        })
-      }
+      onChange({
+        action: 'selected',
+        slides: {
+          previous: elements[currentElementIndex - 1],
+          current: currentElement,
+          next: elements[currentElementIndex + 1]
+        },
+        index: currentElementIndex
+      })
     },
 
-    [ctx.callbacks, elements, getElementIndex, handlePanzoom, onSlideChange]
+    [elements, getElementIndex, handlePanzoom, onChange]
   )
 
   // Handle Previous Element
@@ -167,20 +217,17 @@ const SRLLightboxGallery = ({
         currentElementIndex - 1 === -1
           ? elements.length - 1
           : currentElementIndex - 1
-
-      if (typeof onSlideChange === 'function') {
-        ctx.callbacks.onSlideChange({
-          direction: 'left',
-          slides: {
-            previous: elements[index - 1],
-            current: prevElement,
-            next: elements[index + 1]
-          },
-          index
-        })
-      }
+      onChange({
+        action: 'left',
+        slides: {
+          previous: elements[index - 1],
+          current: prevElement,
+          next: elements[index + 1]
+        },
+        index
+      })
     },
-    [ctx.callbacks, elements, getElementIndex, handlePanzoom, onSlideChange]
+    [elements, getElementIndex, handlePanzoom, onChange]
   )
 
   // Handle Next element
@@ -206,19 +253,18 @@ const SRLLightboxGallery = ({
         currentElementIndex + 1 === elements.length
           ? 0
           : currentElementIndex + 1
-      if (typeof onSlideChange === 'function') {
-        ctx.callbacks.onSlideChange({
-          direction: 'right',
-          slides: {
-            previous: elements[index - 1],
-            current: nextElement,
-            next: elements[index + 1]
-          },
-          index
-        })
-      }
+
+      onChange({
+        action: 'right',
+        slides: {
+          previous: elements[index - 1],
+          current: nextElement,
+          next: elements[index + 1]
+        },
+        index
+      })
     },
-    [ctx.callbacks, elements, getElementIndex, handlePanzoom, onSlideChange]
+    [elements, getElementIndex, handlePanzoom, onChange]
   )
 
   // Handle Close Lightbox
@@ -227,10 +273,11 @@ const SRLLightboxGallery = ({
       type: 'CLOSE_LIGHTBOX'
     })
     // Callback
-    if (typeof onLightboxClosed === 'function') {
-      ctx.callbacks.onLightboxClosed()
-    }
-  }, [ctx.callbacks, dispatch, onLightboxClosed])
+    onClosed({
+      opened: false,
+      currentSlide: ctx.selectedElement
+    })
+  }, [dispatch, onClosed, ctx.selectedElement])
 
   // Handle Autoplay
   function useInterval(callback, delay) {
@@ -263,6 +310,7 @@ const SRLLightboxGallery = ({
   useKeyPressEvent('ArrowUp', () => handleNextElement(currentElement.id))
   useKeyPressEvent('ArrowLeft', () => handlePrevElement(currentElement.id))
   useKeyPressEvent('ArrowDown', () => handlePrevElement(currentElement.id))
+  useKeyPressEvent('Escape', () => handleCloseLightbox())
 
   // Handle FullScreen
   function handleFullScreen() {
@@ -296,6 +344,18 @@ const SRLLightboxGallery = ({
       SRLStageRef.current.classList.add('SRLIdle')
     }
   }
+
+  // We want this to run only once
+  useEffect(() => {
+    onOpened({
+      opened: true,
+      currentSlide: ctx.selectedElement
+    })
+
+    onCount({
+      totalSlide: ctx.elements.length
+    })
+  }, [])
 
   useEffect(() => {
     // Initialize the Idle functionality
@@ -344,16 +404,6 @@ const SRLLightboxGallery = ({
       document.body.style.overflow = 'hidden'
     }
 
-    // Callback
-    if (typeof onLightboxOpened === 'function') {
-      ctx.callbacks.onLightboxOpened()
-    }
-
-    // Callback to count slides
-    if (typeof onCountSlides === 'function') {
-      ctx.callbacks.onCountSlides(elements.length)
-    }
-
     // Cleans up function to remove the class from the body
     return function cleanUp() {
       if (typeof window !== 'undefined') {
@@ -365,8 +415,6 @@ const SRLLightboxGallery = ({
     ctx.callbacks,
     currentElement.id,
     elements,
-    onCountSlides,
-    onLightboxOpened,
     enablePanzoom,
     panzoomEnabled,
     hideControlsAfter,

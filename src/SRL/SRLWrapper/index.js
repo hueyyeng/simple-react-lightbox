@@ -119,14 +119,24 @@ const SRLWrapper = ({
     function handleImagesWithContext(array, elementType) {
       const elements = array.map((e, index) => {
         // If the images is loaded and not broken
-        // Also checks if the image is a Base64 image
-        // const isBase64Image = e.img.src.includes("base64")
         if (e.isLoaded) {
           e.img.id = `element${index}`
           // Check if it's an image
           const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(
             e.img.currentSrc || e.img.src || e.img.href
           )
+
+          /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
+          want to ignore that one but only if it's Gatsby because other base64 images are allowed) */
+          const isBase64Image = e.img.src.includes('base64')
+          const isGatsbyImage = e.img.offsetParent.className.includes(
+            'gatsby-image-wrapper'
+          )
+
+          if (isGatsbyImage && isBase64Image) {
+            return
+          }
+
           // Creates an object for each element
           const element = {
             // Grabs the "src" attribute from the image/video.
