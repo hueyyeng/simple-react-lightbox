@@ -340,7 +340,6 @@ SRLWrapper.defaultProps = {
   defaultOptions: {
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
-      hideButtonsAfter: 3000,
       iconColor: 'rgba(255, 255, 255, 0.8)',
       iconPadding: '5px',
       showAutoplayButton: true,
@@ -353,6 +352,7 @@ SRLWrapper.defaultProps = {
     },
     settings: {
       autoplaySpeed: 3000,
+      hideControlsAfter: 3000,
       disableKeyboardControls: false,
       enablePanzoom: true,
       lightboxTransitionSpeed: 600,

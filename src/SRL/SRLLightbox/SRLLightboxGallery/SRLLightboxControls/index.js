@@ -240,7 +240,6 @@ SRLLightboxControls.propTypes = {
   }),
   buttons: PropTypes.shape({
     backgroundColor: PropTypes.string,
-    hideButtonsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
     iconColor: PropTypes.string,
     iconPadding: PropTypes.string,
     showAutoplayButton: PropTypes.bool,

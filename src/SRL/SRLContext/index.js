@@ -7,7 +7,6 @@ const initialState = {
   options: {
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
-      hideButtonsAfter: 3000,
       iconColor: 'rgba(255, 255, 255, 0.8)',
       iconPadding: '5px',
       showAutoplayButton: true,
@@ -22,6 +21,7 @@ const initialState = {
       autoplaySpeed: 3000,
       disableKeyboardControls: false,
       enablePanzoom: true,
+      hideControlsAfter: 3000,
       lightboxTransitionSpeed: 600,
       lightboxTransitionTimingFunction: 'ease',
       overlayColor: 'rgba(0, 0, 0, 0.9)',

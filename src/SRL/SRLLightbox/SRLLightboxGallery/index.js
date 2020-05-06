@@ -115,7 +115,7 @@ const SRLLightboxGallery = ({
 
   // Check if the user is not taking any action
   const isIdle = useIdle(
-    buttons.hideButtonsAfter < 1000 ? 9999999 : buttons.hideButtonsAfter
+    settings.hideControlsAfter < 1000 ? 9999999 : settings.hideControlsAfter
   )
 
   // Method to get the index of a slide
@@ -374,7 +374,7 @@ const SRLLightboxGallery = ({
 
   useEffect(() => {
     // Initialize the Idle functionality
-    if (buttons.hideButtonsAfter !== 0 || !buttons.hideButtonsAfter) {
+    if (settings.hideControlsAfter !== 0 || !settings.hideControlsAfter) {
       if (isIdle) {
         handleOnIdle()
       } else {
@@ -439,7 +439,7 @@ const SRLLightboxGallery = ({
     settings.enablePanzoom,
     settings.disableKeyboardControls,
     panzoomEnabled,
-    buttons.hideButtonsAfter,
+    settings.hideControlsAfter,
     isIdle,
     handleNavigationWithKeys
   ])
@@ -499,11 +499,11 @@ SRLLightboxGallery.propTypes = {
       overlayColor: PropTypes.string,
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
-      enablePanzoom: PropTypes.bool
+      enablePanzoom: PropTypes.bool,
+      hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
     }),
     buttons: PropTypes.shape({
       backgroundColor: PropTypes.string,
-      hideButtonsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
       iconColor: PropTypes.string,
       iconPadding: PropTypes.string,
       size: PropTypes.string
