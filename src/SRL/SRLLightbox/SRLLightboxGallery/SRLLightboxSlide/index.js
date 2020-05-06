@@ -4,6 +4,7 @@ import SRLLightboxThubnailGallery from './SRLLightboxThubnailGallery'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { useSwipeable } from 'react-swipeable'
 import { useDebouncedCallback } from 'use-debounce'
+import subscribe from 'subscribe-event'
 
 import {
   SRLLightboxContent,
@@ -42,10 +43,10 @@ function SRLLightboxSlideComponent({
   // Debounce callback
   const [debouncedCallback] = useDebouncedCallback(
     // function
-    (e) => {
-      if (e.deltaY > 0) {
+    (value) => {
+      if (value > 0) {
         handleNextElement(id)
-      } else if (e.deltaY < 0) {
+      } else if (value < 0) {
         handlePrevElement(id)
       }
     },
@@ -61,12 +62,14 @@ function SRLLightboxSlideComponent({
   // Handle scrollwheel
   useEffect(() => {
     if (!panzoomEnabled) {
-      document.addEventListener('wheel', debouncedCallback)
+      const unsubscribe = subscribe(document, 'wheel', (e) =>
+        debouncedCallback(e.deltaY)
+      )
       return () => {
-        document.removeEventListener('wheel', debouncedCallback)
+        unsubscribe()
       }
     }
-  }, [debouncedCallback, panzoomEnabled])
+  }, [debouncedCallback, panzoomEnabled, settings.disableWheelControls])
 
   // UseOnClickOutside
   useOnClickOutside(SRLElementRef, () => handleCloseLightbox())
@@ -122,7 +125,7 @@ function SRLLightboxSlideComponent({
               ) : (
                 <SRLLightboxImage
                   className="SRLImage"
-                  enablePanzoom={settings.enablePanzoom}
+                  disablePanzoom={settings.disablePanzoom}
                   width={width}
                   height={height}
                   onClick={() => handlePanzoom(true)}
@@ -228,7 +231,8 @@ SRLLightboxSlideComponent.propTypes = {
   thumbnailsOpacity: PropTypes.number,
   options: PropTypes.shape({
     settings: PropTypes.shape({
-      enablePanzoom: PropTypes.bool,
+      disableWheelControls: PropTypes.bool,
+      disablePanzoom: PropTypes.bool,
       slideTransitionSpeed: PropTypes.number,
       slideTransitionTimingFunction: PropTypes.string
     }),

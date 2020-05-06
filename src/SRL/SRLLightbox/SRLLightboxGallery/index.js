@@ -129,14 +129,14 @@ const SRLLightboxGallery = ({
     [elements]
   )
 
-  // Handle Panzoom (set the state to true)
+  // Handle Panzoom
   const handlePanzoom = useCallback(
     (value) => {
-      if (settings.enablePanzoom) {
+      if (!settings.disablePanzoom) {
         setPanzoomEnabled(value)
       }
     },
-    [settings.enablePanzoom]
+    [settings.disablePanzoom]
   )
 
   // Handle Image Download
@@ -383,7 +383,7 @@ const SRLLightboxGallery = ({
     }
 
     // Initialize the panzoom functionality
-    if (settings.enablePanzoom) {
+    if (!settings.disablePanzoom) {
       if (panzoomEnabled) {
         const panzoomElementRef = SRLLightboxPanzoomImageRef.current
         const INITIAL_ZOOM = 1.5
@@ -436,7 +436,7 @@ const SRLLightboxGallery = ({
     ctx.callbacks,
     currentElement.id,
     elements,
-    settings.enablePanzoom,
+    settings.disablePanzoom,
     settings.disableKeyboardControls,
     panzoomEnabled,
     settings.hideControlsAfter,
@@ -499,7 +499,7 @@ SRLLightboxGallery.propTypes = {
       overlayColor: PropTypes.string,
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
-      enablePanzoom: PropTypes.bool,
+      disablePanzoom: PropTypes.bool,
       hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
     }),
     buttons: PropTypes.shape({

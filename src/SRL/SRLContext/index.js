@@ -20,7 +20,8 @@ const initialState = {
     settings: {
       autoplaySpeed: 3000,
       disableKeyboardControls: false,
-      enablePanzoom: true,
+      disableWheelControls: false,
+      disablePanzoom: false,
       hideControlsAfter: 3000,
       lightboxTransitionSpeed: 600,
       lightboxTransitionTimingFunction: 'ease',

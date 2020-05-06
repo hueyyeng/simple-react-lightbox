@@ -149,7 +149,7 @@ const SRLLightboxImage = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  cursor: ${(props) => (props.enablePanzoom ? 'zoom-in' : 'auto')};
+  cursor: ${(props) => (props.disablePanzoom ? 'auto' : 'zoom-in')};
 `
 
 const SRLLightboxPanzoomImage = styled(SRLLightboxImage)`
