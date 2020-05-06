@@ -286,7 +286,6 @@ SRLWrapper.propTypes = {
   defaultOptions: PropTypes.shape({
     buttons: PropTypes.shape({
       backgroundColor: PropTypes.string,
-      hideButtonsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
       iconColor: PropTypes.string,
       iconPadding: PropTypes.string,
       showAutoplayButton: PropTypes.bool,
@@ -301,6 +300,10 @@ SRLWrapper.propTypes = {
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
       enablePanzoom: PropTypes.bool,
+      hideControlsAfter: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.bool
+      ]),
       lightboxTransitionSpeed: PropTypes.number,
       lightboxTransitionTimingFunction: PropTypes.string,
       overlayColor: PropTypes.string,
