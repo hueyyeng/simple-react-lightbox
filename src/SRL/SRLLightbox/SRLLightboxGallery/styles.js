@@ -96,27 +96,36 @@ const SRLElementWrapper = styled.div`
   }
   &.element-transition-enter-active {
     opacity: 1;
-    transition: ${(props) =>
-      props.transitionSpeed
-        ? `opacity ${props.transitionSpeed}ms ease`
-        : 'opacity 600ms ease'};
+    transition-timing-function: ${(props) =>
+      props.slideTransitionTimingFunction
+        ? props.slideTransitionTimingFunction
+        : 'ease'};
+    transition-duration: ${(props) =>
+      props.slideTransitionSpeed ? props.slideTransitionSpeed + 'ms' : '600ms'};
+    transition-property: opacity;
   }
   &.element-transition-exit {
     opacity: 1;
   }
   &.element-transition-exit-active {
     opacity: 0;
-    transition: ${(props) =>
-      props.transitionSpeed
-        ? `opacity ${props.transitionSpeed}ms ease`
-        : 'opacity 600ms ease;'};
+    transition-timing-function: ${(props) =>
+      props.slideTransitionTimingFunction
+        ? props.slideTransitionTimingFunction
+        : 'ease'};
+    transition-duration: ${(props) =>
+      props.slideTransitionSpeed ? props.slideTransitionSpeed + 'ms' : '600ms'};
+    transition-property: opacity;
   }
   &.element-transition-enter-done {
     opacity: 1;
-    transition: ${(props) =>
-      props.transitionSpeed
-        ? `opacity ${props.transitionSpeed}ms ease`
-        : 'opacity 600ms ease;'};
+    transition-timing-function: ${(props) =>
+      props.slideTransitionTimingFunction
+        ? props.slideTransitionTimingFunction
+        : 'ease'};
+    transition-duration: ${(props) =>
+      props.slideTransitionSpeed ? props.slideTransitionSpeed + 'ms' : '600ms'};
+    transition-property: opacity;
   }
 `
 
@@ -207,9 +216,13 @@ const SRRLLightboxCaption = styled.div`
       props.captionStyle.captionColor
         ? props.captionStyle.captionColor
         : 'white'};
-    text-transform: ${(props) =>
+    font-style: ${(props) =>
       props.captionStyle.captionFontStyle
         ? props.captionStyle.captionFontStyle
+        : 'inherit'};
+    text-transform: ${(props) =>
+      props.captionStyle.captionTextTransform
+        ? props.captionStyle.captionTextTransform
         : 'inherit'};
   }
 `

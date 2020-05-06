@@ -5,27 +5,43 @@ const initialState = {
   elements: [],
   isOpened: false,
   options: {
-    autoplaySpeed: 3000,
-    buttonsIconPadding: '5px',
-    buttonsBackgroundColor: 'rgba(30,30,36,0.8)',
-    buttonsIconColor: 'rgba(255, 255, 255, 0.8)',
-    buttonsSize: '40px',
-    captionColor: '#FFFFFF',
-    captionFontFamily: 'inherit',
-    captionFontSize: 'inherit',
-    captionFontStyle: 'inherit',
-    captionFontWeight: 'inherit',
-    enablePanzoom: true,
-    hideControlsAfter: 3000,
-    overlayColor: 'rgba(0, 0, 0, 0.9)',
-    showCaption: true,
-    showThumbnails: true,
-    showDownloadButton: true,
-    slideTransitionSpeed: 600,
-    thumbnailsOpacity: 0.4,
-    thumbnailsSize: ['100px', '80px'],
-    transitionSpeed: 600,
-    transitionTimingFunction: 'ease'
+    buttons: {
+      backgroundColor: 'rgba(30,30,36,0.8)',
+      hideButtonsAfter: 3000,
+      iconColor: 'rgba(255, 255, 255, 0.8)',
+      iconPadding: '5px',
+      showAutoplayButton: true,
+      showCloseButton: true,
+      showDownloadButton: true,
+      showFullscreenButton: true,
+      showNextButton: true,
+      showPrevButton: true,
+      size: '40px'
+    },
+    settings: {
+      autoplaySpeed: 3000,
+      disableKeyboardControls: false,
+      enablePanzoom: true,
+      lightboxTransitionSpeed: 600,
+      lightboxTransitionTimingFunction: 'ease',
+      overlayColor: 'rgba(0, 0, 0, 0.9)',
+      slideTransitionSpeed: 600,
+      slideTransitionTimingFunction: 'ease'
+    },
+    caption: {
+      showCaption: true,
+      captionColor: '#FFFFFF',
+      captionFontFamily: 'inherit',
+      captionFontSize: 'inherit',
+      captionFontStyle: 'inherit',
+      captionFontWeight: 'inherit',
+      captionTextTransform: 'inherit'
+    },
+    thumbnails: {
+      showThumbnails: true,
+      thumbnailsOpacity: 0.4,
+      thumbnailsSize: ['100px', '80px']
+    }
   },
   selectedElement: {
     caption: '',

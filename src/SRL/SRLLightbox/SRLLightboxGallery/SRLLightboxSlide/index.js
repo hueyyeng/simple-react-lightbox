@@ -31,14 +31,7 @@ function SRLLightboxSlideComponent({
   SRLLightboxPanzoomImageRef,
   width
 }) {
-  const {
-    enablePanzoom,
-    showCaption,
-    showThumbnails,
-    slideTransitionSpeed,
-    thumbnailsOpacity,
-    thumbnailsSize
-  } = options
+  const { settings, thumbnails, caption: captionSettings } = options
 
   // Swipe Handlers
   const handlers = useSwipeable({
@@ -83,11 +76,12 @@ function SRLLightboxSlideComponent({
 
   // Light-box captions options
   const captionOptions = {
-    captionColor: options.captionColor,
-    captionFontFamily: options.captionFontFamily,
-    captionFontSize: options.captionFontSize,
-    captionFontStyle: options.captionFontStyle,
-    captionFontWeight: options.captionFontWeight
+    captionColor: options.caption.captionColor,
+    captionFontFamily: options.caption.captionFontFamily,
+    captionFontSize: options.caption.captionFontSize,
+    captionFontStyle: options.caption.captionFontStyle,
+    captionFontWeight: options.caption.captionFontWeight,
+    captionTextTransform: options.caption.captionTextTransform
   }
 
   return (
@@ -97,8 +91,8 @@ function SRLLightboxSlideComponent({
       ref={SRLLightboxContentRef}
     >
       <SRLLightboxElementContainer
-        showThumbnails={showThumbnails}
-        showCaption={showCaption}
+        showThumbnails={thumbnails.showThumbnails}
+        showCaption={captionSettings.showCaption}
         className="SRLElementContainer"
         ref={SRLElementRef}
         {...handlers}
@@ -107,10 +101,13 @@ function SRLLightboxSlideComponent({
           <CSSTransition
             key={id}
             classNames="element-transition"
-            timeout={slideTransitionSpeed}
+            timeout={settings.slideTransitionSpeed}
           >
             <SRLElementWrapper
-              transitionSpeed={slideTransitionSpeed}
+              slideTransitionSpeed={settings.slideTransitionSpeed}
+              slideTransitionTimingFunction={
+                settings.slideTransitionTimingFunction
+              }
               className="SRLElementWrapper"
             >
               {panzoomEnabled ? (
@@ -125,7 +122,7 @@ function SRLLightboxSlideComponent({
               ) : (
                 <SRLLightboxImage
                   className="SRLImage"
-                  enablePanzoom={enablePanzoom}
+                  enablePanzoom={settings.enablePanzoom}
                   width={width}
                   height={height}
                   onClick={() => handlePanzoom(true)}
@@ -138,7 +135,7 @@ function SRLLightboxSlideComponent({
         </TransitionGroup>
       </SRLLightboxElementContainer>
 
-      {showCaption && (
+      {captionSettings.showCaption && (
         <SRRLLightboxCaption
           captionStyle={captionOptions}
           className="SRLCaption"
@@ -147,11 +144,11 @@ function SRLLightboxSlideComponent({
         </SRRLLightboxCaption>
       )}
 
-      {showThumbnails && (
+      {thumbnails.showThumbnails && (
         <SRLLightboxThubnailGallery
           handleCurrentElement={handleCurrentElement}
-          thumbnailsOpacity={thumbnailsOpacity}
-          thumbnailsSize={thumbnailsSize}
+          thumbnailsOpacity={thumbnails.thumbnailsOpacity}
+          thumbnailsSize={thumbnails.thumbnailsSize}
           currentId={id}
           elements={elements || []}
         />
@@ -228,29 +225,27 @@ SRLLightboxSlideComponent.propTypes = {
   id: PropTypes.string,
   SRLLightboxPanzoomImageRef: PropTypes.object,
   panzoomEnabled: PropTypes.bool,
-  enablePanzoom: PropTypes.bool,
   thumbnailsOpacity: PropTypes.number,
   options: PropTypes.shape({
-    autoplaySpeed: PropTypes.number,
-    buttonsBackgroundColor: PropTypes.string,
-    buttonsIconColor: PropTypes.string,
-    buttonsIconPadding: PropTypes.string,
-    buttonsSize: PropTypes.string,
-    captionColor: PropTypes.string,
-    captionFontFamily: PropTypes.string,
-    captionFontSize: PropTypes.string,
-    captionFontStyle: PropTypes.string,
-    captionFontWeight: PropTypes.string,
-    enablePanzoom: PropTypes.bool,
-    overlayColor: PropTypes.string,
-    showCaption: PropTypes.bool,
-    showThumbnails: PropTypes.bool,
-    showDownloadButton: PropTypes.bool,
-    slideTransitionSpeed: PropTypes.number,
-    thumbnailsOpacity: PropTypes.number,
-    thumbnailsSize: PropTypes.array,
-    transitionSpeed: PropTypes.number,
-    transitionTimingFunction: PropTypes.string
+    settings: PropTypes.shape({
+      enablePanzoom: PropTypes.bool,
+      slideTransitionSpeed: PropTypes.number,
+      slideTransitionTimingFunction: PropTypes.string
+    }),
+    caption: PropTypes.shape({
+      showCaption: PropTypes.bool,
+      captionColor: PropTypes.string,
+      captionFontFamily: PropTypes.string,
+      captionFontSize: PropTypes.string,
+      captionFontStyle: PropTypes.string,
+      captionFontWeight: PropTypes.string,
+      captionTextTransform: PropTypes.string
+    }),
+    thumbnails: PropTypes.shape({
+      showThumbnails: PropTypes.bool,
+      thumbnailsOpacity: PropTypes.number,
+      thumbnailsSize: PropTypes.array
+    })
   })
 }
 

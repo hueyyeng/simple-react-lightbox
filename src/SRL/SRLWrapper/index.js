@@ -46,30 +46,64 @@ const SRLWrapper = ({
       // console.log('dispatched options')
       // We merge the settings that we receive from the user via the props with the original ones (defaultOptions and defaultCallbacks)
       // If the user hasn't provided any options/callbacks via props we make mergedSettings use just the default options/callbacks
-      let mergedSettings = {}
-      if (isEmpty(options) && isEmpty(callbacks)) {
-        mergedSettings = {
-          options: {
-            ...defaultOptions
+
+      let _options = {}
+      let _callbacks = {}
+
+      if (isEmpty(options)) {
+        _options = {
+          ...defaultOptions,
+          buttons: {
+            ...defaultOptions.buttons
           },
-          callbacks: {
-            ...defaultCallbacks
+          settings: {
+            ...defaultOptions.settings
+          },
+          caption: {
+            ...defaultOptions.caption
+          },
+          thumbnails: {
+            ...defaultOptions.thumbnails
           }
         }
       } else {
-        mergedSettings = {
-          options: {
-            ...defaultOptions,
-            ...options
+        _options = {
+          ...defaultOptions,
+          ...options,
+          buttons: {
+            ...defaultOptions.buttons,
+            ...options.buttons
           },
-          callbacks: {
-            ...defaultCallbacks,
-            ...callbacks
+          settings: {
+            ...defaultOptions.settings,
+            ...options.settings
+          },
+          caption: {
+            ...defaultOptions.caption,
+            ...options.caption
+          },
+          thumbnails: {
+            ...defaultOptions.thumbnails,
+            ...options.thumbnails
           }
         }
       }
 
-      if (!isEqual(mergedSettings.options, context.options)) {
+      if (isEmpty(callbacks)) {
+        _callbacks = { ...defaultCallbacks }
+      } else {
+        _callbacks = { ...defaultCallbacks, ...callbacks }
+      }
+
+      const mergedSettings = {
+        options: { ..._options },
+        callbacks: { ..._callbacks }
+      }
+
+      if (
+        !isEqual(mergedSettings.options, context.options) ||
+        !isEqual(mergedSettings.callbacks, context.callbacks)
+      ) {
         context.dispatch({
           type: 'GRAB_SETTINGS',
           mergedSettings
@@ -250,27 +284,43 @@ export default SRLWrapper
 
 SRLWrapper.propTypes = {
   defaultOptions: PropTypes.shape({
-    autoplaySpeed: PropTypes.number,
-    buttonsIconPadding: PropTypes.string,
-    buttonsBackgroundColor: PropTypes.string,
-    buttonsIconColor: PropTypes.string,
-    buttonsSize: PropTypes.string,
-    captionColor: PropTypes.string,
-    captionFontFamily: PropTypes.string,
-    captionFontSize: PropTypes.string,
-    captionFontStyle: PropTypes.string,
-    captionFontWeight: PropTypes.string,
-    enablePanzoom: PropTypes.bool,
-    hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-    overlayColor: PropTypes.string,
-    showCaption: PropTypes.bool,
-    showThumbnails: PropTypes.bool,
-    showDownloadButton: PropTypes.bool,
-    slideTransitionSpeed: PropTypes.number,
-    thumbnailsOpacity: PropTypes.number,
-    thumbnailsSize: PropTypes.array,
-    transitionSpeed: PropTypes.number,
-    transitionTimingFunction: PropTypes.string
+    buttons: PropTypes.shape({
+      backgroundColor: PropTypes.string,
+      hideButtonsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+      iconColor: PropTypes.string,
+      iconPadding: PropTypes.string,
+      showAutoplayButton: PropTypes.bool,
+      showCloseButton: PropTypes.bool,
+      showDownloadButton: PropTypes.bool,
+      showFullscreenButton: PropTypes.bool,
+      showNextButton: PropTypes.bool,
+      showPrevButton: PropTypes.bool,
+      size: PropTypes.string
+    }),
+    settings: PropTypes.shape({
+      autoplaySpeed: PropTypes.number,
+      disableKeyboardControls: PropTypes.bool,
+      enablePanzoom: PropTypes.bool,
+      lightboxTransitionSpeed: PropTypes.number,
+      lightboxTransitionTimingFunction: PropTypes.string,
+      overlayColor: PropTypes.string,
+      slideTransitionSpeed: PropTypes.number,
+      slideTransitionTimingFunction: PropTypes.string
+    }),
+    caption: PropTypes.shape({
+      showCaption: PropTypes.bool,
+      captionColor: PropTypes.string,
+      captionFontFamily: PropTypes.string,
+      captionFontSize: PropTypes.string,
+      captionFontStyle: PropTypes.string,
+      captionFontWeight: PropTypes.string,
+      captionTextTransform: PropTypes.string
+    }),
+    thumbnails: PropTypes.shape({
+      showThumbnails: PropTypes.bool,
+      thumbnailsOpacity: PropTypes.number,
+      thumbnailsSize: PropTypes.array
+    })
   }),
   defaultCallbacks: PropTypes.shape({
     onSlideChange: PropTypes.func,
@@ -288,27 +338,43 @@ SRLWrapper.propTypes = {
 
 SRLWrapper.defaultProps = {
   defaultOptions: {
-    autoplaySpeed: 3000,
-    buttonsBackgroundColor: 'rgba(30,30,36,0.8)',
-    buttonsIconColor: 'rgba(255, 255, 255, 0.8)',
-    buttonsSize: '40px',
-    buttonsIconPadding: '5px',
-    captionColor: '#FFFFFF',
-    captionFontFamily: 'inherit',
-    captionFontSize: 'inherit',
-    captionFontStyle: 'inherit',
-    captionFontWeight: 'inherit',
-    enablePanzoom: true,
-    hideControlsAfter: 3000,
-    overlayColor: 'rgba(0, 0, 0, 0.9)',
-    showCaption: true,
-    showThumbnails: true,
-    showDownloadButton: true,
-    slideTransitionSpeed: 600,
-    thumbnailsOpacity: 0.4,
-    thumbnailsSize: ['100px', '80px'],
-    transitionSpeed: 500,
-    transitionTimingFunction: 'ease'
+    buttons: {
+      backgroundColor: 'rgba(30,30,36,0.8)',
+      hideButtonsAfter: 3000,
+      iconColor: 'rgba(255, 255, 255, 0.8)',
+      iconPadding: '5px',
+      showAutoplayButton: true,
+      showCloseButton: true,
+      showDownloadButton: true,
+      showFullscreenButton: true,
+      showNextButton: true,
+      showPrevButton: true,
+      size: '40px'
+    },
+    settings: {
+      autoplaySpeed: 3000,
+      disableKeyboardControls: false,
+      enablePanzoom: true,
+      lightboxTransitionSpeed: 600,
+      lightboxTransitionTimingFunction: 'ease',
+      overlayColor: 'rgba(0, 0, 0, 0.9)',
+      slideTransitionSpeed: 600,
+      slideTransitionTimingFunction: 'ease'
+    },
+    caption: {
+      showCaption: true,
+      captionColor: '#FFFFFF',
+      captionFontFamily: 'inherit',
+      captionFontSize: 'inherit',
+      captionFontStyle: 'inherit',
+      captionFontWeight: 'inherit',
+      captionTextTransform: 'inherit'
+    },
+    thumbnails: {
+      showThumbnails: true,
+      thumbnailsOpacity: 0.4,
+      thumbnailsSize: ['100px', '80px']
+    }
   },
   defaultCallbacks: {
     onCountSlides: () => {},

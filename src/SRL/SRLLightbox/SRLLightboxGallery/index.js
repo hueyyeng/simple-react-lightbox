@@ -12,7 +12,7 @@ import SRLLightboxControls from './SRLLightboxControls'
 import { SRLCtx } from '../../SRLContext'
 import panzoom from 'panzoom'
 import fscreen from 'fscreen'
-import { useIdle, useKeyPressEvent } from 'react-use'
+import { useIdle } from 'react-use'
 
 // Lodash helper
 const findIndex = require('lodash/findIndex')
@@ -38,10 +38,9 @@ const SRLLightboxGallery = ({
 
   // Destructuring the options
   const {
-    autoplaySpeed,
-    enablePanzoom,
-    hideControlsAfter,
-    showDownloadButton
+    // new
+    buttons,
+    settings
   } = options
 
   // Destructuring the callbacks !!!passed by user!!! and we need to check if those are functions
@@ -115,7 +114,9 @@ const SRLLightboxGallery = ({
   const [panzoomEnabled, setPanzoomEnabled] = useState(false)
 
   // Check if the user is not taking any action
-  const isIdle = useIdle(hideControlsAfter < 1000 ? 9999999 : hideControlsAfter)
+  const isIdle = useIdle(
+    buttons.hideButtonsAfter < 1000 ? 9999999 : buttons.hideButtonsAfter
+  )
 
   // Method to get the index of a slide
   const getElementIndex = useCallback(
@@ -131,11 +132,11 @@ const SRLLightboxGallery = ({
   // Handle Panzoom (set the state to true)
   const handlePanzoom = useCallback(
     (value) => {
-      if (enablePanzoom) {
+      if (settings.enablePanzoom) {
         setPanzoomEnabled(value)
       }
     },
-    [enablePanzoom]
+    [settings.enablePanzoom]
   )
 
   // Handle Image Download
@@ -302,15 +303,29 @@ const SRLLightboxGallery = ({
 
   useInterval(
     () => handleNextElement(currentElement.id),
-    autoplay ? autoplaySpeed : null
+    autoplay ? settings.autoplaySpeed : null
   )
 
   // Handle Navigation With Keys
-  useKeyPressEvent('ArrowRight', () => handleNextElement(currentElement.id))
-  useKeyPressEvent('ArrowUp', () => handleNextElement(currentElement.id))
-  useKeyPressEvent('ArrowLeft', () => handlePrevElement(currentElement.id))
-  useKeyPressEvent('ArrowDown', () => handlePrevElement(currentElement.id))
-  useKeyPressEvent('Escape', () => handleCloseLightbox())
+  const handleNavigationWithKeys = useCallback(
+    (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+        handleNextElement(currentElement.id)
+      }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+        handlePrevElement(currentElement.id)
+      }
+      if (e.key === 'Escape') {
+        handleCloseLightbox()
+      }
+    },
+    [
+      handleNextElement,
+      handlePrevElement,
+      handleCloseLightbox,
+      currentElement.id
+    ]
+  )
 
   // Handle FullScreen
   function handleFullScreen() {
@@ -359,7 +374,7 @@ const SRLLightboxGallery = ({
 
   useEffect(() => {
     // Initialize the Idle functionality
-    if (hideControlsAfter !== 0 || !hideControlsAfter) {
+    if (buttons.hideButtonsAfter !== 0 || !buttons.hideButtonsAfter) {
       if (isIdle) {
         handleOnIdle()
       } else {
@@ -368,7 +383,7 @@ const SRLLightboxGallery = ({
     }
 
     // Initialize the panzoom functionality
-    if (enablePanzoom) {
+    if (settings.enablePanzoom) {
       if (panzoomEnabled) {
         const panzoomElementRef = SRLLightboxPanzoomImageRef.current
         const INITIAL_ZOOM = 1.5
@@ -398,6 +413,11 @@ const SRLLightboxGallery = ({
       })
     }
 
+    // EVENT LISTENERS
+    if (!settings.disableKeyboardControls) {
+      document.addEventListener('keydown', handleNavigationWithKeys, false)
+    }
+
     // Adds a class to the body to remove the overflow
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
@@ -410,15 +430,18 @@ const SRLLightboxGallery = ({
         document.body.classList.remove('SRLOpened')
         document.body.style.overflow = null
       }
+      document.removeEventListener('keydown', handleNavigationWithKeys, false)
     }
   }, [
     ctx.callbacks,
     currentElement.id,
     elements,
-    enablePanzoom,
+    settings.enablePanzoom,
+    settings.disableKeyboardControls,
     panzoomEnabled,
-    hideControlsAfter,
-    isIdle
+    buttons.hideButtonsAfter,
+    isIdle,
+    handleNavigationWithKeys
   ])
 
   // Light-box controls
@@ -433,8 +456,8 @@ const SRLLightboxGallery = ({
     handlePanzoom,
     autoplay,
     panzoomEnabled,
-    autoplaySpeed,
-    showDownloadButton,
+    settings,
+    buttons,
     setAutoplay,
     SRLLightboxImageRef,
     SRLLightboxPanzoomImageRef
@@ -442,16 +465,16 @@ const SRLLightboxGallery = ({
 
   // Light-box buttons options
   const buttonOptions = {
-    buttonsBackgroundColor: options.buttonsBackgroundColor,
-    buttonsIconColor: options.buttonsIconColor,
-    buttonsSize: options.buttonsSize,
-    buttonsIconPadding: options.buttonsIconPadding
+    buttonsBackgroundColor: options.buttons.backgroundColor,
+    buttonsIconColor: options.buttons.iconColor,
+    buttonsSize: options.buttons.size,
+    buttonsIconPadding: options.buttons.iconPadding
   }
 
   return (
     <SRLLightboxGalleryStage
       ref={SRLStageRef}
-      overlayColor={options.overlayColor}
+      overlayColor={options.settings.overlayColor}
       className="SRLStage"
     >
       <SRLLightboxControls {...buttonOptions} {...controls} />
@@ -466,15 +489,26 @@ const SRLLightboxGallery = ({
 }
 
 SRLLightboxGallery.propTypes = {
-  options: PropTypes.object,
   callbacks: PropTypes.object,
-  overlayColor: PropTypes.string,
-  selectedElement: PropTypes.object,
-  hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-  showDownloadButton: PropTypes.bool,
   elements: PropTypes.array,
   isOpened: PropTypes.bool,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  selectedElement: PropTypes.object,
+  options: PropTypes.shape({
+    settings: PropTypes.shape({
+      overlayColor: PropTypes.string,
+      autoplaySpeed: PropTypes.number,
+      disableKeyboardControls: PropTypes.bool,
+      enablePanzoom: PropTypes.bool
+    }),
+    buttons: PropTypes.shape({
+      backgroundColor: PropTypes.string,
+      hideButtonsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+      iconColor: PropTypes.string,
+      iconPadding: PropTypes.string,
+      size: PropTypes.string
+    })
+  })
 }
 
 export default SRLLightboxGallery

@@ -18,16 +18,16 @@ const PortalWithTransitionStyles = styled(Portal)`
   }
   &.portal-transition-enter-active {
     opacity: 1;
-    transition: opacity ${(props) => props.transitionSpeed}ms
-      ${(props) => props.transitionTimingFunction};
+    transition: opacity ${(props) => props.lightboxTransitionSpeed}ms
+      ${(props) => props.lightboxTransitionTimingFunction};
   }
   &.portal-transition-exit {
     opacity: 1;
   }
   &.portal-transition-exit-active {
     opacity: 0;
-    transition: opacity ${(props) => props.transitionSpeed}ms
-      ${(props) => props.transitionTimingFunction};
+    transition: opacity ${(props) => props.lightboxTransitionSpeed}ms
+      ${(props) => props.lightboxTransitionTimingFunction};
   }
 `
 
@@ -39,13 +39,15 @@ function SRLLightbox() {
     <CSSTransition
       in={isOpened}
       classNames="portal-transition"
-      timeout={options.transitionSpeed}
+      timeout={options.settings.lightboxTransitionSpeed}
     >
       <PortalWithTransitionStyles
         selector="SRLLightbox"
         isOpened={isOpened}
-        transitionSpeed={options.transitionSpeed}
-        transitionTimingFunction={options.transitionTimingFunction}
+        lightboxTransitionSpeed={options.settings.lightboxTransitionSpeed}
+        lightboxTransitionTimingFunction={
+          options.settings.lightboxTransitionTimingFunction
+        }
       >
         <SRLLightboxGallery {...context} />
       </PortalWithTransitionStyles>
