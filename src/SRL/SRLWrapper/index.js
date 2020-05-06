@@ -359,7 +359,7 @@ SRLWrapper.defaultProps = {
       hideControlsAfter: 3000,
       disableKeyboardControls: false,
       disableWheelControls: false,
-      disablePanzoom: true,
+      disablePanzoom: false,
       lightboxTransitionSpeed: 600,
       lightboxTransitionTimingFunction: 'ease',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
