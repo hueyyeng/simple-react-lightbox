@@ -20,7 +20,7 @@
 - ⚠️ [Options](#options) have now changed to be more clear and clean. **By upgrading to version 2.8 keep in mind that you must update your options with the new syntax**. Please refer to the documentation below. ⚠️
 - Added new options: `"disableKeyboardControls", "slideTransitionTimingFunction", "captionTextTransform", "showPrevButton", "showNextButton", "showFullscreenButton"` have been added to give you even more control.
 - Simple React Lightbox now works better with [Gatsby Image](https://www.gatsbyjs.org/docs/gatsby-image/)!
-- A new [custom Hook](#hook) has been adedd to close the light-box. ⚠️ **Please note that if you were using hook before you now need to the destructure the hook to get the hook that you want**. ⚠️ Please refer to the documentation below.
+- A new [custom Hook](#hook) has been adedd to close the light-box. ⚠️ **Please note that if you were using hook before you now need to the destructure the hook to get the function that you want**. ⚠️ Please refer to the documentation below.
 - [Callbacks](#callbacks) are fully working now and they give you access to several options to combine Simple React Lightbox with some other packages.
 
 #### A brief introduction
