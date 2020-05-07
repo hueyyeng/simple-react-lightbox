@@ -11,21 +11,17 @@
 - [A brief introduction](#a-brief-introduction)
 - [Demo on CodeSandbox](#demo)
 - [Get started](#how-to-use)
-- [Options](#options)
+- [Options](#options) 🆕
 - [Callbacks](#callbacks)
 - [Custom Hook](#hook)
 - [Panzoom functionality](#panzoom-functionality)
 
-### What's new in Version 2.7
-- Simple React Lightbox now works better with images fetched from an API. Please check the updated [demo](#demo). For this reason (because you could potentially have a lot of images) a new [option](#options) to customize the size of the thumbnails has been added. It's called ``thumbnailsSize`` and it's an array.
-- A "download" button has been added that allows the image to be downloaded. It can be enabled or disabled using the new [option](#options) `showDownloadButton`.
-- The `hideControlsAfter` [option](#options) has been updated. You can now set it to `FALSE` and the controls will never be disabled. If you were using `0` as value previously you can keep the same configuration.
-- I wanted to say thanks to anyone who's contributing by finding issues and suggesting improvements. I am working on this project ALONE so it's difficult to keep track of everything. I try my best to implement a fix as soon as I can. I have also setup a **donation** button in case you want to make a donation.
-- ⚠️ Remember that from version 2.6  **Gatsby and NextJS are supported**. You don't need to do anything in particular apart from wrapping your main component using the `<SimpleReactLightbox>` component. I haven't fully tested using "[gatsby-browser.js](https://www.gatsbyjs.org/docs/browser-apis/)" or ["_document.js"](https://nextjs.org/docs/advanced-features/custom-document) but it works normally outside this two cases.
-
-
-### Migrating from Version 1.0
-Nothing has changed. If you migrate your light-box will be displayed with the default options. That's because the way options are passed has now changed. Don't pass the options to the `<SimpleReactLightbox />` component. Just pass the [options](#options) to the `<SRLWrapper />`
+### What's new in Version 2.8
+- ⚠️ [Options](#options) have now changed to be more clear and clean. **By upgrading to version 2.8 keep in mind that you must update your options with the new syntax**. Please refer to the documentation below. ⚠️
+- Added new options: `"disableKeyboardControls", "slideTransitionTimingFunction", "captionTextTransform", "showPrevButton", "showNextButton", "showFullscreenButton"` have been added to give you even more control.
+- Simple React Lightbox now works better with [Gatsby Image](https://www.gatsbyjs.org/docs/gatsby-image/)!
+- A new [custom Hook](#hook) has been adedd to close the light-box. ⚠️ **Please note that if you were using hook before you now need to the destructure the hook to get the hook that you want**. ⚠️ Please refer to the documentation below.
+- [Callbacks](#callbacks) are fully working now and they give you access to several options to combine Simple React Lightbox with some other packages.
 
 #### A brief introduction
 It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend and I had no control over the content of each post (the content was in a WYSIWYG editor).
@@ -65,9 +61,7 @@ I have provided a **full working demo** on CodeSandbox where you can also play w
 
 [![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
 
-## Demo website
-
-I have provided a **full working website** where you can see the light-box in action. If you want to play with the options, use the CodeSandbox link above.
+I have also created a **full working website** where you can see the light-box in action. If you want to play with the options, use the CodeSandbox link above.
 
 [Simple React Lightbox - Website](https://simple-react-lightbox.dev)
 
@@ -75,16 +69,18 @@ I have provided a **full working website** where you can see the light-box in ac
 
 #### Instructions
 
-First of all you need to wrap your React app with the main component so that it can create the context. The example below will allow you to use the **Simple React Lightbox** wherever you need it in your app:
+First of all you need to **wrap your React app with the main component** so that it can create the context. The example below will allow you to use the **Simple React Lightbox** wherever you need it in your app:
 
 ```jsx
 import React from "react";
 import MyComponent from "./components/MyComponent";
-import SimpleReactLightbox from "simple-react-lightbox"; // Import Simple React Lightbox
+// Import Simple React Lightbox
+import SimpleReactLightbox from "simple-react-lightbox";
 
 function App() {
   return (
     <div className="App">
+      // Wrap your app with the component
       <SimpleReactLightbox>
         <MyComponent /> // Your App logic
       </SimpleReactLightbox>
@@ -95,20 +91,19 @@ function App() {
 export default App;
 ```
 
-Note: if you need multiple instance of the light-box in one page you should wrap each one in it's own  `<SimpleReactLightbox>` component.
+Note: *if you need multiple instance of the light-box in one page you should wrap each one in it's own  `<SimpleReactLightbox>` component.*
 
-Next you want to import and use the `<SRLWrapper>` component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. _The caption for the images will be generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
+Next you want to import and use the `<SRLWrapper>` component wherever you expect the content with the images on which you want to add the light-box functionality. Please note the `{}` as this is a named export. The caption for the images will be generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp) so don't forget to add it.
 
 ```jsx
-import { SRLWrapper } from "simple-react-lightbox"; // Import SRLWrapper
+// Import SRLWrapper
+import { SRLWrapper } from "simple-react-lightbox";
 
 function MyComponent() {
   return (
     <div className="MyComponent">
       <SRLWrapper>
-        // This will be your content with the images. It can be anything.
-        Content defined by yourself, content fetched from an API, data from a
-        graphQL query... anything :)
+        // This will be your content with the images. It can be anything. Content defined by yourself, content fetched from an API, data from a graphQL query... anything :)
       </SRLWrapper>
     </div>
   );
@@ -126,13 +121,14 @@ That's it 🥳 As we are not passing any [options](#options) you should have a w
 
 #### Custom gallery
 
-If you want to use the light-box in a more traditional way, like if you want to create a gallery in which thumbnails are wrapped in a link that points to a full width image, now you can. (You can check the "Gallery with links" example page on the CodeSandbox [demo](#demo)).
+If you want to use the light-box in a more traditional way, like if you want to create a gallery in which thumbnails are wrapped in a link that links to a full width image, now you can. Check the "Gallery with links" example page on the CodeSandbox [demo](#demo).
 
 Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the `alt` attribute for the images will be used as caption if declared.
 
 ```jsx
 import React from "react";
-import { SRLWrapper } from "simple-react-lightbox"; // Import SRLWrapper
+// Import SRLWrapper
+import { SRLWrapper } from "simple-react-lightbox";
 
 function MyComponent() {
   return (
@@ -142,9 +138,8 @@ function MyComponent() {
           <img src="src/for/the/thumbnail/image.jpg" alt="Umbrella" />
         </a>
         <a href="link/to/the/full/width/image_two.jpg" data-attribute="SRL">
-          <img src="src/for/the/thumbnail/image_two.jpg" alt="Umbrella" />
+          <img src="src/for/the/thumbnail/image_two.jpg" alt="Whatever" />
         </a>
-        // More images...
       </SRLWrapper>
     </div>
   );
@@ -159,33 +154,19 @@ I know what you are thinking.
 > "That's cool and all but the style of the light-box doesn't match the one of my project. That's ok though. I will use your classes and override everything with my custom styles..."
 
 ⚠️ **WAIT!** ⚠️ Despite the fact that I have made sure to define class names for each part of the light-box, I have provided all the options that you need to customize the light-box so that you don't have to add any additional logic. **You can customize everything!**
-Check the options below.
 
-| Option | Type | Default | Description |
-| --------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| autoplaySpeed   | number  | 3000 | Controls the auto play change interval. **Set it to 0** if you don't want to use the auto play functionality and hide the button. |
-| buttonIconPadding | string  | '0px ' | Increases the padding between the icon and the sides of the button. The more padding you add the smaller the icon will look.
-| buttonsBackgroundColor | string  | 'rgba(0, 0, 0, 0.9)'  | Controls the background color of the buttons.  Any CSS Color value is valid.
-| buttonsIconColor | string  | 'rgba(255, 255, 255, 0.8)' | Controls the color of the icons inside the buttons.  Any CSS Color value is valid but there is some magic 🎩 happening in here: if you use an rgba() value and set an opacity (like “0.8” as showed in the default value), when you hover with the mouse on the icon this will create a nice CSS hover effect by automatically changing the opacity to “1”, regardless the colour you choose.
-| buttonsSize | string | '40px' | Controls the size of the buttons.
-| captionFontFamily | string | 'inherit' | Controls the font family of the caption.
-| captionFontSize | string | 'inherit' | Controls the font size of the caption.
-| captionFontStyle | string | 'inherit' | Controls the font style of the caption. (This is just the CSS property text-transform (none/capitalize/uppercase/lowercase/initial/inherit))
-| captionFontWeight | string | 'inherit' | Controls the font weight of the caption.
-| enablePanzoom | boolean | true | Enables or disables the pan-zoom on the image. If you are having issues with the pan-zoom you can disable it from this option.
-| hideControlsAfter | number/boolean | 3000/false | Controls after how long it will takes for the controls and thumbnails to be hidden. By default all the controls and the thumbnails will be hidden after 3 seconds, to create a more immersive experience. **This value can't be less then 1000** If you want the controls and thumbnails to be always visible **set this to FALSE**. | overlayColor | string | 'rgba(0, 0, 0, 0.9)' | The background color for the light-box.
-| showCaption | boolean | true | Shows/hides the caption. _The caption of the images is generated from the [image "alt" attribute](https://www.w3schools.com/tags/tag_img.asp)!_
-| showThumbnails | boolean | true | Shows/hides the thumbnail gallery.
-| 🆕showDownloadButton| boolean | true | Shows/hides the button that allows to download an image.
-| slideTransitionSpeed | number | 600 | Controls the transition speed of when an image is swapped with another. **Be gentle** as using a really high value can potentially cause issues. This value is in millisecond.
-| thumbnailsOpacity | number | 0.4 | Controls the opacity of the thumbnails.
-| 🆕thumbnailsSize | array | ["100px", "80px"] | Controls the size of the thumbnail. First value in the array is **width** and the second is **height**.
-| transitionSpeed | number | 600 | Controls the transition speed of when the light-box is opened. This value is in millisecond.
-| transitionTimingFunction | string | 'ease' | Controls the transition timing function of when the light-box is opened. It supports all the value of the [css transition-timing-function options.](https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp)  |
+Passing options is very simple. Just pass the options in a prop called **options** to the `<SRLWrapper>` component. I will strongly recommend to create a constant with all the options and then pass it to the component. **From version 2.8, options are divided in four objects to avoid confusion and to make the code cleaner**
 
-#### Yes, options! But how do I use them?
+The four objects are: `settings`, `caption`, `buttons`, `thumbnails`.
 
-Passing options is as simple as defining props for a React component. Actually, the options **are** props for the SRLWrapper component. I will strongly recommend to create a constant with all the options and then pass it to the component with the prop **options**.
+```js
+const options = {
+  settings: {},
+  caption: {},
+  buttons: {},
+  thumbnails: {}
+}
+```
 
 ```jsx
 import React from "react";
@@ -193,23 +174,29 @@ import MyComponent from "./components/MyComponent";
 // Import SRLWrapper
 import {SRLWrapper} from "simple-react-lightbox";
 
-// Create an object with the options that we want to use
+// Create an object with the options that you want to use. The options are divided in 4 main objects. You don't need to define them all.
 const options = {
-  overlayColor: "rgb(25, 136, 124)",
-  captionColor: "#a6cfa5",
-  captionFontFamily: "Raleway, sans-serif",
-  captionFontSize: "22px",
-  captionFontWeight: "300",
-  captionFontStyle: "capitalize",
-  buttonsBackgroundColor: "#1b5245",
-  buttonsIconColor: "rgba(126, 172, 139, 0.8)",
-  autoplaySpeed: 1500,
-  transitionSpeed: 900,
+  settings: {
+    overlayColor: "rgb(25, 136, 124)",
+    autoplaySpeed: 1500,
+    transitionSpeed: 900,
+  },
+  buttons: {
+    backgroundColor: "#1b5245",
+    iconColor: "rgba(126, 172, 139, 0.8)",
+  },
+  caption: {
+    captionColor: "#a6cfa5",
+    captionFontFamily: "Raleway, sans-serif",
+    captionFontWeight: "300",
+    captionTextTransform: "uppercase",
+  }
 };
 
 function MyComponent() {
   return (
     <div className="MyComponent">
+     // Simply pass the entire object in a prop called "options"
      <SRLWrapper options={options}>
         // Your images here
       </SRLWrapper>
@@ -219,20 +206,132 @@ function MyComponent() {
 
 export default MyComponent;
 ```
+-----------------------------
 
-![Simple React Lightbox - Default options](https://simple-react-lightbox.dev/docs/SRL_Example2_Git.jpeg)
+#### Settings options
 
-###### The light-box with the custom options
+|  **Option** |  **Type** |  **Default value** | **Description**   |
+| :------------ | :------------ | :------------ | :----------------- |
+|  `autoplaySpeed` |  `number`  | 3000  | Controls the auto play change interval. Set it to 0 if you don't want to use the auto play functionality and hide the button. |
+| `hideControlsAfter`  | `number` or `boolean`  |  3000  |  Controls how long it will takes for the controls and thumbnails to be hidden. By default all the controls and the thumbnails will be hidden after 3 seconds (3000ms), to create a more immersive experience. This value can't be less then 1000ms. If you want the controls and thumbnails to be always visible set this to FALSE. |
+| `disableKeyboardControls`   | `boolean`   | `false`  | Disable keyboard controls. |
+| `disableWheelControls`   | `boolean`   | `false`   | Disable mouse wheel controls.  |
+| `disablePanzoom`   | `boolean`   | `false`  | Disable panzzom controls.  |
+| `lightboxTransitionSpeed`   | `number`   | 600  | Controls the transition speed of when the light-box is opened. This value is in millisecond.  |
+| `lightboxTransitionTimingFunction`   | `string`   | "ease"  | Controls the transition timing function of when the light-box is opened. |
+| `overlayColor` | `string` | "rgba(0, 0, 0, 0.9)"  | Controls the background color of the light-box. |
+| `slideTransitionSpeed`   | `number`  | 600  | Controls the transition speed of each image (when changing from an image to another). This value is in millisecond.  |
+| `slideTransitionTimingFunction`   | `string`   | "ease"  | Controls the transition timing function of each image (when changing from an image to another). |
 
-#### Callbacks
-Callbacks can be used in case you need some information about the state of the light-box or to access the different slides (images). A good example of this could be if you, for example, wanted to sync a carousel with the light-box so that when you go through the images, your carousel is synced. (Check the example on )
+```js
+const options = {
+  settings: {
+    autoplaySpeed: 3000,
+    hideControlsAfter: 3000,
+    disableKeyboardControls: false,
+    disableWheelControls: false,
+    disablePanzoom: false,
+    lightboxTransitionSpeed: 600,
+    lightboxTransitionTimingFunction: 'ease',
+    overlayColor: 'rgba(0, 0, 0, 0.9)',
+    slideTransitionSpeed: 600,
+    slideTransitionTimingFunction: 'ease'
+  },
+```
 
-| Callback | Args | Return | Usage | Description |
-|--------------------------------------------------------------------------------------------------------------|--------------------------------------|----------------------------------|------------------------------|-------------------------------------|
-| onCountSlides | total | integer | (total) => yourFunction(total) | Use this to get the total of the slides. You can pass the total to your function and it will give back an **integer** with the total count of the slides/images on your light-box.
-| onSlideChange | object | object | (object) => yourFunction(object) | Use this every time a slide changes on the light-box. This function will give back an **object** with the followings: the **direction** of the slide, the **previous**, the **current** and the **next** slide (as an object) and an **index** (as an integer) with the index of the current slide.
-| onLightboxClosed | none | none | () => yourFunction() | Use this to detect when the light-box is closed
-| onLightboxOpened| none | none | () => yourFunction() | Use this to detect when the light-box is opened |
+-----------------------
+
+#### Buttons options
+
+
+|  **Option** |  **Type** |  **Default value** | **Description**   |
+| :------------ | :------------ | :------------ | :----------------- |
+|  `backgroundColor` |  `string`  | "rgba(30,30,36,0.8)"  | Controls the background color of the buttons. Any CSS Color value is valid.   |
+| `iconColor`  | `string`  |  "rgba(255, 255, 255, 0.8)"  |  Controls the color of the icons inside the buttons. Any CSS Color value is valid but there is some magic 🎩 happening in here: if you use an rgba() value and set an opacity (like “0.8” as showed in the default value), when you hover with the mouse on the icon this will create a nice CSS hover effect by automatically changing the opacity to “1”, regardless the colour you choose. |
+| `size`   | `string`   | "40px"  | Controls the size of the buttons |
+| `iconPadding`   | `string`   | "5px"   | Increases the padding between the icon and the sides of the button. The more padding you add the smaller the icon will look.  |
+| `showAutoplayButton`   | `string`   | `true`  | Show / Hide the autoplay button  |
+| `showCloseButton`   | `string`   | `true`  | Show / Hide the close button  |
+| `showDownloadButton`   | `string`   | `true`  | Show / Hide the download button  |
+| `showFullscreenButton`   | `string`   | `true`  | Show / Hide the fullscreen button  |
+| `showNextButton`   | `string`   | `true`  | Show / Hide the next button  |
+| `showPrevButton`   | `string`   | `true`  | Show / Hide the previous button  |
+
+```js
+const options = {
+  buttons: {
+    backgroundColor: 'rgba(30,30,36,0.8)',
+    iconColor: 'rgba(255, 255, 255, 0.8)',
+    iconPadding: '5px',
+    showAutoplayButton: true,
+    showCloseButton: true,
+    showDownloadButton: true,
+    showFullscreenButton: true,
+    showNextButton: true,
+    showPrevButton: true,
+    size: '40px'
+  }
+```
+-----------------------------------
+
+#### Caption options
+
+|  **Option** |  **Type** |  **Default value** | **Description**   |
+| :------------ | :------------ | :------------ | :----------------- |
+|  `showCaption` |  `boolean`  | `true`  | Show / Hide the caption. |
+| `captionColor`  | `string`  |  "#FFFFFF"  |  Controls the color of the caption. |
+| `captionFontFamily`   | `string`   | "inherit"  | Controls the font family of the caption. By default it will inherit the one from the parent element. |
+| `captionFontSize`   | `string`   | "inherit"  | Controls the font size of the caption. By default it will inherit the one from the parent element. |
+| `captionFontStyle`   | `string`   | "inherit"  | Controls the font style of the caption. By default it will inherit the one from the parent element. |
+| `captionFontWeight`   | `string`   | "inherit"  | Controls the font weight of the caption. By default it will inherit the one from the parent element. |
+| `captionTextTransform`   | `string`   | "inherit"  | Controls the "text-transform" property of the caption. By default it will inherit the one from the parent element. |
+
+
+```js
+const options = {
+  // Please note that "caption" is singular
+  caption: {
+    showCaption: true,
+    captionColor: '#FFFFFF',
+    captionFontFamily: 'inherit',
+    captionFontSize: 'inherit',
+    captionFontStyle: 'inherit',
+    captionFontWeight: 'inherit',
+    captionTextTransform: 'inherit'
+  }
+```
+
+-----------------------
+
+#### Thumbnails options
+
+|  **Option** |  **Type** |  **Default value** | **Description**   |
+| :------------ | :------------ | :------------ | :----------------- |
+|  `showThumbnails` |  `boolean`  | `true`  | Show / Hide the thumbails. |
+| `thumbnailsOpacity`  | `number`  |  0.4  |  Controls the opacity of the thumbnails. |
+| `thumbnailsSize`   | `array` of `strings`   | `['100px', '80px']`  | Controls the size of the thumbnail. First value in the array is width and the second is height. |
+
+```js
+const options = {
+  // Please note that "caption" is singular
+  thumbnails: {
+    showThumbnails: true,
+    thumbnailsOpacity: 0.4,
+    thumbnailsSize: ['100px', '80px']
+  }
+```
+
+
+
+### Callbacks
+Callbacks can be used in case you need to get information about the state of the light-box or to access the different slides (images). A good example of this could be if you, for example, wanted to sync a carousel with the light-box so that when you go through the images, your carousel is synced. (Check the example on the [demo webiste](https://simple-react-lightbox.dev/with-hook/) )
+
+|  **Callback** |  **Args** | **Returns** | **Usage** | **Description**   |
+| :------------ | :------------ | :------------ | :------------ | :----------------- |
+|  `onSlideChange` |  `object` | `index: integer`, `action: string`, `slides: {previous: {}, current: {}, next: {}}` | `(object) => { console.log('object) }`  | Use this to detected when a slide changes. Gives back the current slide index, the action take (left, right or selected) and an object with the previous, current and next slide. |
+|  `onLightboxOpened` |  `object` | `currentSlide: {...}, opened: true` | `(object) => { console.log('object) }`  | Use this to detected when the light-box is opened. It returns an object with the current slide and another one with a key of "opened" and a value of "true".  |
+|  `onLightboxClosed` |  `object` | `currentSlide: {...}, opened: false` | `(object) => { console.log('object) }`  | Use this to detected when the light-box is closed. It returns an object with the current slide and another one with a key of "opened" value of "false".  |
+|  `onCountSlides` |  `total` | `totalSlide: integer` | `(total) => { console.log('total) }`  | Use this to get the total of the slides. You can pass the total as an argument to your callback function and it will give back an integer with the total count of the slides/images on your light-box. |
 
 #### Yes, callbacks! But how do I use them?
 Callbacks are passed with the **callbacks** prop to the SRLWrapper.
@@ -246,21 +345,11 @@ import {SRLWrapper} from "simple-react-lightbox";
 
 // Create an object with the callbacks that you want to use
 const callbacks = {
-    onCountSlides: total => countSlides(total),
-    onSlideChange: object => handleSlideChange(object),
-    onLightboxClosed: () => {},
-    onLightboxOpened: () => {}
+    onSlideChange: object => console.log(object),
+    onLightboxOpened: object => console.log(object),
+    onLightboxClosed: object => console.log(object),
+    onCountSlides: object => console.log(object)
 };
-
-function countSlides(total) {
-  console.log(total);
-  return total;
-}
-
-function handleSlideChange(object) {
-  console.log(object);
-  return object;
-}
 
 function MyComponent() {
   return (
@@ -275,8 +364,12 @@ function MyComponent() {
 export default MyComponent;
 ```
 
-## Hook
-You can use a custom hook to open the light-box even by selecting a specific image. If you don't provide any argument to the function the light-box will just open it from the first image. Check the [demo](#demo) to see it in action. In the example below we are creating a **reusable** React component (a button) that can open the light-box from anywhere in your app.
+## Hooks
+There are two hooks that you can use.
+The first one is `openLightbox`. It opens the light-box and you can pass an argument which is the index of the slide you want to open (starting from 0).If you don't provide any argument to the function the light-box will just open it from the first image.
+The second one is `closeLightbox` and you can use it to close the light-box.
+
+Check the [demo](#demo) to see it in action. In the example below we are creating a **reusable** React component (a button) that can open the light-box from anywhere in your app. **Please note that from version 2.8 you need to destructure the useLightbox() hook to get the function that you need.**
 
 ```jsx
 import React from 'react'
@@ -288,7 +381,7 @@ to open the lightbox from a button or anything :)
 */
 
 const Button = props => {
-  const openLightbox = useLightbox()
+  const { openLightbox } = useLightbox()
 
   return (
     <button

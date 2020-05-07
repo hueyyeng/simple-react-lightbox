@@ -284,18 +284,6 @@ export default SRLWrapper
 
 SRLWrapper.propTypes = {
   defaultOptions: PropTypes.shape({
-    buttons: PropTypes.shape({
-      backgroundColor: PropTypes.string,
-      iconColor: PropTypes.string,
-      iconPadding: PropTypes.string,
-      showAutoplayButton: PropTypes.bool,
-      showCloseButton: PropTypes.bool,
-      showDownloadButton: PropTypes.bool,
-      showFullscreenButton: PropTypes.bool,
-      showNextButton: PropTypes.bool,
-      showPrevButton: PropTypes.bool,
-      size: PropTypes.string
-    }),
     settings: PropTypes.shape({
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
@@ -310,6 +298,18 @@ SRLWrapper.propTypes = {
       overlayColor: PropTypes.string,
       slideTransitionSpeed: PropTypes.number,
       slideTransitionTimingFunction: PropTypes.string
+    }),
+    buttons: PropTypes.shape({
+      backgroundColor: PropTypes.string,
+      iconColor: PropTypes.string,
+      iconPadding: PropTypes.string,
+      showAutoplayButton: PropTypes.bool,
+      showCloseButton: PropTypes.bool,
+      showDownloadButton: PropTypes.bool,
+      showFullscreenButton: PropTypes.bool,
+      showNextButton: PropTypes.bool,
+      showPrevButton: PropTypes.bool,
+      size: PropTypes.string
     }),
     caption: PropTypes.shape({
       showCaption: PropTypes.bool,
@@ -342,18 +342,6 @@ SRLWrapper.propTypes = {
 
 SRLWrapper.defaultProps = {
   defaultOptions: {
-    buttons: {
-      backgroundColor: 'rgba(30,30,36,0.8)',
-      iconColor: 'rgba(255, 255, 255, 0.8)',
-      iconPadding: '5px',
-      showAutoplayButton: true,
-      showCloseButton: true,
-      showDownloadButton: true,
-      showFullscreenButton: true,
-      showNextButton: true,
-      showPrevButton: true,
-      size: '40px'
-    },
     settings: {
       autoplaySpeed: 3000,
       hideControlsAfter: 3000,
@@ -365,6 +353,18 @@ SRLWrapper.defaultProps = {
       overlayColor: 'rgba(0, 0, 0, 0.9)',
       slideTransitionSpeed: 600,
       slideTransitionTimingFunction: 'ease'
+    },
+    buttons: {
+      backgroundColor: 'rgba(30,30,36,0.8)',
+      iconColor: 'rgba(255, 255, 255, 0.8)',
+      iconPadding: '5px',
+      showAutoplayButton: true,
+      showCloseButton: true,
+      showDownloadButton: true,
+      showFullscreenButton: true,
+      showNextButton: true,
+      showPrevButton: true,
+      size: '40px'
     },
     caption: {
       showCaption: true,
