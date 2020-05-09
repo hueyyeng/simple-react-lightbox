@@ -218,8 +218,8 @@ SRLLightboxSlideComponent.propTypes = {
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
   elements: PropTypes.array,
-  width: PropTypes.number,
-  height: PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleCloseLightbox: PropTypes.func,
   handleCurrentElement: PropTypes.func,
   handleNextElement: PropTypes.func,
@@ -242,7 +242,10 @@ SRLLightboxSlideComponent.propTypes = {
       captionFontFamily: PropTypes.string,
       captionFontSize: PropTypes.string,
       captionFontStyle: PropTypes.string,
-      captionFontWeight: PropTypes.string,
+      captionFontWeight: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+      ]),
       captionTextTransform: PropTypes.string
     }),
     thumbnails: PropTypes.shape({

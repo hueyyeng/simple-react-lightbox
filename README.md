@@ -22,17 +22,17 @@
 - Simple React Lightbox now works better with [Gatsby Image](https://www.gatsbyjs.org/docs/gatsby-image/)!
 - A new [custom Hook](#hook) has been adedd to close the light-box. ⚠️ **Please note that if you were using hook before you now need to the destructure the hook to get the function that you want**. ⚠️ Please refer to the documentation below.
 - [Callbacks](#callbacks) are fully working now and they give you access to several options to combine Simple React Lightbox with some other packages.
+- Passing the images through an array is now possible although this is discouraged as this is the reason why I created Simple React Lightbox, to be different from the competition. Please reade [the section below](#a-brief-introduction) if you want to learn more.
 
 #### A brief introduction
-It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend and I had no control over the content of each post (the content was in a WYSIWYG editor).
+It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend and I had no control over the content of each post (the content was coming from a WYSIWYG editor).
 
-I checked online for some light-box for React but the way that they were working was that I had to declare the images beforehand in either an array, an object etc...but what if you don't know about the content and you just want to add a light-box to the images? 😞
+I checked online for some light-box for React but the way that they were working was that I had to declare the images beforehand in either an array, an object etc...but what if you don't know about the content and you just want to add a light-box to your images? 😞
 
 #### My Idea 💡
 
 **Simple React Lightbox** gives you the ability to add a light-box functionality on a set of images, whether you define them yourself or you get them from an external source (API, backend etc…). Just use the provided component to wrap your app, define your options and then use the `<SRLWrapper>`  component by wrapping it around the content in which you have or expect your images 😮!
 
-From version 1.3 you can create a gallery with links and images as thumbnail. This will give you full control if you want a custom gallery. Check how it works in the "Gallery with links" example page on the CodeSandbox [demo](#demo)
 
 #### Packed with features 📦
 
@@ -141,6 +141,45 @@ function MyComponent() {
           <img src="src/for/the/thumbnail/image_two.jpg" alt="Whatever" />
         </a>
       </SRLWrapper>
+    </div>
+  );
+}
+
+export default MyComponent;
+```
+
+#### Declaring images in an array
+
+This approach is approach is definitely supported although is discouraged. Please see the reason why Simple React Lightbox is different by reading [the section above](#a-brief-introduction) to learn more.
+
+```jsx
+import React from "react";
+// Import SRLWrapper
+import { SRLWrapper } from "simple-react-lightbox";
+
+const images = [
+  {
+    src: 'https://www.simple-react-lightbox.dev/docs/gallery/unsplash18.jpg',
+    thumbnail:
+      'https://www.simple-react-lightbox.dev/docs/gallery/thumbnails/unsplash18.jpg',
+    caption: 'Lorem ipsum dolor sit amet',
+    width: 1920,
+    height: 'auto'
+  },
+  {
+    src: 'https://www.simple-react-lightbox.dev/docs/gallery/unsplash19.jpg',
+    thumbnail:
+      'https://www.simple-react-lightbox.dev/docs/gallery/thumbnails/unsplash19.jpg',
+    caption: 'Consecutur adiscip elit',
+    width: 2000,
+    height: 'auto'
+  },
+]
+
+function MyComponent() {
+  return (
+    <div className="MyComponent">
+      <SRLWrapper images={images}>
     </div>
   );
 }

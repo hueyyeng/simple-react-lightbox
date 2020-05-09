@@ -329,6 +329,8 @@ const SRLLightboxGallery = ({
 
   // Handle FullScreen
   function handleFullScreen() {
+    // Stops the autoplay
+    setAutoplay(false)
     let el = ''
     if (typeof window !== 'undefined') {
       el =

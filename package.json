@@ -1,6 +1,10 @@
 {
   "name": "simple-react-lightbox",
+<<<<<<< HEAD
   "version": "2.8.0-2",
+=======
+  "version": "2.8.0-3",
+>>>>>>> develop
   "description": "A simple but functional light-box for React.",
   "author": "michelecocuccio",
   "license": "MIT",
