@@ -372,6 +372,8 @@ const SRLLightboxThubnailGallery = styled.div`
   -webkit-overflow-scrolling: touch;
   opacity: 1;
   transition: opacity 0.3s ease;
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 768px) {
     flex-wrap: nowrap;
