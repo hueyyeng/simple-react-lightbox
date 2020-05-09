@@ -10,6 +10,7 @@ const isEmpty = require('lodash/isEmpty')
 const SRLWrapper = ({
   options,
   callbacks,
+  images,
   children,
   defaultOptions,
   defaultCallbacks
@@ -149,6 +150,26 @@ const SRLWrapper = ({
       }
     }
 
+    // 3.2.5) If the user passes the images via props, handle them
+    function handleImagesPassedViaProps(array) {
+      const elements = array.map((i, index) => {
+        // Creates an object for each element
+        const element = {
+          source: i.src || null,
+          thumbnail: i.thumbnail || i.src || null,
+          caption: i.caption || null,
+          id: `element${index}`,
+          width: 'auto',
+          height: 'auto'
+        }
+
+        return element
+      })
+
+      // Function that handle the lightbox
+      return handleLightBox(elements)
+    }
+
     // 3) Adds the elements to the "context" and add the eventListener to open the lightbox to each element
     function handleImagesWithContext(array, elementType) {
       const elements = array.map((e, index) => {
@@ -273,6 +294,12 @@ const SRLWrapper = ({
           }
         }
       }
+      // USER IS DECLARING IMAGES VIA PROPS
+      else {
+        if (images) {
+          handleImagesPassedViaProps(images)
+        }
+      }
     }
 
     // RUN THE LIGHTBOX
@@ -284,7 +311,8 @@ const SRLWrapper = ({
     defaultCallbacks,
     defaultOptions,
     options,
-    callbacks
+    callbacks,
+    images
   ])
 
   return <div ref={elementsContainer}>{children}</div>
@@ -327,7 +355,10 @@ SRLWrapper.propTypes = {
       captionFontFamily: PropTypes.string,
       captionFontSize: PropTypes.string,
       captionFontStyle: PropTypes.string,
-      captionFontWeight: PropTypes.string,
+      captionFontWeight: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+      ]),
       captionTextTransform: PropTypes.string
     }),
     thumbnails: PropTypes.shape({
@@ -345,9 +376,10 @@ SRLWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
-  ]).isRequired,
+  ]),
   options: PropTypes.object,
-  callbacks: PropTypes.object
+  callbacks: PropTypes.object,
+  images: PropTypes.array
 }
 
 SRLWrapper.defaultProps = {
