@@ -245,6 +245,11 @@ function MyComponent() {
 
 export default MyComponent;
 ```
+
+![Simple React Lightbox - Default options](https://simple-react-lightbox.dev/docs/SRL_Example3_Git.jpeg)
+![Simple React Lightbox - Default options](https://simple-react-lightbox.dev/docs/SRL_Example4_Git.jpeg)
+###### The light-box with the custom options
+
 -----------------------------
 
 #### Settings options
