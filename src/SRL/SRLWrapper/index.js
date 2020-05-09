@@ -204,12 +204,22 @@ const SRLWrapper = ({
           }
 
           // Adds an event listener that will trigger the function to open the lightbox (passed using the Context)
-          e.img.addEventListener('click', (e) => {
-            // Prevent the image from opening
-            e.preventDefault()
-            // Run the function to handle the clicked item
-            handleElement(element)
-          })
+          // If it's a link, assign the event listener to the link instead of the image
+          if (elementType === 'A') {
+            e.img.parentElement.addEventListener('click', (e) => {
+              // Prevent the image from opening
+              e.preventDefault()
+              // Run the function to handle the clicked item
+              handleElement(element)
+            })
+          } else {
+            e.img.addEventListener('click', (e) => {
+              // Prevent the image from opening
+              e.preventDefault()
+              // Run the function to handle the clicked item
+              handleElement(element)
+            })
+          }
 
           // Return the image for the map function
           return element
