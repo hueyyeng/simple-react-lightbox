@@ -175,7 +175,7 @@ const SRLWrapper = ({
       const elements = array.map((e, index) => {
         // If the images is loaded and not broken
         if (e.isLoaded) {
-          e.img.id = `element${index}`
+          e.img.setAttribute('srl-slide_id', index)
           // Check if it's an image
           const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(
             e.img.currentSrc || e.img.src || e.img.href
@@ -209,7 +209,7 @@ const SRLWrapper = ({
             caption: e.img.alt || e.img.textContent || null,
             // Grabs the newly created "id" attribute from the image/video
             // If it's a link grabs the "id" attribute from the children image.
-            id: e.img.id || null,
+            id: e.img.getAttribute('srl-slide_id') || null,
             // Grabs the "width" from the image/video
             // If it's a link we can't grab the width and we will need to calculate it after
             width: isImage
@@ -323,6 +323,7 @@ export default SRLWrapper
 SRLWrapper.propTypes = {
   defaultOptions: PropTypes.shape({
     settings: PropTypes.shape({
+      slideAnimationType: PropTypes.string,
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
       disableWheelControls: PropTypes.bool,
@@ -332,10 +333,17 @@ SRLWrapper.propTypes = {
         PropTypes.bool
       ]),
       lightboxTransitionSpeed: PropTypes.number,
-      lightboxTransitionTimingFunction: PropTypes.string,
+      lightboxTransitionTimingFunction: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.array
+      ]),
       overlayColor: PropTypes.string,
       slideTransitionSpeed: PropTypes.number,
-      slideTransitionTimingFunction: PropTypes.string
+      slideTransitionTimingFunction: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.array
+      ]),
+      slideSpringValues: PropTypes.array
     }),
     buttons: PropTypes.shape({
       backgroundColor: PropTypes.string,
@@ -390,11 +398,13 @@ SRLWrapper.defaultProps = {
       disableKeyboardControls: false,
       disableWheelControls: false,
       disablePanzoom: false,
-      lightboxTransitionSpeed: 600,
-      lightboxTransitionTimingFunction: 'ease',
+      lightboxTransitionSpeed: 0.3,
+      lightboxTransitionTimingFunction: 'easeInOut',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
-      slideTransitionSpeed: 600,
-      slideTransitionTimingFunction: 'ease'
+      slideAnimationType: 'fade',
+      slideTransitionSpeed: 0.6,
+      slideSpringValues: [70, 60],
+      slideTransitionTimingFunction: 'easeIn'
     },
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',

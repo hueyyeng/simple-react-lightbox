@@ -1,11 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  SRLLightboxThubnailGallery,
-  SRLLightboxThubnailGalleryImage
-} from '../../styles'
+import { SRLThumbnailGallery, SRLThumbnailGalleryImage } from '../../styles'
 
-const SRLLightboxThubnailGalleryComponent = ({
+const SRLThumbnailGalleryComponent = ({
   elements,
   currentId,
   handleCurrentElement,
@@ -13,30 +10,30 @@ const SRLLightboxThubnailGalleryComponent = ({
   thumbnailsSize
 }) => {
   return (
-    <SRLLightboxThubnailGallery className="SRLThumbnails">
-      {elements.map((i, index) => {
+    <SRLThumbnailGallery className="SRLThumbnailsContainer">
+      {elements.map((element, index) => {
         return (
-          <SRLLightboxThubnailGalleryImage
-            onClick={() => handleCurrentElement(i.id)}
+          <SRLThumbnailGalleryImage
+            onClick={() => handleCurrentElement(element.id, currentId)}
             thumbnailsOpacity={thumbnailsOpacity}
             thumbnailsSize={thumbnailsSize}
             key={index}
             className={`SRLThumb SRLThumb${index} ${
-              currentId === i.id ? 'SRLSelected' : ''
+              currentId === element.id ? 'SRLSelected' : ''
             }`}
             style={{
-              backgroundImage: `url('${i.thumbnail}')`
+              backgroundImage: `url('${element.thumbnail}')`
             }}
           />
         )
       })}
-    </SRLLightboxThubnailGallery>
+    </SRLThumbnailGallery>
   )
 }
 
-export default SRLLightboxThubnailGalleryComponent
+export default SRLThumbnailGalleryComponent
 
-SRLLightboxThubnailGalleryComponent.propTypes = {
+SRLThumbnailGalleryComponent.propTypes = {
   elements: PropTypes.array,
   handleCurrentElement: PropTypes.func,
   currentId: PropTypes.string,

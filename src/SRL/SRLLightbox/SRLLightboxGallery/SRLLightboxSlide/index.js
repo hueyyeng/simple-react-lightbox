@@ -1,23 +1,25 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import SRLLightboxThubnailGallery from './SRLLightboxThubnailGallery'
+import SRLThumbnailGalleryComponent from './SRLThumbnailGallery'
+import SRLCaptionContainerComponent from './SRLCaption'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { useSwipeable } from 'react-swipeable'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
+import { AnimatePresence } from 'framer-motion'
 
 import {
-  SRLLightboxContent,
-  SRRLLightboxCaption,
-  SRLLightboxElementContainer,
+  SRLContent,
+  SRLElementContainer,
   SRLElementWrapper,
-  SRLLightboxImage,
-  SRLLightboxPanzoomImage
+  SRLImage,
+  SRLPanzoomedImage
   // SRLLightboxVideo
 } from '../styles'
 
 function SRLLightboxSlideComponent({
   caption,
+  direction,
   elements,
   handleCloseLightbox,
   handleCurrentElement,
@@ -29,10 +31,43 @@ function SRLLightboxSlideComponent({
   options,
   panzoomEnabled,
   source,
-  SRLLightboxPanzoomImageRef,
+  SRLPanzoomImageRef,
   width
 }) {
   const { settings, thumbnails, caption: captionSettings } = options
+
+  // Ref for the Content
+  const SRLLightboxContentRef = useRef()
+  // Ref for the Element
+  const SRLElementRef = useRef()
+
+  const variants = {
+    slideIn: (direction) => {
+      return {
+        x:
+          direction === undefined
+            ? '0'
+            : direction === 'next'
+            ? '150vw'
+            : '-150vw'
+      }
+    },
+    slideOut: (direction) => {
+      return {
+        x: direction === 'previous' ? '150vw' : '-150vw'
+      }
+    },
+    fadeIn: {
+      opacity: 0
+    },
+    fadeOut: {
+      opacity: 0
+    },
+    center: {
+      x: 0,
+      opacity: 1
+    }
+  }
 
   // Swipe Handlers
   const handlers = useSwipeable({
@@ -54,19 +89,14 @@ function SRLLightboxSlideComponent({
     150
   )
 
-  // Ref for the Content
-  const SRLLightboxContentRef = useRef()
-  // Ref for the Element
-  const SRLElementRef = useRef()
-
   // Handle scrollwheel
   useEffect(() => {
     if (!panzoomEnabled) {
-      const unsubscribe = subscribe(document, 'wheel', (e) =>
+      const addWheelListener = subscribe(document, 'wheel', (e) =>
         debouncedCallback(e.deltaY)
       )
       return () => {
-        unsubscribe()
+        addWheelListener()
       }
     }
   }, [debouncedCallback, panzoomEnabled, settings.disableWheelControls])
@@ -88,67 +118,79 @@ function SRLLightboxSlideComponent({
   }
 
   return (
-    <SRLLightboxContent
+    <SRLContent
       className="SRLContent"
       onWheel={(e) => debouncedCallback(e)}
       ref={SRLLightboxContentRef}
     >
-      <SRLLightboxElementContainer
+      <SRLElementContainer
         showThumbnails={thumbnails.showThumbnails}
         showCaption={captionSettings.showCaption}
         className="SRLElementContainer"
         ref={SRLElementRef}
         {...handlers}
       >
-        <TransitionGroup className="SRLTransitionGroup">
-          <CSSTransition
+        <AnimatePresence className="SRLTransitionGroup" custom={direction}>
+          <SRLElementWrapper
+            variants={variants}
+            custom={direction}
+            initial={
+              settings.slideAnimationType === 'slide' ? 'slideIn' : 'fadeIn'
+            }
+            animate="center"
+            exit={
+              settings.slideAnimationType === 'slide' ? 'slideOut' : 'fadeOut'
+            }
+            className="SRLElementWrapper"
             key={id}
-            classNames="element-transition"
-            timeout={settings.slideTransitionSpeed}
+            transition={{
+              x: {
+                type: 'spring',
+                stiffness: settings.slideSpringValues[0],
+                damping: settings.slideSpringValues[1]
+              },
+              opacity: { duration: settings.slideTransitionSpeed },
+              ease: settings.slideTransitionTimingFunction
+            }}
           >
-            <SRLElementWrapper
-              slideTransitionSpeed={settings.slideTransitionSpeed}
-              slideTransitionTimingFunction={
-                settings.slideTransitionTimingFunction
-              }
-              className="SRLElementWrapper"
-            >
-              {panzoomEnabled ? (
-                <SRLLightboxPanzoomImage
-                  className="SRLPanzoomImage"
-                  ref={SRLLightboxPanzoomImageRef}
-                  width={width}
-                  height={height}
-                  src={typeof source === 'object' ? 'Loading...' : source}
-                  alt={caption}
-                />
-              ) : (
-                <SRLLightboxImage
-                  className="SRLImage"
-                  disablePanzoom={settings.disablePanzoom}
-                  width={width}
-                  height={height}
-                  onClick={() => handlePanzoom(true)}
-                  src={typeof source === 'object' ? 'Loading...' : source}
-                  alt={caption}
-                />
-              )}
-            </SRLElementWrapper>
-          </CSSTransition>
-        </TransitionGroup>
-      </SRLLightboxElementContainer>
+            {!panzoomEnabled && (
+              <SRLImage
+                className="SRLImage"
+                disablePanzoom={settings.disablePanzoom}
+                width={width}
+                height={height}
+                onClick={() => handlePanzoom(true)}
+                src={typeof source === 'object' ? 'Loading...' : source}
+                alt={caption}
+              />
+            )}
+          </SRLElementWrapper>
+
+          {panzoomEnabled ? (
+            <SRLPanzoomedImage
+              className="SRLPanzoomImage"
+              ref={SRLPanzoomImageRef}
+              width={width}
+              height={height}
+              src={typeof source === 'object' ? 'Loading...' : source}
+              alt={caption}
+            />
+          ) : (
+            <></>
+          )}
+        </AnimatePresence>
+      </SRLElementContainer>
 
       {captionSettings.showCaption && (
-        <SRRLLightboxCaption
-          captionStyle={captionOptions}
-          className="SRLCaption"
-        >
-          <p className="SRLCaption">{caption}</p>
-        </SRRLLightboxCaption>
+        <SRLCaptionContainerComponent
+          id={id}
+          captionOptions={captionOptions}
+          caption={caption}
+        />
       )}
 
       {thumbnails.showThumbnails && (
-        <SRLLightboxThubnailGallery
+        <SRLThumbnailGalleryComponent
           handleCurrentElement={handleCurrentElement}
           thumbnailsOpacity={thumbnails.thumbnailsOpacity}
           thumbnailsSize={thumbnails.thumbnailsSize}
@@ -156,8 +198,9 @@ function SRLLightboxSlideComponent({
           elements={elements || []}
         />
       )}
-    </SRLLightboxContent>
+    </SRLContent>
   )
+
   // Hook
   function useOnClickOutside(ref, handler) {
     useEffect(
@@ -177,13 +220,6 @@ function SRLLightboxSlideComponent({
             event.target.classList.contains('SRLThumbnails') ||
             event.target.classList.contains('SRLThumb') ||
             event.target.classList.contains('SRLCaption') ||
-            event.target.classList.contains('panzoom-enabled ') ||
-            event.target.classList.contains('element-transition-enter') ||
-            event.target.classList.contains(
-              'element-transition-enter-active'
-            ) ||
-            event.target.classList.contains('element-transition-exit') ||
-            event.target.classList.contains('element-transition-exit-active') ||
             event.type === 'touchstart' ||
             event.button !== 0
           ) {
@@ -215,26 +251,27 @@ function SRLLightboxSlideComponent({
 }
 
 SRLLightboxSlideComponent.propTypes = {
-  source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   caption: PropTypes.string,
+  direction: PropTypes.string,
   elements: PropTypes.array,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   handleCloseLightbox: PropTypes.func,
   handleCurrentElement: PropTypes.func,
   handleNextElement: PropTypes.func,
-  handlePrevElement: PropTypes.func,
   handlePanzoom: PropTypes.func,
+  handlePrevElement: PropTypes.func,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   id: PropTypes.string,
-  SRLLightboxPanzoomImageRef: PropTypes.object,
-  panzoomEnabled: PropTypes.bool,
-  thumbnailsOpacity: PropTypes.number,
   options: PropTypes.shape({
     settings: PropTypes.shape({
       disableWheelControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
+      slideAnimationType: PropTypes.string,
       slideTransitionSpeed: PropTypes.number,
-      slideTransitionTimingFunction: PropTypes.string
+      slideTransitionTimingFunction: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.array
+      ]),
+      slideSpringValues: PropTypes.array
     }),
     caption: PropTypes.shape({
       showCaption: PropTypes.bool,
@@ -253,7 +290,12 @@ SRLLightboxSlideComponent.propTypes = {
       thumbnailsOpacity: PropTypes.number,
       thumbnailsSize: PropTypes.array
     })
-  })
+  }),
+  panzoomEnabled: PropTypes.bool,
+  source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  SRLLightboxPanzoomImageRef: PropTypes.object,
+  thumbnailsOpacity: PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
 export default SRLLightboxSlideComponent

@@ -14,6 +14,10 @@ import panzoom from 'panzoom'
 import fscreen from 'fscreen'
 import { useIdle } from 'react-use'
 
+// CONSTANTS
+const NEXT = 'next'
+const PREVIOUS = 'previous'
+
 // Lodash helper
 const findIndex = require('lodash/findIndex')
 
@@ -28,13 +32,13 @@ const SRLLightboxGallery = ({
   const ctx = useContext(SRLCtx)
 
   // Ref for the Image with the panzoom (we define it here as we need it here, but the ref is inside the SRLLightboxSlide component)
-  const SRLLightboxImageRef = useRef()
-
-  // Ref for the Image with the panzoom (we define it here as we need it here, but the ref is inside the SRLLightboxSlide component)
-  const SRLLightboxPanzoomImageRef = useRef()
+  const SRLPanzoomImageRef = useRef()
 
   // Ref for the SRLStage
   const SRLStageRef = useRef()
+
+  // Ref for the panzoom instance
+  const panZoomController = useRef()
 
   // Destructuring the options
   const {
@@ -112,6 +116,8 @@ const SRLLightboxGallery = ({
   const [autoplay, setAutoplay] = useState(false)
   // Let's set a state for the "panzoom" option
   const [panzoomEnabled, setPanzoomEnabled] = useState(false)
+  // Establish if the selected slide comes before or after the current slide and save it to this state
+  const [direction, setDirection] = useState()
 
   // Check if the user is not taking any action
   const isIdle = useIdle(
@@ -129,6 +135,35 @@ const SRLLightboxGallery = ({
     [elements]
   )
 
+  // Method to establish if we are selecting an element that comes before or after the current one
+  const establishNextOrPrevious = useCallback(
+    (selectedElementId, currentElementId, knownDirection) => {
+      /* Because we can't get the ID of a selected element when clicking on the
+      "next" and "previous" button, we pass an hardcoded value called "knownDirection"
+      as we know that we are definitely running that particular function (handleNextElement or handlePreviousElement). If we have this value, skip the check all together and immediately set the new direction */
+      if (knownDirection) {
+        if (knownDirection === NEXT) {
+          setDirection(NEXT)
+        } else if (knownDirection === PREVIOUS) {
+          setDirection(PREVIOUS)
+        } else {
+          setDirection(undefined)
+        }
+      } else {
+        /* If we are clicking on a thumbnail we can check if the ID of the thumbnail
+        that we clicked on is greater o lower than the currentElementID so we can establish if it comes after or before it */
+        if (selectedElementId > currentElementId) {
+          setDirection(NEXT)
+        } else if (selectedElementId < currentElementId) {
+          setDirection(PREVIOUS)
+        } else {
+          setDirection(undefined)
+        }
+      }
+    },
+    []
+  )
+
   // Handle Panzoom
   const handlePanzoom = useCallback(
     (value) => {
@@ -137,6 +172,16 @@ const SRLLightboxGallery = ({
       }
     },
     [settings.disablePanzoom]
+  )
+
+  // Set the element, reset the panzoom state and determine direction of the slide
+  const setElementAndDirection = useCallback(
+    (elementID, currentID, element, knownDirection) => {
+      handlePanzoom(false)
+      establishNextOrPrevious(elementID, currentID, knownDirection)
+      setCurrentElement({ ...element })
+    },
+    [establishNextOrPrevious, handlePanzoom]
   )
 
   // Handle Image Download
@@ -149,7 +194,6 @@ const SRLLightboxGallery = ({
         return URL.createObjectURL(blob)
       })
   }
-
   async function handleImageDownload() {
     const a = document.createElement('a')
     a.href = await toDataURL(currentElement.source)
@@ -161,24 +205,15 @@ const SRLLightboxGallery = ({
 
   // Handle Current Element
   const handleCurrentElement = useCallback(
-    (id) => {
-      // Reset the panzoom state
-      handlePanzoom(false)
-
+    (elementID, currentID) => {
       // Grab the current element index
-      const currentElementIndex = getElementIndex(id)
+      const currentElementIndex = getElementIndex(elementID)
 
       // Grab the current element
       const currentElement = elements[currentElementIndex]
 
       // Set the state with the new element
-      setCurrentElement({
-        source: currentElement.source,
-        caption: currentElement.caption,
-        id: currentElement.id,
-        width: currentElement.width,
-        height: currentElement.height
-      })
+      setElementAndDirection(elementID, currentID, currentElement)
 
       // Callback
       onChange({
@@ -192,26 +227,22 @@ const SRLLightboxGallery = ({
       })
     },
 
-    [elements, getElementIndex, handlePanzoom, onChange]
+    [elements, getElementIndex, onChange, setElementAndDirection]
   )
 
   // Handle Previous Element
   const handlePrevElement = useCallback(
-    (id) => {
-      // Reset the panzoom state
-      handlePanzoom(false)
-
+    (elementID) => {
       // Get the current element index
-      const currentElementIndex = getElementIndex(id)
+      const currentElementIndex = getElementIndex(elementID)
 
       /* The prev element will be the prev item in the array but it could be "undefined" as it goes negative.
       If it does we need to start from the last item. */
       const prevElement =
         elements[currentElementIndex - 1] || elements[elements.length - 1]
 
-      setCurrentElement({
-        ...prevElement
-      })
+      // Set the state with the new element
+      setElementAndDirection(elementID, null, prevElement, 'previous')
 
       // Callback
       const index =
@@ -228,26 +259,21 @@ const SRLLightboxGallery = ({
         index
       })
     },
-    [elements, getElementIndex, handlePanzoom, onChange]
+    [elements, getElementIndex, onChange, setElementAndDirection]
   )
 
   // Handle Next element
   const handleNextElement = useCallback(
-    (id) => {
-      // Reset the panzoom state
-      handlePanzoom(false)
-
+    (elementID) => {
       // Get the current element index
-      const currentElementIndex = getElementIndex(id)
+      const currentElementIndex = getElementIndex(elementID)
 
       /* The next element will be the next item in the array but it could be "undefined".
       If it's undefined we know we have reached the end and we go back to the first item */
       const nextElement = elements[currentElementIndex + 1] || elements[0]
 
       // Set the state with the new element
-      setCurrentElement({
-        ...nextElement
-      })
+      setElementAndDirection(elementID, null, nextElement, 'next')
 
       // Callback
       const index =
@@ -265,7 +291,7 @@ const SRLLightboxGallery = ({
         index
       })
     },
-    [elements, getElementIndex, handlePanzoom, onChange]
+    [elements, getElementIndex, onChange, setElementAndDirection]
   )
 
   // Handle Close Lightbox
@@ -362,7 +388,7 @@ const SRLLightboxGallery = ({
     }
   }
 
-  // We want this to run only once
+  // We want this to run only once!!!
   useEffect(() => {
     onOpened({
       opened: true,
@@ -387,10 +413,10 @@ const SRLLightboxGallery = ({
     // Initialize the panzoom functionality
     if (!settings.disablePanzoom) {
       if (panzoomEnabled) {
-        const panzoomElementRef = SRLLightboxPanzoomImageRef.current
+        const panzoomElementRef = SRLPanzoomImageRef.current
         const INITIAL_ZOOM = 1.5
 
-        const panZoomController = panzoom(panzoomElementRef, {
+        panZoomController.current = panzoom(panzoomElementRef, {
           bounds: true,
           maxZoom: 3,
           minZoom: 0.9
@@ -398,8 +424,8 @@ const SRLLightboxGallery = ({
 
         if (panzoomElementRef !== undefined || panzoomElementRef !== null) {
           // Zoom the image
-          panZoomController.zoomAbs(0, 0, INITIAL_ZOOM)
-          panZoomController.moveTo(0, 0)
+          panZoomController.current.zoomAbs(0, 0, INITIAL_ZOOM)
+          panZoomController.current.moveTo(0, 0)
         }
       }
     }
@@ -427,15 +453,18 @@ const SRLLightboxGallery = ({
     }
 
     // Cleans up function to remove the class from the body
-    return function cleanUp() {
+    return () => {
       if (typeof window !== 'undefined') {
         document.body.classList.remove('SRLOpened')
         document.body.style.overflow = null
       }
       document.removeEventListener('keydown', handleNavigationWithKeys, false)
+      if (panzoomEnabled) {
+        // Dispose of the panzoom completely when cleaning up
+        panZoomController.current.dispose()
+      }
     }
   }, [
-    ctx.callbacks,
     currentElement.id,
     elements,
     settings.disablePanzoom,
@@ -443,12 +472,14 @@ const SRLLightboxGallery = ({
     panzoomEnabled,
     settings.hideControlsAfter,
     isIdle,
-    handleNavigationWithKeys
+    handleNavigationWithKeys,
+    direction
   ])
 
   // Light-box controls
   const controls = {
     currentElementID: currentElement.id,
+    direction,
     handleCurrentElement,
     handleNextElement,
     handlePrevElement,
@@ -461,8 +492,7 @@ const SRLLightboxGallery = ({
     settings,
     buttons,
     setAutoplay,
-    SRLLightboxImageRef,
-    SRLLightboxPanzoomImageRef
+    SRLPanzoomImageRef
   }
 
   // Light-box buttons options

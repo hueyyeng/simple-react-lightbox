@@ -18,16 +18,18 @@ const initialState = {
       size: '40px'
     },
     settings: {
+      slideAnimationType: 'fade',
       autoplaySpeed: 3000,
       disableKeyboardControls: false,
       disableWheelControls: false,
       disablePanzoom: false,
       hideControlsAfter: 3000,
-      lightboxTransitionSpeed: 600,
-      lightboxTransitionTimingFunction: 'ease',
+      lightboxTransitionSpeed: 0.6,
+      lightboxTransitionTimingFunction: 'easeIn',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
       slideTransitionSpeed: 600,
-      slideTransitionTimingFunction: 'ease'
+      slideSpringValues: [70, 60],
+      slideTransitionTimingFunction: 'easeIn'
     },
     caption: {
       showCaption: true,

@@ -101,12 +101,12 @@
     "dist"
   ],
   "dependencies": {
+    "framer-motion": "^1.10.3",
     "fscreen": "^1.0.2",
     "imagesloaded": "^4.1.4",
     "lodash": "^4.17.15",
-    "panzoom": "^9.2.1",
+    "panzoom": "^9.2.4",
     "react-swipeable": "^5.5.1",
-    "react-transition-group": "^4.3.0",
     "react-use": "^14.1.1",
     "subscribe-event": "^1.1.1",
     "use-debounce": "^3.4.1"
