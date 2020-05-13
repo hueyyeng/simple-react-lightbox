@@ -18,6 +18,7 @@ const SRLLightboxControls = ({
   handleFullScreen,
   handleImageDownload,
   buttonsOffsetFromProgressBar,
+  showProgressBar,
   autoplay,
   settings,
   setAutoplay,
@@ -32,6 +33,7 @@ const SRLLightboxControls = ({
         buttonsOffsetFromProgressBar={buttonsOffsetFromProgressBar}
         className="SRLControls"
         autoplay={autoplay}
+        showProgressBar={showProgressBar}
       >
         {buttons.showAutoplayButton && (
           <SRRLLightboxAutoplayIcon
@@ -239,6 +241,7 @@ SRLLightboxControls.propTypes = {
   panzoomEnabled: PropTypes.bool,
   setAutoplay: PropTypes.func,
   autoplay: PropTypes.bool,
+  showProgressBar: PropTypes.bool,
   currentElementID: PropTypes.string,
   buttonsOffsetFromProgressBar: PropTypes.string,
   settings: PropTypes.shape({

@@ -362,6 +362,7 @@ const SRLLLightboxTopButtons = styled.div`
   top: calc(env(safe-area-inset-top) + 5px);
   right: calc(env(safe-area-inset-right) + 5px);
   ${(props) =>
+    props.showProgressBar &&
     props.autoplay &&
     `
   margin-top: ${
