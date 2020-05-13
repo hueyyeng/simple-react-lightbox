@@ -12,6 +12,37 @@ const SRLLightboxGalleryStage = styled.div`
   z-index: 9991;
 `
 
+// The actual fill of the bar is
+const SRLProgressBarWrapper = styled.div`
+  width: 100%;
+  height: ${(props) => props.barHeight};
+  background-color: ${(props) => props.backgroundColor};
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+`
+
+const SRLProgressBar = styled.div`
+  height: ${(props) => props.barHeight};
+  width: 100%;
+  background-color: ${(props) => props.fillColor};
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: 0;
+  will-change: transform;
+  transition-timing-function: linear;
+
+  ${(props) =>
+    props.isPlaying &&
+    `
+    transition-duration: ${props.duration + 'ms'};
+    transform: scaleX(1);
+  `}
+`
+
 // The content of the light-box
 const SRLContent = styled.div`
   bottom: 0;
@@ -196,60 +227,6 @@ const SRLCaption = styled.div`
         ? props.captionStyle.captionTextTransform
         : 'inherit'};
   }
-
-
-  &.caption-transition-exit-active {
-    ${(props) =>
-      props.slideAnimationType === 'fade' &&
-      `
-      opacity: 0;
-    `}
-    transition-timing-function: ${(props) =>
-      props.slideTransitionTimingFunction
-        ? props.slideTransitionTimingFunction
-        : 'ease'};
-    transition-duration: ${(props) => props.slideTransitionSpeed + 'ms'};
-    transition-property: all;
-  }
-
-  &.caption-transition-enter {
-    ${(props) =>
-      props.slideAnimationType === 'fade' &&
-      `
-      opacity: 0;
-    `}
-    /* transform: translate(150vw,-50%); */
-  }
-
-  &.caption-transition-enter-active {
-    ${(props) =>
-      props.slideAnimationType === 'fade' &&
-      `
-      opacity: 1;
-      transition-timing-function: ${
-        props.slideTransitionTimingFunction
-          ? props.slideTransitionTimingFunction
-          : 'ease'
-      };
-      transition-duration:${props.slideTransitionSpeed + 'ms'};
-      transition-property: all;
-    `}
-  }
-
-  &.caption-transition-enter-done {
-    ${(props) =>
-      props.slideAnimationType === 'fade' &&
-      `
-      opacity: 1;
-      transition-timing-function: ${
-        props.slideTransitionTimingFunction
-          ? props.slideTransitionTimingFunction
-          : 'ease'
-      };
-      transition-duration:${props.slideTransitionSpeed + 'ms'};
-      transition-property: all;
-    `}
-  }
 `
 
 // The thumbnails galley
@@ -384,6 +361,14 @@ const SRLLLightboxTopButtons = styled.div`
   right: 5px;
   top: calc(env(safe-area-inset-top) + 5px);
   right: calc(env(safe-area-inset-right) + 5px);
+  ${(props) =>
+    props.autoplay &&
+    `
+  margin-top: ${
+    props.buttonsOffsetFromProgressBar.replace(/[^0-9]/g, '') * 2
+  }px;
+  `}
+
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -441,6 +426,8 @@ const SRLLightboxPrevIcon = styled(StyledButton)`
 
 // Export all of the above
 export {
+  SRLProgressBarWrapper,
+  SRLProgressBar,
   SRLLightboxGalleryStage,
   SRLContent,
   SRLElementContainer,

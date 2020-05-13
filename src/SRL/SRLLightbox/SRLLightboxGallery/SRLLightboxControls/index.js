@@ -17,6 +17,7 @@ const SRLLightboxControls = ({
   handlePrevElement,
   handleFullScreen,
   handleImageDownload,
+  buttonsOffsetFromProgressBar,
   autoplay,
   settings,
   setAutoplay,
@@ -27,7 +28,11 @@ const SRLLightboxControls = ({
 }) => {
   return (
     <>
-      <SRLLLightboxTopButtons className="SRLControls">
+      <SRLLLightboxTopButtons
+        buttonsOffsetFromProgressBar={buttonsOffsetFromProgressBar}
+        className="SRLControls"
+        autoplay={autoplay}
+      >
         {buttons.showAutoplayButton && (
           <SRRLLightboxAutoplayIcon
             buttonsBackgroundColor={buttons.backgroundColor}
@@ -35,7 +40,7 @@ const SRLLightboxControls = ({
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
             autoplaySpeed={settings.autoplaySpeed}
-            title="Autoplay"
+            title="Play"
             className="SRLAutoplayButton"
             onClick={() => setAutoplay(!autoplay)}
           >
@@ -235,6 +240,7 @@ SRLLightboxControls.propTypes = {
   setAutoplay: PropTypes.func,
   autoplay: PropTypes.bool,
   currentElementID: PropTypes.string,
+  buttonsOffsetFromProgressBar: PropTypes.string,
   settings: PropTypes.shape({
     autoplaySpeed: PropTypes.number
   }),

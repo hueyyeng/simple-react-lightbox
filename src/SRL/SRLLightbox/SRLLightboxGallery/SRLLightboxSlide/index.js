@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import SRLThumbnailGalleryComponent from './SRLThumbnailGallery'
 import SRLCaptionContainerComponent from './SRLCaption'
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { useSwipeable } from 'react-swipeable'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
@@ -76,7 +75,7 @@ function SRLLightboxSlideComponent({
   })
 
   // Debounce callback
-  const [debouncedCallback] = useDebouncedCallback(
+  const [handleScrollWheel] = useDebouncedCallback(
     // function
     (value) => {
       if (value > 0) {
@@ -93,13 +92,13 @@ function SRLLightboxSlideComponent({
   useEffect(() => {
     if (!panzoomEnabled) {
       const addWheelListener = subscribe(document, 'wheel', (e) =>
-        debouncedCallback(e.deltaY)
+        handleScrollWheel(e.deltaY)
       )
       return () => {
         addWheelListener()
       }
     }
-  }, [debouncedCallback, panzoomEnabled, settings.disableWheelControls])
+  }, [handleScrollWheel, panzoomEnabled, settings.disableWheelControls])
 
   // UseOnClickOutside
   useOnClickOutside(SRLElementRef, () => handleCloseLightbox())
@@ -118,11 +117,7 @@ function SRLLightboxSlideComponent({
   }
 
   return (
-    <SRLContent
-      className="SRLContent"
-      onWheel={(e) => debouncedCallback(e)}
-      ref={SRLLightboxContentRef}
-    >
+    <SRLContent className="SRLContent" ref={SRLLightboxContentRef}>
       <SRLElementContainer
         showThumbnails={thumbnails.showThumbnails}
         showCaption={captionSettings.showCaption}

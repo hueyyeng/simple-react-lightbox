@@ -65,6 +65,9 @@ const SRLWrapper = ({
           },
           thumbnails: {
             ...defaultOptions.thumbnails
+          },
+          progressBar: {
+            ...defaultOptions.progressBar
           }
         }
       } else {
@@ -86,6 +89,10 @@ const SRLWrapper = ({
           thumbnails: {
             ...defaultOptions.thumbnails,
             ...options.thumbnails
+          },
+          progressBar: {
+            ...defaultOptions.progressBar,
+            ...options.progressBar
           }
         }
       }
@@ -373,6 +380,12 @@ SRLWrapper.propTypes = {
       showThumbnails: PropTypes.bool,
       thumbnailsOpacity: PropTypes.number,
       thumbnailsSize: PropTypes.array
+    }),
+    progressBar: PropTypes.shape({
+      showProgressBar: PropTypes.bool,
+      backgroundColor: PropTypes.string,
+      fillColor: PropTypes.string,
+      height: PropTypes.string
     })
   }),
   defaultCallbacks: PropTypes.shape({
@@ -404,7 +417,13 @@ SRLWrapper.defaultProps = {
       slideAnimationType: 'fade',
       slideTransitionSpeed: 0.6,
       slideSpringValues: [70, 60],
-      slideTransitionTimingFunction: 'easeIn'
+      slideTransitionTimingFunction: 'easeIn',
+      progressBar: {
+        showProgressBar: true,
+        background: 'rgba(255, 255, 255, 0.8)',
+        fill: 'rgba(30,30,36,1)',
+        height: '6px'
+      }
     },
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
@@ -431,6 +450,12 @@ SRLWrapper.defaultProps = {
       showThumbnails: true,
       thumbnailsOpacity: 0.4,
       thumbnailsSize: ['100px', '80px']
+    },
+    progressBar: {
+      showProgressBar: true,
+      backgroundColor: '#f2f2f2',
+      fillColor: 'rgb(30,30,36)',
+      height: '6px'
     }
   },
   defaultCallbacks: {

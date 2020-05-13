@@ -9,10 +9,13 @@ import PropTypes from 'prop-types'
 import { SRLLightboxGalleryStage } from './styles'
 import SRLLightboxSlideComponent from './SRLLightboxSlide'
 import SRLLightboxControls from './SRLLightboxControls'
+import SRLProgressBarComponent from './SRLLightboxSlide/SRLProgressBar'
 import { SRLCtx } from '../../SRLContext'
 import panzoom from 'panzoom'
 import fscreen from 'fscreen'
-import { useIdle } from 'react-use'
+import { useIdle, useInterval } from 'react-use'
+import { useDebouncedCallback } from 'use-debounce'
+import subscribe from 'subscribe-event'
 
 // CONSTANTS
 const NEXT = 'next'
@@ -40,11 +43,15 @@ const SRLLightboxGallery = ({
   // Ref for the panzoom instance
   const panZoomController = useRef()
 
+  // Ref for the subscribe
+  const unsubscribe = useRef()
+
   // Destructuring the options
   const {
     // new
     buttons,
-    settings
+    settings,
+    progressBar
   } = options
 
   // Destructuring the callbacks !!!passed by user!!! and we need to check if those are functions
@@ -139,7 +146,7 @@ const SRLLightboxGallery = ({
   const establishNextOrPrevious = useCallback(
     (selectedElementId, currentElementId, knownDirection) => {
       /* Because we can't get the ID of a selected element when clicking on the
-      "next" and "previous" button, we pass an hardcoded value called "knownDirection"
+      "next" and "previous" button, we pass an hard-coded value called "knownDirection"
       as we know that we are definitely running that particular function (handleNextElement or handlePreviousElement). If we have this value, skip the check all together and immediately set the new direction */
       if (knownDirection) {
         if (knownDirection === NEXT) {
@@ -307,50 +314,27 @@ const SRLLightboxGallery = ({
   }, [dispatch, onClosed, ctx.selectedElement])
 
   // Handle Autoplay
-  function useInterval(callback, delay) {
-    const savedCallback = useRef()
-
-    // Remember the latest callback.
-    useEffect(() => {
-      savedCallback.current = callback
-    }, [callback])
-
-    // Set up the interval.
-    useEffect(() => {
-      function tick() {
-        savedCallback.current()
-      }
-      if (delay !== null) {
-        const id = setInterval(tick, delay)
-        return () => clearInterval(id)
-      }
-    }, [delay])
-  }
-
   useInterval(
     () => handleNextElement(currentElement.id),
     autoplay ? settings.autoplaySpeed : null
   )
 
   // Handle Navigation With Keys
-  const handleNavigationWithKeys = useCallback(
-    (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+  const [handleNavigationWithKeys] = useDebouncedCallback(
+    // function
+    (value) => {
+      if (value === 'ArrowRight' || value === 'ArrowUp') {
         handleNextElement(currentElement.id)
       }
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+      if (value === 'ArrowLeft' || value === 'ArrowDown') {
         handlePrevElement(currentElement.id)
       }
-      if (e.key === 'Escape') {
+      if (value === 'Escape') {
         handleCloseLightbox()
       }
     },
-    [
-      handleNextElement,
-      handlePrevElement,
-      handleCloseLightbox,
-      currentElement.id
-    ]
+    // delay in ms
+    300
   )
 
   // Handle FullScreen
@@ -443,7 +427,12 @@ const SRLLightboxGallery = ({
 
     // EVENT LISTENERS
     if (!settings.disableKeyboardControls) {
-      document.addEventListener('keydown', handleNavigationWithKeys, false)
+      unsubscribe.current = subscribe(
+        document,
+        'keydown',
+        (e) => handleNavigationWithKeys(e.key),
+        false
+      )
     }
 
     // Adds a class to the body to remove the overflow
@@ -454,11 +443,10 @@ const SRLLightboxGallery = ({
 
     // Cleans up function to remove the class from the body
     return () => {
-      if (typeof window !== 'undefined') {
-        document.body.classList.remove('SRLOpened')
-        document.body.style.overflow = null
-      }
-      document.removeEventListener('keydown', handleNavigationWithKeys, false)
+      document.body.classList.remove('SRLOpened')
+      document.body.style.overflow = null
+      unsubscribe.current()
+
       if (panzoomEnabled) {
         // Dispose of the panzoom completely when cleaning up
         panZoomController.current.dispose()
@@ -497,18 +485,27 @@ const SRLLightboxGallery = ({
 
   // Light-box buttons options
   const buttonOptions = {
-    buttonsBackgroundColor: options.buttons.backgroundColor,
-    buttonsIconColor: options.buttons.iconColor,
-    buttonsSize: options.buttons.size,
-    buttonsIconPadding: options.buttons.iconPadding
+    buttonsBackgroundColor: buttons.backgroundColor,
+    buttonsIconColor: buttons.iconColor,
+    buttonsSize: buttons.size,
+    buttonsIconPadding: buttons.iconPadding,
+    // Offset the buttons from the autoplay progress bar
+    buttonsOffsetFromProgressBar: progressBar.height
   }
 
   return (
     <SRLLightboxGalleryStage
       ref={SRLStageRef}
-      overlayColor={options.settings.overlayColor}
+      overlayColor={settings.overlayColor}
       className="SRLStage"
     >
+      {progressBar.showProgressBar && autoplay && (
+        <SRLProgressBarComponent
+          autoplay={autoplay}
+          autoplaySpeed={settings.autoplaySpeed}
+          progressBar={progressBar}
+        />
+      )}
       <SRLLightboxControls {...buttonOptions} {...controls} />
       <SRLLightboxSlideComponent
         {...currentElement}
@@ -539,6 +536,12 @@ SRLLightboxGallery.propTypes = {
       iconColor: PropTypes.string,
       iconPadding: PropTypes.string,
       size: PropTypes.string
+    }),
+    progressBar: PropTypes.shape({
+      showProgressBar: PropTypes.bool,
+      background: PropTypes.string,
+      fill: PropTypes.string,
+      height: PropTypes.string
     })
   })
 }

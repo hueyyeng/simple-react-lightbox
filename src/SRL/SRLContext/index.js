@@ -27,7 +27,7 @@ const initialState = {
       lightboxTransitionSpeed: 0.6,
       lightboxTransitionTimingFunction: 'easeIn',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
-      slideTransitionSpeed: 600,
+      slideTransitionSpeed: 0.6,
       slideSpringValues: [70, 60],
       slideTransitionTimingFunction: 'easeIn'
     },
@@ -44,6 +44,12 @@ const initialState = {
       showThumbnails: true,
       thumbnailsOpacity: 0.4,
       thumbnailsSize: ['100px', '80px']
+    },
+    progressBar: {
+      showProgressBar: true,
+      backgroundColor: '#f2f2f2',
+      fillColor: 'rgb(30,30,36)',
+      height: '6px'
     }
   },
   selectedElement: {
