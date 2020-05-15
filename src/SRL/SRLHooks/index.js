@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useRef, useEffect } from 'react'
 import { SRLCtx } from '../SRLContext'
 
 export function useLightbox() {
@@ -13,4 +13,25 @@ export function useLightbox() {
   }
 
   return { openLightbox, closeLightbox }
+}
+
+export function useInterval(callback, delay, currentID) {
+  const savedCallback = useRef()
+
+  // Remember the latest callback and currentID
+  useEffect(() => {
+    savedCallback.current = callback
+  }, [callback, currentID])
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current()
+    }
+
+    if (delay !== null) {
+      const id = setInterval(tick, delay)
+      return () => clearInterval(id)
+    }
+  }, [delay, currentID])
 }

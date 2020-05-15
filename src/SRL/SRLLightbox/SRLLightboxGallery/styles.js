@@ -34,13 +34,6 @@ const SRLProgressBar = styled.div`
   transform-origin: 0;
   will-change: transform;
   transition-timing-function: linear;
-
-  ${(props) =>
-    props.isPlaying &&
-    `
-    transition-duration: ${props.duration + 'ms'};
-    transform: scaleX(1);
-  `}
 `
 
 // The content of the light-box
@@ -238,24 +231,27 @@ const SRLThumbnailGallery = styled.div`
   margin-top: auto;
   justify-content: center;
   align-self: flex-end;
-  flex-wrap: wrap;
+  overflow-x: hidden;
   overflow-y: hidden;
-  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: 0.3s ease;
+  will-change: transform, opacity;
   position: relative;
   z-index: 999;
-
-  @media (max-width: 768px) {
-    flex-wrap: nowrap;
-  }
+  cursor: pointer;
 
   .SRLIdle & {
     opacity: 0;
   }
+
+  &.SRLDraggable {
+    cursor: grabbing !important;
+  }
+
   @media (max-width: 768px) {
     justify-content: start;
+    overflow-x: visible;
   }
 `
 
@@ -270,9 +266,10 @@ const SRLThumbnailGalleryImage = styled.a`
   margin: 1px;
   opacity: ${(props) =>
     props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
-  transition: opacity 0.3s ease;
+  transition: 0.3s ease;
+  will-change: opacity;
   display: block;
-  cursor: pointer;
+  cursor: draggable;
   flex: 0 0 auto;
   &:first-of-type {
     margin: 0;

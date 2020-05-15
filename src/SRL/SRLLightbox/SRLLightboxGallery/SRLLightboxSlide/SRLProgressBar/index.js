@@ -1,24 +1,31 @@
-import React, { useState } from 'react'
-import { useInterval } from 'react-use'
+import React, { useState, useEffect, useRef } from 'react'
+import { useInterval } from '../../../../SRLHooks'
 import { SRLProgressBar, SRLProgressBarWrapper } from '../../styles'
 import PropTypes from 'prop-types'
 
-const SRLProgressBarComponent = ({ autoplay, autoplaySpeed, progressBar }) => {
-  const [percentage, setPercentage] = useState(0)
+const SRLProgressBarComponent = ({
+  autoplay,
+  autoplaySpeed,
+  progressBar,
+  currentElementID
+}) => {
   const [isPlaying, setIsPlaying] = useState(false)
 
   // Call of the interval to fill the progress bar
   function fillProgressBar() {
-    setPercentage(percentage + 1)
     setIsPlaying(true)
-    if (percentage >= 100) {
-      setPercentage(0)
-      setIsPlaying(false)
-    }
   }
 
+  useEffect(() => {
+    setIsPlaying(false)
+  }, [currentElementID])
+
   // Use interval hook
-  useInterval(() => fillProgressBar(), autoplay ? autoplaySpeed / 100 : null)
+  useInterval(
+    () => fillProgressBar(),
+    autoplay ? autoplaySpeed / 100 : null,
+    currentElementID
+  )
 
   return (
     <SRLProgressBarWrapper
@@ -29,9 +36,10 @@ const SRLProgressBarComponent = ({ autoplay, autoplaySpeed, progressBar }) => {
       <SRLProgressBar
         barHeight={progressBar.height}
         fillColor={progressBar.fillColor}
-        isPlaying={isPlaying}
-        duration={autoplaySpeed}
-        // style={{ transform: `translateX(${percentage}%)` }}
+        style={{
+          transform: `scaleX(${isPlaying ? 1 : 0})`,
+          transitionDuration: `${isPlaying ? autoplaySpeed + 'ms' : '0ms'}`
+        }}
       />
     </SRLProgressBarWrapper>
   )
@@ -40,6 +48,7 @@ const SRLProgressBarComponent = ({ autoplay, autoplaySpeed, progressBar }) => {
 SRLProgressBarComponent.propTypes = {
   autoplay: PropTypes.bool,
   autoplaySpeed: PropTypes.number,
+  currentElementID: PropTypes.string,
   progressBar: PropTypes.shape({
     backgroundColor: PropTypes.string,
     fillColor: PropTypes.string,

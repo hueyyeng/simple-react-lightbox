@@ -11,9 +11,10 @@ import SRLLightboxSlideComponent from './SRLLightboxSlide'
 import SRLLightboxControls from './SRLLightboxControls'
 import SRLProgressBarComponent from './SRLLightboxSlide/SRLProgressBar'
 import { SRLCtx } from '../../SRLContext'
+import { useInterval } from '../../SRLHooks'
 import panzoom from 'panzoom'
 import fscreen from 'fscreen'
-import { useIdle, useInterval } from 'react-use'
+import { useIdle } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
 
@@ -316,7 +317,8 @@ const SRLLightboxGallery = ({
   // Handle Autoplay
   useInterval(
     () => handleNextElement(currentElement.id),
-    autoplay ? settings.autoplaySpeed : null
+    autoplay ? settings.autoplaySpeed : null,
+    currentElement.id
   )
 
   // Handle Navigation With Keys
@@ -505,6 +507,7 @@ const SRLLightboxGallery = ({
           autoplay={autoplay}
           autoplaySpeed={settings.autoplaySpeed}
           progressBar={progressBar}
+          currentElementID={currentElement.id}
         />
       )}
       <SRLLightboxControls {...buttonOptions} {...controls} />

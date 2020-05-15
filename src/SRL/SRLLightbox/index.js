@@ -17,6 +17,7 @@ const PortalWrapper = styled(Portal)`
   height: 100%;
   top: 0;
   left: 0;
+  z-index: 9991;
 `
 
 function SRLLightbox() {
@@ -29,6 +30,7 @@ function SRLLightbox() {
         initial="hidden"
         animate="visible"
         variants={variants}
+        style={{ width: '100%', height: '100%' }}
         transition={{
           duration: options.settings.lightboxTransitionSpeed,
           ease: options.settings.lightboxTransitionTimingFunction
