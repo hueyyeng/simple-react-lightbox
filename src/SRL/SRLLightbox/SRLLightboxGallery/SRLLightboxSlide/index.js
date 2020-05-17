@@ -58,12 +58,18 @@ function SRLLightboxSlideComponent({
             ? '0'
             : direction === 'next'
             ? '100%'
-            : '-100%'
+            : '-100%',
+        transition: {
+          ease: settings.slideTransitionTimingFunction
+        }
       }
     },
     slideOut: (direction) => {
       return {
-        x: direction === 'previous' ? '100%' : '-100%'
+        x: direction === 'previous' ? '100%' : '-100%',
+        transition: {
+          ease: settings.slideTransitionTimingFunction
+        }
       }
     },
     fadeIn: {
@@ -76,6 +82,29 @@ function SRLLightboxSlideComponent({
       opacity: 0,
       transition: {
         ease: settings.slideTransitionTimingFunction
+      }
+    },
+    bothIn: (direction) => {
+      return {
+        opacity: 1,
+        x:
+          direction === undefined
+            ? '0'
+            : direction === 'next'
+            ? '100%'
+            : '-100%',
+        transition: {
+          ease: settings.slideTransitionTimingFunction
+        }
+      }
+    },
+    bothOut: (direction) => {
+      return {
+        opacity: 0,
+        x: direction === 'previous' ? '100%' : '-100%',
+        transition: {
+          ease: settings.slideTransitionTimingFunction
+        }
       }
     },
     center: {
@@ -185,11 +214,19 @@ function SRLLightboxSlideComponent({
             variants={variants}
             custom={direction}
             initial={
-              settings.slideAnimationType === 'slide' ? 'slideIn' : 'fadeIn'
+              settings.slideAnimationType === 'slide'
+                ? 'slideIn'
+                : settings.slideAnimationType === 'both'
+                ? 'bothIn'
+                : 'fadeIn'
             }
             animate="center"
             exit={
-              settings.slideAnimationType === 'slide' ? 'slideOut' : 'fadeOut'
+              settings.slideAnimationType === 'slide'
+                ? 'slideOut'
+                : settings.slideAnimationType === 'both'
+                ? 'bothOut'
+                : 'fadeOut'
             }
             className="SRLElementWrapper"
             key={id}

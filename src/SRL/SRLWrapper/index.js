@@ -423,7 +423,7 @@ SRLWrapper.defaultProps = {
       lightboxTransitionTimingFunction: 'easeInOut',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
       slideAnimationType: 'fade',
-      slideSpringValues: [70, 60],
+      slideSpringValues: [300, 200],
       slideTransitionSpeed: 0.6,
       slideTransitionTimingFunction: 'easeIn'
     },
