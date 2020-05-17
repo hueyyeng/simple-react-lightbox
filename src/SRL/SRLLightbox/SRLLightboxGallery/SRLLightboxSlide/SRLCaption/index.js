@@ -2,9 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { SRLCaption } from '../../styles'
 
-const SRLCaptionContainerComponent = ({ captionOptions, caption }) => {
+const SRLCaptionContainerComponent = ({
+  captionOptions,
+  caption,
+  thumbnailsPosition,
+  captionRef
+}) => {
   return (
-    <SRLCaption captionStyle={captionOptions} className="SRLCaption">
+    <SRLCaption
+      captionStyle={captionOptions}
+      thumbnailsPosition={thumbnailsPosition}
+      className="SRLCaptionContainer"
+      ref={captionRef}
+    >
       <p className="SRLCaptionText">{caption}</p>
     </SRLCaption>
   )
@@ -23,7 +33,8 @@ SRLCaptionContainerComponent.propTypes = {
     ]),
     captionTextTransform: PropTypes.string
   }),
-  id: PropTypes.string,
+  captionRef: PropTypes.object,
+  thumbnailsPosition: PropTypes.string,
   caption: PropTypes.string
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import SRLThumbnailGalleryComponent from './SRLThumbnailGallery'
 import SRLCaptionContainerComponent from './SRLCaption'
@@ -20,25 +20,35 @@ function SRLLightboxSlideComponent({
   caption,
   direction,
   elements,
-  handleCloseLightbox,
   handleCurrentElement,
   handleNextElement,
   handlePanzoom,
   handlePrevElement,
   height,
+  hideThumbnails,
   id,
   options,
   panzoomEnabled,
   source,
   SRLPanzoomImageRef,
+  SRLThumbnailsRef,
+  SRLCaptionRef,
   width
 }) {
   const { settings, thumbnails, caption: captionSettings } = options
 
   // Ref for the Content
   const SRLLightboxContentRef = useRef()
-  // Ref for the Element
-  const SRLElementRef = useRef()
+
+  // Create a state for the sizes that we need to pass to the styled component
+  const [captionRefSizes, setCaptionRefSizes] = useState({
+    width: 0,
+    height: 0
+  })
+  const [thumbnailRefSizes, setThumbnailRefSizes] = useState({
+    width: 0,
+    height: 0
+  })
 
   const variants = {
     slideIn: (direction) => {
@@ -47,20 +57,26 @@ function SRLLightboxSlideComponent({
           direction === undefined
             ? '0'
             : direction === 'next'
-            ? '150vw'
-            : '-150vw'
+            ? '100%'
+            : '-100%'
       }
     },
     slideOut: (direction) => {
       return {
-        x: direction === 'previous' ? '150vw' : '-150vw'
+        x: direction === 'previous' ? '100%' : '-100%'
       }
     },
     fadeIn: {
-      opacity: 0
+      opacity: 0,
+      transition: {
+        ease: settings.slideTransitionTimingFunction
+      }
     },
     fadeOut: {
-      opacity: 0
+      opacity: 0,
+      transition: {
+        ease: settings.slideTransitionTimingFunction
+      }
     },
     center: {
       x: 0,
@@ -71,7 +87,11 @@ function SRLLightboxSlideComponent({
   // Swipe Handlers
   const handlers = useSwipeable({
     onSwipedLeft: () => handleNextElement(id),
-    onSwipedRight: () => handlePrevElement(id)
+    onSwipedRight: () => handlePrevElement(id),
+    delta: panzoomEnabled ? 500 : 90, // min distance(px) before a swipe starts
+    preventDefaultTouchmoveEvent: true, // preventDefault on touchmove, *See Details*
+    trackTouch: true, // track touch input
+    trackMouse: false
   })
 
   // Debounce callback
@@ -90,6 +110,22 @@ function SRLLightboxSlideComponent({
 
   // Handle scrollwheel
   useEffect(() => {
+    // Get the width and height of the caption div IF the ref is not undefined
+    if (SRLCaptionRef.current) {
+      setCaptionRefSizes({
+        width: SRLCaptionRef.current.offsetWidth,
+        height: SRLCaptionRef.current.offsetHeight
+      })
+    }
+
+    // Get the width and height of the thumbnails div IF the ref is not undefined
+    if (SRLThumbnailsRef.current) {
+      setThumbnailRefSizes({
+        width: SRLThumbnailsRef.current.offsetWidth,
+        height: SRLThumbnailsRef.current.offsetHeight
+      })
+    }
+
     if (!panzoomEnabled) {
       const addWheelListener = subscribe(document, 'wheel', (e) =>
         handleScrollWheel(e.deltaY)
@@ -98,17 +134,25 @@ function SRLLightboxSlideComponent({
         addWheelListener()
       }
     }
-  }, [handleScrollWheel, panzoomEnabled, settings.disableWheelControls])
+  }, [
+    handleScrollWheel,
+    panzoomEnabled,
+    settings.disableWheelControls,
+    SRLCaptionRef,
+    SRLThumbnailsRef
+  ])
 
   // UseOnClickOutside
-  useOnClickOutside(SRLElementRef, () => handleCloseLightbox())
+  // useOnClickOutside(SRLLightboxContentRef, () => handleCloseLightbox())
 
   // // Check if it's an image to load the right content
   // const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(source)
 
   // Light-box captions options
   const captionOptions = {
+    captionAlignment: options.caption.captionAlignment,
     captionColor: options.caption.captionColor,
+    captionContainerPadding: options.caption.captionContainerPadding,
     captionFontFamily: options.caption.captionFontFamily,
     captionFontSize: options.caption.captionFontSize,
     captionFontStyle: options.caption.captionFontStyle,
@@ -117,12 +161,23 @@ function SRLLightboxSlideComponent({
   }
 
   return (
-    <SRLContent className="SRLContent" ref={SRLLightboxContentRef}>
+    <SRLContent
+      className="SRLContent"
+      ref={SRLLightboxContentRef}
+      thumbnailsPosition={thumbnails.thumbnailsPosition}
+      showCaption={captionSettings.showCaption}
+      hideThumbnails={hideThumbnails}
+    >
       <SRLElementContainer
+        thumbnailsPosition={thumbnails.thumbnailsPosition}
+        // showThumbnails is the "setting" passed from the user to the context to completely hide the thumbnails
         showThumbnails={thumbnails.showThumbnails}
+        // hideThumbnails is the button that shows and hides the thumbnails on the go
+        hideThumbnails={hideThumbnails}
         showCaption={captionSettings.showCaption}
         className="SRLElementContainer"
-        ref={SRLElementRef}
+        thumbnailRefSizes={thumbnailRefSizes}
+        captionRefSizes={captionRefSizes}
         {...handlers}
       >
         <AnimatePresence className="SRLTransitionGroup" custom={direction}>
@@ -144,8 +199,7 @@ function SRLLightboxSlideComponent({
                 stiffness: settings.slideSpringValues[0],
                 damping: settings.slideSpringValues[1]
               },
-              opacity: { duration: settings.slideTransitionSpeed },
-              ease: settings.slideTransitionTimingFunction
+              opacity: { duration: settings.slideTransitionSpeed }
             }}
           >
             {!panzoomEnabled && (
@@ -179,70 +233,24 @@ function SRLLightboxSlideComponent({
       {captionSettings.showCaption && (
         <SRLCaptionContainerComponent
           id={id}
+          thumbnailsPosition={thumbnails.thumbnailsPosition}
           captionOptions={captionOptions}
           caption={caption}
+          captionRef={SRLCaptionRef}
         />
       )}
 
-      {thumbnails.showThumbnails && (
+      {thumbnails.showThumbnails && !hideThumbnails && (
         <SRLThumbnailGalleryComponent
           handleCurrentElement={handleCurrentElement}
-          thumbnailsOpacity={thumbnails.thumbnailsOpacity}
-          thumbnailsSize={thumbnails.thumbnailsSize}
+          thumbnails={thumbnails}
           currentId={id}
           elements={elements || []}
+          SRLThumbnailsRef={SRLThumbnailsRef}
         />
       )}
     </SRLContent>
   )
-
-  // Hook
-  function useOnClickOutside(ref, handler) {
-    useEffect(
-      () => {
-        const listener = (event) => {
-          // Do nothing if clicking ref's element or descendent elements
-          if (
-            !ref.current ||
-            ref.current.contains(event.target) ||
-            event.target.classList.contains('SRLNextButton') ||
-            event.target.classList.contains('SRLPrevButton') ||
-            event.target.classList.contains('SRLCloseButton') ||
-            event.target.classList.contains('SRLAutoplayButton') ||
-            event.target.classList.contains('SRLExpandButton') ||
-            event.target.classList.contains('SRLZoomOutButton') ||
-            event.target.classList.contains('SRLDownloadButton') ||
-            event.target.classList.contains('SRLThumbnails') ||
-            event.target.classList.contains('SRLThumb') ||
-            event.target.classList.contains('SRLCaption') ||
-            event.type === 'touchstart' ||
-            event.button !== 0
-          ) {
-            return
-          }
-          handler(event)
-        }
-        if (typeof window !== 'undefined') {
-          document.addEventListener('mousedown', listener)
-          document.addEventListener('touchstart', listener)
-        }
-
-        return () => {
-          if (typeof window !== 'undefined') {
-            document.removeEventListener('mousedown', listener)
-            document.removeEventListener('touchstart', listener)
-          }
-        }
-      },
-      // Add ref and handler to effect dependencies
-      // It's worth noting that because passed in handler is a new ...
-      // ... function on every render that will cause this effect ...
-      // ... callback/cleanup to run every render. It's not a big deal ...
-      // ... but to optimize you can wrap handler in useCallback before ...
-      // ... passing it into this hook.
-      [ref, handler]
-    )
-  }
 }
 
 SRLLightboxSlideComponent.propTypes = {
@@ -256,20 +264,24 @@ SRLLightboxSlideComponent.propTypes = {
   handlePrevElement: PropTypes.func,
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   id: PropTypes.string,
+  SRLPanzoomImageRef: PropTypes.object,
+  SRLCaptionRef: PropTypes.object,
+  SRLThumbnailsRef: PropTypes.object,
+  hideThumbnails: PropTypes.bool,
   options: PropTypes.shape({
     settings: PropTypes.shape({
-      disableWheelControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
+      disableWheelControls: PropTypes.bool,
       slideAnimationType: PropTypes.string,
+      slideSpringValues: PropTypes.array,
       slideTransitionSpeed: PropTypes.number,
       slideTransitionTimingFunction: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.array
-      ]),
-      slideSpringValues: PropTypes.array
+      ])
     }),
     caption: PropTypes.shape({
-      showCaption: PropTypes.bool,
+      captionAlignment: PropTypes.string,
       captionColor: PropTypes.string,
       captionFontFamily: PropTypes.string,
       captionFontSize: PropTypes.string,
@@ -278,11 +290,14 @@ SRLLightboxSlideComponent.propTypes = {
         PropTypes.number,
         PropTypes.string
       ]),
-      captionTextTransform: PropTypes.string
+      captionContainerPadding: PropTypes.string,
+      captionTextTransform: PropTypes.string,
+      showCaption: PropTypes.bool
     }),
     thumbnails: PropTypes.shape({
       showThumbnails: PropTypes.bool,
       thumbnailsOpacity: PropTypes.number,
+      thumbnailsPosition: PropTypes.string,
       thumbnailsSize: PropTypes.array
     })
   }),

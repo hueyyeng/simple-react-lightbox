@@ -165,7 +165,7 @@ const SRLWrapper = ({
           source: i.src || null,
           thumbnail: i.thumbnail || i.src || null,
           caption: i.caption || null,
-          id: `element${index}`,
+          id: `${index}`,
           width: 'auto',
           height: 'auto'
         }
@@ -330,11 +330,10 @@ export default SRLWrapper
 SRLWrapper.propTypes = {
   defaultOptions: PropTypes.shape({
     settings: PropTypes.shape({
-      slideAnimationType: PropTypes.string,
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
-      disableWheelControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
+      disableWheelControls: PropTypes.bool,
       hideControlsAfter: PropTypes.oneOfType([
         PropTypes.number,
         PropTypes.bool
@@ -345,12 +344,13 @@ SRLWrapper.propTypes = {
         PropTypes.array
       ]),
       overlayColor: PropTypes.string,
+      slideAnimationType: PropTypes.string,
+      slideSpringValues: PropTypes.array,
       slideTransitionSpeed: PropTypes.number,
       slideTransitionTimingFunction: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.array
-      ]),
-      slideSpringValues: PropTypes.array
+      ])
     }),
     buttons: PropTypes.shape({
       backgroundColor: PropTypes.string,
@@ -362,11 +362,12 @@ SRLWrapper.propTypes = {
       showFullscreenButton: PropTypes.bool,
       showNextButton: PropTypes.bool,
       showPrevButton: PropTypes.bool,
+      showThumbnailsButton: PropTypes.bool,
       size: PropTypes.string
     }),
     caption: PropTypes.shape({
-      showCaption: PropTypes.bool,
       captionColor: PropTypes.string,
+      captionAlignment: PropTypes.string,
       captionFontFamily: PropTypes.string,
       captionFontSize: PropTypes.string,
       captionFontStyle: PropTypes.string,
@@ -374,25 +375,32 @@ SRLWrapper.propTypes = {
         PropTypes.number,
         PropTypes.string
       ]),
-      captionTextTransform: PropTypes.string
+      captionContainerPadding: PropTypes.string,
+      captionTextTransform: PropTypes.string,
+      showCaption: PropTypes.bool
     }),
     thumbnails: PropTypes.shape({
       showThumbnails: PropTypes.bool,
+      thumbnailsAlignment: PropTypes.string,
+      thumbnailsContainerPadding: PropTypes.string,
+      thumbnailsContainerBackgroundColor: PropTypes.string,
+      thumbnailsGap: PropTypes.string,
       thumbnailsOpacity: PropTypes.number,
+      thumbnailsPosition: PropTypes.string,
       thumbnailsSize: PropTypes.array
     }),
     progressBar: PropTypes.shape({
-      showProgressBar: PropTypes.bool,
       backgroundColor: PropTypes.string,
       fillColor: PropTypes.string,
-      height: PropTypes.string
+      height: PropTypes.string,
+      showProgressBar: PropTypes.bool
     })
   }),
   defaultCallbacks: PropTypes.shape({
-    onSlideChange: PropTypes.func,
-    onLightboxClosed: PropTypes.func,
     onCountSlides: PropTypes.func,
-    onLightboxOpened: PropTypes.func
+    onLightboxClosed: PropTypes.func,
+    onLightboxOpened: PropTypes.func,
+    onSlideChange: PropTypes.func
   }),
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -407,23 +415,17 @@ SRLWrapper.defaultProps = {
   defaultOptions: {
     settings: {
       autoplaySpeed: 3000,
-      hideControlsAfter: 3000,
       disableKeyboardControls: false,
-      disableWheelControls: false,
       disablePanzoom: false,
+      disableWheelControls: false,
+      hideControlsAfter: 3000,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'easeInOut',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
       slideAnimationType: 'fade',
-      slideTransitionSpeed: 0.6,
       slideSpringValues: [70, 60],
-      slideTransitionTimingFunction: 'easeIn',
-      progressBar: {
-        showProgressBar: true,
-        background: 'rgba(255, 255, 255, 0.8)',
-        fill: 'rgba(30,30,36,1)',
-        height: '6px'
-      }
+      slideTransitionSpeed: 0.6,
+      slideTransitionTimingFunction: 'easeIn'
     },
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
@@ -435,27 +437,35 @@ SRLWrapper.defaultProps = {
       showFullscreenButton: true,
       showNextButton: true,
       showPrevButton: true,
+      showThumbnailsButton: true,
       size: '40px'
     },
     caption: {
-      showCaption: true,
+      captionAlignment: 'start',
       captionColor: '#FFFFFF',
+      captionContainerPadding: '0',
       captionFontFamily: 'inherit',
       captionFontSize: 'inherit',
       captionFontStyle: 'inherit',
       captionFontWeight: 'inherit',
-      captionTextTransform: 'inherit'
+      captionTextTransform: 'inherit',
+      showCaption: true
     },
     thumbnails: {
       showThumbnails: true,
+      thumbnailsAlignment: 'center',
+      thumbnailsContainerBackgroundColor: 'transparent',
+      thumbnailsContainerPadding: '0',
+      thumbnailsGap: '1px',
       thumbnailsOpacity: 0.4,
+      thumbnailsPosition: 'bottom',
       thumbnailsSize: ['100px', '80px']
     },
     progressBar: {
-      showProgressBar: true,
       backgroundColor: '#f2f2f2',
       fillColor: 'rgb(30,30,36)',
-      height: '6px'
+      height: '3px',
+      showProgressBar: true
     }
   },
   defaultCallbacks: {

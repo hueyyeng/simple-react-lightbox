@@ -1,42 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  SRRLLightboxCloseIcon,
-  SRLLightboxNextIcon,
-  SRLLightboxPrevIcon,
-  SRLLLightboxTopButtons,
-  SRRLLightboxAutoplayIcon,
-  SRRLDownloadIcon,
-  SRRLExpandIcon,
+  SRLCloseIcon,
+  SRLNextIcon,
+  SRLPrevIcon,
+  SRLTopButtons,
+  SRLAutoplayIcon,
+  SRLDownloadIcon,
+  SRLThumbnailsIcon,
+  SRLExpandIcon,
   SRLZoomOutIcon
 } from '../styles'
 
 const SRLLightboxControls = ({
+  autoplay,
+  buttons,
+  buttonsOffsetFromProgressBar,
+  currentElementID,
   handleCloseLightbox,
-  handleNextElement,
-  handlePrevElement,
   handleFullScreen,
   handleImageDownload,
-  buttonsOffsetFromProgressBar,
-  showProgressBar,
-  autoplay,
-  settings,
-  setAutoplay,
-  currentElementID,
-  buttons,
+  handleNextElement,
+  handlePanzoom,
+  handlePrevElement,
+  handleThumbnails,
+  hideThumbnails,
   panzoomEnabled,
-  handlePanzoom
+  setAutoplay,
+  settings,
+  showProgressBar,
+  showThumbnails,
+  SRLThumbnailsRef,
+  thumbnailsPosition,
+  thumbnailsSize
 }) => {
+  /* Unfortunately, we need to calculate the offsetWidth of the thumbnails container
+  by taking is "REF" from up above */
+  const [thumbnailRefSizes, setThumbnailRefSizes] = useState({
+    width: 0,
+    height: 0
+  })
+
+  useEffect(() => {
+    // Get the width and height of the thumbnails div IF the ref is not undefined
+    if (SRLThumbnailsRef.current) {
+      setThumbnailRefSizes({
+        width: SRLThumbnailsRef.current.offsetWidth,
+        height: SRLThumbnailsRef.current.offsetHeight
+      })
+    } else if (hideThumbnails) {
+      setThumbnailRefSizes({
+        width: 0,
+        height: 0
+      })
+    }
+  }, [SRLThumbnailsRef, hideThumbnails])
+
   return (
     <>
-      <SRLLLightboxTopButtons
-        buttonsOffsetFromProgressBar={buttonsOffsetFromProgressBar}
+      <SRLTopButtons
         className="SRLControls"
         autoplay={autoplay}
         showProgressBar={showProgressBar}
+        buttonsOffsetFromProgressBar={buttonsOffsetFromProgressBar}
+        thumbnailsPosition={thumbnailsPosition}
+        thumbnailRefSizes={thumbnailRefSizes}
+        thumbnailsSize={thumbnailsSize}
       >
         {buttons.showAutoplayButton && (
-          <SRRLLightboxAutoplayIcon
+          <SRLAutoplayIcon
             buttonsBackgroundColor={buttons.backgroundColor}
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
@@ -71,11 +103,40 @@ const SRLLightboxControls = ({
                 </svg>
               )}
             </div>
-          </SRRLLightboxAutoplayIcon>
+          </SRLAutoplayIcon>
+        )}
+
+        {buttons.showThumbnailsButton && showThumbnails && (
+          <SRLThumbnailsIcon
+            buttonsBackgroundColor={buttons.backgroundColor}
+            buttonsIconColor={buttons.iconColor}
+            buttonsSize={buttons.size}
+            buttonsIconPadding={buttons.iconPadding}
+            thumbnailsPosition={thumbnailsPosition}
+            onClick={handleThumbnails}
+            title="Thumbnails"
+            className="SRLThumbnailsButton"
+          >
+            <div className="SRLThumbnailsButton">
+              <svg
+                className="SRLThumbnailsButton"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 50 50"
+              >
+                <g fill="#fff" className="SRLThumbnailsButton">
+                  <path
+                    d="M15.4 27.4h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm12 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm12 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4z"
+                    opacity=".4"
+                  />
+                  <path d="M39.4 13h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm-24 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm12 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4z" />
+                </g>
+              </svg>
+            </div>
+          </SRLThumbnailsIcon>
         )}
 
         {buttons.showDownloadButton && (
-          <SRRLDownloadIcon
+          <SRLDownloadIcon
             buttonsBackgroundColor={buttons.backgroundColor}
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
@@ -96,7 +157,7 @@ const SRLLightboxControls = ({
                 />
               </svg>
             </div>
-          </SRRLDownloadIcon>
+          </SRLDownloadIcon>
         )}
 
         {panzoomEnabled ? (
@@ -126,7 +187,7 @@ const SRLLightboxControls = ({
           ''
         )}
         {buttons.showFullscreenButton && (
-          <SRRLExpandIcon
+          <SRLExpandIcon
             buttonsBackgroundColor={buttons.backgroundColor}
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
@@ -147,11 +208,11 @@ const SRLLightboxControls = ({
                 />
               </svg>
             </div>
-          </SRRLExpandIcon>
+          </SRLExpandIcon>
         )}
 
         {buttons.showCloseButton && (
-          <SRRLLightboxCloseIcon
+          <SRLCloseIcon
             buttonsBackgroundColor={buttons.backgroundColor}
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
@@ -172,16 +233,20 @@ const SRLLightboxControls = ({
                 />
               </svg>
             </div>
-          </SRRLLightboxCloseIcon>
+          </SRLCloseIcon>
         )}
-      </SRLLLightboxTopButtons>
+      </SRLTopButtons>
 
       {buttons.showNextButton && (
-        <SRLLightboxNextIcon
+        <SRLNextIcon
           buttonsBackgroundColor={buttons.backgroundColor}
           buttonsIconColor={buttons.iconColor}
           buttonsSize={buttons.size}
           buttonsIconPadding={buttons.iconPadding}
+          thumbnailsPosition={thumbnailsPosition}
+          thumbnailRefSizes={thumbnailRefSizes}
+          thumbnailsSize={thumbnailsSize}
+          hideThumbnails={hideThumbnails}
           title="Next"
           className="SRLNextButton"
           onClick={() => handleNextElement(currentElementID)}
@@ -198,17 +263,20 @@ const SRLLightboxControls = ({
               />
             </svg>
           </div>
-        </SRLLightboxNextIcon>
+        </SRLNextIcon>
       )}
 
       {buttons.showPrevButton && (
-        <SRLLightboxPrevIcon
+        <SRLPrevIcon
           buttonsBackgroundColor={buttons.backgroundColor}
           buttonsIconColor={buttons.iconColor}
           buttonsSize={buttons.size}
           buttonsIconPadding={buttons.iconPadding}
           title="Previous"
           className="SRLPrevButton"
+          thumbnailsPosition={thumbnailsPosition}
+          thumbnailRefSizes={thumbnailRefSizes}
+          thumbnailsSize={thumbnailsSize}
           onClick={() => handlePrevElement(currentElementID)}
         >
           <div className="SRLPrevButton">
@@ -223,7 +291,7 @@ const SRLLightboxControls = ({
               />
             </svg>
           </div>
-        </SRLLightboxPrevIcon>
+        </SRLPrevIcon>
       )}
     </>
   )
@@ -232,21 +300,7 @@ const SRLLightboxControls = ({
 export default SRLLightboxControls
 
 SRLLightboxControls.propTypes = {
-  handleCloseLightbox: PropTypes.func,
-  handleNextElement: PropTypes.func,
-  handlePrevElement: PropTypes.func,
-  handleFullScreen: PropTypes.func,
-  handleImageDownload: PropTypes.func,
-  handlePanzoom: PropTypes.func,
-  panzoomEnabled: PropTypes.bool,
-  setAutoplay: PropTypes.func,
   autoplay: PropTypes.bool,
-  showProgressBar: PropTypes.bool,
-  currentElementID: PropTypes.string,
-  buttonsOffsetFromProgressBar: PropTypes.string,
-  settings: PropTypes.shape({
-    autoplaySpeed: PropTypes.number
-  }),
   buttons: PropTypes.shape({
     backgroundColor: PropTypes.string,
     iconColor: PropTypes.string,
@@ -257,6 +311,27 @@ SRLLightboxControls.propTypes = {
     showFullscreenButton: PropTypes.bool,
     showNextButton: PropTypes.bool,
     showPrevButton: PropTypes.bool,
+    showThumbnailsButton: PropTypes.bool,
+    hideThumbnails: PropTypes.bool,
     size: PropTypes.string
-  })
+  }),
+  buttonsOffsetFromProgressBar: PropTypes.string,
+  currentElementID: PropTypes.string,
+  handleCloseLightbox: PropTypes.func,
+  handleFullScreen: PropTypes.func,
+  handleImageDownload: PropTypes.func,
+  handleNextElement: PropTypes.func,
+  handlePanzoom: PropTypes.func,
+  handlePrevElement: PropTypes.func,
+  handleThumbnails: PropTypes.func,
+  panzoomEnabled: PropTypes.bool,
+  setAutoplay: PropTypes.func,
+  settings: PropTypes.shape({
+    autoplaySpeed: PropTypes.number
+  }),
+  showProgressBar: PropTypes.bool,
+  showThumbnails: PropTypes.bool,
+  thumbnailsPosition: PropTypes.string,
+  SRLThumbnailsRef: PropTypes.object,
+  thumbnailsSize: PropTypes.array
 }

@@ -6,7 +6,7 @@ import React, {
   useContext
 } from 'react'
 import PropTypes from 'prop-types'
-import { SRLLightboxGalleryStage } from './styles'
+import { SRLGalleryStage } from './styles'
 import SRLLightboxSlideComponent from './SRLLightboxSlide'
 import SRLLightboxControls from './SRLLightboxControls'
 import SRLProgressBarComponent from './SRLLightboxSlide/SRLProgressBar'
@@ -38,6 +38,13 @@ const SRLLightboxGallery = ({
   // Ref for the Image with the panzoom (we define it here as we need it here, but the ref is inside the SRLLightboxSlide component)
   const SRLPanzoomImageRef = useRef()
 
+  /* Ref for the thumbnails div (we will need it in the SRLLightboxControls to calculate the width of the div containing the thumbnails
+    and to calculate the height of the image minus the width or the height of the div containing the thumbnails) */
+  const SRLThumbnailsRef = useRef()
+
+  /* Ref for the caption div (to calculate the height of the image minus the width or the height of the div containing the caption) */
+  const SRLCaptionRef = useRef()
+
   // Ref for the SRLStage
   const SRLStageRef = useRef()
 
@@ -52,7 +59,8 @@ const SRLLightboxGallery = ({
     // new
     buttons,
     settings,
-    progressBar
+    progressBar,
+    thumbnails
   } = options
 
   // Destructuring the callbacks !!!passed by user!!! and we need to check if those are functions
@@ -116,16 +124,14 @@ const SRLLightboxGallery = ({
     [ctx.callbacks, onCountSlides]
   )
 
-  // In this component we set the state using the context.
-  // We don't want to manipulate the context every time so we create a localized state
-  // The first element will be the one that is clicked
-  const [currentElement, setCurrentElement] = useState(selectedElement)
-  // Let's set a state for the "autoplay" option
+  // Set a state for the "autoplay" option
   const [autoplay, setAutoplay] = useState(false)
-  // Let's set a state for the "panzoom" option
+  // Set a state for the "panzoom" option
   const [panzoomEnabled, setPanzoomEnabled] = useState(false)
-  // Establish if the selected slide comes before or after the current slide and save it to this state
+  // Set the direction of a slide if it comes before or after the current slide
   const [direction, setDirection] = useState()
+  // Set a state for the user to hide/show the thumbnails (not from the option, if they want to hide them on the fly)
+  const [hideThumbnails, setHideThumbnails] = useState(false)
 
   // Check if the user is not taking any action
   const isIdle = useIdle(
@@ -172,6 +178,11 @@ const SRLLightboxGallery = ({
     []
   )
 
+  // Handle Thumbnails
+  const handleThumbnails = useCallback(() => {
+    setHideThumbnails(!hideThumbnails)
+  }, [hideThumbnails])
+
   // Handle Panzoom
   const handlePanzoom = useCallback(
     (value) => {
@@ -187,9 +198,12 @@ const SRLLightboxGallery = ({
     (elementID, currentID, element, knownDirection) => {
       handlePanzoom(false)
       establishNextOrPrevious(elementID, currentID, knownDirection)
-      setCurrentElement({ ...element })
+      dispatch({
+        type: 'HANDLE_ELEMENT',
+        element
+      })
     },
-    [establishNextOrPrevious, handlePanzoom]
+    [establishNextOrPrevious, handlePanzoom, dispatch]
   )
 
   // Handle Image Download
@@ -204,7 +218,7 @@ const SRLLightboxGallery = ({
   }
   async function handleImageDownload() {
     const a = document.createElement('a')
-    a.href = await toDataURL(currentElement.source)
+    a.href = await toDataURL(selectedElement.source)
     a.download = ''
     document.body.appendChild(a)
     a.click()
@@ -316,9 +330,9 @@ const SRLLightboxGallery = ({
 
   // Handle Autoplay
   useInterval(
-    () => handleNextElement(currentElement.id),
+    () => handleNextElement(selectedElement.id),
     autoplay ? settings.autoplaySpeed : null,
-    currentElement.id
+    selectedElement.id
   )
 
   // Handle Navigation With Keys
@@ -326,10 +340,10 @@ const SRLLightboxGallery = ({
     // function
     (value) => {
       if (value === 'ArrowRight' || value === 'ArrowUp') {
-        handleNextElement(currentElement.id)
+        handleNextElement(selectedElement.id)
       }
       if (value === 'ArrowLeft' || value === 'ArrowDown') {
-        handlePrevElement(currentElement.id)
+        handlePrevElement(selectedElement.id)
       }
       if (value === 'Escape') {
         handleCloseLightbox()
@@ -416,14 +430,19 @@ const SRLLightboxGallery = ({
       }
     }
 
-    // Sets the current element to be the first item in the array if the id is undefined. This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
-    if (currentElement.id === undefined) {
-      setCurrentElement({
-        source: elements[0].source,
-        caption: elements[0].caption,
-        id: elements[0].id,
-        width: elements[0].width,
-        height: elements[0].height
+    // Sets the current element to be the first item in the array if the id is undefined.
+    // This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
+
+    if (selectedElement.id === undefined) {
+      dispatch({
+        type: 'HANDLE_ELEMENT',
+        element: {
+          source: elements[0].source,
+          caption: elements[0].caption,
+          id: elements[0].id,
+          width: elements[0].width,
+          height: elements[0].height
+        }
       })
     }
 
@@ -455,7 +474,7 @@ const SRLLightboxGallery = ({
       }
     }
   }, [
-    currentElement.id,
+    selectedElement.id,
     elements,
     settings.disablePanzoom,
     settings.disableKeyboardControls,
@@ -463,26 +482,33 @@ const SRLLightboxGallery = ({
     settings.hideControlsAfter,
     isIdle,
     handleNavigationWithKeys,
-    direction
+    direction,
+    ctx,
+    dispatch,
+    selectedElement
   ])
 
-  // Light-box controls
+  // Light-box controls and settings
   const controls = {
-    currentElementID: currentElement.id,
+    autoplay,
+    buttons,
+    currentElementID: selectedElement.id,
     direction,
-    handleCurrentElement,
-    handleNextElement,
-    handlePrevElement,
     handleCloseLightbox,
+    handleCurrentElement,
     handleFullScreen,
     handleImageDownload,
+    handleNextElement,
     handlePanzoom,
-    autoplay,
+    handlePrevElement,
+    handleThumbnails,
+    hideThumbnails,
     panzoomEnabled,
-    settings,
-    buttons,
     setAutoplay,
-    SRLPanzoomImageRef
+    settings,
+    SRLPanzoomImageRef,
+    SRLThumbnailsRef,
+    SRLCaptionRef
   }
 
   // Light-box buttons options
@@ -497,7 +523,7 @@ const SRLLightboxGallery = ({
   }
 
   return (
-    <SRLLightboxGalleryStage
+    <SRLGalleryStage
       ref={SRLStageRef}
       overlayColor={settings.overlayColor}
       className="SRLStage"
@@ -507,17 +533,25 @@ const SRLLightboxGallery = ({
           autoplay={autoplay}
           autoplaySpeed={settings.autoplaySpeed}
           progressBar={progressBar}
-          currentElementID={currentElement.id}
+          currentElementID={selectedElement.id}
         />
       )}
-      <SRLLightboxControls {...buttonOptions} {...controls} />
+      <SRLLightboxControls
+        {...buttonOptions}
+        {...controls}
+        thumbnailsPosition={thumbnails.thumbnailsPosition}
+        thumbnailsSize={thumbnails.thumbnailsSize}
+        thumbnailsContainerPadding={thumbnails.thumbnailsContainerPadding}
+        showThumbnails={thumbnails.showThumbnails}
+        SRLThumbnailsRef={SRLThumbnailsRef}
+      />
       <SRLLightboxSlideComponent
-        {...currentElement}
+        {...selectedElement}
         {...controls}
         elements={elements}
         options={options}
       />
-    </SRLLightboxGalleryStage>
+    </SRLGalleryStage>
   )
 }
 
@@ -527,12 +561,20 @@ SRLLightboxGallery.propTypes = {
   isOpened: PropTypes.bool,
   dispatch: PropTypes.func,
   selectedElement: PropTypes.object,
+  SRLPanzoomImageRef: PropTypes.object,
   options: PropTypes.shape({
+    thumbnails: PropTypes.shape({
+      thumbnailsContainerPadding: PropTypes.string,
+      thumbnailsPosition: PropTypes.string,
+      thumbnailsSize: PropTypes.array,
+      showThumbnails: PropTypes.bool
+    }),
     settings: PropTypes.shape({
       overlayColor: PropTypes.string,
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
+
       hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
     }),
     buttons: PropTypes.shape({
@@ -544,7 +586,6 @@ SRLLightboxGallery.propTypes = {
     progressBar: PropTypes.shape({
       showProgressBar: PropTypes.bool,
       background: PropTypes.string,
-      fill: PropTypes.string,
       height: PropTypes.string
     })
   })

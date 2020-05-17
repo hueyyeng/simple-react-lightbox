@@ -1,15 +1,16 @@
 import { motion } from 'framer-motion'
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 
 // Main div containing the light-box
-const SRLLightboxGalleryStage = styled.div`
+const SRLGalleryStage = styled.div`
   background-color: ${(props) => props.overlayColor};
   position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 9991;
+  z-index: 9999;
 `
 
 // The actual fill of the bar is
@@ -20,7 +21,7 @@ const SRLProgressBarWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9;
+  z-index: 9999;
 `
 
 const SRLProgressBar = styled.div`
@@ -42,12 +43,46 @@ const SRLContent = styled.div`
   left: 0;
   right: 0;
   top: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  justify-items: center;
+  width: 100vw;
+  height: 100vh;
+
+  /* Thumbnails aligned to the right */
+  ${(props) =>
+    props.thumbnailsPosition === 'right' &&
+    css`
+      grid-template-columns: 1fr auto;
+      grid-template-rows: 90% auto;
+    `};
+
+  /* Thumbnails aligned to the left */
+  ${(props) =>
+    props.thumbnailsPosition === 'left' &&
+    css`
+      grid-template-columns: auto 1fr;
+      grid-template-rows: 90% auto;
+    `};
+
+  ${(props) =>
+    props.hideThumbnails &&
+    css`
+      grid-template-rows: 90% auto;
+    `};
+
+  ${(props) =>
+    !props.showCaption &&
+    css`
+      grid-template-rows: auto;
+    `};
+
+  @media (max-width: 768px) {
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+  }
 `
 
 // The container for the image
@@ -57,55 +92,55 @@ const SRLElementContainer = styled.div`
   justify-content: center;
   align-items: center;
   outline: none;
-  width: ${(props) => {
-    if (props.showThumbnails === false && !!props.showCaption === false) {
-      return '90vw'
-    } else if (props.showThumbnails === false && props.showCaption === true) {
-      return '85vw'
-    } else if (props.showThumbnails === true && props.showCaption === false) {
-      return '75vw'
-    } else {
-      return '70vw'
-    }
-  }};
-  height: ${(props) => {
-    if (props.showThumbnails === false && !!props.showCaption === false) {
-      return '90vh'
-    } else if (props.showThumbnails === false && props.showCaption === true) {
-      return '85vh'
-    } else if (props.showThumbnails === true && props.showCaption === false) {
-      return '75vh'
-    } else {
-      return '70vh'
-    }
-  }};
-  margin-top: ${(props) => {
-    if (props.showThumbnails === false && !!props.showCaption === false) {
-      return '0px'
-    } else if (props.showThumbnails === false && props.showCaption === true) {
-      return 'auto'
-    } else if (props.showThumbnails === true && props.showCaption === false) {
-      return 'auto'
-    } else {
-      return 'auto'
-    }
-  }};
+  width: 100vw;
+  height: ${(props) =>
+    props
+      ? `calc(100vh - ${
+          props.captionRefSizes.height + props.thumbnailRefSizes.height
+        }px)`
+      : '100%'};
+
+  /* Thumbnails aligned to the right.
+  We need to exclude the height of the div this time */
+  ${(props) =>
+    props.thumbnailsPosition === 'right' &&
+    css`
+      grid-column: 1/2;
+      width: 100%;
+      height: calc(100vh - ${props.captionRefSizes.height}px);
+    `};
+
+  /* Thumbnails aligned to the left */
+  ${(props) =>
+    props.thumbnailsPosition === 'left' &&
+    css`
+      grid-column: 2/2;
+      width: 100%;
+      height: calc(100vh - ${props.captionRefSizes.height}px);
+    `};
+
+  ${(props) =>
+    props.hideThumbnails &&
+    css`
+      height: 100%;
+    `};
+
   @media (max-width: 768px) {
+    grid-column: auto;
     width: 100vw;
-    height: ${(props) => (props.showThumbnails ? '70vh' : '80vh')};
-  }
-  > div,
-  .SRLTransitionGroup {
-    width: 100%;
-    height: 100%;
-    outline: none;
+    height: ${(props) =>
+      props
+        ? `calc(100vh - ${
+            props.captionRefSizes.height + props.thumbnailRefSizes.height
+          }px)`
+        : '100%'} !important;
   }
 `
 
 // Element Wrapper
 const SRLElementWrapper = styled(motion.div)`
   width: 100%;
-  height: 100%;
+  height: 90%;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -136,7 +171,7 @@ const SRLImage = styled.img`
   opacity: 1;
   margin: auto;
   position: absolute;
-  z-index: 99;
+  z-index: 9997;
   cursor: ${(props) => (props.cursorType ? 'auto' : 'zoom-in')};
 `
 
@@ -147,6 +182,7 @@ const SRLPanzoomedImage = styled(SRLImage)`
   position: relative;
   transform-origin: 50% 50% !important;
   cursor: grab;
+  z-index: 9997;
 `
 
 // // The Video
@@ -177,24 +213,47 @@ const SRLCaption = styled.div`
   font-family: inherit;
   outline: none;
   border: 0;
-  margin: auto 0;
   position: relative;
   width: 100%;
-  height: auto;
+  height: 100px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   z-index: -1;
+  display: flex;
+  justify-content: center;
+  align-content: ${(props) => props.captionAlignment};
+  padding: ${(props) =>
+    props.captionStyle.captionContainerPadding
+      ? props.captionStyle.captionContainerPadding
+      : '0'};
+
+  ${(props) =>
+    /* Thumbnails aligned to the right */
+    props.thumbnailsPosition === 'right' &&
+    css`
+      grid-column: 1/2;
+      align-items: start;
+    `};
+
+  /* Thumbnails aligned to the left */
+  ${(props) =>
+    props.thumbnailsPosition === 'left' &&
+    css`
+      grid-column: 2/2;
+      align-items: start;
+    `};
+
+  @media (max-width: 768px) {
+    grid-column: auto;
+    height: 50px;
+  }
 
   p {
     margin: 0;
-    padding: 0;
     text-align: center;
     background-color: transparent;
-    @media (max-width: 768px) {
-      padding: 0 15px;
-    }
     font-weight: ${(props) =>
       props.captionStyle.captionFontWeight
         ? props.captionStyle.captionFontWeight
@@ -219,6 +278,11 @@ const SRLCaption = styled.div`
       props.captionStyle.captionTextTransform
         ? props.captionStyle.captionTextTransform
         : 'inherit'};
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+      padding: 0 15px;
+    }
   }
 `
 
@@ -228,9 +292,8 @@ const SRLThumbnailGallery = styled.div`
   color: white;
   height: auto;
   width: 100%;
-  margin-top: auto;
   justify-content: center;
-  align-self: flex-end;
+  margin-top: auto;
   overflow-x: hidden;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -238,20 +301,80 @@ const SRLThumbnailGallery = styled.div`
   transition: 0.3s ease;
   will-change: transform, opacity;
   position: relative;
-  z-index: 999;
+  z-index: 9997;
   cursor: pointer;
+  padding: ${(props) =>
+    props.thumbnailsContainerPadding ? props.thumbnailsContainerPadding : '0'};
+  background-color: ${(props) =>
+    props.thumbnailsContainerBackgroundColor
+      ? props.thumbnailsContainerBackgroundColor
+      : 'transparent'};
+
+  /* Thumbnails alignment */
+  ${(props) =>
+    props.thumbnailsAlignment === 'start' &&
+    css`
+      margin-top: 0;
+      justify-content: flex-start;
+    `}
+
+  ${(props) =>
+    props.thumbnailsAlignment === 'end' &&
+    css`
+      margin-top: 0;
+      justify-content: flex-end;
+    `}
+
+  ${(props) =>
+    props.thumbnailsAlignment === 'space-between' &&
+    css`
+      justify-content: space-between;
+    `}
+
+  ${(props) =>
+    props.thumbnailsAlignment === 'space-evenly' &&
+    css`
+      justify-content: space-evenly;
+    `}
+
+  /* Thumbnails aligned to the right */
+  ${(props) =>
+    props.thumbnailsPosition === 'right' &&
+    css`
+      flex-direction: column;
+      grid-column-start: 2;
+      grid-row-start: 1;
+      grid-row-end: 3;
+      height: 100%;
+    `};
+
+  /* Thumbnails aligned to the left */
+  ${(props) =>
+    props.thumbnailsPosition === 'left' &&
+    css`
+      flex-direction: column;
+      grid-column-start: 1;
+      grid-row-start: 1;
+      grid-row-end: 3;
+      height: 100%;
+    `};
 
   .SRLIdle & {
     opacity: 0;
   }
 
   &.SRLDraggable {
-    cursor: grabbing !important;
+    cursor: grabbing;
   }
 
   @media (max-width: 768px) {
     justify-content: start;
     overflow-x: visible;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    grid-column: auto;
+    grid-row: auto;
   }
 `
 
@@ -263,7 +386,7 @@ const SRLThumbnailGalleryImage = styled.a`
     props.thumbnailsSize ? props.thumbnailsSize[1] : '80px'};
   background-repeat: no-repeat;
   background-size: cover;
-  margin: 1px;
+  margin: ${(props) => (props.thumbnailsGap ? props.thumbnailsGap : '1px')};
   opacity: ${(props) =>
     props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
   transition: 0.3s ease;
@@ -271,14 +394,14 @@ const SRLThumbnailGalleryImage = styled.a`
   display: block;
   cursor: draggable;
   flex: 0 0 auto;
-  &:first-of-type {
-    margin: 0;
-  }
-  &:last-child {
-    margin: 0;
-  }
-  &.SRLSelected {
+
+  &.SRLThumbnailSelected {
     opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    height: 60px;
+    width: 80px;
   }
 `
 
@@ -299,25 +422,44 @@ const StyledButton = styled.button`
   display: inline-block;
   margin: 0;
   visibility: inherit;
-  z-index: 9992;
+  z-index: 9998;
   opacity: 1;
   transition: opacity 0.3s ease;
+
   .SRLIdle & {
     opacity: 0;
   }
-  @media (max-width: 768px) {
-    height: ${(props) =>
-      props.buttonsSize
-        ? Math.round(parseInt(props.buttonsSize, 10) / 1.3) + 'px'
-        : '30px'};
-    width: ${(props) =>
-      props.buttonsSize
-        ? Math.round(parseInt(props.buttonsSize, 10) / 1.3) + 'px'
-        : '30px'};
-  }
+
   &:focus {
     outline: none;
   }
+
+  @media (max-width: 768px) {
+    height: ${(props) =>
+      props.buttonsSize
+        ? Math.round(parseInt(props.buttonsSize, 10) / 1) + 'px'
+        : '30px'};
+    width: ${(props) =>
+      props.buttonsSize
+        ? Math.round(parseInt(props.buttonsSize, 10) / 1) + 'px'
+        : '30px'};
+  }
+
+  @media (max-width: 360px) {
+    height: ${(props) =>
+      props.buttonsSize
+        ? Math.round(parseInt(props.buttonsSize, 10) / 1.2) + 'px'
+        : '30px'};
+    width: ${(props) =>
+      props.buttonsSize
+        ? Math.round(parseInt(props.buttonsSize, 10) / 1.2) + 'px'
+        : '30px'};
+
+    .SRLIdle & {
+      opacity: 1;
+    }
+  }
+
   div {
     display: flex;
     justify-content: center;
@@ -352,35 +494,57 @@ const StyledButton = styled.button`
 `
 
 // Top right buttons
-const SRLLLightboxTopButtons = styled.div`
+const SRLTopButtons = styled.div`
   position: absolute;
   top: 5px;
   right: 5px;
   top: calc(env(safe-area-inset-top) + 5px);
   right: calc(env(safe-area-inset-right) + 5px);
-  ${(props) =>
-    props.showProgressBar &&
-    props.autoplay &&
-    `
-  margin-top: ${
-    props.buttonsOffsetFromProgressBar.replace(/[^0-9]/g, '') * 2
-  }px;
-  `}
-
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  transition: 0.3s ease;
+  will-change: right;
+
+  /* Offset the buttons if the progress bar is active and the autoplay is "playing" */
+  ${(props) =>
+    props.showProgressBar &&
+    props.autoplay &&
+    css`
+      top: ${Math.round(parseInt(props.buttonsOffsetFromProgressBar, 10)) *
+      2}px;
+      top: calc(
+        env(safe-area-inset-top) +
+          ${Math.round(parseInt(props.buttonsOffsetFromProgressBar, 10)) * 2}px
+      );
+    `}
+
+  /* Offset the buttons if the thumbnails are on the right */
+  ${(props) =>
+    props.thumbnailsPosition === 'right' &&
+    css`
+      right: ${props.thumbnailRefSizes.width + 5}px;
+      right: calc(
+        env(safe-area-inset-top) + ${props.thumbnailRefSizes.width + 5}px
+      );
+    `}
+
+
 `
 
 // The "close" button
-const SRRLLightboxCloseIcon = styled(StyledButton)`
+const SRLCloseIcon = styled(StyledButton)`
   position: relative;
 `
 
 // The "expand" button
-const SRRLExpandIcon = styled(StyledButton)`
+const SRLExpandIcon = styled(StyledButton)`
   position: relative;
   margin-right: 5px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 // The "zoomOut" button
@@ -390,33 +554,85 @@ const SRLZoomOutIcon = styled(StyledButton)`
 `
 
 // The "autoplay" button
-const SRRLLightboxAutoplayIcon = styled(StyledButton)`
+const SRLAutoplayIcon = styled(StyledButton)`
   position: relative;
   margin-right: 5px;
   display: ${(props) => (props.autoplaySpeed === 0 ? 'none' : 'block')};
 `
 
 // The "download" button
-const SRRLDownloadIcon = styled(StyledButton)`
+const SRLThumbnailsIcon = styled(StyledButton)`
+  position: relative;
+  margin-right: 5px;
+
+  ${(props) =>
+    props.thumbnailsPosition === 'right' &&
+    css`
+      svg {
+        transform: rotate(-90deg);
+      }
+    `}
+
+  ${(props) =>
+    props.thumbnailsPosition === 'left' &&
+    css`
+      svg {
+        transform: rotate(90deg);
+      }
+    `}
+
+  @media (max-width: 768px) {
+    svg {
+      transform: rotate(0) !important;
+    }
+  }
+`
+
+// The "download" button
+const SRLDownloadIcon = styled(StyledButton)`
   position: relative;
   margin-right: 5px;
 `
 
 // The "next" button
-const SRLLightboxNextIcon = styled(StyledButton)`
+const SRLNextIcon = styled(StyledButton)`
   top: calc(50% - 50px);
   right: 5px;
   right: calc(env(safe-area-inset-right) + 5px);
+  transition: 0.3s ease;
+  will-change: right;
+
+  ${(props) =>
+    props.thumbnailsPosition === 'right' &&
+    css`
+      right: ${props.thumbnailRefSizes.width + 5}px;
+      right: calc(
+        env(safe-area-inset-right) + ${props.thumbnailRefSizes.width + 5}px
+      );
+    `}
+
   @media (max-width: 768px) {
     display: none;
   }
 `
 
 // The "prev" button
-const SRLLightboxPrevIcon = styled(StyledButton)`
+const SRLPrevIcon = styled(StyledButton)`
   top: calc(50% - 50px);
   left: 5px;
   left: calc(env(safe-area-inset-left) + 5px);
+  transition: 0.3s ease;
+  will-change: left;
+
+  ${(props) =>
+    props.thumbnailsPosition === 'left' &&
+    css`
+      left: ${props.thumbnailRefSizes.width + 5}px;
+      left: calc(
+        env(safe-area-inset-right) + ${props.thumbnailRefSizes.width + 5}px
+      );
+    `}
+
   @media (max-width: 768px) {
     display: none;
   }
@@ -426,21 +642,22 @@ const SRLLightboxPrevIcon = styled(StyledButton)`
 export {
   SRLProgressBarWrapper,
   SRLProgressBar,
-  SRLLightboxGalleryStage,
+  SRLGalleryStage,
   SRLContent,
   SRLElementContainer,
   SRLElementWrapper,
   SRLImage,
   SRLPanzoomedImage,
   SRLCaption,
-  SRRLLightboxCloseIcon,
-  SRLLightboxNextIcon,
-  SRLLightboxPrevIcon,
-  SRRLLightboxAutoplayIcon,
-  SRRLDownloadIcon,
-  SRRLExpandIcon,
+  SRLCloseIcon,
+  SRLNextIcon,
+  SRLPrevIcon,
+  SRLAutoplayIcon,
+  SRLThumbnailsIcon,
+  SRLDownloadIcon,
+  SRLExpandIcon,
   SRLZoomOutIcon,
   SRLThumbnailGallery,
   SRLThumbnailGalleryImage,
-  SRLLLightboxTopButtons
+  SRLTopButtons
 }

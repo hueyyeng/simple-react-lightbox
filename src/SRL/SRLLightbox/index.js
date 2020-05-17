@@ -17,13 +17,12 @@ const PortalWrapper = styled(Portal)`
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 9991;
+  z-index: 9999;
 `
 
 function SRLLightbox() {
   const context = useContext(SRLCtx)
   const { options, isOpened } = context
-
   return (
     <PortalWrapper selector="SRLLightbox" isOpened={isOpened}>
       <motion.div

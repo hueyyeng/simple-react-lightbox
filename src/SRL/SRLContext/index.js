@@ -18,47 +18,54 @@ const initialState = {
       size: '40px'
     },
     settings: {
-      slideAnimationType: 'fade',
       autoplaySpeed: 3000,
       disableKeyboardControls: false,
-      disableWheelControls: false,
       disablePanzoom: false,
+      disableWheelControls: false,
       hideControlsAfter: 3000,
       lightboxTransitionSpeed: 0.6,
       lightboxTransitionTimingFunction: 'easeIn',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
-      slideTransitionSpeed: 0.6,
+      slideAnimationType: 'fade',
       slideSpringValues: [70, 60],
+      slideTransitionSpeed: 0.6,
       slideTransitionTimingFunction: 'easeIn'
     },
     caption: {
-      showCaption: true,
+      captionAlignment: 'start',
       captionColor: '#FFFFFF',
       captionFontFamily: 'inherit',
       captionFontSize: 'inherit',
       captionFontStyle: 'inherit',
       captionFontWeight: 'inherit',
-      captionTextTransform: 'inherit'
+      captionContainerPadding: '0',
+      captionTextTransform: 'inherit',
+      showCaption: true
     },
     thumbnails: {
       showThumbnails: true,
+      thumbnailsAlignment: 'center',
+      thumbnailsContainerPadding: '0',
+      thumbnailsContainerBackgroundColor: 'transparent',
+      thumbnailsGap: '1px',
+      thumbnailsPosition: 'bottom',
       thumbnailsOpacity: 0.4,
       thumbnailsSize: ['100px', '80px']
     },
     progressBar: {
-      showProgressBar: true,
       backgroundColor: '#f2f2f2',
       fillColor: 'rgb(30,30,36)',
-      height: '6px'
+      height: '3px',
+      showProgressBar: true
     }
   },
   selectedElement: {
     caption: '',
     height: 0,
-    id: '',
+    id: 0,
     source: '',
     thumbnail: '',
-    width: ''
+    width: 0
   },
   callbacks: {
     onCountSlides: () => {},
