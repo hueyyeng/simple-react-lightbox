@@ -99,14 +99,14 @@
     "dist"
   ],
   "dependencies": {
-    "framer-motion": "^1.10.3",
+    "framer-motion": "^1.11.0",
     "fscreen": "^1.0.2",
     "imagesloaded": "^4.1.4",
     "lodash": "^4.17.15",
     "panzoom": "^9.2.4",
     "react-swipeable": "^5.5.1",
-    "react-use": "^14.1.1",
+    "react-use": "^15.1.0",
     "subscribe-event": "^1.1.1",
-    "use-debounce": "^3.4.1"
+    "use-debounce": "^3.4.2"
   }
 }
