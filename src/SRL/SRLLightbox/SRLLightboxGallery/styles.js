@@ -352,7 +352,6 @@ const SRLThumbnailGallery = styled.div`
   height: auto;
   width: 100vw;
   justify-content: center;
-
   overflow-x: hidden;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -405,8 +404,20 @@ const SRLThumbnailGallery = styled.div`
       grid-row-start: 1;
       -ms-grid-row-span: 2;
       grid-row-end: 3;
-      height: 100vh;
+      height: 100%;
       width: auto;
+
+      /* SAFARI HACK */
+      @media not all and (min-resolution: 0.001dpcm) {
+        @media {
+          height: 100vh;
+        }
+      }
+
+      /* IE 11 HACK **/
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        height: 100vh;
+      }
     `};
 
   /* Thumbnails aligned to the left */
@@ -420,8 +431,20 @@ const SRLThumbnailGallery = styled.div`
       grid-row-start: 1;
       -ms-grid-row-span: 2;
       grid-row-end: 3;
-      height: 100vh;
+      height: 100%;
       width: auto;
+
+      /* SAFARI HACK */
+      @media not all and (min-resolution: 0.001dpcm) {
+        @media {
+          height: 100vh;
+        }
+      }
+
+      /* IE 11 HACK **/
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        height: 100vh;
+      }
     `};
 
   .SRLIdle & {
