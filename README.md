@@ -15,6 +15,7 @@
 - [Options](#options) 🆕
 - [Callbacks](#callbacks)
 - [Custom Hook](#hook)
+- [A note on "slide" animation and Firefox](#firefox-bug)
 
 
 ### What's new in Version 3.0
@@ -31,9 +32,9 @@
 - Caption has [new options](caption-options) to allow the text to be aligned and to add some padding to the container.
 - Auto-play has been improved. When the auto-play is on, if the image is changed, the auto-play timer will be reset (and also the progress bar if enabled).
 
-- Responsive UX of the light-box has been improved.
-
 - CSS Classes are 100% covered now so if you really want to add some more customization, every element will have its own class. Please keep in mind that if you drastically change the css I am not responsible of any broken code 🤪
+
+- Responsive UX of the light-box has been improved on mobile devices. Various fixes with IE11. An issue with the panz-zoom not working well with touch controls on mobile has been fixed.
 
 
 #### A brief introduction
@@ -482,6 +483,38 @@ const callbacks = {
     onLightboxOpened: object => console.log(object),
     onLightboxClosed: object => console.log(object),
     onCountSlides: object => console.log(object)
+};
+
+function MyComponent() {
+  return (
+    <div className="MyComponent">
+     <SRLWrapper callbacks={callbacks}>
+        // Your images here
+      </SRLWrapper>
+    </div>
+  );
+}
+
+export default MyComponent;
+```
+
+## Firefox issue
+I have noticed that sometimes Firefox has issues on rendering the "slide" animation. I will need to investigate this fully but I think it's related to a bug with Firefox and semi-transparent background. The solution is to change the `overlayColor` option to have a color without any transparency.
+If you really want the transparency you can do a little hack and change the variable if the browser is Firefox. This only occurs rarely and especially with the "slide" animation. The "fade" animation should work perfectly regardless.
+
+```jsx
+import React from "react";
+import MyComponent from "./components/MyComponent";
+// Import SRLWrapper
+import {SRLWrapper} from "simple-react-lightbox";
+
+const browser = navigator.userAgent
+const isFirefox = browser.indexOf('Firefox') > -1
+
+const options = {
+    settings: {
+      overlayColor: isFirefox ? '#000000' : 'rgba(0,0,0,0,8)'
+    }
 };
 
 function MyComponent() {
