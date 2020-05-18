@@ -14,8 +14,8 @@
 - [Get started](#how-to-use)
 - [Options](#options) 🆕
 - [Callbacks](#callbacks)
-- [Custom Hook](#hook)
-- [A note on "slide" animation and Firefox](#firefox-bug)
+- [Custom Hook](#hooks)
+- [A note on "slide" animation and Firefox](#firefox-issue)
 
 
 ### What's new in Version 3.0
@@ -37,7 +37,7 @@
 - Responsive UX of the light-box has been improved on mobile devices. Various fixes with IE11. An issue with the panz-zoom not working well with touch controls on mobile has been fixed.
 
 
-#### A brief introduction
+## A brief introduction
 It all started when I was working on one of my project using React. The client had a blog page and he wanted to add a light-box to the images in the blog posts. The problem is that the data was fetched from the backend and I had no control over the content of each post (the content was coming from a WYSIWYG editor).
 
 I checked online for some light-box for React but the way that they were working was that I had to declare the images beforehand in either an array, an object etc...but what if you don't know about the content and you just want to add a light-box to your images? 😞
