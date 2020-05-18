@@ -6,14 +6,14 @@ const SRLCaptionContainerComponent = ({
   captionOptions,
   caption,
   thumbnailsPosition,
-  captionRef
+  SRLCaptionRef
 }) => {
   return (
     <SRLCaption
       captionStyle={captionOptions}
       thumbnailsPosition={thumbnailsPosition}
       className="SRLCaptionContainer"
-      ref={captionRef}
+      ref={SRLCaptionRef}
     >
       <p className="SRLCaptionText">{caption}</p>
     </SRLCaption>
@@ -33,7 +33,7 @@ SRLCaptionContainerComponent.propTypes = {
     ]),
     captionTextTransform: PropTypes.string
   }),
-  captionRef: PropTypes.object,
+  SRLCaptionRef: PropTypes.object,
   thumbnailsPosition: PropTypes.string,
   caption: PropTypes.string
 }

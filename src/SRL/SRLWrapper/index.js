@@ -208,9 +208,11 @@ const SRLWrapper = ({
                 ? e.img.currentSrc || e.img.src || e.img.href || null
                 : e.img.parentElement.href || null,
 
-            thumbnail: e.img.parentElement.href
-              ? e.img.currentSrc || null
-              : e.img.parentElement.href || e.img.currentSrc || null,
+            thumbnail:
+              elementType === 'IMG'
+                ? e.img.currentSrc || e.img.src || e.img.href || null
+                : e.img.parentElement.href || null,
+
             // Grabs the "alt" attribute from the image or the "textContent" from the video.
             // If it's a link grabs the "alt" attribute from the children image.
             caption: e.img.alt || e.img.textContent || null,
@@ -420,12 +422,12 @@ SRLWrapper.defaultProps = {
       disableWheelControls: false,
       hideControlsAfter: 3000,
       lightboxTransitionSpeed: 0.3,
-      lightboxTransitionTimingFunction: 'easeInOut',
+      lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
       slideAnimationType: 'fade',
       slideSpringValues: [300, 200],
       slideTransitionSpeed: 0.6,
-      slideTransitionTimingFunction: 'easeIn'
+      slideTransitionTimingFunction: 'easeInOut'
     },
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',

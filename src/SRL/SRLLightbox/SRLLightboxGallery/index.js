@@ -465,7 +465,7 @@ const SRLLightboxGallery = ({
     // Cleans up function to remove the class from the body
     return () => {
       document.body.classList.remove('SRLOpened')
-      document.body.style.overflow = null
+      document.body.style.overflow = ''
       unsubscribe.current()
 
       if (panzoomEnabled) {

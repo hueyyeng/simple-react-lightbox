@@ -40,6 +40,10 @@ function SRLLightboxSlideComponent({
   // Ref for the Content
   const SRLLightboxContentRef = useRef()
 
+  const isIE11 = !!window.MSInputMethodContext && !!document.documentMode
+  const POSITIVE_X = isIE11 ? 1000 : '100%'
+  const NEGATIVE_X = isIE11 ? -1000 : '-100%'
+
   // Create a state for the sizes that we need to pass to the styled component
   const [captionRefSizes, setCaptionRefSizes] = useState({
     width: 0,
@@ -55,10 +59,10 @@ function SRLLightboxSlideComponent({
       return {
         x:
           direction === undefined
-            ? '0'
+            ? 0
             : direction === 'next'
-            ? '100%'
-            : '-100%',
+            ? POSITIVE_X
+            : NEGATIVE_X,
         transition: {
           ease: settings.slideTransitionTimingFunction
         }
@@ -66,7 +70,7 @@ function SRLLightboxSlideComponent({
     },
     slideOut: (direction) => {
       return {
-        x: direction === 'previous' ? '100%' : '-100%',
+        x: direction === 'previous' ? POSITIVE_X : NEGATIVE_X,
         transition: {
           ease: settings.slideTransitionTimingFunction
         }
@@ -87,12 +91,7 @@ function SRLLightboxSlideComponent({
     bothIn: (direction) => {
       return {
         opacity: 1,
-        x:
-          direction === undefined
-            ? '0'
-            : direction === 'next'
-            ? '100%'
-            : '-100%',
+        x: direction === undefined ? '0' : direction === 'next' ? 1000 : -1000,
         transition: {
           ease: settings.slideTransitionTimingFunction
         }
@@ -101,7 +100,7 @@ function SRLLightboxSlideComponent({
     bothOut: (direction) => {
       return {
         opacity: 0,
-        x: direction === 'previous' ? '100%' : '-100%',
+        x: direction === 'previous' ? 1000 : -1000,
         transition: {
           ease: settings.slideTransitionTimingFunction
         }
@@ -273,7 +272,7 @@ function SRLLightboxSlideComponent({
           thumbnailsPosition={thumbnails.thumbnailsPosition}
           captionOptions={captionOptions}
           caption={caption}
-          captionRef={SRLCaptionRef}
+          SRLCaptionRef={SRLCaptionRef}
         />
       )}
 

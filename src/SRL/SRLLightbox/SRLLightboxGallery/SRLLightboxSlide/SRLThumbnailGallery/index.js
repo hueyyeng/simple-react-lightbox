@@ -57,17 +57,25 @@ const SRLThumbnailGalleryComponent = ({
 
       // Scroll the thumbnails automatically and sync the light-box
       if (SRLTCR.scrollWidth > SRLTCR.offsetWidth) {
-        SRLTCR.scrollBy({
-          top: 0,
-          left: bcr.left,
-          behavior: 'smooth'
-        })
+        if ('scrollBehavior' in document.documentElement.style) {
+          SRLTCR.scrollBy({
+            top: 0,
+            left: bcr.left,
+            behavior: 'smooth'
+          })
+        } else {
+          SRLTCR.scrollLeft = bcr.left
+        }
       } else if (SRLTCR.scrollHeight > SRLTCR.offsetHeight) {
-        SRLTCR.scrollBy({
-          top: bcr.top,
-          left: 0,
-          behavior: 'smooth'
-        })
+        if ('scrollBehavior' in document.documentElement.style) {
+          SRLTCR.scrollBy({
+            top: bcr.top,
+            left: 0,
+            behavior: 'smooth'
+          })
+        } else {
+          SRLTCR.scrollTop = bcr.top
+        }
       }
     }
 

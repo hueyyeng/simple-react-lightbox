@@ -44,6 +44,8 @@ const SRLContent = styled.div`
   right: 0;
   top: 0;
   display: grid;
+  display: -ms-grid;
+  -ms-grid-rows: auto;
   grid-template-rows: auto;
   align-items: center;
   justify-content: center;
@@ -51,31 +53,73 @@ const SRLContent = styled.div`
   width: 100vw;
   height: 100vh;
 
+  > *:nth-of-type(1) {
+    -ms-grid-row: 1;
+  }
+
+  > *:nth-of-type(2) {
+    -ms-grid-row: 2;
+  }
+
+  > *:nth-of-type(3) {
+    -ms-grid-row: 3;
+  }
+
   /* Thumbnails aligned to the right */
   ${(props) =>
     props.thumbnailsPosition === 'right' &&
     css`
+      -ms-grid-columns: 1fr auto;
       grid-template-columns: 1fr auto;
+      -ms-grid-rows: 90% auto;
       grid-template-rows: 90% auto;
+
+      > *:nth-of-type(1) {
+        -ms-grid-row: 1;
+      }
+
+      > *:nth-of-type(2) {
+        -ms-grid-row: 2;
+      }
+
+      > *:nth-of-type(3) {
+        -ms-grid-row: 1;
+      }
     `};
 
   /* Thumbnails aligned to the left */
   ${(props) =>
     props.thumbnailsPosition === 'left' &&
     css`
+      -ms-grid-columns: auto 1fr;
       grid-template-columns: auto 1fr;
+      -ms-grid-rows: 90% auto;
       grid-template-rows: 90% auto;
+
+      > *:nth-of-type(1) {
+        -ms-grid-row: 1;
+      }
+
+      > *:nth-of-type(2) {
+        -ms-grid-row: 2;
+      }
+
+      > *:nth-of-type(3) {
+        -ms-grid-row: 1;
+      }
     `};
 
   ${(props) =>
     props.hideThumbnails &&
     css`
+      -ms-grid-rows: 90% auto;
       grid-template-rows: 90% auto;
     `};
 
   ${(props) =>
     !props.showCaption &&
     css`
+      -ms-grid-rows: auto;
       grid-template-rows: auto;
     `};
 
@@ -106,6 +150,8 @@ const SRLElementContainer = styled.div`
     props.thumbnailsPosition === 'right' &&
     css`
       grid-column: 1/2;
+      -ms-grid-column: 1;
+      -ms-grid-column-span: 1;
       width: 100%;
       height: calc(100vh - ${props.captionRefSizes.height}px);
     `};
@@ -115,14 +161,16 @@ const SRLElementContainer = styled.div`
     props.thumbnailsPosition === 'left' &&
     css`
       grid-column: 2/2;
+      -ms-grid-column: 2;
       width: 100%;
       height: calc(100vh - ${props.captionRefSizes.height}px);
     `};
 
   ${(props) =>
     props.hideThumbnails &&
+    props.thumbnailsPosition === 'bottom' &&
     css`
-      height: 100%;
+      height: calc(100vh - ${props.thumbnailRefSizes.height}px);
     `};
 
   @media (max-width: 768px) {
@@ -142,6 +190,11 @@ const SRLElementWrapper = styled(motion.div)`
   width: 100%;
   height: 90%;
   position: absolute;
+  /* IE 11 HACK **/
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    top: 5%;
+    left: 0;
+  }
   display: flex;
   justify-content: center;
   align-items: center;
@@ -157,6 +210,10 @@ const SRLElementWrapper = styled(motion.div)`
 const SRLImage = styled.img`
   background: transparent;
   border: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: block;
   max-width: 100%;
   max-height: 100%;
@@ -170,7 +227,6 @@ const SRLImage = styled.img`
   transition: all 200ms ease;
   opacity: 1;
   margin: auto;
-  position: absolute;
   z-index: 9997;
   cursor: ${(props) => (props.cursorType ? 'auto' : 'zoom-in')};
 `
@@ -214,6 +270,9 @@ const SRLCaption = styled.div`
   outline: none;
   border: 0;
   position: relative;
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    width: 100vw;
+  }
   width: 100%;
   height: 100px;
   -webkit-user-select: none;
@@ -234,6 +293,8 @@ const SRLCaption = styled.div`
     props.thumbnailsPosition === 'right' &&
     css`
       grid-column: 1/2;
+      -ms-grid-column: 1;
+      -ms-grid-column-span: 1;
       align-items: start;
     `};
 
@@ -242,6 +303,7 @@ const SRLCaption = styled.div`
     props.thumbnailsPosition === 'left' &&
     css`
       grid-column: 2/2;
+      -ms-grid-column: 2;
       align-items: start;
     `};
 
@@ -253,7 +315,6 @@ const SRLCaption = styled.div`
   p {
     margin: 0;
     text-align: center;
-    background-color: transparent;
     font-weight: ${(props) =>
       props.captionStyle.captionFontWeight
         ? props.captionStyle.captionFontWeight
@@ -291,9 +352,9 @@ const SRLThumbnailGallery = styled.div`
   display: flex;
   color: white;
   height: auto;
-  width: 100%;
+  width: 100vw;
   justify-content: center;
-  margin-top: auto;
+
   overflow-x: hidden;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -314,14 +375,12 @@ const SRLThumbnailGallery = styled.div`
   ${(props) =>
     props.thumbnailsAlignment === 'start' &&
     css`
-      margin-top: 0;
       justify-content: flex-start;
     `}
 
   ${(props) =>
     props.thumbnailsAlignment === 'end' &&
     css`
-      margin-top: 0;
       justify-content: flex-end;
     `}
 
@@ -342,10 +401,14 @@ const SRLThumbnailGallery = styled.div`
     props.thumbnailsPosition === 'right' &&
     css`
       flex-direction: column;
+      -ms-grid-column: 2;
       grid-column-start: 2;
+      -ms-grid-row: 1;
       grid-row-start: 1;
+      -ms-grid-row-span: 2;
       grid-row-end: 3;
-      height: 100%;
+      height: 100vh;
+      width: auto;
     `};
 
   /* Thumbnails aligned to the left */
@@ -353,10 +416,14 @@ const SRLThumbnailGallery = styled.div`
     props.thumbnailsPosition === 'left' &&
     css`
       flex-direction: column;
+      -ms-grid-column: 1;
       grid-column-start: 1;
+      -ms-grid-row: 1;
       grid-row-start: 1;
+      -ms-grid-row-span: 2;
       grid-row-end: 3;
-      height: 100%;
+      height: 100vh;
+      width: auto;
     `};
 
   .SRLIdle & {

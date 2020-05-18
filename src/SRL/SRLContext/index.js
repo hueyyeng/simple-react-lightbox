@@ -24,12 +24,12 @@ const initialState = {
       disableWheelControls: false,
       hideControlsAfter: 3000,
       lightboxTransitionSpeed: 0.6,
-      lightboxTransitionTimingFunction: 'easeIn',
+      lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
       slideAnimationType: 'fade',
       slideSpringValues: [300, 200],
       slideTransitionSpeed: 0.6,
-      slideTransitionTimingFunction: 'easeIn'
+      slideTransitionTimingFunction: 'easeInOut'
     },
     caption: {
       captionAlignment: 'start',
