@@ -208,7 +208,7 @@ function SRLLightboxSlideComponent({
         captionRefSizes={captionRefSizes}
         {...handlers}
       >
-        <AnimatePresence className="SRLTransitionGroup" custom={direction}>
+        <AnimatePresence className="SRLAnimatePresence" custom={direction}>
           <SRLElementWrapper
             variants={variants}
             custom={direction}

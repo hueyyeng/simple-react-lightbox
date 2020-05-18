@@ -1,13 +1,34 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import { SRLCtx } from '../SRLContext'
+import { SRLLightBox } from './../SRLLightbox/SRLLightboxGallery/styles'
+
+const variants = {
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 }
+}
 
 const Portal = ({ isOpened, children, className }) => {
+  const context = useContext(SRLCtx)
+  const { options } = context
+
   // ClassName comes from the Styled Component
   const modalMarkup = (
-    <div id="SRLLightbox" className={className}>
+    <SRLLightBox
+      id="SRLLightbox"
+      initial="hidden"
+      animate="visible"
+      variants={variants}
+      overlayColor={options.settings.overlayColor}
+      transition={{
+        duration: options.settings.lightboxTransitionSpeed,
+        ease: options.settings.lightboxTransitionTimingFunction
+      }}
+      className={className}
+    >
       {children}
-    </div>
+    </SRLLightBox>
   )
   if (!isOpened || typeof window === 'undefined') {
     return null

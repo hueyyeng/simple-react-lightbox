@@ -421,13 +421,13 @@ SRLWrapper.defaultProps = {
       disablePanzoom: false,
       disableWheelControls: false,
       hideControlsAfter: 3000,
-      lightboxTransitionSpeed: 0.3,
+      lightboxTransitionSpeed: 0.6,
       lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
       slideAnimationType: 'fade',
       slideSpringValues: [300, 200],
       slideTransitionSpeed: 0.6,
-      slideTransitionTimingFunction: 'easeInOut'
+      slideTransitionTimingFunction: 'linear'
     },
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
@@ -458,14 +458,14 @@ SRLWrapper.defaultProps = {
       thumbnailsAlignment: 'center',
       thumbnailsContainerBackgroundColor: 'transparent',
       thumbnailsContainerPadding: '0',
-      thumbnailsGap: '1px',
+      thumbnailsGap: '0 1px',
       thumbnailsOpacity: 0.4,
       thumbnailsPosition: 'bottom',
       thumbnailsSize: ['100px', '80px']
     },
     progressBar: {
       backgroundColor: '#f2f2f2',
-      fillColor: 'rgb(30,30,36)',
+      fillColor: '#000000',
       height: '3px',
       showProgressBar: true
     }

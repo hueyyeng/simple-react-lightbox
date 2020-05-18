@@ -2,15 +2,13 @@ import { motion } from 'framer-motion'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 
-// Main div containing the light-box
-const SRLGalleryStage = styled.div`
+const SRLLightBox = styled(motion.div)`
   background-color: ${(props) => props.overlayColor};
   position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 9999;
 `
 
 // The actual fill of the bar is
@@ -270,6 +268,7 @@ const SRLCaption = styled.div`
   outline: none;
   border: 0;
   position: relative;
+  z-index: 9996;
   @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     width: 100vw;
   }
@@ -279,7 +278,6 @@ const SRLCaption = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  z-index: -1;
   display: flex;
   justify-content: center;
   align-content: ${(props) => props.captionAlignment};
@@ -707,9 +705,9 @@ const SRLPrevIcon = styled(StyledButton)`
 
 // Export all of the above
 export {
+  SRLLightBox,
   SRLProgressBarWrapper,
   SRLProgressBar,
-  SRLGalleryStage,
   SRLContent,
   SRLElementContainer,
   SRLElementWrapper,

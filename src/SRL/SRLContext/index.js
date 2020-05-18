@@ -29,7 +29,7 @@ const initialState = {
       slideAnimationType: 'fade',
       slideSpringValues: [300, 200],
       slideTransitionSpeed: 0.6,
-      slideTransitionTimingFunction: 'easeInOut'
+      slideTransitionTimingFunction: 'linear'
     },
     caption: {
       captionAlignment: 'start',
@@ -47,14 +47,14 @@ const initialState = {
       thumbnailsAlignment: 'center',
       thumbnailsContainerPadding: '0',
       thumbnailsContainerBackgroundColor: 'transparent',
-      thumbnailsGap: '1px',
+      thumbnailsGap: '0 1px',
       thumbnailsPosition: 'bottom',
       thumbnailsOpacity: 0.4,
       thumbnailsSize: ['100px', '80px']
     },
     progressBar: {
       backgroundColor: '#f2f2f2',
-      fillColor: 'rgb(30,30,36)',
+      fillColor: '#000000',
       height: '3px',
       showProgressBar: true
     }

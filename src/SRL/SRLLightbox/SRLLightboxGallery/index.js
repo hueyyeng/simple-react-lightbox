@@ -6,7 +6,6 @@ import React, {
   useContext
 } from 'react'
 import PropTypes from 'prop-types'
-import { SRLGalleryStage } from './styles'
 import SRLLightboxSlideComponent from './SRLLightboxSlide'
 import SRLLightboxControls from './SRLLightboxControls'
 import SRLProgressBarComponent from './SRLLightboxSlide/SRLProgressBar'
@@ -523,11 +522,7 @@ const SRLLightboxGallery = ({
   }
 
   return (
-    <SRLGalleryStage
-      ref={SRLStageRef}
-      overlayColor={settings.overlayColor}
-      className="SRLStage"
-    >
+    <div ref={SRLStageRef} className="SRLStage">
       {progressBar.showProgressBar && autoplay && (
         <SRLProgressBarComponent
           autoplay={autoplay}
@@ -551,7 +546,7 @@ const SRLLightboxGallery = ({
         elements={elements}
         options={options}
       />
-    </SRLGalleryStage>
+    </div>
   )
 }
 
