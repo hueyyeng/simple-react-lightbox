@@ -509,12 +509,15 @@ const StyledButton = styled.button`
   border-radius: 0;
   box-shadow: none;
   cursor: pointer;
-  display: inline-block;
   margin: 0;
   visibility: inherit;
   z-index: 9998;
   opacity: 1;
   transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
 
   .SRLIdle & {
     opacity: 0;
@@ -553,8 +556,8 @@ const StyledButton = styled.button`
   div {
     display: flex;
     justify-content: center;
-    height: 100%;
-    width: 100%;
+    height: ${(props) => (props.buttonsSize ? props.buttonsSize : '30px')};
+    width: ${(props) => (props.buttonsSize ? props.buttonsSize : '30px')};
     padding: ${(props) =>
       props.buttonsIconPadding ? props.buttonsIconPadding : '5px'};
     box-sizing: border-box;
@@ -652,7 +655,7 @@ const SRLZoomOutIcon = styled(StyledButton)`
 const SRLAutoplayIcon = styled(StyledButton)`
   position: relative;
   margin-right: 5px;
-  display: ${(props) => (props.autoplaySpeed === 0 ? 'none' : 'block')};
+  display: ${(props) => (props.autoplaySpeed === 0 ? 'none' : 'flex')};
 `
 
 // The "download" button
