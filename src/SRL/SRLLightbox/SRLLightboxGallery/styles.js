@@ -309,7 +309,6 @@ const SRLCaption = styled.div`
 
   @media (max-width: 768px) {
     grid-column: auto;
-    height: 50px;
   }
 
   p {
