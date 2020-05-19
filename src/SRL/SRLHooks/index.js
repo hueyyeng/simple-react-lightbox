@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect } from 'react'
+import { useContext, useRef, useEffect, useState } from 'react'
 import { SRLCtx } from '../SRLContext'
 
 export function useLightbox() {

@@ -6,7 +6,8 @@ const SRLLightBox = styled(motion.div)`
   background-color: ${(props) => props.overlayColor};
   position: fixed;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   top: 0;
   left: 0;
 `
@@ -50,6 +51,7 @@ const SRLContent = styled.div`
   justify-items: center;
   width: 100vw;
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 
   > *:nth-of-type(1) {
     -ms-grid-row: 1;
@@ -176,10 +178,10 @@ const SRLElementContainer = styled.div`
     width: 100vw;
     height: ${(props) =>
       props
-        ? `calc(100vh - ${
+        ? `calc((var(--vh, 1vh) * 100) - ${
             props.captionRefSizes.height + props.thumbnailRefSizes.height
           }px)`
-        : '100%'} !important;
+        : '100%'};
   }
 `
 
@@ -457,9 +459,9 @@ const SRLThumbnailGallery = styled.div`
 
   @media (max-width: 768px) {
     justify-content: start;
-    overflow-x: visible;
+    overflow: auto !important;
     flex-direction: row;
-    width: 100%;
+    width: 100vw !important;
     height: auto;
     grid-column: auto;
     grid-row: auto;

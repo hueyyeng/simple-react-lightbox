@@ -24,7 +24,7 @@ function SRLLightboxSlideComponent({
   handleNextElement,
   handlePanzoom,
   handlePrevElement,
-  height,
+  height: imgWidth,
   hideThumbnails,
   id,
   options,
@@ -33,7 +33,7 @@ function SRLLightboxSlideComponent({
   SRLPanzoomImageRef,
   SRLThumbnailsRef,
   SRLCaptionRef,
-  width
+  width: imgHeight
 }) {
   const { settings, thumbnails, caption: captionSettings } = options
 
@@ -136,7 +136,6 @@ function SRLLightboxSlideComponent({
     150
   )
 
-  // Handle scrollwheel
   useEffect(() => {
     // Get the width and height of the caption div IF the ref is not undefined
     if (SRLCaptionRef.current) {
@@ -154,6 +153,7 @@ function SRLLightboxSlideComponent({
       })
     }
 
+    // Handle scrollwheel
     if (!panzoomEnabled) {
       const addWheelListener = subscribe(document, 'wheel', (e) =>
         handleScrollWheel(e.deltaY)
@@ -242,8 +242,8 @@ function SRLLightboxSlideComponent({
               <SRLImage
                 className="SRLImage"
                 disablePanzoom={settings.disablePanzoom}
-                width={width}
-                height={height}
+                width={imgWidth}
+                height={imgHeight}
                 onClick={() => handlePanzoom(true)}
                 src={typeof source === 'object' ? 'Loading...' : source}
                 alt={caption}
@@ -255,8 +255,8 @@ function SRLLightboxSlideComponent({
             <SRLPanzoomedImage
               className="SRLPanzoomImage"
               ref={SRLPanzoomImageRef}
-              width={width}
-              height={height}
+              width={imgWidth}
+              height={imgHeight}
               src={typeof source === 'object' ? 'Loading...' : source}
               alt={caption}
             />
