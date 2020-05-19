@@ -137,6 +137,7 @@ const SRLElementContainer = styled.div`
   align-items: center;
   outline: none;
   width: 100vw;
+
   height: ${(props) =>
     props
       ? `calc(100vh - ${
@@ -617,6 +618,11 @@ const SRLTopButtons = styled.div`
         env(safe-area-inset-top) + ${props.thumbnailRefSizes.width + 5}px
       );
     `}
+
+  @media (max-width: 768px) {
+    right: calc(env(safe-area-inset-right) + 5px);
+  }
+
 
 
 `
