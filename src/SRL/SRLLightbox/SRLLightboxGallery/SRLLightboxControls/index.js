@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { useSizes } from '../../../SRLHooks'
+
 import {
   SRLCloseIcon,
   SRLNextIcon,
@@ -10,7 +12,7 @@ import {
   SRLThumbnailsIcon,
   SRLExpandIcon,
   SRLZoomOutIcon
-} from '../styles'
+} from '../../../styles/SRLButtonsStyles'
 
 const SRLLightboxControls = ({
   autoplay,
@@ -36,25 +38,7 @@ const SRLLightboxControls = ({
 }) => {
   /* Unfortunately, we need to calculate the offsetWidth of the thumbnails container
   by taking is "REF" from up above */
-  const [thumbnailRefSizes, setThumbnailRefSizes] = useState({
-    width: 0,
-    height: 0
-  })
-
-  useEffect(() => {
-    // Get the width and height of the thumbnails div IF the ref is not undefined
-    if (SRLThumbnailsRef.current) {
-      setThumbnailRefSizes({
-        width: SRLThumbnailsRef.current.offsetWidth,
-        height: SRLThumbnailsRef.current.offsetHeight
-      })
-    } else if (hideThumbnails) {
-      setThumbnailRefSizes({
-        width: 0,
-        height: 0
-      })
-    }
-  }, [SRLThumbnailsRef, hideThumbnails])
+  const [thumbnailsDivSizes] = useSizes(SRLThumbnailsRef)
 
   return (
     <>
@@ -64,8 +48,9 @@ const SRLLightboxControls = ({
         showProgressBar={showProgressBar}
         buttonsOffsetFromProgressBar={buttonsOffsetFromProgressBar}
         thumbnailsPosition={thumbnailsPosition}
-        thumbnailRefSizes={thumbnailRefSizes}
+        thumbnailsDivSizes={thumbnailsDivSizes}
         thumbnailsSize={thumbnailsSize}
+        hideThumbnails={hideThumbnails}
       >
         {buttons.showAutoplayButton && (
           <SRLAutoplayIcon
@@ -125,10 +110,14 @@ const SRLLightboxControls = ({
               >
                 <g fill="#fff" className="SRLThumbnailsButton">
                   <path
+                    className="SRLThumbnailsButton"
                     d="M15.4 27.4h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm12 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm12 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4z"
                     opacity=".4"
                   />
-                  <path d="M39.4 13h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm-24 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm12 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4z" />
+                  <path
+                    className="SRLThumbnailsButton"
+                    d="M39.4 13h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm-24 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4zm12 0h-4.8c-1.3 0-2.4 1.1-2.4 2.4v4.8c0 1.3 1.1 2.4 2.4 2.4h4.8c1.3 0 2.4-1.1 2.4-2.4v-4.8c0-1.3-1.1-2.4-2.4-2.4z"
+                  />
                 </g>
               </svg>
             </div>
@@ -244,7 +233,7 @@ const SRLLightboxControls = ({
           buttonsSize={buttons.size}
           buttonsIconPadding={buttons.iconPadding}
           thumbnailsPosition={thumbnailsPosition}
-          thumbnailRefSizes={thumbnailRefSizes}
+          thumbnailsDivSizes={thumbnailsDivSizes}
           thumbnailsSize={thumbnailsSize}
           hideThumbnails={hideThumbnails}
           title="Next"
@@ -275,8 +264,9 @@ const SRLLightboxControls = ({
           title="Previous"
           className="SRLPrevButton"
           thumbnailsPosition={thumbnailsPosition}
-          thumbnailRefSizes={thumbnailRefSizes}
+          thumbnailsDivSizes={thumbnailsDivSizes}
           thumbnailsSize={thumbnailsSize}
+          hideThumbnails={hideThumbnails}
           onClick={() => handlePrevElement(currentElementID)}
         >
           <div className="SRLPrevButton">

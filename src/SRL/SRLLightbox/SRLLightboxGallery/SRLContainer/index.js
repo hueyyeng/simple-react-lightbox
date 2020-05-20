@@ -6,21 +6,23 @@ import { useSwipeable } from 'react-swipeable'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
 import { AnimatePresence } from 'framer-motion'
+import { useOnClickOutside, useSizes } from '../../../SRLHooks'
 
+import { SRLContainer } from '../../../styles/SRLContainerStyles'
 import {
-  SRLContent,
   SRLElementContainer,
   SRLElementWrapper,
   SRLImage,
   SRLPanzoomedImage
   // SRLLightboxVideo
-} from '../styles'
+} from '../../../styles/SRLElementContainerStyles'
 
-function SRLLightboxSlideComponent({
+function SRLContainerComponent({
   caption,
   direction,
   elements,
   handleCurrentElement,
+  handleCloseLightbox,
   handleNextElement,
   handlePanzoom,
   handlePrevElement,
@@ -37,22 +39,15 @@ function SRLLightboxSlideComponent({
 }) {
   const { settings, thumbnails, caption: captionSettings } = options
 
+  const [captionDivSizes] = useSizes(SRLCaptionRef)
+  const [thumbnailsDivSizes] = useSizes(SRLThumbnailsRef)
+
   // Ref for the Content
   const SRLLightboxContentRef = useRef()
 
   const isIE11 = !!window.MSInputMethodContext && !!document.documentMode
   const POSITIVE_X = isIE11 ? 1000 : '100%'
   const NEGATIVE_X = isIE11 ? -1000 : '-100%'
-
-  // Create a state for the sizes that we need to pass to the styled component
-  const [captionRefSizes, setCaptionRefSizes] = useState({
-    width: 0,
-    height: 0
-  })
-  const [thumbnailRefSizes, setThumbnailRefSizes] = useState({
-    width: 0,
-    height: 0
-  })
 
   const variants = {
     slideIn: (direction) => {
@@ -137,22 +132,6 @@ function SRLLightboxSlideComponent({
   )
 
   useEffect(() => {
-    // Get the width and height of the caption div IF the ref is not undefined
-    if (SRLCaptionRef.current) {
-      setCaptionRefSizes({
-        width: SRLCaptionRef.current.offsetWidth,
-        height: SRLCaptionRef.current.offsetHeight
-      })
-    }
-
-    // Get the width and height of the thumbnails div IF the ref is not undefined
-    if (SRLThumbnailsRef.current) {
-      setThumbnailRefSizes({
-        width: SRLThumbnailsRef.current.offsetWidth,
-        height: SRLThumbnailsRef.current.offsetHeight
-      })
-    }
-
     // Handle scrollwheel
     if (!panzoomEnabled) {
       const addWheelListener = subscribe(document, 'wheel', (e) =>
@@ -162,16 +141,10 @@ function SRLLightboxSlideComponent({
         addWheelListener()
       }
     }
-  }, [
-    handleScrollWheel,
-    panzoomEnabled,
-    settings.disableWheelControls,
-    SRLCaptionRef,
-    SRLThumbnailsRef
-  ])
+  }, [handleScrollWheel, panzoomEnabled, settings.disableWheelControls])
 
   // UseOnClickOutside
-  // useOnClickOutside(SRLLightboxContentRef, () => handleCloseLightbox())
+  useOnClickOutside(SRLLightboxContentRef, () => handleCloseLightbox())
 
   // // Check if it's an image to load the right content
   // const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(source)
@@ -189,8 +162,8 @@ function SRLLightboxSlideComponent({
   }
 
   return (
-    <SRLContent
-      className="SRLContent"
+    <SRLContainer
+      className="SRLContainer"
       ref={SRLLightboxContentRef}
       thumbnailsPosition={thumbnails.thumbnailsPosition}
       showCaption={captionSettings.showCaption}
@@ -204,8 +177,8 @@ function SRLLightboxSlideComponent({
         hideThumbnails={hideThumbnails}
         showCaption={captionSettings.showCaption}
         className="SRLElementContainer"
-        thumbnailRefSizes={thumbnailRefSizes}
-        captionRefSizes={captionRefSizes}
+        captionDivSizes={captionDivSizes}
+        thumbnailsDivSizes={thumbnailsDivSizes}
         {...handlers}
       >
         <AnimatePresence className="SRLAnimatePresence" custom={direction}>
@@ -285,11 +258,11 @@ function SRLLightboxSlideComponent({
           SRLThumbnailsRef={SRLThumbnailsRef}
         />
       )}
-    </SRLContent>
+    </SRLContainer>
   )
 }
 
-SRLLightboxSlideComponent.propTypes = {
+SRLContainerComponent.propTypes = {
   caption: PropTypes.string,
   direction: PropTypes.string,
   elements: PropTypes.array,
@@ -344,4 +317,4 @@ SRLLightboxSlideComponent.propTypes = {
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
-export default SRLLightboxSlideComponent
+export default SRLContainerComponent

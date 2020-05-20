@@ -6,9 +6,9 @@ import React, {
   useContext
 } from 'react'
 import PropTypes from 'prop-types'
-import SRLLightboxSlideComponent from './SRLLightboxSlide'
+import SRLContainerComponent from './SRLContainer'
 import SRLLightboxControls from './SRLLightboxControls'
-import SRLProgressBarComponent from './SRLLightboxSlide/SRLProgressBar'
+import SRLProgressBarComponent from './SRLContainer/SRLProgressBar'
 import { SRLCtx } from '../../SRLContext'
 import { useInterval } from '../../SRLHooks'
 import panzoom from 'panzoom'
@@ -34,7 +34,7 @@ const SRLLightboxGallery = ({
   // Context
   const ctx = useContext(SRLCtx)
 
-  // Ref for the Image with the panzoom (we define it here as we need it here, but the ref is inside the SRLLightboxSlide component)
+  // Ref for the Image with the panzoom (we define it here as we need it here, but the ref is inside the SRLContainer component)
   const SRLPanzoomImageRef = useRef()
 
   /* Ref for the thumbnails div (we will need it in the SRLLightboxControls to calculate the width of the div containing the thumbnails
@@ -387,16 +387,30 @@ const SRLLightboxGallery = ({
     }
   }
 
-  // We want this to run only once!!!
+  // We want this to run only once!
   useEffect(() => {
+    // The callbacks below need to be called once (the selected element is only shown one time when the lightbox is opened)
     onOpened({
       opened: true,
       currentSlide: ctx.selectedElement
     })
 
+    // The slide will be counted once when the light-box is opened, there is no way to manipulate the number of slides
     onCount({
       totalSlide: ctx.elements.length
     })
+
+    // Adds a class to the body to remove the overflow
+    if (typeof window !== 'undefined') {
+      document.body.classList.add('SRLOpened')
+      document.body.style.overflow = 'hidden'
+    }
+
+    // Cleanup function
+    return () => {
+      document.body.classList.remove('SRLOpened')
+      document.body.style.overflow = ''
+    }
   }, [])
 
   useEffect(() => {
@@ -455,16 +469,8 @@ const SRLLightboxGallery = ({
       )
     }
 
-    // Adds a class to the body to remove the overflow
-    if (typeof window !== 'undefined') {
-      document.body.classList.add('SRLOpened')
-      document.body.style.overflow = 'hidden'
-    }
-
     // Cleans up function to remove the class from the body
     return () => {
-      document.body.classList.remove('SRLOpened')
-      document.body.style.overflow = ''
       unsubscribe.current()
 
       if (panzoomEnabled) {
@@ -540,7 +546,7 @@ const SRLLightboxGallery = ({
         showThumbnails={thumbnails.showThumbnails}
         SRLThumbnailsRef={SRLThumbnailsRef}
       />
-      <SRLLightboxSlideComponent
+      <SRLContainerComponent
         {...selectedElement}
         {...controls}
         elements={elements}

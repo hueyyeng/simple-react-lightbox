@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect, useState } from 'react'
+import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import { SRLCtx } from '../SRLContext'
 
 export function useLightbox() {
@@ -53,6 +53,7 @@ export function useOnClickOutside(ref, handler) {
           event.target.classList.contains('SRLExpandButton') ||
           event.target.classList.contains('SRLZoomOutButton') ||
           event.target.classList.contains('SRLDownloadButton') ||
+          event.target.classList.contains('SRLThumbnailsButton') ||
           event.target.classList.contains('SRLThumbnails') ||
           event.target.classList.contains('SRLThumb') ||
           event.target.classList.contains('SRLCaption') ||
@@ -83,4 +84,67 @@ export function useOnClickOutside(ref, handler) {
     // ... passing it into this hook.
     [ref, handler]
   )
+}
+
+export function useSizes(ref) {
+  const [sizes, setSizes] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    scrollHeight: 0,
+    scrollWidth: 0
+  })
+  const isClient = typeof window === 'object'
+
+  useEffect(() => {
+    if (!ref.current && !isClient) {
+      return
+    }
+
+    function getSizes() {
+      const {
+        x,
+        y,
+        width,
+        height,
+        top,
+        left,
+        bottom,
+        right
+      } = ref.current.getBoundingClientRect()
+
+      return {
+        width,
+        height,
+        scrollWidth: ref.current.scrollWidth,
+        scrollHeight: ref.current.scrollHeight,
+        x,
+        y,
+        top,
+        left,
+        bottom,
+        right
+      }
+    }
+
+    if (ref.current) {
+      setSizes(getSizes())
+    }
+
+    function handleSizes() {
+      if (ref.current) {
+        setSizes(getSizes())
+      }
+    }
+
+    window.addEventListener('resize', handleSizes)
+    return () => window.removeEventListener('resize', handleSizes)
+  }, [ref, isClient])
+
+  return [sizes]
 }

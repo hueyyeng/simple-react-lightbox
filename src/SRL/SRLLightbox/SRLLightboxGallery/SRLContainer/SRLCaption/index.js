@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { SRLCaption } from '../../styles'
+import { SRLCaption } from '../../../../styles/SRLCaptionStyles'
 
 const SRLCaptionContainerComponent = ({
   captionOptions,
