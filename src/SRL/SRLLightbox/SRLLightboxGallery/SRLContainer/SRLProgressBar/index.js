@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useInterval } from '../../../../SRLHooks'
-import { SRLProgressBar, SRLProgressBarWrapper } from '../../styles'
+import {
+  SRLProgressBar,
+  SRLProgressBarWrapper
+} from '../../../../styles/SRLProgressBarStyles'
 import PropTypes from 'prop-types'
 
 const SRLProgressBarComponent = ({

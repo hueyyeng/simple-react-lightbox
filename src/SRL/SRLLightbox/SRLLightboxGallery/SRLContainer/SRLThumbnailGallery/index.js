@@ -1,6 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { SRLThumbnailGallery, SRLThumbnailGalleryImage } from '../../styles'
+import {
+  SRLThumbnailGallery,
+  SRLThumbnailGalleryImage
+} from '../../../../styles/SRLThumbnailsStyle'
 
 const SRLThumbnailGalleryComponent = ({
   elements,

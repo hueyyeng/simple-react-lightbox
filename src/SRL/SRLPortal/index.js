@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
-import { SRLLightBox } from './../SRLLightbox/SRLLightboxGallery/styles'
+import { SRLLightbox } from '../styles/SRLLightBoxstyles'
 
 const variants = {
   visible: { opacity: 1 },
@@ -15,7 +15,7 @@ const Portal = ({ isOpened, children, className }) => {
 
   // ClassName comes from the Styled Component
   const modalMarkup = (
-    <SRLLightBox
+    <SRLLightbox
       id="SRLLightbox"
       initial="hidden"
       animate="visible"
@@ -28,7 +28,7 @@ const Portal = ({ isOpened, children, className }) => {
       className={className}
     >
       {children}
-    </SRLLightBox>
+    </SRLLightbox>
   )
   if (!isOpened || typeof window === 'undefined') {
     return null
