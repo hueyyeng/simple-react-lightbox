@@ -11,8 +11,7 @@ function SRLLightbox() {
   const vh = useRef()
 
   useEffect(() => {
-    /* Set a value in the --vh cus
-    tom property to the root of the document so that we can calculate the height of the light-box
+    /* Set a value in the --vh custom property to the root of the document so that we can calculate the height of the light-box
     This is needed for mobile issues wit the VH unit
     https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
 
