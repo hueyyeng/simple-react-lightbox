@@ -102,7 +102,7 @@ export const SRLImage = styled.img`
   opacity: 1;
   margin: auto;
   z-index: 9997;
-  cursor: ${(props) => (props.cursorType ? 'auto' : 'zoom-in')};
+  cursor: ${(props) => (props.disablePanzoom ? 'auto' : 'zoom-in')};
 `
 
 // The Pan-zoomed image

@@ -133,7 +133,7 @@ function SRLContainerComponent({
 
   useEffect(() => {
     // Handle scrollwheel
-    if (!panzoomEnabled) {
+    if (!panzoomEnabled && !settings.disableWheelControls) {
       const addWheelListener = subscribe(document, 'wheel', (e) =>
         handleScrollWheel(e.deltaY)
       )
