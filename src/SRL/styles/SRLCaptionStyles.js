@@ -14,10 +14,6 @@ export const SRLCaption = styled.div`
   }
   width: 100%;
   height: 100px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   display: flex;
   justify-content: center;
   align-content: ${(props) => props.captionAlignment};

@@ -13,7 +13,8 @@ const SRLWrapper = ({
   images,
   children,
   defaultOptions,
-  defaultCallbacks
+  defaultCallbacks,
+  customCaptions
 }) => {
   // Imports the context
   const context = useContext(SRLCtx)
@@ -43,7 +44,7 @@ const SRLWrapper = ({
     })
 
     // 4.5) Dispatch the action to grab the options
-    function dispatchGrabSettings(options, callbacks) {
+    function dispatchGrabSettings(options, callbacks, customCaptions) {
       // console.log('dispatched options')
       // We merge the settings that we receive from the user via the props with the original ones (defaultOptions and defaultCallbacks)
       // If the user hasn't provided any options/callbacks via props we make mergedSettings use just the default options/callbacks
@@ -105,7 +106,8 @@ const SRLWrapper = ({
 
       const mergedSettings = {
         options: { ..._options },
-        callbacks: { ..._callbacks }
+        callbacks: { ..._callbacks },
+        customCaptions: [...customCaptions]
       }
 
       if (
@@ -140,7 +142,7 @@ const SRLWrapper = ({
         // console.log('light-box is initialized')
         return (
           dispatchAddElements(elements.filter((e) => e !== undefined)),
-          dispatchGrabSettings(options, callbacks)
+          dispatchGrabSettings(options, callbacks, customCaptions)
         )
       }
     }
@@ -321,7 +323,8 @@ const SRLWrapper = ({
     defaultOptions,
     options,
     callbacks,
-    images
+    images,
+    customCaptions
   ])
 
   return <div ref={elementsContainer}>{children}</div>
@@ -410,7 +413,8 @@ SRLWrapper.propTypes = {
   ]),
   options: PropTypes.object,
   callbacks: PropTypes.object,
-  images: PropTypes.array
+  images: PropTypes.array,
+  customCaptions: PropTypes.array
 }
 
 SRLWrapper.defaultProps = {
@@ -475,5 +479,6 @@ SRLWrapper.defaultProps = {
     onSlideChange: () => {},
     onLightboxClosed: () => {},
     onLightboxOpened: () => {}
-  }
+  },
+  customCaptions: [{}]
 }

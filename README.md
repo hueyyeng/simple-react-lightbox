@@ -12,7 +12,8 @@
 - [A brief introduction](#a-brief-introduction)
 - [Demo on CodeSandbox](#demo)
 - [Get started](#how-to-use)
-- [Options](#options) 🆕
+- [Options](#options)
+- [Custom Captions](#custom-captions) 🆕
 - [Callbacks](#callbacks)
 - [Custom Hook](#hooks)
 - [A note on "slide" animation and Firefox](#firefox-issue)
@@ -20,6 +21,8 @@
 
 ### What's new in Version 3.0
 - ⚠️ **HEADS UP!** The value for the following options in the settings object have been changed from milliseconds to seconds. `slideTransitionSpeed`,`lightboxTransitionSpeed`. If you see a really slow animation is likely because you have forget to change the value. ⚠️
+
+- 🆕 (added in 3.1) Custom captions are now a thing. I have listened to some feedbacks and now you can make a custom caption with HTML markup and add it to a specific image. Read carefully the documentation on [custom captions](#custom-captions) to see how to use it.
 
 - New physics animations for the light-box have ben added for realistic motion. The images can now have a "slide" animation where they slide left and right. They can also slide and fade, or just fade. Please read carefully the [settings options](#settings-options) to check how implement this or check the demo for some examples.
 
@@ -455,10 +458,51 @@ const Button = props => {
 export default Button
 ```
 
+## Custom Captions
+If you want one or more image to have a fully customized caption, you can now do it by declaring an array of objects and passing it to the a prop on the `<SRLWrapper>` called `customCaptions`. Each object in the array has to values:
+- `id` which is the image you want to add the custom caption to. **Remember that the id is starting from 0 so `id: 0` will target the first image, `id: 4` the fifth and so on...**
+- `caption` this will contain your custom caption. HTML markup is valid and you can use template literals using the backtick symbol to write your custom HTML markup. You can have buttons, links and anything you like.
+
+Check the example on the [demo website](https://simple-react-lightbox.dev/with-custom-captions/)
+
+⚠️ NOTES:
+- If you are using a button, or a link or anything you want clickable or selectable, **you need to add a class of `SRLCustomCaption` to every element, including children**. This is to prevent the light-box from closing when clicking outside which is the normal behavior of the light-box.
+- All the settings about the caption are being ignored if you are using a custom caption. You dictate the style of your custom caption. Keep in mind that the caption was designed to be just that, a caption, and I am not responsible if your layout breaks for any reason (like if you put too many things in it).
+
+```jsx
+import React from "react";
+import MyComponent from "./components/MyComponent";
+// Import SRLWrapper
+import {SRLWrapper} from "simple-react-lightbox";
+
+const captionOne = `<div myCustomCaptionOne">She found herself in a <span>forest...</span></div>`
+
+const captionTwo = `<div myCustomCaptionTwo">...lost and wandering she had to <span>make a choice...</span></div>`
+
+const captionThree = `<a href="http://www.simple-react-lightbox.dev" target="__blank" class="SRLCustomCaption myCustomButton">Help her make a choice</a>`
+
+// Create an object with the custom captions that you want to use
+const customCaptions = [
+  { id: 0, caption: captionOne },
+  { id: 1, caption: captionTwo },
+  { id: 2, caption: captionThree }
+]
+
+function MyComponent() {
+  return (
+    <div className="MyComponent">
+     <SRLWrapper customCaptions={customCaptions}>
+        // Your images here. Images 0,1,2 will use a custom caption.
+      </SRLWrapper>
+    </div>
+  );
+}
+
+```
 
 
 ## Callbacks
-Callbacks can be used in case you need to get information about the state of the light-box or to access the different slides (images). A good example of this could be if you, for example, wanted to sync a carousel with the light-box so that when you go through the images, your carousel is synced. (Check the example on the [demo webiste](https://simple-react-lightbox.dev/with-hook/) )
+Callbacks can be used in case you need to get information about the state of the light-box or to access the different slides (images). A good example of this could be if you, for example, wanted to sync a carousel with the light-box so that when you go through the images, your carousel is synced. (Check the example on the [demo website](https://simple-react-lightbox.dev/with-hook/) )
 
 |  **Callback** |  **Args** | **Returns** | **Usage** | **Description**   |
 | :------------ | :------------ | :------------ | :------------ | :----------------- |

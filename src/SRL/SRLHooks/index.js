@@ -54,6 +54,9 @@ export function useOnClickOutside(ref, handler) {
           event.target.classList.contains('SRLZoomOutButton') ||
           event.target.classList.contains('SRLDownloadButton') ||
           event.target.classList.contains('SRLThumbnailsButton') ||
+          event.target.classList.contains('SRLCaptionContainer') ||
+          event.target.classList.contains('SRLCaptionText') ||
+          event.target.classList.contains('SRLCustomCaption') ||
           event.target.classList.contains('SRLThumbnails') ||
           event.target.classList.contains('SRLThumb') ||
           event.target.classList.contains('SRLCaption') ||

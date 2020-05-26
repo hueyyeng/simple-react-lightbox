@@ -72,7 +72,8 @@ const initialState = {
     onSlideChange: () => {},
     onLightboxClosed: () => {},
     onLightboxOpened: () => {}
-  }
+  },
+  customCaptions: [{}]
 }
 
 const SRLCtx = React.createContext(initialState)
