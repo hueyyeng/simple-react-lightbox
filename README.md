@@ -347,6 +347,10 @@ const options = {
 
 #### Caption options
 
+
+If you want to use [custom captions](#custom-captions) please read the documentation below.
+
+
 |  **Option** |  **Type** |  **Default value** | **Description**   |
 | :------------------ | :------------ | :------------ | :----------------- |
 |  `captionAlignment` 🆕 |  `string`  | "start"  | Align the caption inside its div. Accepted values are *"start", "center", "end"* |
@@ -468,6 +472,7 @@ Check the example on the [demo website](https://simple-react-lightbox.dev/with-c
 ⚠️ NOTES:
 - If you are using a button, or a link or anything you want clickable or selectable, **you need to add a class of `SRLCustomCaption` to every element, including children**. This is to prevent the light-box from closing when clicking outside which is the normal behavior of the light-box.
 - All the settings about the caption are being ignored if you are using a custom caption. You dictate the style of your custom caption. Keep in mind that the caption was designed to be just that, a caption, and I am not responsible if your layout breaks for any reason (like if you put too many things in it).
+- Custom captions are made possible using [dangerouslySetInnerHTML](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml). Please read this to fully understand the risk of using this concept in your app.
 
 ```jsx
 import React from "react";
