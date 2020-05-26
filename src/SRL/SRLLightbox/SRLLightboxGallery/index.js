@@ -471,7 +471,9 @@ const SRLLightboxGallery = ({
 
     // Cleans up function to remove the class from the body
     return () => {
-      unsubscribe.current()
+      if (!settings.disableKeyboardControls) {
+        unsubscribe.current()
+      }
 
       if (panzoomEnabled) {
         // Dispose of the panzoom completely when cleaning up
