@@ -472,7 +472,6 @@ Check the example on the [demo website](https://simple-react-lightbox.dev/with-c
 ⚠️ NOTES:
 - If you are using a button, or a link or anything you want clickable or selectable, **you need to add a class of `SRLCustomCaption` to every element, including children**. This is to prevent the light-box from closing when clicking outside which is the normal behavior of the light-box.
 - All the settings about the caption are being ignored if you are using a custom caption. You dictate the style of your custom caption. Keep in mind that the caption was designed to be just that, a caption, and I am not responsible if your layout breaks for any reason (like if you put too many things in it).
-- Custom captions are made possible using [dangerouslySetInnerHTML](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml). Please read this to fully understand the risk of using this concept in your app.
 
 ```jsx
 import React from "react";
@@ -480,11 +479,11 @@ import MyComponent from "./components/MyComponent";
 // Import SRLWrapper
 import {SRLWrapper} from "simple-react-lightbox";
 
-const captionOne = `<div myCustomCaptionOne">She found herself in a <span>forest...</span></div>`
+const captionOne = <div myCustomCaptionOne">She found herself in a <span>forest...</span></div>
 
-const captionTwo = `<div myCustomCaptionTwo">...lost and wandering she had to <span>make a choice...</span></div>`
+const captionTwo = <div myCustomCaptionTwo">...lost and wandering she had to <span>make a choice...</span></div>
 
-const captionThree = `<a href="http://www.simple-react-lightbox.dev" target="__blank" class="SRLCustomCaption myCustomButton">Help her make a choice</a>`
+const captionThree = <a href="http://www.simple-react-lightbox.dev" target="__blank" class="SRLCustomCaption myCustomButton">Help her make a choice</a>
 
 // Create an object with the custom captions that you want to use
 const customCaptions = [
