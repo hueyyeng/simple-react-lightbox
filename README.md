@@ -10,7 +10,7 @@
 ### Documentation: quick links
 
 - [A brief introduction](#a-brief-introduction)
-- [Demo on CodeSandbox](#demo)
+- [Demo on StackBlitz](#demo)
 - [Get started](#how-to-use)
 - [Options](#options)
 - [Custom Captions](#custom-captions) 🆕
@@ -59,11 +59,11 @@ I checked online for some light-box for React but the way that they were working
 
 ## Demo
 
-I have provided a **full working demo** on CodeSandbox where you can also play with the options and see the light-box in action.
+I have provided a **full working demo** on StackBlitz where you can also play with the options and see the light-box in action.
 
-[![Edit Simple-React-Lightbox§](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/simple-react-lightboxss-39wrb?fontsize=10)
+[![Edit Simple-React-Lightbox](https://www.simple-react-lightbox.dev/docs/editOnStackBitz.png)](https://stackblitz.com/edit/simple-react-lightbox)
 
-I have also created a **full working website** where you can see the light-box in action. If you want to play with the options, use the CodeSandbox link above.
+I have also created a **full working website** where you can see the light-box in action. If you want to play with the options, use the StackBlitz link above.
 
 [Simple React Lightbox - Website](https://simple-react-lightbox.dev)
 
@@ -140,7 +140,7 @@ That's it 🥳 You implemented your light-box! But you know that there are tons 
 
 #### Custom gallery
 
-If you want to use the light-box in a more traditional way, like if you want to create a gallery in which thumbnails are wrapped in a link that links to a full width image check the "Gallery with links" example page on the CodeSandbox [demo](#demo).
+If you want to use the light-box in a more traditional way, like if you want to create a gallery in which thumbnails are wrapped in a link that links to a full width image check the "Gallery with links" example page on the StackBlitz [demo](#demo).
 
 Simply wrap your images (ideally the thumbnails) in a link with the **`data-attribute="SRL"`**. As usual, the `alt` attribute for the images will be used as caption if declared.
 
