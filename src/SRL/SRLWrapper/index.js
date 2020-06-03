@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
-import imagesLoaded from 'imagesLoaded'
+import imagesLoaded from 'imagesloaded';
 
 // IsEqual from lodash to do a deep comparison of the objects
 const isEqual = require('lodash/isEqual')

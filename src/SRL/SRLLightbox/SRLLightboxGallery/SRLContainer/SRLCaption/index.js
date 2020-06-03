@@ -17,10 +17,6 @@ const SRLCaptionContainerComponent = ({
 
   const customCaption = customCaptions.find(findCustomCaption)
 
-  function createMarkup() {
-    return { __html: customCaption.caption }
-  }
-
   return (
     <SRLCaption
       captionStyle={captionOptions}
@@ -31,8 +27,9 @@ const SRLCaptionContainerComponent = ({
       {customCaption ? (
         <div
           className="SRLCustomCaption"
-          dangerouslySetInnerHTML={createMarkup()}
-        />
+        >
+          {customCaption.caption}
+        </div>
       ) : (
         <p className="SRLCaptionText">{caption}</p>
       )}
