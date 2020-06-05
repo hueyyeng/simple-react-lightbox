@@ -24,7 +24,7 @@
 
 - 🆕 (added in 3.1) Custom captions are now a thing. I have listened to some feedbacks and now you can make a custom caption with HTML markup and add it to a specific image. Read carefully the documentation on [custom captions](#custom-captions) to see how to use it.
 
-- New physics animations for the light-box have ben added for realistic motion. The images can now have a "slide" animation where they slide left and right. They can also slide and fade, or just fade. Please read carefully the [settings options](#settings-options) to check how implement this or check the demo for some examples.
+- New physics animations for the light-box have been added for realistic motion. The images can now have a "slide" animation where they slide left and right. They can also slide and fade, or just fade. Please read carefully the [settings options](#settings-options) to check how to implement this or check the demo for some examples.
 
 - Thumbnails have been completely redesigned to greatly improve the UX of the light-box. If the number of thumbnails is greater than the viewport width (your screen), they will become draggable and they will auto-sync with the current image displayed.
 
@@ -106,7 +106,7 @@ function App() {
 export default App;
 ```
 
-Note: *if you need multiple instance of the light-box in one page you should wrap each one in it's own  `<SimpleReactLightbox>` component.*
+Note: *if you need multiple instances of the light-box in one page you should wrap each one in it's own  `<SimpleReactLightbox>` component.*
 
 #### STEP 2
 
@@ -169,7 +169,7 @@ export default MyComponent;
 
 #### Declaring images in an array
 
-This approach is approach is definitely supported although is discouraged. Please see the reason why Simple React Lightbox is different by reading [the section above](#a-brief-introduction) to learn more.
+This approach is definitely supported, but it is discouraged. Please see the reason why Simple React Lightbox is different by reading [the section above](#a-brief-introduction) to learn more.
 
 ```jsx
 import React from "react";
@@ -198,7 +198,7 @@ const images = [
 function MyComponent() {
   return (
     <div className="MyComponent">
-      <SRLWrapper images={images}>
+      <SRLWrapper images={images}/>
     </div>
   );
 }
@@ -463,7 +463,7 @@ export default Button
 ```
 
 ## Custom Captions
-If you want one or more image to have a fully customized caption, you can now do it by declaring an array of objects and passing it to the a prop on the `<SRLWrapper>` called `customCaptions`. Each object in the array has to values:
+If you want one or more image to have a fully customized caption, you can now do it by declaring an array of objects and passing it to the a prop on the `<SRLWrapper>` called `customCaptions`. Each object in the array has two values:
 - `id` which is the image you want to add the custom caption to. **Remember that the id is starting from 0 so `id: 0` will target the first image, `id: 4` the fifth and so on...**
 - `caption` this will contain your custom caption. HTML markup is valid and you can use template literals using the backtick symbol to write your custom HTML markup. You can have buttons, links and anything you like.
 
