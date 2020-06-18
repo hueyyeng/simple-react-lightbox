@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
-import imagesLoaded from 'imagesloaded';
+import imagesLoaded from 'imagesloaded'
 
 // IsEqual from lodash to do a deep comparison of the objects
 const isEqual = require('lodash/isEqual')
@@ -193,7 +193,7 @@ const SRLWrapper = ({
           /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
           want to ignore that one but only if it's Gatsby because other base64 images are allowed) */
           const isBase64Image = e.img.src.includes('base64')
-          const isGatsbyImage = e.img.offsetParent.className.includes(
+          const isGatsbyImage = e.img.offsetParent?.className.includes(
             'gatsby-image-wrapper'
           )
 
