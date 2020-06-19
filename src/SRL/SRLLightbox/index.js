@@ -3,6 +3,7 @@ import Portal from '../SRLPortal'
 import PropTypes from 'prop-types'
 import SRLLightboxGallery from './SRLLightboxGallery'
 import { SRLCtx } from '../SRLContext'
+import { AnimatePresence } from 'framer-motion'
 
 function SRLLightbox() {
   const context = useContext(SRLCtx)
@@ -12,8 +13,7 @@ function SRLLightbox() {
 
   useEffect(() => {
     /* Set a value in the --vh custom property to the root of the document so that we can calculate the height of the light-box
-    This is needed for mobile issues wit the VH unit
-    https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
+    This is needed due to a mobile issues wit the VH unit https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
 
     function getVH() {
       vh.current = window.innerHeight * 0.01
@@ -27,9 +27,13 @@ function SRLLightbox() {
   }, [])
 
   return (
-    <Portal selector="SRLLightbox" isOpened={isOpened}>
-      <SRLLightboxGallery {...context} />
-    </Portal>
+    <AnimatePresence>
+      {isOpened && (
+        <Portal selector="SRLLightbox" isOpened={isOpened}>
+          <SRLLightboxGallery {...context} />
+        </Portal>
+      )}
+    </AnimatePresence>
   )
 }
 

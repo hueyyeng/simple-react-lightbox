@@ -19,6 +19,7 @@ const Portal = ({ isOpened, children, className }) => {
       id="SRLLightbox"
       initial="hidden"
       animate="visible"
+      exit="hidden"
       variants={variants}
       overlayColor={options.settings.overlayColor}
       transition={{
