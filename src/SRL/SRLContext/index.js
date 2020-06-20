@@ -23,7 +23,7 @@ const initialState = {
       disablePanzoom: false,
       disableWheelControls: false,
       hideControlsAfter: 3000,
-      lightboxTransitionSpeed: 0.6,
+      lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(0, 0, 0, 0.9)',
       slideAnimationType: 'fade',
