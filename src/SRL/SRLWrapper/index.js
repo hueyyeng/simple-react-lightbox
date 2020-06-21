@@ -213,7 +213,7 @@ const SRLWrapper = ({
             thumbnail:
               elementType === 'IMG'
                 ? e.img.currentSrc || e.img.src || e.img.href || null
-                : e.img.parentElement.href || null,
+                : e.img.currentSrc || e.img.parentElement.href || null,
 
             // Grabs the "alt" attribute from the image or the "textContent" from the video.
             // If it's a link grabs the "alt" attribute from the children image.
