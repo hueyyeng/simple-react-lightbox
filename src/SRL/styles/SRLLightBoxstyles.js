@@ -10,4 +10,5 @@ export const SRLLightbox = styled(motion.div)`
   height: calc(var(--vh, 1vh) * 100);
   top: 0;
   left: 0;
+  z-index: 9999;
 `
