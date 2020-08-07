@@ -103,7 +103,7 @@
     "framer-motion": "^1.11.0",
     "fscreen": "^1.0.2",
     "imagesloaded": "^4.1.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "panzoom": "^9.2.4",
     "react-swipeable": "^5.5.1",
     "react-use": "^15.1.0",
