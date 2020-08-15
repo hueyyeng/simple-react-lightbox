@@ -67,7 +67,7 @@ const SRLThumbnailGalleryComponent = ({
             behavior: 'smooth'
           })
         } else {
-          SRLTCR.scrollLeft = bcr.left
+          SRLTCR.scrollLeft = 80 * parseInt(currentId)
         }
       } else if (SRLTCR.scrollHeight > SRLTCR.offsetHeight) {
         if ('scrollBehavior' in document.documentElement.style) {

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { SRLCaption } from '../../../../styles/SRLCaptionStyles'
 import { SRLCtx } from '../../../../SRLContext'
@@ -25,11 +25,7 @@ const SRLCaptionContainerComponent = ({
       ref={SRLCaptionRef}
     >
       {customCaption ? (
-        <div
-          className="SRLCustomCaption"
-        >
-          {customCaption.caption}
-        </div>
+        <div className="SRLCustomCaption">{customCaption.caption}</div>
       ) : (
         <p className="SRLCaptionText">{caption}</p>
       )}
