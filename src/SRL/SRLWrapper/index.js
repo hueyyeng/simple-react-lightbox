@@ -191,24 +191,29 @@ const SRLWrapper = ({
           )
 
           /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
-          want to ignore that one but only if it's Gatsby because other base64 images are allowed) */
+          want to ignore that one but only if it's Gatsby because other base64 images are allowed)
+          Also ignores images inside the <picture></picture> tag in Gatsby Images */
           const isBase64Image = e.img.src.includes('base64')
           const isGatsbyImage = e.img.offsetParent?.className.includes(
             'gatsby-image-wrapper'
           )
+          const isGatsbyPicture = e.img.parentNode.localName !== 'picture'
 
-          if (isGatsbyImage && isBase64Image) {
+          if (isGatsbyImage && isBase64Image && isGatsbyPicture) {
             return
           }
 
           // Creates an object for each element
           const element = {
             // Grabs the "src" attribute from the image/video.
-            // If it's a link grabs the "href" attribute.
+            // If it's a link grabs the "href" attribute
+            // (in case of a gatsby image we need to go up to the wrapper Div and find the parent)
             source:
               elementType === 'IMG'
                 ? e.img.currentSrc || e.img.src || e.img.href || null
-                : e.img.parentElement.href || null,
+                : e.img.parentElement.href ||
+                  e.img.offsetParent.parentElement.href ||
+                  null,
 
             thumbnail:
               elementType === 'IMG'
@@ -262,10 +267,23 @@ const SRLWrapper = ({
       return handleLightBox(elements)
     }
 
+    // 2.5) When images are not loaded prevent them from being clicked
+    function handleLightboxNotLoaded(array) {
+      Array.from(array).map((e) =>
+        e.addEventListener('click', (event) => {
+          event.preventDefault()
+        })
+      )
+    }
+
     // 2) Detected if images are loaded in the DOM
     function handleImagesLoaded(array) {
       // Checks if the images are loaded using "imagesLoaded" by Desandro (❤️)
       // When te images are loaded set the state to TRUE and run the function to handle the context
+      if (!imagesAreLoaded) {
+        // If images are still loading
+        handleLightboxNotLoaded(array)
+      }
       imagesLoaded(array, function (instance) {
         if (instance.isComplete) {
           // Checks if the element (the first one) is an image or a link. If it's a link, the user is using the gallery
@@ -283,24 +301,38 @@ const SRLWrapper = ({
     function handleDetectTypeOfElements(array) {
       // Grabs images in the ref
       const collectedElements = array.querySelectorAll('img')
+      // Filtered collected elemenets is used to exclude Gatsby images inside the <picture></picture> tag
+      const filteredCollectedElements = Array.from(collectedElements).filter(
+        (e) => {
+          return (
+            e.parentNode.localName !== 'picture' &&
+            !e.parentNode.offsetParent.className.includes(
+              'gatsby-image-wrapper'
+            )
+          )
+        }
+      )
       // Grabs data attributes (in links) in the ref
       const collectedDataAttributes = array.querySelectorAll(
         "a[data-attribute='SRL']"
       )
 
       // Checks if the are elements in the DOM first of all
-      if (collectedElements.length !== 0) {
+      if (filteredCollectedElements.length !== 0) {
         if (collectedDataAttributes.length === 0) {
           // USER IS NOT USING DATA ATTRIBUTES
-          handleImagesLoaded(collectedElements)
+          handleImagesLoaded(filteredCollectedElements)
         } else if (collectedDataAttributes.length > 0) {
           // USER *IS* USING DATA ATTRIBUTES
           handleImagesLoaded(collectedDataAttributes)
           /* Throws a warning if the number of links is not equal to the number of images so that means
           that the user has forgot to add a "a[data-attribute='SRL']" to one or more images */
-          if (collectedDataAttributes.length !== collectedElements.length) {
+
+          if (
+            collectedDataAttributes.length !== filteredCollectedElements.length
+          ) {
             console.warn(
-              `HEY!. You have ${collectedDataAttributes.length} links and ${collectedElements.length} images. You likely forgot to add the ** data-attribute="SRL" ** to one of your link wrapping your image!`
+              `HEY!. You have ${collectedDataAttributes.length} links and ${filteredCollectedElements.length} images. You likely forgot to add the ** data-attribute="SRL" ** to one of your link wrapping your image!`
             )
           }
         }

@@ -28,6 +28,14 @@ const StyledButton = styled.button`
 
   .SRLIdle & {
     opacity: 0;
+
+    @media (max-width: 768px) {
+      opacity: 1;
+    }
+
+    @media (max-width: 360px) {
+      opacity: 1;
+    }
   }
 
   &:focus {

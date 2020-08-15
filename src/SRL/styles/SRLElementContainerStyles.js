@@ -106,11 +106,16 @@ export const SRLImage = styled.img`
 `
 
 // The Pan-zoomed image
-export const SRLPanzoomedImage = styled(SRLImage)`
+export const SRLPanzoomedImage = styled.img`
   top: 0;
   left: 0;
   position: relative;
   transform-origin: 50% 50% !important;
   cursor: grab;
   z-index: 9997;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
 `
