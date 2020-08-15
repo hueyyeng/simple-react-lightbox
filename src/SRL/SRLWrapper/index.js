@@ -32,7 +32,7 @@ const SRLWrapper = ({
     mutationRef.current = new MutationObserver(detectChanges)
 
     // Detect if there are mutations in the SRLWrapper ref
-    function detectChanges(mutations) {
+    function detectChanges() {
       // if this runs there has been a mutation
       handleDetectTypeOfElements(elementsContainer.current)
     }
@@ -40,7 +40,8 @@ const SRLWrapper = ({
     // Declare what to observe
     mutationRef.current.observe(elementsContainer.current, {
       childList: true,
-      subtree: true
+      subtree: true,
+      attributeFilter: ['href', 'src']
     })
 
     // 4.5) Dispatch the action to grab the options
