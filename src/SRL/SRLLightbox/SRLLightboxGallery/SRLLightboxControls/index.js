@@ -34,11 +34,14 @@ const SRLLightboxControls = ({
   showThumbnails,
   SRLThumbnailsRef,
   thumbnailsPosition,
-  thumbnailsSize
+  thumbnailsSize,
+  translations
 }) => {
   /* Unfortunately, we need to calculate the offsetWidth of the thumbnails container
   by taking is "REF" from up above */
   const [thumbnailsDivSizes] = useSizes(SRLThumbnailsRef)
+
+  console.log(translations)
 
   return (
     <>
@@ -59,7 +62,9 @@ const SRLLightboxControls = ({
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
             autoplaySpeed={settings.autoplaySpeed}
-            title="Play"
+            title={
+              !autoplay ? translations.autoplayText : translations.pauseText
+            }
             className="SRLAutoplayButton"
             onClick={() => setAutoplay(!autoplay)}
           >
@@ -99,7 +104,7 @@ const SRLLightboxControls = ({
             buttonsIconPadding={buttons.iconPadding}
             thumbnailsPosition={thumbnailsPosition}
             onClick={handleThumbnails}
-            title="Thumbnails"
+            title={translations.thumbnailsText}
             className="SRLThumbnailsButton"
           >
             <div className="SRLThumbnailsButton">
@@ -130,7 +135,7 @@ const SRLLightboxControls = ({
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
-            title="Download"
+            title={translations.downloadText}
             className="SRLDownloadButton"
             onClick={handleImageDownload}
           >
@@ -155,7 +160,7 @@ const SRLLightboxControls = ({
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
-            title="Zoom Out"
+            title={translations.zoomOutText}
             className="SRLZoomOutButton"
             onClick={() => handlePanzoom(false)}
           >
@@ -181,7 +186,7 @@ const SRLLightboxControls = ({
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
-            title="Expand"
+            title={translations.fullscreenText}
             className="SRLExpandButton"
             onClick={() => handleFullScreen()}
           >
@@ -206,7 +211,7 @@ const SRLLightboxControls = ({
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
-            title="Close"
+            title={translations.closeText}
             className="SRLCloseButton"
             onClick={() => handleCloseLightbox()}
           >
@@ -236,7 +241,7 @@ const SRLLightboxControls = ({
           thumbnailsDivSizes={thumbnailsDivSizes}
           thumbnailsSize={thumbnailsSize}
           hideThumbnails={hideThumbnails}
-          title="Next"
+          title={translations.nextText}
           className="SRLNextButton"
           onClick={() => handleNextElement(currentElementID)}
         >
@@ -261,7 +266,7 @@ const SRLLightboxControls = ({
           buttonsIconColor={buttons.iconColor}
           buttonsSize={buttons.size}
           buttonsIconPadding={buttons.iconPadding}
-          title="Previous"
+          title={translations.previousText}
           className="SRLPrevButton"
           thumbnailsPosition={thumbnailsPosition}
           thumbnailsDivSizes={thumbnailsDivSizes}
@@ -302,9 +307,10 @@ SRLLightboxControls.propTypes = {
     showNextButton: PropTypes.bool,
     showPrevButton: PropTypes.bool,
     showThumbnailsButton: PropTypes.bool,
-    hideThumbnails: PropTypes.bool,
+
     size: PropTypes.string
   }),
+  hideThumbnails: PropTypes.bool,
   buttonsOffsetFromProgressBar: PropTypes.string,
   currentElementID: PropTypes.string,
   handleCloseLightbox: PropTypes.func,
@@ -323,5 +329,16 @@ SRLLightboxControls.propTypes = {
   showThumbnails: PropTypes.bool,
   thumbnailsPosition: PropTypes.string,
   SRLThumbnailsRef: PropTypes.object,
-  thumbnailsSize: PropTypes.array
+  thumbnailsSize: PropTypes.array,
+  translations: PropTypes.shape({
+    autoplayText: PropTypes.string,
+    closeText: PropTypes.string,
+    downloadText: PropTypes.string,
+    fullscreenText: PropTypes.string,
+    nextText: PropTypes.string,
+    pauseText: PropTypes.string,
+    previousText: PropTypes.string,
+    thumbnailsText: PropTypes.string,
+    zoomOutText: PropTypes.string
+  })
 }

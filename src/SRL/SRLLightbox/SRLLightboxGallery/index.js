@@ -531,7 +531,9 @@ const SRLLightboxGallery = ({
     buttonsIconPadding: buttons.iconPadding,
     // Offset the buttons from the autoplay progress bar
     buttonsOffsetFromProgressBar: progressBar.height,
-    showProgressBar: progressBar.showProgressBar
+    showProgressBar: progressBar.showProgressBar,
+    // Translations
+    translations: ctx.options.translations
   }
 
   return (

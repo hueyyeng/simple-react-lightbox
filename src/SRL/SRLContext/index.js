@@ -57,6 +57,17 @@ const initialState = {
       fillColor: '#000000',
       height: '3px',
       showProgressBar: true
+    },
+    translations: {
+      autoplayText: 'Play',
+      closeText: 'Close',
+      downloadText: 'Download',
+      fullscreenText: 'Full screen',
+      nextText: 'Next',
+      pauseText: 'Pause',
+      previousText: 'Previous',
+      thumbnailsText: 'Hide thumbnails',
+      zoomOutText: 'Zoom Out'
     }
   },
   selectedElement: {

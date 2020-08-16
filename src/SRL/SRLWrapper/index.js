@@ -70,6 +70,9 @@ const SRLWrapper = ({
           },
           progressBar: {
             ...defaultOptions.progressBar
+          },
+          translations: {
+            ...defaultOptions.translations
           }
         }
       } else {
@@ -95,6 +98,10 @@ const SRLWrapper = ({
           progressBar: {
             ...defaultOptions.progressBar,
             ...options.progressBar
+          },
+          translations: {
+            ...defaultOptions.translations,
+            ...options.translations
           }
         }
       }
@@ -432,6 +439,17 @@ SRLWrapper.propTypes = {
       fillColor: PropTypes.string,
       height: PropTypes.string,
       showProgressBar: PropTypes.bool
+    }),
+    translations: PropTypes.shape({
+      autoplayText: PropTypes.string,
+      closeText: PropTypes.string,
+      downloadText: PropTypes.string,
+      fullscreenText: PropTypes.string,
+      nextText: PropTypes.string,
+      pauseText: PropTypes.string,
+      previousText: PropTypes.string,
+      thumbnailsText: PropTypes.string,
+      zoomOutText: PropTypes.string
     })
   }),
   defaultCallbacks: PropTypes.shape({
@@ -505,6 +523,17 @@ SRLWrapper.defaultProps = {
       fillColor: '#000000',
       height: '3px',
       showProgressBar: true
+    },
+    translations: {
+      autoplayText: 'Play',
+      closeText: 'Close',
+      downloadText: 'Download',
+      fullscreenText: 'Full screen',
+      nextText: 'Next',
+      pauseText: 'Pause',
+      previousText: 'Previous',
+      thumbnailsText: 'Hide thumbnails',
+      zoomOutText: 'Zoom Out'
     }
   },
   defaultCallbacks: {
