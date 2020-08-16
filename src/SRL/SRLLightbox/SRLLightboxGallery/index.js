@@ -130,8 +130,6 @@ const SRLLightboxGallery = ({
   const [direction, setDirection] = useState()
   // Set a state for the user to hide/show the thumbnails (not from the option, if they want to hide them on the fly)
   const [hideThumbnails, setHideThumbnails] = useState(false)
-  // Set a state for the fullscreen
-  const [fullScreen, setFullScreen] = useState(false)
 
   // Check if the user is not taking any action
   const isIdle = useIdle(
@@ -360,10 +358,9 @@ const SRLLightboxGallery = ({
       el = document.querySelector('#SRLLightbox')
     }
 
-    if (!fullScreen) {
+    if (!document.fullscreenElement) {
       // Stops the autoplay
       setAutoplay(false)
-      setFullScreen(true)
 
       if (el !== null) {
         el.requestFullscreen()
@@ -375,7 +372,6 @@ const SRLLightboxGallery = ({
           })
       }
     } else {
-      setFullScreen(false)
       document.exitFullscreen()
     }
   }
