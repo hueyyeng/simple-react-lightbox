@@ -19,25 +19,19 @@
 - [A note on "slide" animation and Firefox](#firefox-issue)
 
 
-### What's new in Version 3.0
-- ⚠️ **HEADS UP!** The value for the following options in the settings object have been changed from milliseconds to seconds. `slideTransitionSpeed`,`lightboxTransitionSpeed`. If you see a really slow animation is likely because you have forget to change the value. ⚠️
+### August updates and bugfixes (v3.3)
+- **[Translations](#translations-options) has been added to the list of options**. Now you can change the title of the buttons with the text that you want and you can translate it to your preferred language.
 
-- 🆕 (added in 3.1) Custom captions are now a thing. I have listened to some feedbacks and now you can make a custom caption with HTML markup and add it to a specific image. Read carefully the documentation on [custom captions](#custom-captions) to see how to use it.
+- **Full screen mode has been improved**. Now you can use the interface of Simple React Lightbox while being on full screen.
 
-- New physics animations for the light-box have been added for realistic motion. The images can now have a "slide" animation where they slide left and right. They can also slide and fade, or just fade. Please read carefully the [settings options](#settings-options) to check how to implement this or check the demo for some examples.
+- Fixed a bug that was causing the image to shake when panning and zooming on IOS.
 
-- Thumbnails have been completely redesigned to greatly improve the UX of the light-box. If the number of thumbnails is greater than the viewport width (your screen), they will become draggable and they will auto-sync with the current image displayed.
+- Fixed a bug that was causing the thumbnails to wrongly position themself on IOS.
 
-- Thumbnails have now [more options](#thumbnails-options) then ever. They can now be aligned left or right! They can now also be hidden immediately with a new button, be spaced using flexbox values and have a background color and a padding can be added to the container.
+- Fixed a bug that was causing the light-box to be unable to recognize the source of the image when using Gatsby image with the "Gallery with thumbnails" mode.
 
-- New feature added: **[progress-bar](#progress-bar)**. A progress bar will be shown when the auto-play functionality is on. It can be fully customized and it can also be disabled if not wanted. That improves the UX of the light-box as the user know how long will it takes until a new image shows up.
+- Added an improvement to the "Gallery with thumbnails" mode where if the light-box is not loaded will prevent the link to be clicked and therfore to open the image in the browser.
 
-- Caption has [new options](caption-options) to allow the text to be aligned and to add some padding to the container.
-- Auto-play has been improved. When the auto-play is on, if the image is changed, the auto-play timer will be reset (and also the progress bar if enabled).
-
-- CSS Classes are 100% covered now so if you really want to add some more customization, every element will have its own class. Please keep in mind that if you drastically change the css I am not responsible of any broken code 🤪
-
-- Responsive UX of the light-box has been improved on mobile devices. Various fixes with IE11. An issue with the panz-zoom not working well with touch controls on mobile has been fixed.
 
 
 ## A brief introduction
@@ -304,7 +298,8 @@ const options = {
     slideSpringValues: [300, 200],
     slideTransitionSpeed: 0.6,
     slideTransitionTimingFunction: 'linear'
-  },
+  }
+}
 ```
 
 -----------------------
@@ -342,6 +337,7 @@ const options = {
     showThumbnailsButton: true,
     size: '40px'
   }
+}
 ```
 -----------------------------------
 
@@ -378,6 +374,7 @@ const options = {
     captionTextTransform: 'inherit',
     showCaption: true
   }
+}
 ```
 
 -----------------------
@@ -407,18 +404,19 @@ const options = {
     thumbnailsPosition: 'bottom',
     thumbnailsSize: ['100px', '80px']
   }
+}
 ```
 
 -----------------------
 
-#### Progress bar options 🆕
+#### Progress bar options
 
 |  **Option** |  **Type** |  **Default value** | **Description**   |
 | :------------ | :------------ | :------------ | :----------------- |
-|  `backgroundColor` 🆕 |  `string`  | "#f2f2f2"  | The background color of the progress bar. |
-|  `fillColor` 🆕 |  `string`  | "#000000"  | The fill color of the progess bar. |
-|  `height` 🆕 |  `string`  | "3px"  | The height of the progress bar. |
-|  `showProgressBar` 🆕 |  `boolean`  | `true`  | Show / Hide the progress bar. |
+|  `backgroundColor` |  `string`  | "#f2f2f2"  | The background color of the progress bar. |
+|  `fillColor` |  `string`  | "#000000"  | The fill color of the progess bar. |
+|  `height` |  `string`  | "3px"  | The height of the progress bar. |
+|  `showProgressBar` |  `boolean`  | `true`  | Show / Hide the progress bar. |
 
 
 ```js
@@ -429,6 +427,42 @@ const options = {
     height: '3px',
     showProgressBar: true
   }
+}
+```
+
+-----------------------
+
+#### Translations options 🆕
+
+|  **Option** |  **Type** |  **Default value** | **Description**   |
+| :------------ | :------------ | :------------ | :----------------- |
+|  `autoplayText`  |  `string`  | "Play"  | The text for the play button when the light-box is not playing |
+|  `closeText`  |  `string`  | "Close"  | The text for the close button |
+|  `downloadText`  |  `string`  | "Download"  | The text for the download button |
+|  `fullscreenText`  |  `string`  | "Full Screen"  | The text for the full screen button |
+|  `nextText`  |  `string`  | "Next"  | The text for the next slide button |
+|  `previousText`  |  `string`  | "Previous"  | The text for the previous slide button |
+|  `pauseText`  |  `string`  | "Pause"  | The text for the play button when the light-box is playing |
+|  `thumbnailsText`  |  `string`  | "Hide thumbnails"  | The text for the hide thumbnails button |
+|  `zoomOutText`  |  `string`  | "Zoom out"  | The text for the zoom out button when the pan zoom is activate |
+
+
+
+
+```js
+const options = {
+  translations: {
+    autoplayText: 'Play',
+    closeText: 'Close',
+    downloadText: 'Download',
+    fullscreenText: 'Full screen',
+    nextText: 'Next',
+    pauseText: 'Pause',
+    previousText: 'Previous',
+    thumbnailsText: 'Hide thumbnails',
+    zoomOutText: 'Zoom Out'
+  }
+}
 ```
 
 ## Hooks
@@ -465,7 +499,7 @@ export default Button
 ## Custom Captions
 If you want one or more image to have a fully customized caption, you can now do it by declaring an array of objects and passing it to the a prop on the `<SRLWrapper>` called `customCaptions`. Each object in the array has two values:
 - `id` which is the image you want to add the custom caption to. **Remember that the id is starting from 0 so `id: 0` will target the first image, `id: 4` the fifth and so on...**
-- `caption` this will contain your custom caption. HTML markup is valid and you can use template literals using the backtick symbol to write your custom HTML markup. You can have buttons, links and anything you like.
+- `caption` this will contain your custom caption. You can use JSX/HTML markup and so you can have buttons, links and anything you like.
 
 Check the example on the [demo website](https://simple-react-lightbox.dev/with-custom-captions/)
 
