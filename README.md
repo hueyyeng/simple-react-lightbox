@@ -432,7 +432,7 @@ const options = {
 
 -----------------------
 
-#### Translations options 🆕
+#### Translations options
 
 |  **Option** |  **Type** |  **Default value** | **Description**   |
 | :------------ | :------------ | :------------ | :----------------- |
@@ -445,8 +445,6 @@ const options = {
 |  `pauseText`  |  `string`  | "Pause"  | The text for the play button when the light-box is playing |
 |  `thumbnailsText`  |  `string`  | "Hide thumbnails"  | The text for the hide thumbnails button |
 |  `zoomOutText`  |  `string`  | "Zoom out"  | The text for the zoom out button when the pan zoom is activate |
-
-
 
 
 ```js
