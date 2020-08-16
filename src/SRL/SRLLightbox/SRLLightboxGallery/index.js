@@ -12,7 +12,6 @@ import SRLProgressBarComponent from './SRLContainer/SRLProgressBar'
 import { SRLCtx } from '../../SRLContext'
 import { useInterval } from '../../SRLHooks'
 import panzoom from 'panzoom'
-import fscreen from 'fscreen'
 import { useIdle } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
@@ -131,6 +130,8 @@ const SRLLightboxGallery = ({
   const [direction, setDirection] = useState()
   // Set a state for the user to hide/show the thumbnails (not from the option, if they want to hide them on the fly)
   const [hideThumbnails, setHideThumbnails] = useState(false)
+  // Set a state for the fullscreen
+  const [fullScreen, setFullScreen] = useState(false)
 
   // Check if the user is not taking any action
   const isIdle = useIdle(
@@ -354,20 +355,28 @@ const SRLLightboxGallery = ({
 
   // Handle FullScreen
   function handleFullScreen() {
-    // Stops the autoplay
-    setAutoplay(false)
     let el = ''
     if (typeof window !== 'undefined') {
-      el =
-        document.querySelector('.SRLImage') ||
-        document.querySelector('.SRLPanzoomImage')
+      el = document.querySelector('#SRLLightbox')
     }
 
-    if (el !== null) {
-      if (fscreen.fullscreenEnabled) {
-        fscreen.addEventListener('fullscreenchange', null, false)
-        fscreen.requestFullscreen(el)
+    if (!fullScreen) {
+      // Stops the autoplay
+      setAutoplay(false)
+      setFullScreen(true)
+
+      if (el !== null) {
+        el.requestFullscreen()
+          .then({})
+          .catch((err) => {
+            console.log(
+              `An error occurred while trying to switch into full-screen mode: ${err.message} (${err.name})`
+            )
+          })
       }
+    } else {
+      setFullScreen(false)
+      document.exitFullscreen()
     }
   }
 

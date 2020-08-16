@@ -101,7 +101,6 @@
   "dependencies": {
     "fast-deep-equal": "^3.1.1",
     "framer-motion": "^2.3.0",
-    "fscreen": "^1.0.2",
     "imagesloaded": "^4.1.4",
     "lodash": "^4.17.19",
     "panzoom": "^9.2.4",
