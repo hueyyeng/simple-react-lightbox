@@ -126,6 +126,7 @@ const SRLLightboxGallery = ({
   const [autoplay, setAutoplay] = useState(false)
   // Set a state for the "panzoom" option
   const [panzoomEnabled, setPanzoomEnabled] = useState(false)
+  const [panzoomActive, setPanzoomActive] = useState(false)
   // Set the direction of a slide if it comes before or after the current slide
   const [direction, setDirection] = useState()
   // Set a state for the user to hide/show the thumbnails (not from the option, if they want to hide them on the fly)
@@ -186,6 +187,7 @@ const SRLLightboxGallery = ({
     (value) => {
       if (!settings.disablePanzoom) {
         setPanzoomEnabled(value)
+        setPanzoomActive(false)
       }
     },
     [settings.disablePanzoom]
@@ -429,7 +431,7 @@ const SRLLightboxGallery = ({
     }
 
     // Initialize the panzoom functionality
-    if (!settings.disablePanzoom) {
+    if (!settings.disablePanzoom && !panzoomActive) {
       if (panzoomEnabled) {
         const panzoomElementRef = SRLPanzoomImageRef.current
         const INITIAL_ZOOM = 1.5
@@ -444,6 +446,7 @@ const SRLLightboxGallery = ({
           // Zoom the image
           panZoomController.current.zoomAbs(0, 0, INITIAL_ZOOM)
           panZoomController.current.moveTo(0, 0)
+          setPanzoomActive(true)
         }
       }
     }
@@ -479,11 +482,6 @@ const SRLLightboxGallery = ({
       if (!settings.disableKeyboardControls) {
         unsubscribe.current()
       }
-
-      if (panzoomEnabled) {
-        // Dispose of the panzoom completely when cleaning up
-        panZoomController.current.dispose()
-      }
     }
   }, [
     selectedElement.id,
@@ -491,6 +489,7 @@ const SRLLightboxGallery = ({
     settings.disablePanzoom,
     settings.disableKeyboardControls,
     panzoomEnabled,
+    panzoomActive,
     settings.hideControlsAfter,
     isIdle,
     handleNavigationWithKeys,
