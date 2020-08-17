@@ -41,8 +41,6 @@ const SRLLightboxControls = ({
   by taking is "REF" from up above */
   const [thumbnailsDivSizes] = useSizes(SRLThumbnailsRef)
 
-  console.log(translations)
-
   return (
     <>
       <SRLTopButtons
