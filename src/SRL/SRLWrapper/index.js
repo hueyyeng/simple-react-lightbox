@@ -329,7 +329,7 @@ const SRLWrapper = ({
       if (filteredCollectedElements.length !== 0) {
         if (collectedDataAttributes.length === 0) {
           // USER IS NOT USING DATA ATTRIBUTES
-          handleImagesLoaded(filteredCollectedElements)
+          handleImagesLoaded(collectedElements)
         } else if (collectedDataAttributes.length > 0) {
           // USER *IS* USING DATA ATTRIBUTES
           handleImagesLoaded(collectedDataAttributes)
