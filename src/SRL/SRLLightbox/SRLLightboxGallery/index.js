@@ -189,8 +189,11 @@ const SRLLightboxGallery = ({
         setPanzoomEnabled(value)
         setPanzoomActive(false)
       }
+      if (panzoomEnabled) {
+        panZoomController.current.dispose()
+      }
     },
-    [settings.disablePanzoom]
+    [settings.disablePanzoom, panzoomEnabled]
   )
 
   // Set the element, reset the panzoom state and determine direction of the slide
