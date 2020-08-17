@@ -30,6 +30,8 @@
 
 - Fixed a bug that was causing the light-box to be unable to recognize the source of the image when using Gatsby image with the "Gallery with thumbnails" mode.
 
+- Fixed a bug where the pan zoomed image was repositioning itself due to a wrong re-render of the component when the thumbnails were hidden.
+
 - Added an improvement to the "Gallery with thumbnails" mode where if the light-box is not loaded will prevent the link to be clicked and therfore to open the image in the browser.
 
 
