@@ -23,4 +23,8 @@ yarn-error.log*
 
 # example folder
 example
-example-with-gatsby
+
+example-with-gatsby/node_modules
+example-with-gatsby/.cache
+example-with-gatsby/public/static
+example-with-gatsby/public/page-data

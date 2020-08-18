@@ -1,0 +1,22 @@
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+
+header {
+  padding: 30px 0;
+  background-color: #313e50;
+  margin-bottom: 30px;
+  a {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+  }
+}
+
+
+.bootstrap_column {
+  margin-bottom: 20px;
+  height: 300px;
+  .gatsby-image-wrapper {
+    height: 100%;
+  }
+}
