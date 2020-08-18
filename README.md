@@ -34,6 +34,7 @@
 
 - Added an improvement to the "Gallery with thumbnails" mode where if the light-box is not loaded will prevent the link to be clicked and therfore to open the image in the browser.
 
+- Added a folder in the repository called "example-with-gatsby" which shows how to correctly use the light-box with Gatsby when using gatsby-images
 
 
 ## A brief introduction
