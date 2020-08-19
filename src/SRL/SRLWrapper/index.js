@@ -310,23 +310,26 @@ const SRLWrapper = ({
       // Grabs images in the ref
       const collectedElements = array.querySelectorAll('img')
       // Filtered collected elemenets is used to exclude Gatsby images inside the <picture></picture> tag
-      const filteredCollectedElements = Array.from(collectedElements).filter(
-        (e) => {
-          return (
-            e.parentNode.localName !== 'picture' &&
-            !e.parentNode.offsetParent.className.includes(
-              'gatsby-image-wrapper'
-            )
-          )
-        }
-      )
+      // const filteredCollectedElements = Array.from(collectedElements).filter(
+      //   (e) => {
+      //     console.log(
+      //       e.parentNode.offsetParent.className.includes('gatsby-image-wrapper')
+      //     )
+      //     return (
+      //       e.parentNode?.localName !== 'picture' &&
+      //       !e.parentNode?.offsetParent?.className.includes(
+      //         'gatsby-image-wrapper'
+      //       )
+      //     )
+      //   }
+      // )
       // Grabs data attributes (in links) in the ref
       const collectedDataAttributes = array.querySelectorAll(
         "a[data-attribute='SRL']"
       )
 
       // Checks if the are elements in the DOM first of all
-      if (filteredCollectedElements.length !== 0) {
+      if (collectedElements.length !== 0) {
         if (collectedDataAttributes.length === 0) {
           // USER IS NOT USING DATA ATTRIBUTES
           handleImagesLoaded(collectedElements)
@@ -336,13 +339,13 @@ const SRLWrapper = ({
           /* Throws a warning if the number of links is not equal to the number of images so that means
           that the user has forgot to add a "a[data-attribute='SRL']" to one or more images */
 
-          if (
-            collectedDataAttributes.length !== filteredCollectedElements.length
-          ) {
-            console.warn(
-              `HEY!. You have ${collectedDataAttributes.length} links and ${filteredCollectedElements.length} images. You likely forgot to add the ** data-attribute="SRL" ** to one of your link wrapping your image!`
-            )
-          }
+          // if (
+          //   collectedDataAttributes.length !== filteredCollectedElements.length
+          // ) {
+          //   console.warn(
+          //     `HEY!. You have ${collectedDataAttributes.length} links and ${filteredCollectedElements.length} images. You likely forgot to add the ** data-attribute="SRL" ** to one of your link wrapping your image!`
+          //   )
+          // }
         }
       }
       // USER IS DECLARING IMAGES VIA PROPS
