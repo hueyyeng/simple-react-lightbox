@@ -6,6 +6,8 @@
 
 [![paypal](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=846H2KJ6AUL48)
 
+[![buymeacoffe](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/michelecocuccio)
+
 
 ### Documentation: quick links
 
