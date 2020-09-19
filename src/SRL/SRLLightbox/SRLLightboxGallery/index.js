@@ -535,7 +535,9 @@ const SRLLightboxGallery = ({
     buttonsOffsetFromProgressBar: progressBar.height,
     showProgressBar: progressBar.showProgressBar,
     // Translations
-    translations: ctx.options.translations
+    translations: ctx.options.translations,
+    // Custom Icons
+    icons: ctx.options.icons
   }
 
   return (

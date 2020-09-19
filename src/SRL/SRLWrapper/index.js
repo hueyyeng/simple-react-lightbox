@@ -73,6 +73,9 @@ const SRLWrapper = ({
           },
           translations: {
             ...defaultOptions.translations
+          },
+          icons: {
+            ...defaultOptions.icons
           }
         }
       } else {
@@ -102,6 +105,10 @@ const SRLWrapper = ({
           translations: {
             ...defaultOptions.translations,
             ...options.translations
+          },
+          icons: {
+            ...defaultOptions.icons,
+            ...options.icons
           }
         }
       }
@@ -453,6 +460,17 @@ SRLWrapper.propTypes = {
       previousText: PropTypes.string,
       thumbnailsText: PropTypes.string,
       zoomOutText: PropTypes.string
+    }),
+    icons: PropTypes.shape({
+      autoplayIcons: PropTypes.string,
+      closeIcons: PropTypes.string,
+      downloadIcons: PropTypes.string,
+      fullscreenIcons: PropTypes.string,
+      nextIcons: PropTypes.string,
+      pauseIcons: PropTypes.string,
+      previousIcons: PropTypes.string,
+      thumbnailsIcons: PropTypes.string,
+      zoomOutIcons: PropTypes.string
     })
   }),
   defaultCallbacks: PropTypes.shape({
@@ -481,7 +499,7 @@ SRLWrapper.defaultProps = {
       hideControlsAfter: 3000,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',
-      overlayColor: 'rgba(0, 0, 0, 0.9)',
+      overlayColor: 'rgba(30, 30, 30, 0.9)',
       slideAnimationType: 'fade',
       slideSpringValues: [300, 200],
       slideTransitionSpeed: 0.6,
@@ -490,7 +508,7 @@ SRLWrapper.defaultProps = {
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
       iconColor: 'rgba(255, 255, 255, 0.8)',
-      iconPadding: '5px',
+      iconPadding: '13px',
       showAutoplayButton: true,
       showCloseButton: true,
       showDownloadButton: true,
@@ -537,6 +555,17 @@ SRLWrapper.defaultProps = {
       previousText: 'Previous',
       thumbnailsText: 'Hide thumbnails',
       zoomOutText: 'Zoom Out'
+    },
+    icons: {
+      autoplayIcon: null,
+      closeIcon: null,
+      downloadIcon: null,
+      fullscreenIcon: null,
+      nextIcon: null,
+      pauseIcon: null,
+      previousIcon: null,
+      thumbnailsIcon: null,
+      zoomOutIcon: null
     }
   },
   defaultCallbacks: {

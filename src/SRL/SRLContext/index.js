@@ -8,7 +8,7 @@ const initialState = {
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
       iconColor: 'rgba(255, 255, 255, 0.8)',
-      iconPadding: '5px',
+      iconPadding: '13px',
       showAutoplayButton: true,
       showCloseButton: true,
       showDownloadButton: true,
@@ -25,7 +25,7 @@ const initialState = {
       hideControlsAfter: 3000,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',
-      overlayColor: 'rgba(0, 0, 0, 0.9)',
+      overlayColor: 'rgba(30, 30, 30, 0.9)',
       slideAnimationType: 'fade',
       slideSpringValues: [300, 200],
       slideTransitionSpeed: 0.6,
@@ -68,6 +68,17 @@ const initialState = {
       previousText: 'Previous',
       thumbnailsText: 'Hide thumbnails',
       zoomOutText: 'Zoom Out'
+    },
+    icons: {
+      autoplayIcon: null,
+      closeIcon: null,
+      downloadIcon: null,
+      fullscreenIcon: null,
+      nextIcon: null,
+      pauseIcon: null,
+      previousIcon: null,
+      thumbnailsIcon: null,
+      zoomOutIcon: null
     }
   },
   selectedElement: {
