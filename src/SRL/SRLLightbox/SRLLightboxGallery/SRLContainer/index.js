@@ -13,6 +13,7 @@ import {
   SRLElementContainer,
   SRLElementWrapper,
   SRLImage,
+  SRLVideo,
   SRLPanzoomedImage
   // SRLLightboxVideo
 } from '../../../styles/SRLElementContainerStyles'
@@ -26,16 +27,20 @@ function SRLContainerComponent({
   handleNextElement,
   handlePanzoom,
   handlePrevElement,
-  height: imgWidth,
+  height: elementWidth,
   hideThumbnails,
   id,
+  type,
+  autoPlay,
+  muted,
+  showControls,
   options,
   panzoomEnabled,
   source,
   SRLPanzoomImageRef,
   SRLThumbnailsRef,
   SRLCaptionRef,
-  width: imgHeight
+  width: elementHeight
 }) {
   const { settings, thumbnails, caption: captionSettings } = options
 
@@ -211,16 +216,29 @@ function SRLContainerComponent({
               opacity: { duration: settings.slideTransitionSpeed }
             }}
           >
-            {!panzoomEnabled && (
-              <SRLImage
-                className="SRLImage"
-                disablePanzoom={settings.disablePanzoom}
-                width={imgWidth}
-                height={imgHeight}
-                onClick={() => handlePanzoom(true)}
+            {type === 'video' ? (
+              <SRLVideo
+                className="SRLVideo"
+                controls={showControls}
+                autoPlay={autoPlay}
+                muted={muted}
+                width={elementWidth}
+                height={elementHeight}
                 src={typeof source === 'object' ? 'Loading...' : source}
                 alt={caption}
               />
+            ) : (
+              !panzoomEnabled && (
+                <SRLImage
+                  className="SRLImage"
+                  disablePanzoom={settings.disablePanzoom}
+                  width={elementWidth}
+                  height={elementHeight}
+                  onClick={() => handlePanzoom(true)}
+                  src={typeof source === 'object' ? 'Loading...' : source}
+                  alt={caption}
+                />
+              )
             )}
           </SRLElementWrapper>
 
@@ -228,8 +246,8 @@ function SRLContainerComponent({
             <SRLPanzoomedImage
               className="SRLPanzoomImage"
               ref={SRLPanzoomImageRef}
-              width={imgWidth}
-              height={imgHeight}
+              width={elementWidth}
+              height={elementHeight}
               src={typeof source === 'object' ? 'Loading...' : source}
               alt={caption}
             />
@@ -263,6 +281,7 @@ function SRLContainerComponent({
 }
 
 SRLContainerComponent.propTypes = {
+  autoPlay: PropTypes.bool,
   caption: PropTypes.string,
   direction: PropTypes.string,
   elements: PropTypes.array,
@@ -272,11 +291,9 @@ SRLContainerComponent.propTypes = {
   handlePanzoom: PropTypes.func,
   handlePrevElement: PropTypes.func,
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  id: PropTypes.string,
-  SRLPanzoomImageRef: PropTypes.object,
-  SRLCaptionRef: PropTypes.object,
-  SRLThumbnailsRef: PropTypes.object,
   hideThumbnails: PropTypes.bool,
+  id: PropTypes.string,
+  muted: PropTypes.bool,
   options: PropTypes.shape({
     settings: PropTypes.shape({
       disablePanzoom: PropTypes.bool,
@@ -311,10 +328,14 @@ SRLContainerComponent.propTypes = {
     })
   }),
   panzoomEnabled: PropTypes.bool,
+  showControls: PropTypes.bool,
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  SRLCaptionRef: PropTypes.object,
   SRLLightboxPanzoomImageRef: PropTypes.object,
+  SRLPanzoomImageRef: PropTypes.object,
+  SRLThumbnailsRef: PropTypes.object,
   thumbnailsOpacity: PropTypes.number,
+  type: PropTypes.string,
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
-
 export default SRLContainerComponent

@@ -1,5 +1,12 @@
 import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
+import {
+  GRAB_SETTINGS,
+  GRAB_ELEMENTS,
+  HANDLE_ELEMENT,
+  OPEN_AT_INDEX,
+  CLOSE_LIGHTBOX
+} from './actions'
 
 const initialState = {
   elements: [],
@@ -27,7 +34,7 @@ const initialState = {
       lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(30, 30, 30, 0.9)',
       slideAnimationType: 'fade',
-      slideSpringValues: [300, 200],
+      slideSpringValues: [300, 50],
       slideTransitionSpeed: 0.6,
       slideTransitionTimingFunction: 'linear'
     },
@@ -104,17 +111,17 @@ const SRLContextComponent = (props) => {
   // Reducer
   const reducer = (state, action) => {
     switch (action.type) {
-      case 'GRAB_SETTINGS':
+      case GRAB_SETTINGS:
         return {
           ...state,
           ...action.mergedSettings
         }
-      case 'GRAB_ELEMENTS':
+      case GRAB_ELEMENTS:
         return {
           ...state,
           elements: action.elements
         }
-      case 'HANDLE_ELEMENT':
+      case HANDLE_ELEMENT:
         return {
           ...state,
           isOpened: true,
@@ -122,7 +129,8 @@ const SRLContextComponent = (props) => {
             ...action.element
           }
         }
-      case 'OPEN_AT_INDEX':
+
+      case OPEN_AT_INDEX:
         return {
           ...state,
           isOpened: true,
@@ -130,7 +138,7 @@ const SRLContextComponent = (props) => {
             ...state.elements[action.index]
           }
         }
-      case 'CLOSE_LIGHTBOX':
+      case CLOSE_LIGHTBOX:
         return {
           ...state,
           isOpened: false

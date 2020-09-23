@@ -2,6 +2,12 @@ import React, { useContext, useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
 import imagesLoaded from 'imagesloaded'
+import {
+  GRAB_SETTINGS,
+  GRAB_ELEMENTS,
+  HANDLE_ELEMENT
+} from '../SRLContext/actions'
+import { GALLERY_IMAGE, IMAGE, VIDEO } from './element_types'
 
 // IsEqual from lodash to do a deep comparison of the objects
 const isEqual = require('lodash/isEqual')
@@ -18,6 +24,8 @@ const SRLWrapper = ({
 }) => {
   // Imports the context
   const context = useContext(SRLCtx)
+
+  console.log(context)
 
   // Sets a new Ref which will be used to target the div with the images
   const elementsContainer = useRef(null)
@@ -130,7 +138,7 @@ const SRLWrapper = ({
         !isEqual(mergedSettings.callbacks, context.callbacks)
       ) {
         context.dispatch({
-          type: 'GRAB_SETTINGS',
+          type: GRAB_SETTINGS,
           mergedSettings
         })
       }
@@ -141,7 +149,7 @@ const SRLWrapper = ({
       if (!isEqual(elements, context.elements)) {
         // console.log('dispatched grab elements')
         context.dispatch({
-          type: 'GRAB_ELEMENTS',
+          type: GRAB_ELEMENTS,
           elements
         })
       }
@@ -168,7 +176,7 @@ const SRLWrapper = ({
       if (!isEqual(element, context.selectedElement)) {
         // console.log('dispatched grab element (single)')
         context.dispatch({
-          type: 'HANDLE_ELEMENT',
+          type: HANDLE_ELEMENT,
           element
         })
       }
@@ -179,9 +187,9 @@ const SRLWrapper = ({
       const elements = array.map((i, index) => {
         // Creates an object for each element
         const element = {
-          source: i.src || null,
-          thumbnail: i.thumbnail || i.src || null,
-          caption: i.caption || null,
+          source: i.src,
+          thumbnail: i.thumbnail || i.src,
+          caption: i.caption,
           id: `${index}`,
           width: 'auto',
           height: 'auto'
@@ -194,95 +202,109 @@ const SRLWrapper = ({
       return handleLightBox(elements)
     }
 
-    // 3) Adds the elements to the "context" and add the eventListener to open the lightbox to each element
-    function handleImagesWithContext(array, elementType) {
-      const elements = array.map((e, index) => {
-        // If the images is loaded and not broken
-        if (e.isLoaded) {
-          e.img.setAttribute('srl-slide_id', index)
-          // Check if it's an image
-          const isImage = /\.(gif|jpg|jpeg|tiff|png|webp)$/i.test(
-            e.img.currentSrc || e.img.src || e.img.href
-          )
+    // 3.1.1) Prevents clicking on the element and instead handle it
+    function handlePreventClick(e, element) {
+      if (e.previousSibling?.nodeName === 'IMG' && e.nodeName === 'VIDEO') {
+        e.previousSibling.addEventListener('click', (e) => {
+          // Prevent the element from opening
+          e.preventDefault()
+          // Run the function to handle the clicked item
+          handleElement(element)
+        })
+      } else {
+        e.addEventListener('click', (e) => {
+          // Prevent the element from opening
+          e.preventDefault()
+          // Run the function to handle the clicked item
+          handleElement(element)
+        })
+      }
+    }
 
-          /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
+    // 3) Adds the elements to the "context" and add the eventListener to open the lightbox to each element
+    function handleElements(data) {
+      let elementId = 0
+
+      console.log(data)
+
+      const elements = data
+        .map(({ element: e, isLoaded, type }) => {
+          e.setAttribute('srl_elementid', elementId)
+
+          if (isLoaded) {
+            /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
           want to ignore that one but only if it's Gatsby because other base64 images are allowed)
           Also ignores images inside the <picture></picture> tag in Gatsby Images */
-          const isBase64Image = e.img.src.includes('base64')
-          const isGatsbyImage = e.img.offsetParent?.className.includes(
-            'gatsby-image-wrapper'
-          )
-          const isGatsbyPicture = e.img.parentNode.localName !== 'picture'
+            const isBase64Image = e.src?.includes('base64')
+            const isGatsbyImage = e.offsetParent?.className.includes(
+              'gatsby-image-wrapper'
+            )
+            const isGatsbyPicture = e.parentNode?.localName !== 'picture'
 
-          if (isGatsbyImage && isBase64Image && isGatsbyPicture) {
-            return
+            if (isGatsbyImage && isBase64Image && isGatsbyPicture) {
+              return undefined
+            } else {
+              elementId++
+              switch (type) {
+                case IMAGE: {
+                  const element = {
+                    id: e.getAttribute('srl_elementid'),
+                    source: e.currentSrc || e.src,
+                    caption: e.alt,
+                    thumbnail: e.currentSrc || e.src,
+                    width: e.naturalWidth,
+                    height: e.naturalHeight,
+                    type: 'image'
+                  }
+                  handlePreventClick(e, element)
+                  return element
+                }
+                case GALLERY_IMAGE: {
+                  const element = {
+                    id: e.getAttribute('srl_elementid'),
+                    source:
+                      e.parentElement.href ||
+                      e.offsetParent.parentElement.href ||
+                      null,
+                    caption: e.alt || e.textContent,
+                    thumbnail: e.currentSrc || e.parentElement.href,
+                    width: null,
+                    height: null,
+                    type: 'gallery_image'
+                  }
+                  handlePreventClick(e, element)
+                  return element
+                }
+                case VIDEO: {
+                  const element = {
+                    id: e.getAttribute('srl_elementid'),
+                    source: e.currentSrc || e.src,
+                    caption: e.getAttribute('srl_video_caption'),
+                    thumbnail: e.getAttribute('srl_video_thumbnail'),
+                    width: e.getAttribute('srl_video_width'),
+                    height: e.getAttribute('srl_video_height'),
+                    showControls:
+                      e.getAttribute('srl_video_controls') == 'true',
+                    autoPlay: e.getAttribute('srl_video_autoplay') == 'true',
+                    muted: e.getAttribute('srl_video_muted') == 'true',
+                    type: 'video'
+                  }
+                  handlePreventClick(e, element)
+                  return element
+                }
+                default: {
+                  return undefined
+                }
+              }
+            }
           }
+        })
+        .filter((e) => e !== undefined)
 
-          // Creates an object for each element
-          const element = {
-            // Grabs the "src" attribute from the image/video.
-            // If it's a link grabs the "href" attribute
-            // (in case of a gatsby image we need to go up to the wrapper Div and find the parent)
-            source:
-              elementType === 'IMG'
-                ? e.img.currentSrc || e.img.src || e.img.href || null
-                : e.img.parentElement.href ||
-                  e.img.offsetParent.parentElement.href ||
-                  null,
-
-            thumbnail:
-              elementType === 'IMG'
-                ? e.img.currentSrc || e.img.src || e.img.href || null
-                : e.img.currentSrc || e.img.parentElement.href || null,
-
-            // Grabs the "alt" attribute from the image or the "textContent" from the video.
-            // If it's a link grabs the "alt" attribute from the children image.
-            caption: e.img.alt || e.img.textContent || null,
-            // Grabs the newly created "id" attribute from the image/video
-            // If it's a link grabs the "id" attribute from the children image.
-            id: e.img.getAttribute('srl-slide_id') || null,
-            // Grabs the "width" from the image/video
-            // If it's a link we can't grab the width and we will need to calculate it after
-            width: isImage
-              ? e.img.naturalWidth || null
-              : e.img.videoWidth || null,
-            // Grabs the "height" from the image/video
-            // If it's a link we can't grab the height and we will need to calculate it after.
-            height: isImage
-              ? e.img.naturalHeight || null
-              : e.img.videoHeight || null
-            // Generates a thumbnail image for the video otherwise set it to null
-            // videoThumbnail: isImage ? null : generateScreen(e)
-          }
-
-          // Adds an event listener that will trigger the function to open the lightbox (passed using the Context)
-          // If it's a link, assign the event listener to the link instead of the image
-          if (elementType === 'A') {
-            e.img.parentElement.addEventListener('click', (e) => {
-              // Prevent the image from opening
-              e.preventDefault()
-              // Run the function to handle the clicked item
-              handleElement(element)
-            })
-          } else {
-            e.img.addEventListener('click', (e) => {
-              // Prevent the image from opening
-              e.preventDefault()
-              // Run the function to handle the clicked item
-              handleElement(element)
-            })
-          }
-
-          // Return the image for the map function
-          return element
-        }
-      })
-
-      // Function that handle the lightbox
       return handleLightBox(elements)
     }
 
-    // 2.5) When images are not loaded prevent them from being clicked
+    // 2.5) When elements are not loaded prevent them from being clicked
     function handleLightboxNotLoaded(array) {
       Array.from(array).map((e) =>
         e.addEventListener('click', (event) => {
@@ -293,67 +315,67 @@ const SRLWrapper = ({
 
     // 2) Detected if images are loaded in the DOM
     function handleImagesLoaded(array) {
-      // Checks if the images are loaded using "imagesLoaded" by Desandro (❤️)
-      // When te images are loaded set the state to TRUE and run the function to handle the context
-      if (!imagesAreLoaded) {
-        // If images are still loading
-        handleLightboxNotLoaded(array)
-      }
-      imagesLoaded(array, function (instance) {
-        if (instance.isComplete) {
-          // Checks if the element (the first one) is an image or a link. If it's a link, the user is using the gallery
-          // And we need to grab the correct source of the image, not the thumbnail
-          const elementType = instance.elements[0].nodeName
-          if (!imagesAreLoaded) {
-            setImagesAreLoaded(true)
-            handleImagesWithContext(instance.images, elementType)
+      const imagesLoadedPromise = new Promise(function (resolve, reject) {
+        imagesLoaded(array, function (instance) {
+          if (instance.isComplete) {
+            if (!imagesAreLoaded) {
+              // We wants all the elements, not only the images, as we can now have videos too
+              // But we still want to validate the images so we need to merge the merge the two arrays
+              // We create a new array and we grab the images from the "instance.images" array and the rest from the "instance.elements" array
+              let index = -1
+              const elements = instance.elements
+                .map((e) => {
+                  if (
+                    e.nodeName === 'IMG' &&
+                    e.parentNode.dataset.attribute === 'SRL'
+                  ) {
+                    index++
+                    return {
+                      type: GALLERY_IMAGE,
+                      element: instance.images[index].img,
+                      isLoaded: instance.images[index].isLoaded
+                    }
+                  } else if (
+                    e.nodeName === 'IMG' &&
+                    e.nextSibling?.nodeName !== 'VIDEO'
+                  ) {
+                    index++
+                    return {
+                      type: IMAGE,
+                      element: instance.images[index].img,
+                      isLoaded: instance.images[index].isLoaded
+                    }
+                  } else if (e.nodeName === 'VIDEO') {
+                    return {
+                      type: VIDEO,
+                      element: e,
+                      isLoaded: 'unknown'
+                    }
+                  }
+                })
+                .filter((e) => e !== undefined)
+              resolve(elements)
+            } else {
+              handleLightboxNotLoaded(array)
+            }
           }
-        }
+        })
       })
+      return imagesLoadedPromise
     }
 
     // 1) Detected the type of element (if the user is using the "GALLERY" approach)
     function handleDetectTypeOfElements(array) {
       // Grabs images in the ref
-      const collectedElements = array.querySelectorAll('img')
-      // Filtered collected elemenets is used to exclude Gatsby images inside the <picture></picture> tag
-      // const filteredCollectedElements = Array.from(collectedElements).filter(
-      //   (e) => {
-      //     console.log(
-      //       e.parentNode.offsetParent.className.includes('gatsby-image-wrapper')
-      //     )
-      //     return (
-      //       e.parentNode?.localName !== 'picture' &&
-      //       !e.parentNode?.offsetParent?.className.includes(
-      //         'gatsby-image-wrapper'
-      //       )
-      //     )
-      //   }
-      // )
+      const collectedElements = array.querySelectorAll('img,video')
       // Grabs data attributes (in links) in the ref
-      const collectedDataAttributes = array.querySelectorAll(
-        "a[data-attribute='SRL']"
-      )
 
       // Checks if the are elements in the DOM first of all
-      if (collectedElements.length !== 0) {
-        if (collectedDataAttributes.length === 0) {
-          // USER IS NOT USING DATA ATTRIBUTES
-          handleImagesLoaded(collectedElements)
-        } else if (collectedDataAttributes.length > 0) {
-          // USER *IS* USING DATA ATTRIBUTES
-          handleImagesLoaded(collectedDataAttributes)
-          /* Throws a warning if the number of links is not equal to the number of images so that means
-          that the user has forgot to add a "a[data-attribute='SRL']" to one or more images */
-
-          // if (
-          //   collectedDataAttributes.length !== filteredCollectedElements.length
-          // ) {
-          //   console.warn(
-          //     `HEY!. You have ${collectedDataAttributes.length} links and ${filteredCollectedElements.length} images. You likely forgot to add the ** data-attribute="SRL" ** to one of your link wrapping your image!`
-          //   )
-          // }
-        }
+      if (collectedElements.length > 0) {
+        handleImagesLoaded(collectedElements).then((result) => {
+          handleElements(result)
+          setImagesAreLoaded(true)
+        })
       }
       // USER IS DECLARING IMAGES VIA PROPS
       else {
@@ -501,7 +523,7 @@ SRLWrapper.defaultProps = {
       lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(30, 30, 30, 0.9)',
       slideAnimationType: 'fade',
-      slideSpringValues: [300, 200],
+      slideSpringValues: [300, 50],
       slideTransitionSpeed: 0.6,
       slideTransitionTimingFunction: 'linear'
     },

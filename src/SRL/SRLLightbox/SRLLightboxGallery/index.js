@@ -15,6 +15,7 @@ import panzoom from 'panzoom'
 import { useIdle } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
+import { HANDLE_ELEMENT, CLOSE_LIGHTBOX } from '../../SRLContext/actions'
 
 // CONSTANTS
 const NEXT = 'next'
@@ -202,7 +203,7 @@ const SRLLightboxGallery = ({
       handlePanzoom(false)
       establishNextOrPrevious(elementID, currentID, knownDirection)
       dispatch({
-        type: 'HANDLE_ELEMENT',
+        type: HANDLE_ELEMENT,
         element
       })
     },
@@ -322,7 +323,7 @@ const SRLLightboxGallery = ({
   // Handle Close Lightbox
   const handleCloseLightbox = useCallback(() => {
     dispatch({
-      type: 'CLOSE_LIGHTBOX'
+      type: CLOSE_LIGHTBOX
     })
     // Callback
     onClosed({
@@ -459,7 +460,7 @@ const SRLLightboxGallery = ({
 
     if (selectedElement.id === undefined) {
       dispatch({
-        type: 'HANDLE_ELEMENT',
+        type: HANDLE_ELEMENT,
         element: {
           source: elements[0].source,
           caption: elements[0].caption,

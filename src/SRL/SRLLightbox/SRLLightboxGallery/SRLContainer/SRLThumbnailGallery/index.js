@@ -185,6 +185,7 @@ const SRLThumbnailGalleryComponent = ({
             style={{
               backgroundImage: `url('${element.thumbnail}')`
             }}
+            isVideoThumbnail={element.type === 'video'}
           />
         )
       })}

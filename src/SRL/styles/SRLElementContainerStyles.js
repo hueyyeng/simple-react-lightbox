@@ -105,6 +105,30 @@ export const SRLImage = styled.img`
   cursor: ${(props) => (props.disablePanzoom ? 'auto' : 'zoom-in')};
 `
 
+// Video Element
+export const SRLVideo = styled.video`
+  background: transparent;
+  border: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  outline: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: all 200ms ease;
+  opacity: 1;
+  margin: auto;
+  z-index: 9997;
+`
+
 // The Pan-zoomed image
 export const SRLPanzoomedImage = styled.img`
   top: 0;

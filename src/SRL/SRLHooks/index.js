@@ -1,15 +1,16 @@
-import { useContext, useRef, useEffect, useState, useMemo } from 'react'
+import { useContext, useRef, useEffect, useState } from 'react'
 import { SRLCtx } from '../SRLContext'
+import { OPEN_AT_INDEX, CLOSE_LIGHTBOX } from '../SRLContext/actions'
 
 export function useLightbox() {
   const ctx = useContext(SRLCtx)
 
   const openLightbox = (slideIndex = 0) => {
-    ctx.dispatch({ type: 'OPEN_AT_INDEX', index: slideIndex })
+    ctx.dispatch({ type: OPEN_AT_INDEX, index: slideIndex })
   }
 
   const closeLightbox = () => {
-    ctx.dispatch({ type: 'CLOSE_LIGHTBOX' })
+    ctx.dispatch({ type: CLOSE_LIGHTBOX })
   }
 
   return { openLightbox, closeLightbox }

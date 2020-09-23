@@ -280,9 +280,9 @@ export default MyComponent;
 | `hideControlsAfter`  | `number` or `boolean`  |  3000  |  Controls how long it will takes for the controls and thumbnails to be hidden. By default all the controls and the thumbnails will be hidden after 3 seconds (3000ms), to create a more immersive experience. This value can't be less then 1000ms. If you want the controls and thumbnails to be always visible set this to FALSE. |
 | `lightboxTransitionSpeed `   | `number`   | 0.6  | Controls the transition speed of when the light-box is opened.**This value is in seconds ⚠️**.  |
 | `lightboxTransitionTimingFunction`   | `string`   | "linear"  | Controls the transition timing function of when the light-box is opened. Accepted values are *"linear", "easeIn","easeOut", "easeInOut","circIn", "circOut", "circInOut", "backIn", "backOut", "backInOut", "anticipate"*|
-| `overlayColor` | `string` | "rgba(0, 0, 0, 0.9)"  | Controls the background color of the light-box. |
+| `overlayColor` | `string` | "rgba(30, 30, 30, 0.9)"  | Controls the background color of the light-box. |
 | `slideAnimationType`  🆕  | `string`  | 'fade'  | Set the type of animation. Possible values are "fade","slide","both". "Fade" is a simple fade in/out animation. "Slide" means that the image will slide left or right (depeding on the direction). This uses the spring physics animation so make sure you set the `slideSpringValues` as settings. "Both" means that the image will slide and fade. |
-| ` slideSpringValues`  🆕  | `array` of `number`  | `[300, 200]`  | Simulates spring physics for realistic motion. The first value in the array is **damping** (Strength of opposing force. If set to 0, spring will oscillate indefinitely so don't do it). The second value is **stiffness** (Stiffness of the spring. Higher values will create more sudden movement).  |
+| ` slideSpringValues`  🆕  | `array` of `number`  | `[300, 50]`  | Simulates spring physics for realistic motion. The first value in the array is **damping** (Strength of opposing force. If set to 0, spring will oscillate indefinitely so don't do it). The second value is **stiffness** (Stiffness of the spring. Higher values will create more sudden movement).  |
 | `slideTransitionSpeed`   | `number`  | 0.6  | Controls the transition speed of each image (when changing from an image to another). **This value is in seconds ⚠️**. This value is going to be ignored if you use the "slide" animation type and the `slideSpringValues` settings will be used instead|
 | `slideTransitionTimingFunction`   | `string`   | "linear"  | Controls the transition timing function of each image (when changing from an image to another). Accepted values are *"linear", "easeIn","easeOut", "easeInOut","circIn", "circOut", "circInOut", "backIn", "backOut", "backInOut", "anticipate"* |
 
@@ -296,7 +296,7 @@ const options = {
     hideControlsAfter: 3000,
     lightboxTransitionSpeed: 0.6,
     lightboxTransitionTimingFunction: 'linear',
-    overlayColor: 'rgba(0, 0, 0, 0.9)',
+    overlayColor: 'rgba(30, 30, 30, 0.9)',
     slideAnimationType: 'fade',
     slideSpringValues: [300, 200],
     slideTransitionSpeed: 0.6,
