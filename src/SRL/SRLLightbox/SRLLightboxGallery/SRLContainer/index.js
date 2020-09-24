@@ -232,8 +232,6 @@ function SRLContainerComponent({
                 <SRLImage
                   className="SRLImage"
                   disablePanzoom={settings.disablePanzoom}
-                  width={elementWidth}
-                  height={elementHeight}
                   onClick={() => handlePanzoom(true)}
                   src={typeof source === 'object' ? 'Loading...' : source}
                   alt={caption}

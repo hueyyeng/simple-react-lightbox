@@ -116,8 +116,8 @@ export const SRLVideo = styled.video`
   display: block;
   max-width: 100%;
   max-height: 100%;
-  width: auto;
-  height: auto;
+  width: ${(props) => (props.width ? props.width : 'auto')};
+  height: ${(props) => (props.height ? props.height : 'auto')};
   outline: none;
   -webkit-user-select: none;
   -moz-user-select: none;

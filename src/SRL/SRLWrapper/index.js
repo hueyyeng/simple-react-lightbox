@@ -8,6 +8,12 @@ import {
   HANDLE_ELEMENT
 } from '../SRLContext/actions'
 import { GALLERY_IMAGE, IMAGE, VIDEO } from './element_types'
+import {
+  isSimpleImage,
+  isGalleryImage,
+  isImageWithVideo,
+  isVideo
+} from './detect_types'
 
 // IsEqual from lodash to do a deep comparison of the objects
 const isEqual = require('lodash/isEqual')
@@ -25,7 +31,7 @@ const SRLWrapper = ({
   // Imports the context
   const context = useContext(SRLCtx)
 
-  console.log(context)
+  console.log(context.elements)
 
   // Sets a new Ref which will be used to target the div with the images
   const elementsContainer = useRef(null)
@@ -225,7 +231,7 @@ const SRLWrapper = ({
     function handleElements(data) {
       let elementId = 0
 
-      console.log(data)
+      // console.log(data)
 
       const elements = data
         .map(({ element: e, isLoaded, type }) => {
@@ -325,32 +331,31 @@ const SRLWrapper = ({
               let index = -1
               const elements = instance.elements
                 .map((e) => {
-                  if (
-                    e.nodeName === 'IMG' &&
-                    e.parentNode.dataset.attribute === 'SRL'
-                  ) {
+                  if (isGalleryImage(e)) {
                     index++
                     return {
                       type: GALLERY_IMAGE,
                       element: instance.images[index].img,
                       isLoaded: instance.images[index].isLoaded
                     }
-                  } else if (
-                    e.nodeName === 'IMG' &&
-                    e.nextSibling?.nodeName !== 'VIDEO'
-                  ) {
+                  } else if (isSimpleImage(e)) {
                     index++
                     return {
                       type: IMAGE,
                       element: instance.images[index].img,
                       isLoaded: instance.images[index].isLoaded
                     }
-                  } else if (e.nodeName === 'VIDEO') {
+                  } else if (isImageWithVideo(e)) {
+                    index++
+                    return undefined
+                  } else if (isVideo(e)) {
                     return {
                       type: VIDEO,
                       element: e,
                       isLoaded: 'unknown'
                     }
+                  } else {
+                    return undefined
                   }
                 })
                 .filter((e) => e !== undefined)
