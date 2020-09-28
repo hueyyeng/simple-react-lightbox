@@ -13,10 +13,9 @@ import {
   SRLElementContainer,
   SRLElementWrapper,
   SRLImage,
-  SRLVideo,
   SRLPanzoomedImage
-  // SRLLightboxVideo
 } from '../../../styles/SRLElementContainerStyles'
+import { SRLVideoComponent } from './SRLVideoComponent'
 
 function SRLContainerComponent({
   caption,
@@ -27,11 +26,11 @@ function SRLContainerComponent({
   handleNextElement,
   handlePanzoom,
   handlePrevElement,
-  height: elementWidth,
+  height: elementHeight,
   hideThumbnails,
   id,
   type,
-  autoPlay,
+  videoAutoplay,
   muted,
   showControls,
   options,
@@ -40,7 +39,7 @@ function SRLContainerComponent({
   SRLPanzoomImageRef,
   SRLThumbnailsRef,
   SRLCaptionRef,
-  width: elementHeight
+  width: elementWidth
 }) {
   const { settings, thumbnails, caption: captionSettings } = options
 
@@ -216,16 +215,15 @@ function SRLContainerComponent({
               opacity: { duration: settings.slideTransitionSpeed }
             }}
           >
-            {type === 'video' ? (
-              <SRLVideo
-                className="SRLVideo"
+            {type === 'video' || type === 'embed_video' ? (
+              <SRLVideoComponent
                 controls={showControls}
-                autoPlay={autoPlay}
+                autoplay={videoAutoplay}
                 muted={muted}
                 width={elementWidth}
                 height={elementHeight}
                 src={typeof source === 'object' ? 'Loading...' : source}
-                alt={caption}
+                type={type}
               />
             ) : (
               !panzoomEnabled && (
@@ -279,7 +277,7 @@ function SRLContainerComponent({
 }
 
 SRLContainerComponent.propTypes = {
-  autoPlay: PropTypes.bool,
+  videoAutoplay: PropTypes.bool,
   caption: PropTypes.string,
   direction: PropTypes.string,
   elements: PropTypes.array,

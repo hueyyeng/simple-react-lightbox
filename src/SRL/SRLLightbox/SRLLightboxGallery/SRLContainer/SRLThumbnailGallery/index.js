@@ -4,6 +4,7 @@ import {
   SRLThumbnailGallery,
   SRLThumbnailGalleryImage
 } from '../../../../styles/SRLThumbnailsStyle'
+import SRLVideoIcon from './SRLVideoIcon'
 
 const SRLThumbnailGalleryComponent = ({
   elements,
@@ -19,7 +20,8 @@ const SRLThumbnailGalleryComponent = ({
     thumbnailsAlignment,
     thumbnailsContainerBackgroundColor,
     thumbnailsContainerPadding,
-    thumbnailsGap
+    thumbnailsGap,
+    thumbnailsIconColor
   } = thumbnails
 
   // // Ref for the container of the thumbnails
@@ -185,8 +187,11 @@ const SRLThumbnailGalleryComponent = ({
             style={{
               backgroundImage: `url('${element.thumbnail}')`
             }}
-            isVideoThumbnail={element.type === 'video'}
-          />
+          >
+            {(element.type === 'video' || element.type === 'embed_video') && (
+              <SRLVideoIcon thumbnailsIconColor={thumbnailsIconColor} />
+            )}
+          </SRLThumbnailGalleryImage>
         )
       })}
     </SRLThumbnailGallery>
@@ -205,6 +210,7 @@ SRLThumbnailGalleryComponent.propTypes = {
     thumbnailsContainerBackgroundColor: PropTypes.string,
     thumbnailsContainerPadding: PropTypes.string,
     thumbnailsGap: PropTypes.string,
+    thumbnailsIconColor: PropTypes.string,
     thumbnailsOpacity: PropTypes.number,
     thumbnailsPosition: PropTypes.string,
     thumbnailsSize: PropTypes.array

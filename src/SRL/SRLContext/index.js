@@ -55,6 +55,7 @@ const initialState = {
       thumbnailsContainerPadding: '0',
       thumbnailsContainerBackgroundColor: 'transparent',
       thumbnailsGap: '0 1px',
+      thumbnailsIconColor: '#ffffff',
       thumbnailsPosition: 'bottom',
       thumbnailsOpacity: 0.4,
       thumbnailsSize: ['100px', '80px']

@@ -7,12 +7,13 @@ import {
   GRAB_ELEMENTS,
   HANDLE_ELEMENT
 } from '../SRLContext/actions'
-import { GALLERY_IMAGE, IMAGE, VIDEO } from './element_types'
+import { GALLERY_IMAGE, IMAGE, VIDEO, EMBED_VIDEO } from './element_types'
 import {
   isSimpleImage,
   isGalleryImage,
   isImageWithVideo,
-  isVideo
+  isVideo,
+  isEmbeddedVideo
 } from './detect_types'
 
 // IsEqual from lodash to do a deep comparison of the objects
@@ -231,8 +232,6 @@ const SRLWrapper = ({
     function handleElements(data) {
       let elementId = 0
 
-      // console.log(data)
-
       const elements = data
         .map(({ element: e, isLoaded, type }) => {
           e.setAttribute('srl_elementid', elementId)
@@ -288,12 +287,38 @@ const SRLWrapper = ({
                     caption: e.getAttribute('srl_video_caption'),
                     thumbnail: e.getAttribute('srl_video_thumbnail'),
                     width: e.getAttribute('srl_video_width'),
-                    height: e.getAttribute('srl_video_height'),
                     showControls:
                       e.getAttribute('srl_video_controls') == 'true',
-                    autoPlay: e.getAttribute('srl_video_autoplay') == 'true',
+                    videoAutoplay:
+                      e.getAttribute('srl_video_autoplay') == 'true',
                     muted: e.getAttribute('srl_video_muted') == 'true',
                     type: 'video'
+                  }
+                  handlePreventClick(e, element)
+                  return element
+                }
+                case EMBED_VIDEO: {
+                  const element = {
+                    id: e.getAttribute('srl_elementid'),
+                    source:
+                      e.parentElement.href ||
+                      e.offsetParent.parentElement.href ||
+                      null,
+                    caption: e.parentElement.getAttribute('srl_video_caption'),
+                    thumbnail:
+                      e.parentElement.getAttribute('srl_video_thumbnail') ||
+                      e.currentSrc ||
+                      e.src,
+                    width: e.parentElement.getAttribute('srl_video_width'),
+                    showControls:
+                      e.parentElement.getAttribute('srl_video_controls') ==
+                      'true',
+                    videoAutoplay:
+                      e.parentElement.getAttribute('srl_video_autoplay') ==
+                      'true',
+                    muted:
+                      e.parentElement.getAttribute('srl_video_muted') == 'true',
+                    type: 'embed_video'
                   }
                   handlePreventClick(e, element)
                   return element
@@ -329,9 +354,16 @@ const SRLWrapper = ({
               // But we still want to validate the images so we need to merge the merge the two arrays
               // We create a new array and we grab the images from the "instance.images" array and the rest from the "instance.elements" array
               let index = -1
+
               const elements = instance.elements
                 .map((e) => {
-                  if (isGalleryImage(e)) {
+                  if (isEmbeddedVideo(e)) {
+                    return {
+                      type: EMBED_VIDEO,
+                      element: e,
+                      isLoaded: 'unknown'
+                    }
+                  } else if (isGalleryImage(e)) {
                     index++
                     return {
                       type: GALLERY_IMAGE,
@@ -467,6 +499,7 @@ SRLWrapper.propTypes = {
       thumbnailsContainerPadding: PropTypes.string,
       thumbnailsContainerBackgroundColor: PropTypes.string,
       thumbnailsGap: PropTypes.string,
+      thumbnailsIconColor: PropTypes.string,
       thumbnailsOpacity: PropTypes.number,
       thumbnailsPosition: PropTypes.string,
       thumbnailsSize: PropTypes.array
@@ -562,6 +595,7 @@ SRLWrapper.defaultProps = {
       thumbnailsContainerBackgroundColor: 'transparent',
       thumbnailsContainerPadding: '0',
       thumbnailsGap: '0 1px',
+      thumbnailsIconColor: '#ffffff',
       thumbnailsOpacity: 0.4,
       thumbnailsPosition: 'bottom',
       thumbnailsSize: ['100px', '80px']

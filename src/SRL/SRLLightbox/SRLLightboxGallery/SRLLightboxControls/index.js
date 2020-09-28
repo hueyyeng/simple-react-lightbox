@@ -231,7 +231,7 @@ const SRLLightboxControls = ({
             buttonsIconPadding={buttons.iconPadding}
             title={translations.fullscreenText}
             className="SRLExpandButton"
-            onClick={() => handleFullScreen()}
+            onClick={handleFullScreen}
           >
             <div className="SRLExpandButton">
               {icons.fullscreenIcon ? (
