@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
 import imagesLoaded from 'imagesloaded'
 import {
-  GRAB_SETTINGS,
-  GRAB_ELEMENTS,
+  READY_LIGHTBOX,
+  RESET_LIGHTBOX,
   HANDLE_ELEMENT
 } from '../SRLContext/actions'
 import { GALLERY_IMAGE, IMAGE, VIDEO, EMBED_VIDEO } from './element_types'
+import { dispatchError } from '../SRLErrors'
+
 import {
   isSimpleImage,
   isGalleryImage,
@@ -32,39 +34,278 @@ const SRLWrapper = ({
   // Imports the context
   const context = useContext(SRLCtx)
 
-  console.log(context.elements)
+  console.log(context)
 
   // Sets a new Ref which will be used to target the div with the images
   const elementsContainer = useRef(null)
   // Ref for the mutation
   const mutationRef = useRef()
-
-  const [imagesAreLoaded, setImagesAreLoaded] = useState(false)
+  // Set a state to indicate if the lightbox is initialized
   const [lightboxIsInit, setLightboxIsInit] = useState(false)
 
+  /* RESET THE LIGHTBOX STATUS */
   useEffect(() => {
-    // Mutation Observer
-    mutationRef.current = new MutationObserver(detectChanges)
+    try {
+      context.dispatch({
+        type: RESET_LIGHTBOX
+      })
+    } catch (error) {
+      const message = (error.message =
+        'SRL - ERROR WHEN RESETTING THE LIGHTBOX STATUS')
+      dispatchError(message)
+    }
+  }, [])
 
-    // Detect if there are mutations in the SRLWrapper ref
-    function detectChanges() {
-      // if this runs there has been a mutation
-      handleDetectTypeOfElements(elementsContainer.current)
+  useEffect(() => {
+    /* STARTS SIMPLE REACT LIGHTBOX */
+    function handleSRL(array) {
+      // Grabs images and videos inside the ref
+      const collectedElements = array.querySelectorAll('img,video')
+      // Checks if the are elements in the DOM
+      if (collectedElements.length > 0) {
+        if (!context.imagesLoaded) {
+          handleImagesLoaded(collectedElements).then((result) => {
+            handleElements(result)
+          })
+        }
+        // preventDefault on elements inside the ref
+        if (!context.isLoaded) {
+          Array.from(collectedElements).map((e) =>
+            e.addEventListener('click', (event) => {
+              event.preventDefault()
+            })
+          )
+        }
+      }
+      // User is declaring images via prop
+      else {
+        if (images) {
+          handleImagesPassedViaProps(images)
+        }
+      }
     }
 
-    // Declare what to observe
-    mutationRef.current.observe(elementsContainer.current, {
-      childList: true,
-      subtree: true,
-      attributeFilter: ['href', 'src']
-    })
+    /* HANDLE ELEMENTS PASSED BY THE USER VIA PROPS */
+    function handleImagesPassedViaProps(array) {
+      const elements = array.map((i, index) => {
+        // Creates an object for each element
+        const element = {
+          source: i.src,
+          thumbnail: i.thumbnail || i.src,
+          caption: i.caption,
+          id: `${index}`,
+          width: 'auto',
+          height: 'auto'
+        }
 
-    // 4.5) Dispatch the action to grab the options
-    function dispatchGrabSettings(options, callbacks, customCaptions) {
-      // console.log('dispatched options')
-      // We merge the settings that we receive from the user via the props with the original ones (defaultOptions and defaultCallbacks)
-      // If the user hasn't provided any options/callbacks via props we make mergedSettings use just the default options/callbacks
+        return element
+      })
 
+      // Function that handle the lightbox
+      return handleLightBox(elements)
+    }
+
+    /* DETECTS IF IMAGES ARE LOADED IN THE DOM AND ARE NOT BROKEN */
+    function handleImagesLoaded(array) {
+      const imagesLoadedPromise = new Promise(function (resolve, reject) {
+        imagesLoaded(array, function (instance) {
+          if (instance.isComplete) {
+            // We wants all the elements, not only the images as there are also videos
+            // We create a new array and we grab the images from the "instance.images" array and the rest from the "instance.elements" array
+            let index = -1
+            const elements = instance.elements
+              .map((e) => {
+                if (isEmbeddedVideo(e)) {
+                  return {
+                    type: EMBED_VIDEO,
+                    element: e,
+                    isLoaded: 'unknown'
+                  }
+                } else if (isGalleryImage(e)) {
+                  index++
+                  return {
+                    type: GALLERY_IMAGE,
+                    element: instance.images[index].img,
+                    isLoaded: instance.images[index].isLoaded
+                  }
+                } else if (isSimpleImage(e)) {
+                  index++
+                  return {
+                    type: IMAGE,
+                    element: instance.images[index].img,
+                    isLoaded: instance.images[index].isLoaded
+                  }
+                } else if (isImageWithVideo(e)) {
+                  index++
+                  return undefined
+                } else if (isVideo(e)) {
+                  return {
+                    type: VIDEO,
+                    element: e,
+                    isLoaded: 'unknown'
+                  }
+                } else {
+                  return undefined
+                }
+              })
+              .filter((e) => e !== undefined)
+            resolve(elements)
+          }
+        })
+      })
+      return imagesLoadedPromise
+    }
+
+    /* DISPATCH THE ACTION TO HANDLE THE ELEMENT */
+    const handleElement = (element) => {
+      // We don't want to dispatch the action if the selected image is already selected
+      if (!isEqual(element, context.selectedElement)) {
+        // console.log('dispatched grab element (single)')
+        try {
+          context.dispatch({
+            type: HANDLE_ELEMENT,
+            element
+          })
+        } catch (error) {
+          const message = (error.message =
+            'SRL - ERROR WHEN HANDLING THE ELEMENT')
+          dispatchError(message)
+        }
+      }
+    }
+
+    /* ATTACH AN EVENT LISTENER TO AN ELEMENT */
+    function handleAttachListener(e, element) {
+      if (!lightboxIsInit) {
+        // If it's a video and has a image as thumbnails as sibling
+        if (e.previousSibling?.nodeName === 'IMG' && e.nodeName === 'VIDEO') {
+          e.previousSibling?.addEventListener('click', () => {
+            // Run the function to handle the clicked item
+            handleElement(element)
+          })
+        } else {
+          e.addEventListener('click', () => {
+            // Run the function to handle the clicked item
+            handleElement(element)
+          })
+        }
+      }
+    }
+
+    /* ADDS ELEMENTS TO THE CONTEXT AND ATTACH AN EVENT LISTENER TO EACH */
+    function handleElements(data) {
+      let elementId = 0
+      const elements = data
+        .map(({ element: e, isLoaded, type }) => {
+          e.setAttribute('srl_elementid', elementId)
+
+          if (isLoaded) {
+            /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
+          want to ignore that one but only if it's Gatsby because other base64 images are allowed)
+          Also ignores images inside the <picture></picture> tag in Gatsby Images */
+            const isBase64Image = e.src?.includes('base64')
+            const isGatsbyImage = e.offsetParent?.className.includes(
+              'gatsby-image-wrapper'
+            )
+            const isGatsbyPicture = e.parentNode?.localName !== 'picture'
+
+            if (isGatsbyImage && isBase64Image && isGatsbyPicture) {
+              return undefined
+            } else {
+              elementId++
+              switch (type) {
+                case IMAGE: {
+                  const element = {
+                    id: e.getAttribute('srl_elementid'),
+                    source: e.currentSrc || e.src,
+                    caption: e.alt,
+                    thumbnail: e.currentSrc || e.src,
+                    width: e.naturalWidth,
+                    height: e.naturalHeight,
+                    type: 'image'
+                  }
+                  handleAttachListener(e, element)
+                  return element
+                }
+                case GALLERY_IMAGE: {
+                  const element = {
+                    id: e.getAttribute('srl_elementid'),
+                    source:
+                      e.parentElement.href ||
+                      e.offsetParent.parentElement.href ||
+                      null,
+                    caption: e.alt || e.textContent,
+                    thumbnail: e.currentSrc || e.parentElement.href,
+                    width: null,
+                    height: null,
+                    type: 'gallery_image'
+                  }
+                  handleAttachListener(e, element)
+                  return element
+                }
+                case VIDEO: {
+                  const element = {
+                    id: e.getAttribute('srl_elementid'),
+                    source: e.currentSrc || e.src,
+                    caption: e.getAttribute('srl_video_caption'),
+                    thumbnail: e.getAttribute('srl_video_thumbnail'),
+                    width: e.getAttribute('srl_video_width'),
+                    showControls:
+                      e.getAttribute('srl_video_controls') == 'true',
+                    videoAutoplay:
+                      e.getAttribute('srl_video_autoplay') == 'true',
+                    muted: e.getAttribute('srl_video_muted') == 'true',
+                    type: 'video'
+                  }
+                  handleAttachListener(e, element)
+                  return element
+                }
+                case EMBED_VIDEO: {
+                  const element = {
+                    id: e.getAttribute('srl_elementid'),
+                    source:
+                      e.parentElement.href ||
+                      e.offsetParent.parentElement.href ||
+                      null,
+                    caption: e.parentElement.getAttribute('srl_video_caption'),
+                    thumbnail:
+                      e.parentElement.getAttribute('srl_video_thumbnail') ||
+                      e.currentSrc ||
+                      e.src,
+                    width: e.parentElement.getAttribute('srl_video_width'),
+                    showControls:
+                      e.parentElement.getAttribute('srl_video_controls') ==
+                      'true',
+                    videoAutoplay:
+                      e.parentElement.getAttribute('srl_video_autoplay') ==
+                      'true',
+                    muted:
+                      e.parentElement.getAttribute('srl_video_muted') == 'true',
+                    type: 'embed_video'
+                  }
+                  handleAttachListener(e, element)
+                  return element
+                }
+                default: {
+                  return undefined
+                }
+              }
+            }
+          }
+        })
+        .filter((e) => e !== undefined)
+
+      // Adds elements to the context
+      return handleLightBox(elements)
+    }
+
+    /* DISPATCH AN ACTION TO GRAB ALL THE ELEMENTS AND THE SETTINGS AND READY THE LIGHTBOX */
+    function dispatchLightboxReady(
+      options,
+      callbacks,
+      customCaptions,
+      elements
+    ) {
       let _options = {}
       let _callbacks = {}
 
@@ -142,292 +383,59 @@ const SRLWrapper = ({
 
       if (
         !isEqual(mergedSettings.options, context.options) ||
-        !isEqual(mergedSettings.callbacks, context.callbacks)
+        !isEqual(mergedSettings.callbacks, context.callbacks) ||
+        !isEqual(elements, context.elements)
       ) {
-        context.dispatch({
-          type: GRAB_SETTINGS,
-          mergedSettings
-        })
+        try {
+          context.dispatch({
+            type: READY_LIGHTBOX,
+            mergedSettings,
+            elements
+          })
+        } catch (error) {
+          const message = (error.message =
+            'SRL - ERROR GRABBING SETTINGS AND ELEMENTS')
+          dispatchError(message)
+        }
       }
     }
 
-    // 4.5) Dispatch the action to handle the elements
-    function dispatchAddElements(elements) {
-      if (!isEqual(elements, context.elements)) {
-        // console.log('dispatched grab elements')
-        context.dispatch({
-          type: GRAB_ELEMENTS,
-          elements
-        })
-      }
-    }
-
-    // 4) Finally handle the lightbox by dispatching the actions to the context
+    /* HANDLE THE LIGHTBOX BY DISPATCHING THE TWO ACTIONS */
     function handleLightBox(elements) {
-      // Set the lightbox to be successfully initialized
-      setLightboxIsInit(true)
-
       if (!lightboxIsInit) {
+        // Set the lightbox to be successfully initialized
+        setLightboxIsInit(true)
+
         // Dispatch the actions to grab settings and elements
         // console.log('light-box is initialized')
-        return (
-          dispatchAddElements(elements.filter((e) => e !== undefined)),
-          dispatchGrabSettings(options, callbacks, customCaptions)
+        return dispatchLightboxReady(
+          options,
+          callbacks,
+          customCaptions,
+          elements
         )
       }
     }
 
-    // 3.5) Dispatch the Action to handle the clicked item
-    const handleElement = (element) => {
-      // We don't want to dispatch the action if the selected image is already selected
-      if (!isEqual(element, context.selectedElement)) {
-        // console.log('dispatched grab element (single)')
-        context.dispatch({
-          type: HANDLE_ELEMENT,
-          element
-        })
-      }
+    /* DETECTS IF THERE ARE MUTATIONS IN THE REF  */
+    mutationRef.current = new MutationObserver(detectChanges)
+    function detectChanges() {
+      // if this runs there has been a mutation
+      handleSRL(elementsContainer.current)
     }
 
-    // 3.2.5) If the user passes the images via props, handle them
-    function handleImagesPassedViaProps(array) {
-      const elements = array.map((i, index) => {
-        // Creates an object for each element
-        const element = {
-          source: i.src,
-          thumbnail: i.thumbnail || i.src,
-          caption: i.caption,
-          id: `${index}`,
-          width: 'auto',
-          height: 'auto'
-        }
-
-        return element
-      })
-
-      // Function that handle the lightbox
-      return handleLightBox(elements)
-    }
-
-    // 3.1.1) Prevents clicking on the element and instead handle it
-    function handlePreventClick(e, element) {
-      if (e.previousSibling?.nodeName === 'IMG' && e.nodeName === 'VIDEO') {
-        e.previousSibling.addEventListener('click', (e) => {
-          // Prevent the element from opening
-          e.preventDefault()
-          // Run the function to handle the clicked item
-          handleElement(element)
-        })
-      } else {
-        e.addEventListener('click', (e) => {
-          // Prevent the element from opening
-          e.preventDefault()
-          // Run the function to handle the clicked item
-          handleElement(element)
-        })
-      }
-    }
-
-    // 3) Adds the elements to the "context" and add the eventListener to open the lightbox to each element
-    function handleElements(data) {
-      let elementId = 0
-
-      const elements = data
-        .map(({ element: e, isLoaded, type }) => {
-          e.setAttribute('srl_elementid', elementId)
-
-          if (isLoaded) {
-            /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
-          want to ignore that one but only if it's Gatsby because other base64 images are allowed)
-          Also ignores images inside the <picture></picture> tag in Gatsby Images */
-            const isBase64Image = e.src?.includes('base64')
-            const isGatsbyImage = e.offsetParent?.className.includes(
-              'gatsby-image-wrapper'
-            )
-            const isGatsbyPicture = e.parentNode?.localName !== 'picture'
-
-            if (isGatsbyImage && isBase64Image && isGatsbyPicture) {
-              return undefined
-            } else {
-              elementId++
-              switch (type) {
-                case IMAGE: {
-                  const element = {
-                    id: e.getAttribute('srl_elementid'),
-                    source: e.currentSrc || e.src,
-                    caption: e.alt,
-                    thumbnail: e.currentSrc || e.src,
-                    width: e.naturalWidth,
-                    height: e.naturalHeight,
-                    type: 'image'
-                  }
-                  handlePreventClick(e, element)
-                  return element
-                }
-                case GALLERY_IMAGE: {
-                  const element = {
-                    id: e.getAttribute('srl_elementid'),
-                    source:
-                      e.parentElement.href ||
-                      e.offsetParent.parentElement.href ||
-                      null,
-                    caption: e.alt || e.textContent,
-                    thumbnail: e.currentSrc || e.parentElement.href,
-                    width: null,
-                    height: null,
-                    type: 'gallery_image'
-                  }
-                  handlePreventClick(e, element)
-                  return element
-                }
-                case VIDEO: {
-                  const element = {
-                    id: e.getAttribute('srl_elementid'),
-                    source: e.currentSrc || e.src,
-                    caption: e.getAttribute('srl_video_caption'),
-                    thumbnail: e.getAttribute('srl_video_thumbnail'),
-                    width: e.getAttribute('srl_video_width'),
-                    showControls:
-                      e.getAttribute('srl_video_controls') == 'true',
-                    videoAutoplay:
-                      e.getAttribute('srl_video_autoplay') == 'true',
-                    muted: e.getAttribute('srl_video_muted') == 'true',
-                    type: 'video'
-                  }
-                  handlePreventClick(e, element)
-                  return element
-                }
-                case EMBED_VIDEO: {
-                  const element = {
-                    id: e.getAttribute('srl_elementid'),
-                    source:
-                      e.parentElement.href ||
-                      e.offsetParent.parentElement.href ||
-                      null,
-                    caption: e.parentElement.getAttribute('srl_video_caption'),
-                    thumbnail:
-                      e.parentElement.getAttribute('srl_video_thumbnail') ||
-                      e.currentSrc ||
-                      e.src,
-                    width: e.parentElement.getAttribute('srl_video_width'),
-                    showControls:
-                      e.parentElement.getAttribute('srl_video_controls') ==
-                      'true',
-                    videoAutoplay:
-                      e.parentElement.getAttribute('srl_video_autoplay') ==
-                      'true',
-                    muted:
-                      e.parentElement.getAttribute('srl_video_muted') == 'true',
-                    type: 'embed_video'
-                  }
-                  handlePreventClick(e, element)
-                  return element
-                }
-                default: {
-                  return undefined
-                }
-              }
-            }
-          }
-        })
-        .filter((e) => e !== undefined)
-
-      return handleLightBox(elements)
-    }
-
-    // 2.5) When elements are not loaded prevent them from being clicked
-    function handleLightboxNotLoaded(array) {
-      Array.from(array).map((e) =>
-        e.addEventListener('click', (event) => {
-          event.preventDefault()
-        })
-      )
-    }
-
-    // 2) Detected if images are loaded in the DOM
-    function handleImagesLoaded(array) {
-      const imagesLoadedPromise = new Promise(function (resolve, reject) {
-        imagesLoaded(array, function (instance) {
-          if (instance.isComplete) {
-            if (!imagesAreLoaded) {
-              // We wants all the elements, not only the images, as we can now have videos too
-              // But we still want to validate the images so we need to merge the merge the two arrays
-              // We create a new array and we grab the images from the "instance.images" array and the rest from the "instance.elements" array
-              let index = -1
-
-              const elements = instance.elements
-                .map((e) => {
-                  if (isEmbeddedVideo(e)) {
-                    return {
-                      type: EMBED_VIDEO,
-                      element: e,
-                      isLoaded: 'unknown'
-                    }
-                  } else if (isGalleryImage(e)) {
-                    index++
-                    return {
-                      type: GALLERY_IMAGE,
-                      element: instance.images[index].img,
-                      isLoaded: instance.images[index].isLoaded
-                    }
-                  } else if (isSimpleImage(e)) {
-                    index++
-                    return {
-                      type: IMAGE,
-                      element: instance.images[index].img,
-                      isLoaded: instance.images[index].isLoaded
-                    }
-                  } else if (isImageWithVideo(e)) {
-                    index++
-                    return undefined
-                  } else if (isVideo(e)) {
-                    return {
-                      type: VIDEO,
-                      element: e,
-                      isLoaded: 'unknown'
-                    }
-                  } else {
-                    return undefined
-                  }
-                })
-                .filter((e) => e !== undefined)
-              resolve(elements)
-            } else {
-              handleLightboxNotLoaded(array)
-            }
-          }
-        })
-      })
-      return imagesLoadedPromise
-    }
-
-    // 1) Detected the type of element (if the user is using the "GALLERY" approach)
-    function handleDetectTypeOfElements(array) {
-      // Grabs images in the ref
-      const collectedElements = array.querySelectorAll('img,video')
-      // Grabs data attributes (in links) in the ref
-
-      // Checks if the are elements in the DOM first of all
-      if (collectedElements.length > 0) {
-        handleImagesLoaded(collectedElements).then((result) => {
-          handleElements(result)
-          setImagesAreLoaded(true)
-        })
-      }
-      // USER IS DECLARING IMAGES VIA PROPS
-      else {
-        if (images) {
-          handleImagesPassedViaProps(images)
-        }
-      }
-    }
+    /* OBSERVE THE MUTATION */
+    mutationRef.current.observe(elementsContainer.current, {
+      childList: true,
+      subtree: true,
+      attributeFilter: ['href', 'src']
+    })
 
     // RUN THE LIGHTBOX
-    handleDetectTypeOfElements(elementsContainer.current)
+    handleSRL(elementsContainer.current)
   }, [
     lightboxIsInit,
     context,
-    imagesAreLoaded,
     defaultCallbacks,
     defaultOptions,
     options,

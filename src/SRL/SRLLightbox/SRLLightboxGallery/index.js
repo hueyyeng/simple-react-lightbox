@@ -16,7 +16,7 @@ import { useIdle } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
 import { HANDLE_ELEMENT, CLOSE_LIGHTBOX } from '../../SRLContext/actions'
-
+import { fullscreenError } from '../../SRLErrors'
 // CONSTANTS
 const NEXT = 'next'
 const PREVIOUS = 'previous'
@@ -369,13 +369,20 @@ const SRLLightboxGallery = ({
       setAutoplay(false)
 
       if (el !== null) {
-        el.requestFullscreen()
-          .then({})
-          .catch((err) => {
-            console.log(
-              `An error occurred while trying to switch into full-screen mode: ${err.message} (${err.name})`
-            )
-          })
+        try {
+          if (
+            navigator.userAgent.indexOf('Safari') !== -1 &&
+            navigator.userAgent.indexOf('Chrome') === -1
+          ) {
+            el.webkitRequestFullScreen()
+          } else {
+            el.requestFullscreen()
+          }
+        } catch (error) {
+          const message = (error.message =
+            'SRL - ERROR WHEN USING FULLSCREEN API')
+          fullscreenError(message)
+        }
       }
     } else {
       document.exitFullscreen()

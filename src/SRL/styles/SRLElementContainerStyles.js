@@ -32,10 +32,25 @@ const videoRatio = (props) => css`
     : '106vh'};
   margin: auto;
 
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
+    width: 100vw;
+    height: 56.25vw; /* height:width ratio = 9/16 = .5625  */
+    max-height: 100vh;
+    max-width: 177.78vh; /* 16/9 = 1.778 */
+    margin: auto;
+  }
+
+  @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+    width: 100vw;
+    height: 56.25vw; /* height:width ratio = 9/16 = .5625  */
+    max-height: 100vh;
+    max-width: 177.78vh; /* 16/9 = 1.778 */
+    margin: auto;
+  }
+
   @media (max-width: 768px) {
     width: 100vw;
     height: 56.25vw; /* height:width ratio = 9/16 = .5625  */
-    background: pink;
     max-height: 100vh;
     max-width: 177.78vh; /* 16/9 = 1.778 */
     margin: auto;
@@ -71,6 +86,28 @@ export const SRLElementContainer = styled.div`
     css`
       height: calc(100vh - ${props.thumbnailsDivSizes.height}px);
     `};
+
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
+    grid-column: auto;
+    width: 100vw;
+    height: ${(props) =>
+      props
+        ? `calc((var(--vh, 1vh) * 100) - ${
+            props.captionDivSizes.height + props.thumbnailsDivSizes.height
+          }px)`
+        : '100%'};
+  }
+
+  @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+    grid-column: auto;
+    width: 100vw;
+    height: ${(props) =>
+      props
+        ? `calc((var(--vh, 1vh) * 100) - ${
+            props.captionDivSizes.height + props.thumbnailsDivSizes.height
+          }px)`
+        : '100%'};
+  }
 
   @media (max-width: 768px) {
     grid-column: auto;

@@ -6,11 +6,15 @@ export function useLightbox() {
   const ctx = useContext(SRLCtx)
 
   const openLightbox = (slideIndex = 0) => {
-    ctx.dispatch({ type: OPEN_AT_INDEX, index: slideIndex })
+    if (ctx.isLoaded) {
+      ctx.dispatch({ type: OPEN_AT_INDEX, index: slideIndex })
+    }
   }
 
   const closeLightbox = () => {
-    ctx.dispatch({ type: CLOSE_LIGHTBOX })
+    if (ctx.isLoaded) {
+      ctx.dispatch({ type: CLOSE_LIGHTBOX })
+    }
   }
 
   return { openLightbox, closeLightbox }

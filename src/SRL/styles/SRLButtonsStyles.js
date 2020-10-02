@@ -45,17 +45,6 @@ const StyledButton = styled.button`
   @media (max-width: 768px) {
     height: ${(props) =>
       props.buttonsSize
-        ? Math.round(parseInt(props.buttonsSize, 10) / 1) + 'px'
-        : '30px'};
-    width: ${(props) =>
-      props.buttonsSize
-        ? Math.round(parseInt(props.buttonsSize, 10) / 1) + 'px'
-        : '30px'};
-  }
-
-  @media (max-width: 360px) {
-    height: ${(props) =>
-      props.buttonsSize
         ? Math.round(parseInt(props.buttonsSize, 10) / 1.2) + 'px'
         : '30px'};
     width: ${(props) =>
@@ -69,15 +58,14 @@ const StyledButton = styled.button`
   }
 
   div {
-    display: flex;
-    justify-content: center;
     height: ${(props) => (props.buttonsSize ? props.buttonsSize : '30px')};
     width: ${(props) => (props.buttonsSize ? props.buttonsSize : '30px')};
     padding: ${(props) =>
       props.buttonsIconPadding ? props.buttonsIconPadding : '5px'};
     box-sizing: border-box;
 
-    @media (max-width: 768px) {
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
+      padding: 10px;
       height: ${(props) =>
         props.buttonsSize
           ? Math.round(parseInt(props.buttonsSize, 10) / 1) + 'px'
@@ -88,14 +76,27 @@ const StyledButton = styled.button`
           : '30px'};
     }
 
-    @media (max-width: 360px) {
+    @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+      padding: 10px;
       height: ${(props) =>
         props.buttonsSize
-          ? Math.round(parseInt(props.buttonsSize, 10) / 1.2) + 'px'
+          ? Math.round(parseInt(props.buttonsSize, 10) / 1) + 'px'
           : '30px'};
       width: ${(props) =>
         props.buttonsSize
-          ? Math.round(parseInt(props.buttonsSize, 10) / 1.2) + 'px'
+          ? Math.round(parseInt(props.buttonsSize, 10) / 1) + 'px'
+          : '30px'};
+    }
+
+    @media (max-width: 768px) {
+      padding: 11px;
+      height: ${(props) =>
+        props.buttonsSize
+          ? Math.round(parseInt(props.buttonsSize, 10) / 1.1) + 'px'
+          : '30px'};
+      width: ${(props) =>
+        props.buttonsSize
+          ? Math.round(parseInt(props.buttonsSize, 10) / 1.1) + 'px'
           : '30px'};
 
       .SRLIdle & {

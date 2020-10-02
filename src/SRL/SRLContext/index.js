@@ -1,8 +1,8 @@
 import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import {
-  GRAB_SETTINGS,
-  GRAB_ELEMENTS,
+  READY_LIGHTBOX,
+  RESET_LIGHTBOX,
   HANDLE_ELEMENT,
   OPEN_AT_INDEX,
   CLOSE_LIGHTBOX
@@ -11,6 +11,7 @@ import {
 const initialState = {
   elements: [],
   isOpened: false,
+  isLoaded: false,
   options: {
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
@@ -112,16 +113,18 @@ const SRLContextComponent = (props) => {
   // Reducer
   const reducer = (state, action) => {
     switch (action.type) {
-      case GRAB_SETTINGS:
+      case READY_LIGHTBOX:
         return {
           ...state,
-          ...action.mergedSettings
+          ...action.mergedSettings,
+          elements: action.elements,
+          isLoaded: true
         }
-      case GRAB_ELEMENTS:
+      case RESET_LIGHTBOX: {
         return {
-          ...state,
-          elements: action.elements
+          ...initialState
         }
+      }
       case HANDLE_ELEMENT:
         return {
           ...state,
@@ -130,7 +133,6 @@ const SRLContextComponent = (props) => {
             ...action.element
           }
         }
-
       case OPEN_AT_INDEX:
         return {
           ...state,
