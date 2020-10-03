@@ -9,9 +9,11 @@ import gzipPlugin from 'rollup-plugin-gzip'
 import image from 'rollup-plugin-image'
 import pkg from './package.json'
 import { terser } from 'rollup-plugin-terser'
+import nodePolyfills from 'rollup-plugin-node-polyfills'
 
 export default {
   input: 'src/index.js',
+  preferBuiltins: false,
   output: [
     {
       file: pkg.main,
@@ -35,7 +37,30 @@ export default {
     }),
     svgr(),
     babel({
-      exclude: 'node_modules/**'
+      exclude: 'node_modules/**',
+      babelHelpers: 'runtime',
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            modules: false,
+            spec: true,
+            forceAllTransforms: true,
+            debug: false,
+            useBuiltIns: 'entry',
+            corejs: 3
+          }
+        ],
+        '@babel/preset-react'
+      ],
+      plugins: [
+        [
+          '@babel/plugin-transform-runtime',
+          {
+            regenerator: true
+          }
+        ]
+      ]
     }),
     nodeResolve({ preferBuiltins: true, customResolveOptions: 'src' }),
     commonjs({
@@ -43,6 +68,7 @@ export default {
     }),
     gzipPlugin(),
     image(),
-    terser()
+    terser(),
+    nodePolyfills()
   ]
 }

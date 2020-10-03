@@ -17,12 +17,13 @@ import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
 import { HANDLE_ELEMENT, CLOSE_LIGHTBOX } from '../../SRLContext/actions'
 import { fullscreenError } from '../../SRLErrors'
+
+// Lodash helper
+import { findIndex } from 'lodash'
+
 // CONSTANTS
 const NEXT = 'next'
 const PREVIOUS = 'previous'
-
-// Lodash helper
-const findIndex = require('lodash/findIndex')
 
 const SRLLightboxGallery = ({
   options,

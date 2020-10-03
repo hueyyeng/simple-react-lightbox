@@ -63,6 +63,8 @@ const StyledButton = styled.button`
     padding: ${(props) =>
       props.buttonsIconPadding ? props.buttonsIconPadding : '5px'};
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
 
     @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
       padding: 10px;

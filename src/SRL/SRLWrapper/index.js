@@ -17,10 +17,8 @@ import {
   isVideo,
   isEmbeddedVideo
 } from './detect_types'
-
 // IsEqual from lodash to do a deep comparison of the objects
-const isEqual = require('lodash/isEqual')
-const isEmpty = require('lodash/isEmpty')
+import { isEqual, isEmpty } from 'lodash'
 
 const SRLWrapper = ({
   options,
@@ -34,7 +32,7 @@ const SRLWrapper = ({
   // Imports the context
   const context = useContext(SRLCtx)
 
-  console.log(context)
+  console.log('ctx', context)
 
   // Sets a new Ref which will be used to target the div with the images
   const elementsContainer = useRef(null)

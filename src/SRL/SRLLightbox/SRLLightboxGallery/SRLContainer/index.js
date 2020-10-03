@@ -205,7 +205,7 @@ function SRLContainerComponent({
                 : 'fadeOut'
             }
             className="SRLElementWrapper"
-            key={id}
+            key={id || 0}
             transition={{
               x: {
                 type: 'spring',
