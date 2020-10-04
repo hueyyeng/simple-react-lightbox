@@ -465,7 +465,6 @@ const SRLLightboxGallery = ({
 
     // Sets the current element to be the first item in the array if the id is undefined.
     // This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
-
     if (selectedElement.id === undefined) {
       dispatch({
         type: HANDLE_ELEMENT,
@@ -474,7 +473,11 @@ const SRLLightboxGallery = ({
           caption: elements[0].caption,
           id: elements[0].id,
           width: elements[0].width,
-          height: elements[0].height
+          height: elements[0].height,
+          type: elements[0].type,
+          showControls: elements[0].showControls,
+          videoAutoplay: elements[0].videoAutoplay,
+          muted: elements[0].muted
         }
       })
     }

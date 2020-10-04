@@ -44,6 +44,7 @@ const SRLWrapper = ({
   /* RESET THE LIGHTBOX STATUS */
   useEffect(() => {
     try {
+      // console.log('RESET')
       context.dispatch({
         type: RESET_LIGHTBOX
       })
@@ -93,7 +94,8 @@ const SRLWrapper = ({
           caption: i.caption,
           id: `${index}`,
           width: 'auto',
-          height: 'auto'
+          height: 'auto',
+          type: undefined
         }
 
         return element
@@ -161,6 +163,7 @@ const SRLWrapper = ({
       if (!isEqual(element, context.selectedElement)) {
         // console.log('dispatched grab element (single)')
         try {
+          // console.log('HANDLE ELEMENT')
           context.dispatch({
             type: HANDLE_ELEMENT,
             element
@@ -386,6 +389,7 @@ const SRLWrapper = ({
         !isEqual(elements, context.elements)
       ) {
         try {
+          // console.log('READY')
           context.dispatch({
             type: READY_LIGHTBOX,
             mergedSettings,
