@@ -7,7 +7,12 @@ export function isSimpleImage(e) {
 }
 
 export function isGalleryImage(e) {
-  return e.nodeName === 'IMG' && e.parentNode?.nodeName === 'A'
+  const regex = /(https?:\/\/)www.(youtube.com\/watch[?]v=([a-zA-Z0-9_-]{11}))|https?:\/\/(www.)?vimeo.com\/([0-9]{9})/g
+  return (
+    e.nodeName === 'IMG' &&
+    e.parentNode?.nodeName === 'A' &&
+    !regex.test(e.parentNode.href)
+  )
 }
 
 export function isImageWithVideo(e) {
@@ -18,6 +23,11 @@ export function isVideo(e) {
   return e.nodeName === 'VIDEO' && e.nextSibling?.nodeName !== 'VIDEO'
 }
 
-export function isEmbeddedVideo(e) {
-  return e.nodeName === 'IMG' && e.parentNode?.getAttribute('srl_embed_video')
+export function isEmbedVideo(e) {
+  const regex = /(https?:\/\/)www.(youtube.com\/watch[?]v=([a-zA-Z0-9_-]{11}))|https?:\/\/(www.)?vimeo.com\/([0-9]{9})/g
+  return (
+    e.nodeName === 'IMG' &&
+    e.parentNode?.nodeName === 'A' &&
+    regex.test(e.parentNode.href)
+  )
 }

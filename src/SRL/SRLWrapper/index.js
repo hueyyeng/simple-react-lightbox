@@ -15,7 +15,7 @@ import {
   isGalleryImage,
   isImageWithVideo,
   isVideo,
-  isEmbeddedVideo
+  isEmbedVideo
 } from './detect_types'
 // IsEqual from lodash to do a deep comparison of the objects
 import { isEqual, isEmpty } from 'lodash'
@@ -113,7 +113,8 @@ const SRLWrapper = ({
             let index = -1
             const elements = instance.elements
               .map((e) => {
-                if (isEmbeddedVideo(e)) {
+                if (isEmbedVideo(e)) {
+                  index++
                   return {
                     type: EMBED_VIDEO,
                     element: e,
