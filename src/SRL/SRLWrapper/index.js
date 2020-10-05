@@ -475,7 +475,8 @@ SRLWrapper.propTypes = {
       slideTransitionTimingFunction: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.array
-      ])
+      ]),
+      usingPreact: PropTypes.bool
     }),
     buttons: PropTypes.shape({
       backgroundColor: PropTypes.string,
@@ -574,7 +575,8 @@ SRLWrapper.defaultProps = {
       slideAnimationType: 'fade',
       slideSpringValues: [300, 50],
       slideTransitionSpeed: 0.6,
-      slideTransitionTimingFunction: 'linear'
+      slideTransitionTimingFunction: 'linear',
+      usingPreact: false
     },
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',

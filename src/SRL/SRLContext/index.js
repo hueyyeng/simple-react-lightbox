@@ -37,7 +37,8 @@ const initialState = {
       slideAnimationType: 'fade',
       slideSpringValues: [300, 50],
       slideTransitionSpeed: 0.6,
-      slideTransitionTimingFunction: 'linear'
+      slideTransitionTimingFunction: 'linear',
+      usingPreact: false
     },
     caption: {
       captionAlignment: 'start',

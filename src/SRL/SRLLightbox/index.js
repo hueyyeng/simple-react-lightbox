@@ -7,8 +7,8 @@ import { AnimatePresence } from 'framer-motion'
 
 function SRLLightbox() {
   const context = useContext(SRLCtx)
-  const { isOpened } = context
-
+  const { isOpened, options } = context
+  const isUsingPreact = options.settings.usingPreact
   const vh = useRef()
 
   useEffect(() => {
@@ -26,15 +26,23 @@ function SRLLightbox() {
     return () => window.removeEventListener('resize', getVH)
   }, [])
 
-  return (
-    <AnimatePresence>
-      {isOpened && (
-        <Portal selector="SRLLightbox" isOpened={isOpened}>
-          <SRLLightboxGallery {...context} />
-        </Portal>
-      )}
-    </AnimatePresence>
-  )
+  if (isUsingPreact) {
+    return (
+      <Portal selector="SRLLightbox" isOpened={isOpened}>
+        <SRLLightboxGallery {...context} />
+      </Portal>
+    )
+  } else {
+    return (
+      <AnimatePresence>
+        {isOpened && (
+          <Portal selector="SRLLightbox" isOpened={isOpened}>
+            <SRLLightboxGallery {...context} />
+          </Portal>
+        )}
+      </AnimatePresence>
+    )
+  }
 }
 
 SRLLightbox.propTypes = {
