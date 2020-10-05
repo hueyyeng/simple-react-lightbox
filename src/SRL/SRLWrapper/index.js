@@ -25,8 +25,6 @@ const SRLWrapper = ({
   // Imports the context
   const context = useContext(SRLCtx)
 
-  console.log(context)
-
   // Sets a new Ref which will be used to target the div with the images
   const elementsContainer = useRef(null)
   // Ref for the mutation
