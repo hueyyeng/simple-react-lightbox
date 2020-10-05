@@ -15,7 +15,6 @@ import {
   SRLImage,
   SRLPanzoomedImage
 } from '../../../styles/SRLElementContainerStyles'
-import { SRLVideoComponent } from './SRLVideoComponent'
 
 function SRLContainerComponent({
   caption,
@@ -29,10 +28,6 @@ function SRLContainerComponent({
   height: elementHeight,
   hideThumbnails,
   id,
-  type,
-  videoAutoplay,
-  muted,
-  showControls,
   options,
   panzoomEnabled,
   source,
@@ -215,26 +210,14 @@ function SRLContainerComponent({
               opacity: { duration: settings.slideTransitionSpeed }
             }}
           >
-            {type === 'video' || type === 'embed_video' ? (
-              <SRLVideoComponent
-                controls={showControls}
-                autoplay={videoAutoplay}
-                muted={muted}
-                width={elementWidth}
-                height={elementHeight}
+            {!panzoomEnabled && (
+              <SRLImage
+                className="SRLImage"
+                disablePanzoom={settings.disablePanzoom}
+                onClick={() => handlePanzoom(true)}
                 src={typeof source === 'object' ? 'Loading...' : source}
-                type={type}
+                alt={caption}
               />
-            ) : (
-              !panzoomEnabled && (
-                <SRLImage
-                  className="SRLImage"
-                  disablePanzoom={settings.disablePanzoom}
-                  onClick={() => handlePanzoom(true)}
-                  src={typeof source === 'object' ? 'Loading...' : source}
-                  alt={caption}
-                />
-              )
             )}
           </SRLElementWrapper>
 
@@ -277,7 +260,6 @@ function SRLContainerComponent({
 }
 
 SRLContainerComponent.propTypes = {
-  videoAutoplay: PropTypes.bool,
   caption: PropTypes.string,
   direction: PropTypes.string,
   elements: PropTypes.array,
@@ -289,7 +271,6 @@ SRLContainerComponent.propTypes = {
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   hideThumbnails: PropTypes.bool,
   id: PropTypes.string,
-  muted: PropTypes.bool,
   options: PropTypes.shape({
     settings: PropTypes.shape({
       disablePanzoom: PropTypes.bool,

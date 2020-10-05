@@ -17,46 +17,6 @@ const thumbnailsOnLeft = (props) => css`
   height: calc(100vh - ${props.captionDivSizes.height}px);
 `
 
-const videoRatio = (props) => css`
-  position: relative;
-  /* XX% of viewport width */
-  width: ${props.wrapperWidth + 'vw' || '60vw'};
-  /* Ratio = 9/16 * XX */
-  height: ${props.wrapperWidth
-    ? (9 / 16) * props.wrapperWidth + 'vw'
-    : '33.75vw'};
-  max-height: ${props.wrapperWidth ? props.wrapperWidth + 'vh' : '60vh'};
-  /* 16/9 * XX */
-  max-width: ${props.wrapperWidth
-    ? (16 / 9) * props.wrapperWidth + 'vh'
-    : '106vh'};
-  margin: auto;
-
-  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
-    width: 100vw;
-    height: 56.25vw; /* height:width ratio = 9/16 = .5625  */
-    max-height: 100vh;
-    max-width: 177.78vh; /* 16/9 = 1.778 */
-    margin: auto;
-  }
-
-  @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
-    width: 100vw;
-    height: 56.25vw; /* height:width ratio = 9/16 = .5625  */
-    max-height: 100vh;
-    max-width: 177.78vh; /* 16/9 = 1.778 */
-    margin: auto;
-  }
-
-  @media (max-width: 768px) {
-    width: 100vw;
-    height: 56.25vw; /* height:width ratio = 9/16 = .5625  */
-    max-height: 100vh;
-    max-width: 177.78vh; /* 16/9 = 1.778 */
-    margin: auto;
-  }
-`
-
 // The container for the image
 export const SRLElementContainer = styled.div`
   position: relative;
@@ -140,10 +100,6 @@ export const SRLElementWrapper = styled(motion.div)`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-
-  .SRLVimeoVideoLoading {
-    color: inherit;
-  }
 `
 
 // Image Element
@@ -169,21 +125,6 @@ export const SRLImage = styled.img`
   margin: auto;
   z-index: 9997;
   cursor: ${(props) => (props.disablePanzoom ? 'auto' : 'zoom-in')};
-`
-
-// Video Element
-export const SRLEmbedVideoWrapper = styled.div`
-  ${videoRatio}
-  .SRLYouTubeWrapper {
-    ${videoRatio}
-  }
-
-  iframe,
-  video {
-    object-fit: contain;
-    width: 100%;
-    height: 100%;
-  }
 `
 
 // The Pan-zoomed image

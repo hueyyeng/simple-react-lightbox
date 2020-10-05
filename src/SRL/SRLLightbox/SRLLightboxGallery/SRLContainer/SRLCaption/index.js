@@ -1,22 +1,13 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { SRLCaption } from '../../../../styles/SRLCaptionStyles'
-import { SRLCtx } from '../../../../SRLContext'
+
 const SRLCaptionContainerComponent = ({
   captionOptions,
   caption,
   thumbnailsPosition,
   SRLCaptionRef
 }) => {
-  const ctx = useContext(SRLCtx)
-  const { selectedElement, customCaptions } = ctx
-
-  function findCustomCaption(caption) {
-    return caption.id === parseInt(selectedElement.id)
-  }
-
-  const customCaption = customCaptions.find(findCustomCaption)
-
   return (
     <SRLCaption
       captionStyle={captionOptions}
@@ -24,11 +15,7 @@ const SRLCaptionContainerComponent = ({
       className="SRLCaptionContainer"
       ref={SRLCaptionRef}
     >
-      {customCaption ? (
-        <div className="SRLCustomCaption">{customCaption.caption}</div>
-      ) : (
-        <p className="SRLCaptionText">{caption}</p>
-      )}
+      <p className="SRLCaptionText">{caption}</p>
     </SRLCaption>
   )
 }
