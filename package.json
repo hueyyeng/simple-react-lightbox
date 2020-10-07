@@ -102,10 +102,9 @@
     "dist"
   ],
   "dependencies": {
-
     "fast-deep-equal": "^3.1.1",
     "framer-motion": "^2.7.1",
-    "imagesloaded": "^4.1.4",
+    "image-promise": "^7.0.1",
     "lodash": "^4.17.20",
     "panzoom": "^9.2.4",
     "react-swipeable": "^5.5.1",

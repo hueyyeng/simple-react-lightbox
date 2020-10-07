@@ -1,7 +1,7 @@
-import React, { useContext, useRef, useEffect, useState } from 'react'
+import React, { useContext, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
-import imagesLoaded from 'imagesloaded'
+import loadImage from 'image-promise'
 import {
   READY_LIGHTBOX,
   RESET_LIGHTBOX,
@@ -9,7 +9,7 @@ import {
 } from '../SRLContext/actions'
 import { GALLERY_IMAGE, IMAGE } from './element_types'
 import { dispatchError } from '../SRLErrors'
-
+import { handleAttachListener } from './utils'
 import { isSimpleImage, isGalleryImage } from './detect_types'
 // IsEqual from lodash to do a deep comparison of the objects
 import { isEqual, isEmpty } from 'lodash'
@@ -29,8 +29,9 @@ const SRLWrapper = ({
   const elementsContainer = useRef(null)
   // Ref for the mutation
   const mutationRef = useRef()
-  // Set a state to indicate if the lightbox is initialized
-  const [lightboxIsInit, setLightboxIsInit] = useState(false)
+  /* mountedRef is used here to indicate if the component is still mounted.
+  If so, we can continue any async call otherwise, skip them. */
+  const mountedRef = useRef(true)
 
   /* RESET THE LIGHTBOX STATUS */
   useEffect(() => {
@@ -44,6 +45,9 @@ const SRLWrapper = ({
         'SRL - ERROR WHEN RESETTING THE LIGHTBOX STATUS')
       dispatchError(message)
     }
+    return () => {
+      mountedRef.current = false
+    }
   }, [])
 
   useEffect(() => {
@@ -53,10 +57,8 @@ const SRLWrapper = ({
       const collectedElements = array.querySelectorAll('img')
       // Checks if the are elements in the DOM
       if (collectedElements.length > 0) {
-        if (!context.imagesLoaded) {
-          handleImagesLoaded(collectedElements).then((result) => {
-            handleElements(result)
-          })
+        if (!context.isLoaded) {
+          handleImagesLoaded(collectedElements)
         }
         // preventDefault on elements inside the ref
         if (!context.isLoaded) {
@@ -96,35 +98,44 @@ const SRLWrapper = ({
       return handleLightBox(elements)
     }
 
-    /* DETECTS IF IMAGES ARE LOADED IN THE DOM AND ARE NOT BROKEN */
-    function handleImagesLoaded(array) {
-      const imagesLoadedPromise = new Promise(function (resolve, reject) {
-        imagesLoaded(array, function (instance) {
-          if (instance.isComplete) {
-            const elements = instance.images
-              .map((e) => {
-                if (isGalleryImage(e)) {
-                  return {
-                    type: GALLERY_IMAGE,
-                    element: e.img,
-                    isLoaded: e.isLoaded
-                  }
-                } else if (isSimpleImage(e)) {
-                  return {
-                    type: IMAGE,
-                    element: e.img,
-                    isLoaded: e.isLoaded
-                  }
-                } else {
-                  return undefined
-                }
-              })
-              .filter((e) => e !== undefined)
-            resolve(elements)
-          }
-        })
+    /* CREATES AN ARRAY OF IMAGES */
+    function handleCreateElements(allImgs) {
+      let elements = []
+      allImgs.forEach((e) => {
+        if (isGalleryImage(e)) {
+          elements = [
+            ...elements,
+            {
+              type: GALLERY_IMAGE,
+              element: e
+            }
+          ]
+        } else if (isSimpleImage(e)) {
+          elements = [
+            ...elements,
+            {
+              type: IMAGE,
+              element: e
+            }
+          ]
+        } else {
+          elements = [...elements]
+        }
       })
-      return imagesLoadedPromise
+      handleElements(elements)
+    }
+
+    /* DETECTS IF IMAGES ARE LOADED IN THE DOM AND ARE NOT BROKEN */
+    function handleImagesLoaded(allElements) {
+      loadImage(allElements)
+        .then(function (allImgs) {
+          if (!mountedRef.current) return null
+          handleCreateElements(allImgs)
+        })
+        .catch(function (err) {
+          if (!mountedRef.current) return null
+          handleCreateElements(err.loaded)
+        })
     }
 
     /* DISPATCH THE ACTION TO HANDLE THE ELEMENT */
@@ -146,69 +157,57 @@ const SRLWrapper = ({
       }
     }
 
-    /* ATTACH AN EVENT LISTENER TO AN ELEMENT */
-    function handleAttachListener(e, element) {
-      if (!lightboxIsInit) {
-        e.addEventListener('click', () => {
-          // Run the function to handle the clicked item
-          handleElement(element)
-        })
-      }
-    }
-
     /* ADDS ELEMENTS TO THE CONTEXT AND ATTACH AN EVENT LISTENER TO EACH */
     function handleElements(data) {
       let elementId = 0
       const elements = data
-        .map(({ element: e, isLoaded, type }) => {
+        .map(({ element: e, type }) => {
           e.setAttribute('srl_elementid', elementId)
-          if (isLoaded) {
-            /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
+          /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
           want to ignore that one but only if it's Gatsby because other base64 images are allowed)
           Also ignores images inside the <picture></picture> tag in Gatsby Images */
-            const isBase64Image = e.src?.includes('base64')
-            const isGatsbyImage = e.offsetParent?.className.includes(
-              'gatsby-image-wrapper'
-            )
-            const isGatsbyPicture = e.parentNode?.localName !== 'picture'
+          const isBase64Image = e.src?.includes('base64')
+          const isGatsbyImage = e.offsetParent?.className.includes(
+            'gatsby-image-wrapper'
+          )
+          const isGatsbyPicture = e.parentNode?.localName !== 'picture'
 
-            if (isGatsbyImage && isBase64Image && isGatsbyPicture) {
-              return undefined
-            } else {
-              elementId++
-              switch (type) {
-                case IMAGE: {
-                  const element = {
-                    id: e.getAttribute('srl_elementid'),
-                    source: e.currentSrc || e.src,
-                    caption: e.alt,
-                    thumbnail: e.currentSrc || e.src,
-                    width: e.naturalWidth,
-                    height: e.naturalHeight,
-                    type: 'image'
-                  }
-                  handleAttachListener(e, element)
-                  return element
+          if (isGatsbyImage && isBase64Image && isGatsbyPicture) {
+            return undefined
+          } else {
+            elementId++
+            switch (type) {
+              case IMAGE: {
+                const element = {
+                  id: e.getAttribute('srl_elementid'),
+                  source: e.currentSrc || e.src,
+                  caption: e.alt,
+                  thumbnail: e.currentSrc || e.src,
+                  width: e.naturalWidth,
+                  height: e.naturalHeight,
+                  type: 'image'
                 }
-                case GALLERY_IMAGE: {
-                  const element = {
-                    id: e.getAttribute('srl_elementid'),
-                    source:
-                      e.parentElement.href ||
-                      e.offsetParent.parentElement.href ||
-                      null,
-                    caption: e.alt || e.textContent,
-                    thumbnail: e.currentSrc || e.parentElement.href,
-                    width: null,
-                    height: null,
-                    type: 'gallery_image'
-                  }
-                  handleAttachListener(e, element)
-                  return element
+                handleAttachListener(e, element, handleElement)
+                return element
+              }
+              case GALLERY_IMAGE: {
+                const element = {
+                  id: e.getAttribute('srl_elementid'),
+                  source:
+                    e.parentElement.href ||
+                    e.offsetParent.parentElement.href ||
+                    null,
+                  caption: e.alt || e.textContent,
+                  thumbnail: e.currentSrc || e.parentElement.href,
+                  width: null,
+                  height: null,
+                  type: 'gallery_image'
                 }
-                default: {
-                  return undefined
-                }
+                handleAttachListener(e, element, handleElement)
+                return element
+              }
+              default: {
+                return undefined
               }
             }
           }
@@ -303,14 +302,9 @@ const SRLWrapper = ({
 
     /* HANDLE THE LIGHTBOX BY DISPATCHING THE TWO ACTIONS */
     function handleLightBox(elements) {
-      if (!lightboxIsInit) {
-        // Set the lightbox to be successfully initialized
-        setLightboxIsInit(true)
-
-        // Dispatch the actions to grab settings and elements
-        // console.log('light-box is initialized')
-        return dispatchLightboxReady(options, callbacks, elements)
-      }
+      // Dispatch the actions to grab settings and elements
+      // console.log('light-box is initialized')
+      return dispatchLightboxReady(options, callbacks, elements)
     }
 
     /* DETECTS IF THERE ARE MUTATIONS IN THE REF  */
@@ -329,15 +323,7 @@ const SRLWrapper = ({
 
     // RUN THE LIGHTBOX
     handleSRL(elementsContainer.current)
-  }, [
-    lightboxIsInit,
-    context,
-    defaultCallbacks,
-    defaultOptions,
-    options,
-    callbacks,
-    images
-  ])
+  }, [context, defaultCallbacks, defaultOptions, options, callbacks, images])
 
   return <div ref={elementsContainer}>{children}</div>
 }
