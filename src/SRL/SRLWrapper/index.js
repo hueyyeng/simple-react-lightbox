@@ -167,12 +167,17 @@ const SRLWrapper = ({
           want to ignore that one but only if it's Gatsby because other base64 images are allowed)
           Also ignores images inside the <picture></picture> tag in Gatsby Images */
           const isBase64Image = e.src?.includes('base64')
+          const isSVGImage = e.src?.includes('svg+xml')
           const isGatsbyImage = e.offsetParent?.className.includes(
             'gatsby-image-wrapper'
           )
           const isGatsbyPicture = e.parentNode?.localName !== 'picture'
 
-          if (isGatsbyImage && isBase64Image && isGatsbyPicture) {
+          if (
+            isGatsbyImage &&
+            (isBase64Image || isSVGImage) &&
+            isGatsbyPicture
+          ) {
             return undefined
           } else {
             elementId++
