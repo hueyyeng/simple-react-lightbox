@@ -22,7 +22,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # example folder
-example
 
-example-with-gatsby/node_modules
-example-with-gatsby/.cache
+example*/
