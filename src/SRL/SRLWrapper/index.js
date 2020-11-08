@@ -10,14 +10,14 @@ import {
 import { GALLERY_IMAGE, IMAGE } from './element_types'
 import { dispatchError } from '../SRLErrors'
 import { handleAttachListener } from './utils'
-import { isSimpleImage, isGalleryImage } from './detect_types'
+import { isSimpleImage, isGalleryImage, isImageByUser } from './detect_types'
 // IsEqual from lodash to do a deep comparison of the objects
 import { isEqual, isEmpty } from 'lodash'
 
 const SRLWrapper = ({
   options,
   callbacks,
-  images,
+  elements,
   children,
   defaultOptions,
   defaultCallbacks
@@ -71,28 +71,29 @@ const SRLWrapper = ({
       }
       // User is declaring images via prop
       else {
-        if (images) {
-          handleImagesPassedViaProps(images)
+        if (elements) {
+          handleElementsPassedViaProps(elements)
         }
       }
     }
 
     /* HANDLE ELEMENTS PASSED BY THE USER VIA PROPS */
-    function handleImagesPassedViaProps(array) {
-      const elements = array.map((i, index) => {
-        // Creates an object for each element
-        const element = {
-          source: i.src,
-          thumbnail: i.thumbnail || i.src,
-          caption: i.caption,
-          id: `${index}`,
-          width: 'auto',
-          height: 'auto',
-          type: undefined
-        }
-
-        return element
-      })
+    function handleElementsPassedViaProps(array) {
+      const elements = array
+        .map((e, index) => {
+          if (isImageByUser(e)) {
+            return {
+              id: index + '',
+              source: e.src || null,
+              caption: e.caption || null,
+              thumbnail: e.thumbnail || e.src || null,
+              type: 'image'
+            }
+          } else {
+            return undefined
+          }
+        })
+        .filter((e) => e && !e.src)
 
       // Function that handle the lightbox
       return handleLightBox(elements)
@@ -172,11 +173,14 @@ const SRLWrapper = ({
             'gatsby-image-wrapper'
           )
           const isGatsbyPicture = e.parentNode?.localName !== 'picture'
+          /* Next.js version 10 include an Image component which has a div with another image with a role of presentation that shouldn't be included */
+          const isNextJsImage = e.getAttribute('role') === 'presentation'
 
           if (
-            isGatsbyImage &&
-            (isBase64Image || isSVGImage) &&
-            isGatsbyPicture
+            (isGatsbyImage &&
+              (isBase64Image || isSVGImage) &&
+              isGatsbyPicture) ||
+            isNextJsImage
           ) {
             return undefined
           } else {
@@ -328,7 +332,7 @@ const SRLWrapper = ({
 
     // RUN THE LIGHTBOX
     handleSRL(elementsContainer.current)
-  }, [context, defaultCallbacks, defaultOptions, options, callbacks, images])
+  }, [context, defaultCallbacks, defaultOptions, options, callbacks, elements])
 
   return <div ref={elementsContainer}>{children}</div>
 }
@@ -418,7 +422,7 @@ SRLWrapper.propTypes = {
   ]),
   options: PropTypes.object,
   callbacks: PropTypes.object,
-  images: PropTypes.array
+  elements: PropTypes.array
 }
 
 SRLWrapper.defaultProps = {
