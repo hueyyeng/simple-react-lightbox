@@ -1,7 +1,6 @@
 import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import external from 'rollup-plugin-peer-deps-external'
-import postcss from 'rollup-plugin-postcss'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import url from '@rollup/plugin-url'
 import svgr from '@svgr/rollup'
@@ -13,24 +12,23 @@ import nodePolyfills from 'rollup-plugin-node-polyfills'
 
 export default {
   input: 'src/index.js',
-  preferBuiltins: false,
   output: [
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: false
+      sourcemap: false,
+      exports: 'named' /** Disable warning for default imports */
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: false
+      sourcemap: false,
+      exports: 'named' /** Disable warning for default imports */
     }
   ],
+
   plugins: [
     external(),
-    postcss({
-      modules: true
-    }),
     url({
       limit: 0, // 0 => copy all files
       include: ['**/*.?(ttf|woff|woff2|png|jpg|svg|gif)']
@@ -39,20 +37,7 @@ export default {
     babel({
       exclude: 'node_modules/**',
       babelHelpers: 'runtime',
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            modules: false,
-            spec: true,
-            forceAllTransforms: true,
-            debug: false,
-            useBuiltIns: 'entry',
-            corejs: 3
-          }
-        ],
-        '@babel/preset-react'
-      ],
+      presets: ['@babel/preset-env', '@babel/preset-react'],
       plugins: [
         [
           '@babel/plugin-transform-runtime',

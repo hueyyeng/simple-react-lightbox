@@ -27,6 +27,7 @@ const initialState = {
     },
     settings: {
       autoplaySpeed: 3000,
+      boxShadow: 'none',
       disableKeyboardControls: false,
       disablePanzoom: false,
       disableWheelControls: false,

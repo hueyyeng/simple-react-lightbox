@@ -348,6 +348,7 @@ SRLWrapper.propTypes = {
   defaultOptions: PropTypes.shape({
     settings: PropTypes.shape({
       autoplaySpeed: PropTypes.number,
+      boxShadow: PropTypes.string,
       disableKeyboardControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
       disableWheelControls: PropTypes.bool,
@@ -434,6 +435,7 @@ SRLWrapper.defaultProps = {
   defaultOptions: {
     settings: {
       autoplaySpeed: 3000,
+      boxShadow: 'none',
       disableKeyboardControls: false,
       disablePanzoom: false,
       disableWheelControls: false,

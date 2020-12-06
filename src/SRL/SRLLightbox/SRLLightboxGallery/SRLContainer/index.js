@@ -217,6 +217,7 @@ function SRLContainerComponent({
                 onClick={() => handlePanzoom(true)}
                 src={typeof source === 'object' ? 'Loading...' : source}
                 alt={caption}
+                boxShadow={settings.boxShadow}
               />
             )}
           </SRLElementWrapper>
@@ -273,6 +274,7 @@ SRLContainerComponent.propTypes = {
   id: PropTypes.string,
   options: PropTypes.shape({
     settings: PropTypes.shape({
+      boxShadow: PropTypes.string,
       disablePanzoom: PropTypes.bool,
       disableWheelControls: PropTypes.bool,
       slideAnimationType: PropTypes.string,

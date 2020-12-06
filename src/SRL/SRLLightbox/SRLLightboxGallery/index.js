@@ -212,22 +212,26 @@ const SRLLightboxGallery = ({
   )
 
   // Handle Image Download
-  function toDataURL(url) {
-    return fetch(url)
-      .then((response) => {
-        return response.blob()
-      })
-      .then((blob) => {
-        return URL.createObjectURL(blob)
-      })
-  }
-  async function handleImageDownload() {
-    const a = document.createElement('a')
-    a.href = await toDataURL(selectedElement.source)
-    a.download = ''
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
+  const toDataURL = (url) =>
+    fetch(url)
+      .then((response) => response.blob())
+      .then(
+        (blob) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+          })
+      )
+
+  function handleImageDownload() {
+    toDataURL(selectedElement.source).then((dataUrl) => {
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = ''
+      a.click()
+    })
   }
 
   // Handle Current Element
