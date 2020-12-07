@@ -345,7 +345,7 @@ const SRLLightboxGallery = ({
   )
 
   // Handle Navigation With Keys
-  const [handleNavigationWithKeys] = useDebouncedCallback(
+  const handleNavigationWithKeys = useDebouncedCallback(
     // function
     (value) => {
       if (value === 'ArrowRight' || value === 'ArrowUp') {
@@ -491,7 +491,7 @@ const SRLLightboxGallery = ({
       unsubscribe.current = subscribe(
         document,
         'keydown',
-        (e) => handleNavigationWithKeys(e.key),
+        (e) => handleNavigationWithKeys.callback(e.key),
         false
       )
     }

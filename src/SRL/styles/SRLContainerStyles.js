@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 const thumbnailsOnRight = css`
   -ms-grid-columns: 1fr auto;

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 const thumbnailsOnRight = (props) => css`
   grid-column: 1/2;

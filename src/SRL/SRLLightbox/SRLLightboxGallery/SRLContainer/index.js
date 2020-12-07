@@ -117,7 +117,7 @@ function SRLContainerComponent({
   })
 
   // Debounce callback
-  const [handleScrollWheel] = useDebouncedCallback(
+  const handleScrollWheel = useDebouncedCallback(
     // function
     (value) => {
       if (value > 0) {
@@ -134,7 +134,7 @@ function SRLContainerComponent({
     // Handle scrollwheel
     if (!panzoomEnabled && !settings.disableWheelControls) {
       const addWheelListener = subscribe(document, 'wheel', (e) =>
-        handleScrollWheel(e.deltaY)
+        handleScrollWheel.callback(e.deltaY)
       )
       return () => {
         addWheelListener()
