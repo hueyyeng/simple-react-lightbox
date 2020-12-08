@@ -53,6 +53,10 @@ const SRLWrapper = ({
   useEffect(() => {
     /* STARTS SIMPLE REACT LIGHTBOX */
     function handleSRL(array) {
+      if (!array) {
+        return
+      }
+
       // Grabs images inside the ref
       const collectedElements = array.querySelectorAll('img')
       // Checks if the are elements in the DOM
@@ -452,7 +456,7 @@ SRLWrapper.defaultProps = {
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
       iconColor: 'rgba(255, 255, 255, 0.8)',
-      iconPadding: '13px',
+      iconPadding: '10px',
       showAutoplayButton: true,
       showCloseButton: true,
       showDownloadButton: true,

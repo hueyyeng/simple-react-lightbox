@@ -16,7 +16,7 @@ const initialState = {
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
       iconColor: 'rgba(255, 255, 255, 0.8)',
-      iconPadding: '13px',
+      iconPadding: '10px',
       showAutoplayButton: true,
       showCloseButton: true,
       showDownloadButton: true,
