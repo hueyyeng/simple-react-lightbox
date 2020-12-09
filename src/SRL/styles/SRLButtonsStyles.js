@@ -91,7 +91,7 @@ const StyledButton = styled.button`
     }
 
     @media (max-width: 768px) {
-      padding: 11px;
+      padding: 10px;
       height: ${(props) =>
         props.buttonsSize
           ? Math.round(parseInt(props.buttonsSize, 10) / 1.1) + 'px'
@@ -109,7 +109,7 @@ const StyledButton = styled.button`
     svg {
       display: block;
       height: 100%;
-      width: auto;
+      width: 100%;
       overflow: visible;
       position: relative;
       path {

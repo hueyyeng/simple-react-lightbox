@@ -439,7 +439,7 @@ SRLWrapper.defaultProps = {
       disableKeyboardControls: false,
       disablePanzoom: false,
       disableWheelControls: false,
-      hideControlsAfter: 3000,
+      hideControlsAfter: false,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(30, 30, 30, 0.9)',
@@ -465,7 +465,7 @@ SRLWrapper.defaultProps = {
     caption: {
       captionAlignment: 'start',
       captionColor: '#FFFFFF',
-      captionContainerPadding: '0',
+      captionContainerPadding: '20px 0 30px 0',
       captionFontFamily: 'inherit',
       captionFontSize: 'inherit',
       captionFontStyle: 'inherit',
