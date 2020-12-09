@@ -181,15 +181,11 @@ const SRLWrapper = ({
           /* Next.js version 10 include an Image component which has a div with another image with a role of presentation that shouldn't be included */
           const isNextJsImage = e.getAttribute('role') === 'presentation'
 
-          /* User has excluded the element */
-          const isExcluded = e.getAttribute('srl_exclude')
-
           if (
             (isGatsbyImage &&
               (isBase64Image || isSVGImage) &&
               isGatsbyPicture) ||
-            isNextJsImage ||
-            isExcluded
+            isNextJsImage
           ) {
             return undefined
           } else {

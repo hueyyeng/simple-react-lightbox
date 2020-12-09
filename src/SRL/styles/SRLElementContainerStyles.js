@@ -100,6 +100,22 @@ export const SRLElementWrapper = styled(motion.div)`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .SRLLoadingIndicator {
+    animation: spin 1.2s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
 `
 
 // Image Element

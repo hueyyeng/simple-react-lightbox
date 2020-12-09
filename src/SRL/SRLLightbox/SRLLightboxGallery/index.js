@@ -427,11 +427,13 @@ const SRLLightboxGallery = ({
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
       document.body.style.overflow = 'hidden'
+      document.body.style.marginRight = '15px'
     }
 
     // Cleanup function
     return () => {
       document.body.classList.remove('SRLOpened')
+      document.body.style.marginRight = '0'
       document.body.style.overflow = ''
     }
   }, [])

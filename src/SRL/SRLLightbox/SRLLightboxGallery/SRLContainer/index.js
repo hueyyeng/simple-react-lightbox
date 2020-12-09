@@ -7,12 +7,11 @@ import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
 import { AnimatePresence } from 'framer-motion'
 import { useOnClickOutside, useSizes } from '../../../SRLHooks'
-
+import ImageLoad from './SRLImageComponent'
 import { SRLContainer } from '../../../styles/SRLContainerStyles'
 import {
   SRLElementContainer,
   SRLElementWrapper,
-  SRLImage,
   SRLPanzoomedImage
 } from '../../../styles/SRLElementContainerStyles'
 
@@ -211,12 +210,11 @@ function SRLContainerComponent({
             }}
           >
             {!panzoomEnabled && (
-              <SRLImage
-                className="SRLImage"
+              <ImageLoad
                 disablePanzoom={settings.disablePanzoom}
-                onClick={() => handlePanzoom(true)}
-                src={typeof source === 'object' ? 'Loading...' : source}
-                alt={caption}
+                handlePanzoom={handlePanzoom}
+                src={source}
+                caption={caption}
                 boxShadow={settings.boxShadow}
               />
             )}
