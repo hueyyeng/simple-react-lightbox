@@ -7,14 +7,12 @@ import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
 import { AnimatePresence } from 'framer-motion'
 import { useOnClickOutside, useSizes } from '../../../SRLHooks'
-
+import ImageLoad from './SRLImageComponent'
 import { SRLContainer } from '../../../styles/SRLContainerStyles'
 import {
   SRLElementContainer,
   SRLElementWrapper,
-  SRLImage,
   SRLPanzoomedImage
-  // SRLLightboxVideo
 } from '../../../styles/SRLElementContainerStyles'
 
 function SRLContainerComponent({
@@ -26,7 +24,7 @@ function SRLContainerComponent({
   handleNextElement,
   handlePanzoom,
   handlePrevElement,
-  height: imgWidth,
+  height: elementHeight,
   hideThumbnails,
   id,
   options,
@@ -35,7 +33,7 @@ function SRLContainerComponent({
   SRLPanzoomImageRef,
   SRLThumbnailsRef,
   SRLCaptionRef,
-  width: imgHeight
+  width: elementWidth
 }) {
   const { settings, thumbnails, caption: captionSettings } = options
 
@@ -118,7 +116,7 @@ function SRLContainerComponent({
   })
 
   // Debounce callback
-  const [handleScrollWheel] = useDebouncedCallback(
+  const handleScrollWheel = useDebouncedCallback(
     // function
     (value) => {
       if (value > 0) {
@@ -135,7 +133,7 @@ function SRLContainerComponent({
     // Handle scrollwheel
     if (!panzoomEnabled && !settings.disableWheelControls) {
       const addWheelListener = subscribe(document, 'wheel', (e) =>
-        handleScrollWheel(e.deltaY)
+        handleScrollWheel.callback(e.deltaY)
       )
       return () => {
         addWheelListener()
@@ -201,7 +199,7 @@ function SRLContainerComponent({
                 : 'fadeOut'
             }
             className="SRLElementWrapper"
-            key={id}
+            key={id || 0}
             transition={{
               x: {
                 type: 'spring',
@@ -212,14 +210,12 @@ function SRLContainerComponent({
             }}
           >
             {!panzoomEnabled && (
-              <SRLImage
-                className="SRLImage"
+              <ImageLoad
                 disablePanzoom={settings.disablePanzoom}
-                width={imgWidth}
-                height={imgHeight}
-                onClick={() => handlePanzoom(true)}
-                src={typeof source === 'object' ? 'Loading...' : source}
-                alt={caption}
+                handlePanzoom={handlePanzoom}
+                src={source}
+                caption={caption}
+                boxShadow={settings.boxShadow}
               />
             )}
           </SRLElementWrapper>
@@ -228,8 +224,8 @@ function SRLContainerComponent({
             <SRLPanzoomedImage
               className="SRLPanzoomImage"
               ref={SRLPanzoomImageRef}
-              width={imgWidth}
-              height={imgHeight}
+              width={elementWidth}
+              height={elementHeight}
               src={typeof source === 'object' ? 'Loading...' : source}
               alt={caption}
             />
@@ -272,13 +268,11 @@ SRLContainerComponent.propTypes = {
   handlePanzoom: PropTypes.func,
   handlePrevElement: PropTypes.func,
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  id: PropTypes.string,
-  SRLPanzoomImageRef: PropTypes.object,
-  SRLCaptionRef: PropTypes.object,
-  SRLThumbnailsRef: PropTypes.object,
   hideThumbnails: PropTypes.bool,
+  id: PropTypes.string,
   options: PropTypes.shape({
     settings: PropTypes.shape({
+      boxShadow: PropTypes.string,
       disablePanzoom: PropTypes.bool,
       disableWheelControls: PropTypes.bool,
       slideAnimationType: PropTypes.string,
@@ -311,10 +305,14 @@ SRLContainerComponent.propTypes = {
     })
   }),
   panzoomEnabled: PropTypes.bool,
+  showControls: PropTypes.bool,
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  SRLCaptionRef: PropTypes.object,
   SRLLightboxPanzoomImageRef: PropTypes.object,
+  SRLPanzoomImageRef: PropTypes.object,
+  SRLThumbnailsRef: PropTypes.object,
   thumbnailsOpacity: PropTypes.number,
+  type: PropTypes.string,
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
-
 export default SRLContainerComponent

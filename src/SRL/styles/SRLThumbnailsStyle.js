@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 const thumbnailsOnRight = (props) => css`
   flex-direction: column;
@@ -140,6 +140,10 @@ export const SRLThumbnailGalleryImage = styled.a`
   display: block;
   cursor: draggable;
   flex: 0 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &.SRLThumbnailSelected {
     opacity: 1;
@@ -149,4 +153,14 @@ export const SRLThumbnailGalleryImage = styled.a`
     height: 60px;
     width: 80px;
   }
+`
+
+// The icons inside the image thumbnail if it's a video
+export const SRLVideoIconStyle = styled.svg`
+  width: ${(props) =>
+    props.thumbnailsSize ? props.thumbnailsSize[0] / 2 : '40px'};
+  height: ${(props) =>
+    props.thumbnailsSize ? props.thumbnailsSize[1] / 2 : '40px'};
+  opacity: ${(props) =>
+    props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
 `

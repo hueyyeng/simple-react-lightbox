@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 // The caption
 export const SRLCaption = styled.div`
@@ -13,14 +13,15 @@ export const SRLCaption = styled.div`
     width: 100vw;
   }
   width: 100%;
-  height: 100px;
+  min-height: 50px;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-content: ${(props) => props.captionAlignment};
   padding: ${(props) =>
     props.captionStyle.captionContainerPadding
       ? props.captionStyle.captionContainerPadding
-      : '0'};
+      : '20px 0 30px 0'};
 
   ${(props) =>
     /* Thumbnails aligned to the right */

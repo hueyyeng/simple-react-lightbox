@@ -22,5 +22,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # example folder
-
-example*/
+example
+example-with-gatsbyjs
+example-with-nextjs
+example-with-preact

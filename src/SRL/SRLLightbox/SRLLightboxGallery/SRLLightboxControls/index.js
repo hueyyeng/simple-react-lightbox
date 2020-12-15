@@ -34,11 +34,10 @@ const SRLLightboxControls = ({
   showThumbnails,
   SRLThumbnailsRef,
   thumbnailsPosition,
-  thumbnailsSize,
-  translations
+  thumbnailsSize
 }) => {
   /* Unfortunately, we need to calculate the offsetWidth of the thumbnails container
-  by taking is "REF" from up above */
+  by taking its "REF" from up above */
   const [thumbnailsDivSizes] = useSizes(SRLThumbnailsRef)
 
   return (
@@ -60,9 +59,7 @@ const SRLLightboxControls = ({
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
             autoplaySpeed={settings.autoplaySpeed}
-            title={
-              !autoplay ? translations.autoplayText : translations.pauseText
-            }
+            title={autoplay ? 'Pause' : 'Play'}
             className="SRLAutoplayButton"
             onClick={() => setAutoplay(!autoplay)}
           >
@@ -71,7 +68,7 @@ const SRLLightboxControls = ({
                 <svg
                   className="SRLAutoplayButton"
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 50 50"
+                  viewBox="11 11 30 30"
                 >
                   <path
                     className="SRLAutoplayButton"
@@ -82,7 +79,7 @@ const SRLLightboxControls = ({
                 <svg
                   className="SRLAutoplayButton"
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 50 50"
+                  viewBox="11 11 30 30"
                 >
                   <path
                     className="SRLAutoplayButton"
@@ -102,14 +99,14 @@ const SRLLightboxControls = ({
             buttonsIconPadding={buttons.iconPadding}
             thumbnailsPosition={thumbnailsPosition}
             onClick={handleThumbnails}
-            title={translations.thumbnailsText}
+            title={hideThumbnails ? 'Show Thumbnails' : 'Hide Thumbnails'}
             className="SRLThumbnailsButton"
           >
             <div className="SRLThumbnailsButton">
               <svg
                 className="SRLThumbnailsButton"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 50 50"
+                viewBox="11 11 30 30"
               >
                 <g fill="#fff" className="SRLThumbnailsButton">
                   <path
@@ -133,7 +130,7 @@ const SRLLightboxControls = ({
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
-            title={translations.downloadText}
+            title="Download image"
             className="SRLDownloadButton"
             onClick={handleImageDownload}
           >
@@ -141,7 +138,7 @@ const SRLLightboxControls = ({
               <svg
                 className="SRLDownloadButton"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 50 50"
+                viewBox="11 11 30 30"
               >
                 <path
                   className="SRLDownloadButton"
@@ -158,7 +155,7 @@ const SRLLightboxControls = ({
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
-            title={translations.zoomOutText}
+            title="Zoom out"
             className="SRLZoomOutButton"
             onClick={() => handlePanzoom(false)}
           >
@@ -166,7 +163,7 @@ const SRLLightboxControls = ({
               <svg
                 className="SRLZoomOutButton"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 50 50"
+                viewBox="11 11 30 30"
               >
                 <path
                   className="SRLZoomOutButton"
@@ -184,15 +181,15 @@ const SRLLightboxControls = ({
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
-            title={translations.fullscreenText}
+            title="Enter fullscreen"
             className="SRLExpandButton"
-            onClick={() => handleFullScreen()}
+            onClick={handleFullScreen}
           >
             <div className="SRLExpandButton">
               <svg
                 className="SRLExpandButton"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 50 50"
+                viewBox="11 11 30 30"
               >
                 <path
                   className="SRLExpandButton"
@@ -209,7 +206,7 @@ const SRLLightboxControls = ({
             buttonsIconColor={buttons.iconColor}
             buttonsSize={buttons.size}
             buttonsIconPadding={buttons.iconPadding}
-            title={translations.closeText}
+            title="Close"
             className="SRLCloseButton"
             onClick={() => handleCloseLightbox()}
           >
@@ -217,7 +214,7 @@ const SRLLightboxControls = ({
               <svg
                 className="SRLCloseButton"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 50 50"
+                viewBox="11 11 30 30"
               >
                 <path
                   className="SRLCloseButton"
@@ -239,7 +236,7 @@ const SRLLightboxControls = ({
           thumbnailsDivSizes={thumbnailsDivSizes}
           thumbnailsSize={thumbnailsSize}
           hideThumbnails={hideThumbnails}
-          title={translations.nextText}
+          title="Next"
           className="SRLNextButton"
           onClick={() => handleNextElement(currentElementID)}
         >
@@ -247,7 +244,7 @@ const SRLLightboxControls = ({
             <svg
               className="SRLNextButton"
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 50 50"
+              viewBox="11 11 30 30"
             >
               <path
                 className="SRLPrevButton"
@@ -264,7 +261,7 @@ const SRLLightboxControls = ({
           buttonsIconColor={buttons.iconColor}
           buttonsSize={buttons.size}
           buttonsIconPadding={buttons.iconPadding}
-          title={translations.previousText}
+          title="Previous"
           className="SRLPrevButton"
           thumbnailsPosition={thumbnailsPosition}
           thumbnailsDivSizes={thumbnailsDivSizes}
@@ -276,7 +273,7 @@ const SRLLightboxControls = ({
             <svg
               className="SRLPrevButton"
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 50 50"
+              viewBox="11 11 30 30"
             >
               <path
                 className="SRLPrevButton"
@@ -327,16 +324,5 @@ SRLLightboxControls.propTypes = {
   showThumbnails: PropTypes.bool,
   thumbnailsPosition: PropTypes.string,
   SRLThumbnailsRef: PropTypes.object,
-  thumbnailsSize: PropTypes.array,
-  translations: PropTypes.shape({
-    autoplayText: PropTypes.string,
-    closeText: PropTypes.string,
-    downloadText: PropTypes.string,
-    fullscreenText: PropTypes.string,
-    nextText: PropTypes.string,
-    pauseText: PropTypes.string,
-    previousText: PropTypes.string,
-    thumbnailsText: PropTypes.string,
-    zoomOutText: PropTypes.string
-  })
+  thumbnailsSize: PropTypes.array
 }

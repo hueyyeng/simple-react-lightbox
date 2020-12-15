@@ -1,14 +1,22 @@
 import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
+import {
+  READY_LIGHTBOX,
+  RESET_LIGHTBOX,
+  HANDLE_ELEMENT,
+  OPEN_AT_INDEX,
+  CLOSE_LIGHTBOX
+} from './actions'
 
 const initialState = {
   elements: [],
   isOpened: false,
+  isLoaded: false,
   options: {
     buttons: {
       backgroundColor: 'rgba(30,30,36,0.8)',
       iconColor: 'rgba(255, 255, 255, 0.8)',
-      iconPadding: '5px',
+      iconPadding: '10px',
       showAutoplayButton: true,
       showCloseButton: true,
       showDownloadButton: true,
@@ -19,17 +27,19 @@ const initialState = {
     },
     settings: {
       autoplaySpeed: 3000,
+      boxShadow: 'none',
       disableKeyboardControls: false,
       disablePanzoom: false,
       disableWheelControls: false,
-      hideControlsAfter: 3000,
+      hideControlsAfter: false,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',
-      overlayColor: 'rgba(0, 0, 0, 0.9)',
+      overlayColor: 'rgba(30, 30, 30, 0.9)',
       slideAnimationType: 'fade',
-      slideSpringValues: [300, 200],
+      slideSpringValues: [300, 50],
       slideTransitionSpeed: 0.6,
-      slideTransitionTimingFunction: 'linear'
+      slideTransitionTimingFunction: 'linear',
+      usingPreact: false
     },
     caption: {
       captionAlignment: 'start',
@@ -38,7 +48,7 @@ const initialState = {
       captionFontSize: 'inherit',
       captionFontStyle: 'inherit',
       captionFontWeight: 'inherit',
-      captionContainerPadding: '0',
+      captionContainerPadding: '20px 0 30px 0',
       captionTextTransform: 'inherit',
       showCaption: true
     },
@@ -48,6 +58,7 @@ const initialState = {
       thumbnailsContainerPadding: '0',
       thumbnailsContainerBackgroundColor: 'transparent',
       thumbnailsGap: '0 1px',
+      thumbnailsIconColor: '#ffffff',
       thumbnailsPosition: 'bottom',
       thumbnailsOpacity: 0.4,
       thumbnailsSize: ['100px', '80px']
@@ -57,17 +68,6 @@ const initialState = {
       fillColor: '#000000',
       height: '3px',
       showProgressBar: true
-    },
-    translations: {
-      autoplayText: 'Play',
-      closeText: 'Close',
-      downloadText: 'Download',
-      fullscreenText: 'Full screen',
-      nextText: 'Next',
-      pauseText: 'Pause',
-      previousText: 'Previous',
-      thumbnailsText: 'Hide thumbnails',
-      zoomOutText: 'Zoom Out'
     }
   },
   selectedElement: {
@@ -83,8 +83,7 @@ const initialState = {
     onSlideChange: () => {},
     onLightboxClosed: () => {},
     onLightboxOpened: () => {}
-  },
-  customCaptions: [{}]
+  }
 }
 
 const SRLCtx = React.createContext(initialState)
@@ -93,17 +92,19 @@ const SRLContextComponent = (props) => {
   // Reducer
   const reducer = (state, action) => {
     switch (action.type) {
-      case 'GRAB_SETTINGS':
+      case READY_LIGHTBOX:
         return {
           ...state,
-          ...action.mergedSettings
+          ...action.mergedSettings,
+          elements: action.elements,
+          isLoaded: true
         }
-      case 'GRAB_ELEMENTS':
+      case RESET_LIGHTBOX: {
         return {
-          ...state,
-          elements: action.elements
+          ...initialState
         }
-      case 'HANDLE_ELEMENT':
+      }
+      case HANDLE_ELEMENT:
         return {
           ...state,
           isOpened: true,
@@ -111,7 +112,7 @@ const SRLContextComponent = (props) => {
             ...action.element
           }
         }
-      case 'OPEN_AT_INDEX':
+      case OPEN_AT_INDEX:
         return {
           ...state,
           isOpened: true,
@@ -119,7 +120,7 @@ const SRLContextComponent = (props) => {
             ...state.elements[action.index]
           }
         }
-      case 'CLOSE_LIGHTBOX':
+      case CLOSE_LIGHTBOX:
         return {
           ...state,
           isOpened: false

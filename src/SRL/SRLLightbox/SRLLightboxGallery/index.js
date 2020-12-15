@@ -15,13 +15,15 @@ import panzoom from 'panzoom'
 import { useIdle } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
+import { HANDLE_ELEMENT, CLOSE_LIGHTBOX } from '../../SRLContext/actions'
+import { fullscreenError } from '../../SRLErrors'
+
+// Lodash helper
+import { findIndex } from 'lodash'
 
 // CONSTANTS
 const NEXT = 'next'
 const PREVIOUS = 'previous'
-
-// Lodash helper
-const findIndex = require('lodash/findIndex')
 
 const SRLLightboxGallery = ({
   options,
@@ -202,7 +204,7 @@ const SRLLightboxGallery = ({
       handlePanzoom(false)
       establishNextOrPrevious(elementID, currentID, knownDirection)
       dispatch({
-        type: 'HANDLE_ELEMENT',
+        type: HANDLE_ELEMENT,
         element
       })
     },
@@ -210,22 +212,26 @@ const SRLLightboxGallery = ({
   )
 
   // Handle Image Download
-  function toDataURL(url) {
-    return fetch(url)
-      .then((response) => {
-        return response.blob()
-      })
-      .then((blob) => {
-        return URL.createObjectURL(blob)
-      })
-  }
-  async function handleImageDownload() {
-    const a = document.createElement('a')
-    a.href = await toDataURL(selectedElement.source)
-    a.download = ''
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
+  const toDataURL = (url) =>
+    fetch(url)
+      .then((response) => response.blob())
+      .then(
+        (blob) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+          })
+      )
+
+  function handleImageDownload() {
+    toDataURL(selectedElement.source).then((dataUrl) => {
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = ''
+      a.click()
+    })
   }
 
   // Handle Current Element
@@ -322,7 +328,7 @@ const SRLLightboxGallery = ({
   // Handle Close Lightbox
   const handleCloseLightbox = useCallback(() => {
     dispatch({
-      type: 'CLOSE_LIGHTBOX'
+      type: CLOSE_LIGHTBOX
     })
     // Callback
     onClosed({
@@ -339,7 +345,7 @@ const SRLLightboxGallery = ({
   )
 
   // Handle Navigation With Keys
-  const [handleNavigationWithKeys] = useDebouncedCallback(
+  const handleNavigationWithKeys = useDebouncedCallback(
     // function
     (value) => {
       if (value === 'ArrowRight' || value === 'ArrowUp') {
@@ -368,13 +374,20 @@ const SRLLightboxGallery = ({
       setAutoplay(false)
 
       if (el !== null) {
-        el.requestFullscreen()
-          .then({})
-          .catch((err) => {
-            console.log(
-              `An error occurred while trying to switch into full-screen mode: ${err.message} (${err.name})`
-            )
-          })
+        try {
+          if (
+            navigator.userAgent.indexOf('Safari') !== -1 &&
+            navigator.userAgent.indexOf('Chrome') === -1
+          ) {
+            el.webkitRequestFullScreen()
+          } else {
+            el.requestFullscreen()
+          }
+        } catch (error) {
+          const message = (error.message =
+            'SRL - ERROR WHEN USING FULLSCREEN API')
+          fullscreenError(message)
+        }
       }
     } else {
       document.exitFullscreen()
@@ -414,11 +427,13 @@ const SRLLightboxGallery = ({
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
       document.body.style.overflow = 'hidden'
+      document.body.style.marginRight = '15px'
     }
 
     // Cleanup function
     return () => {
       document.body.classList.remove('SRLOpened')
+      document.body.style.marginRight = '0'
       document.body.style.overflow = ''
     }
   }, [])
@@ -456,16 +471,19 @@ const SRLLightboxGallery = ({
 
     // Sets the current element to be the first item in the array if the id is undefined.
     // This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
-
     if (selectedElement.id === undefined) {
       dispatch({
-        type: 'HANDLE_ELEMENT',
+        type: HANDLE_ELEMENT,
         element: {
           source: elements[0].source,
           caption: elements[0].caption,
           id: elements[0].id,
           width: elements[0].width,
-          height: elements[0].height
+          height: elements[0].height,
+          type: elements[0].type,
+          showControls: elements[0].showControls,
+          videoAutoplay: elements[0].videoAutoplay,
+          muted: elements[0].muted
         }
       })
     }
@@ -475,7 +493,7 @@ const SRLLightboxGallery = ({
       unsubscribe.current = subscribe(
         document,
         'keydown',
-        (e) => handleNavigationWithKeys(e.key),
+        (e) => handleNavigationWithKeys.callback(e.key),
         false
       )
     }
@@ -535,7 +553,9 @@ const SRLLightboxGallery = ({
     buttonsOffsetFromProgressBar: progressBar.height,
     showProgressBar: progressBar.showProgressBar,
     // Translations
-    translations: ctx.options.translations
+    translations: ctx.options.translations,
+    // Custom Icons
+    icons: ctx.options.icons
   }
 
   return (

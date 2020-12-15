@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
+import { css } from '@emotion/react'
 
 const thumbnailsOnRight = (props) => css`
   grid-column: 1/2;
@@ -47,6 +47,28 @@ export const SRLElementContainer = styled.div`
       height: calc(100vh - ${props.thumbnailsDivSizes.height}px);
     `};
 
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) {
+    grid-column: auto;
+    width: 100vw;
+    height: ${(props) =>
+      props
+        ? `calc((var(--vh, 1vh) * 100) - ${
+            props.captionDivSizes.height + props.thumbnailsDivSizes.height
+          }px)`
+        : '100%'};
+  }
+
+  @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+    grid-column: auto;
+    width: 100vw;
+    height: ${(props) =>
+      props
+        ? `calc((var(--vh, 1vh) * 100) - ${
+            props.captionDivSizes.height + props.thumbnailsDivSizes.height
+          }px)`
+        : '100%'};
+  }
+
   @media (max-width: 768px) {
     grid-column: auto;
     width: 100vw;
@@ -78,6 +100,22 @@ export const SRLElementWrapper = styled(motion.div)`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .SRLLoadingIndicator {
+    animation: spin 1.2s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
 `
 
 // Image Element
@@ -102,6 +140,7 @@ export const SRLImage = styled.img`
   opacity: 1;
   margin: auto;
   z-index: 9997;
+  box-shadow: ${(props) => props.boxShadow};
   cursor: ${(props) => (props.disablePanzoom ? 'auto' : 'zoom-in')};
 `
 
