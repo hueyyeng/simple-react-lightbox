@@ -80,7 +80,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import SimpleReactLightbox from 'simple-react-lightbox'
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-// import SimpleReactLightbox from '@michelecocuccio/simple-react-lightbox-pro'
+// import SimpleReactLightbox from 'simple-react-lightbox-pro'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -103,7 +103,7 @@ Next you want to import and use the `<SRLWrapper>` component wherever you expect
 ```jsx
 import { SRLWrapper } from "simple-react-lightbox";
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-// import { SRLWrapper } from '@michelecocuccio/simple-react-lightbox-pro'
+// import { SRLWrapper } from 'simple-react-lightbox-pro'
 
 function MyComponent() {
   return (
@@ -135,7 +135,7 @@ The anchor tag will point to the full width image while the image will act as th
 ```jsx
 import { SRLWrapper } from "simple-react-lightbox";
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-// import { SRLWrapper } from '@michelecocuccio/simple-react-lightbox-pro'
+// import { SRLWrapper } from 'simple-react-lightbox-pro'
 
 function MyComponent() {
   return (
@@ -161,7 +161,7 @@ Passing `src` is the only mandatory requirement for passing a valid element.
 ```jsx
 import { SRLWrapper } from "simple-react-lightbox";
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-// import { SRLWrapper } from '@michelecocuccio/simple-react-lightbox-pro'
+// import { SRLWrapper } from 'simple-react-lightbox-pro'
 
 // Create an array of objects that you want to pass to the lightbox
 const elements = [
@@ -516,7 +516,7 @@ In the case of web videos you can pass them as per usual using the HTML `video` 
 ```jsx
 import { SRLWrapper } from "simple-react-lightbox";
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-// import { SRLWrapper } from '@michelecocuccio/simple-react-lightbox-pro'
+// import { SRLWrapper } from 'simple-react-lightbox-pro'
 
 function MyComponent() {
   return (
@@ -606,7 +606,7 @@ Check the example on the [demo website](https://simple-react-lightbox.dev/with-c
 ```jsx
   import { SRLWrapper } from "simple-react-lightbox";
   // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-  // import { SRLWrapper } from '@michelecocuccio/simple-react-lightbox-pro'
+  // import { SRLWrapper } from 'simple-react-lightbox-pro'
 
   // JSX can be assigned to a variable
   const captionOne = (
@@ -660,7 +660,7 @@ Check the [demo](#demo) to see it in action. In the example below we are creatin
 ```jsx
 import { useLightbox } from 'simple-react-lightbox'
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-// import { useLightbox } from '@michelecocuccio/simple-react-lightbox-pro'
+// import { useLightbox } from 'simple-react-lightbox-pro'
 
 export default function Buttons() {
   const { openLightbox, closeLightbox } = useLightbox()
@@ -699,7 +699,7 @@ I will strongly recommend to create a constant with all of your callbacks and th
 ```jsx
 import { SRLWrapper } from "simple-react-lightbox";
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-// import { SRLWrapper } from '@michelecocuccio/simple-react-lightbox-pro'
+// import { SRLWrapper } from 'simple-react-lightbox-pro'
 
 // Create an object with the callbacks that you want to use
 const callbacks = {
@@ -730,7 +730,7 @@ If you really want the transparency you can do a little hack and change the vari
 ```jsx
 import { SRLWrapper } from "simple-react-lightbox";
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
-// import { SRLWrapper } from '@michelecocuccio/simple-react-lightbox-pro'
+// import { SRLWrapper } from 'simple-react-lightbox-pro'
 
 const browser = navigator.userAgent
 const isFirefox = browser.indexOf('Firefox') > -1
