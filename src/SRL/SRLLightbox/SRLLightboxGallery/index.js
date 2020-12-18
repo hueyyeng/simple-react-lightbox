@@ -30,7 +30,8 @@ const SRLLightboxGallery = ({
   callbacks,
   selectedElement,
   elements,
-  dispatch
+  dispatch,
+  compensateForScrollbar
 }) => {
   // Context
   const ctx = useContext(SRLCtx)
@@ -427,7 +428,7 @@ const SRLLightboxGallery = ({
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
       document.body.style.overflow = 'hidden'
-      document.body.style.marginRight = '15px'
+      document.body.style.marginRight = compensateForScrollbar + 'px'
     }
 
     // Cleanup function
@@ -589,6 +590,7 @@ const SRLLightboxGallery = ({
 
 SRLLightboxGallery.propTypes = {
   callbacks: PropTypes.object,
+  compensateForScrollbar: PropTypes.number,
   elements: PropTypes.array,
   isOpened: PropTypes.bool,
   dispatch: PropTypes.func,
