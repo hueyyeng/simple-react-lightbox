@@ -7,6 +7,7 @@ export function isGalleryImage(e) {
 }
 
 export function isImageByUser(e) {
-  const regex = /\.(jpeg|jpg|gif|svg|png|webp)\/?$/g
-  return regex.test(e.src)
+  // const regex = /\.(jpeg|jpg|gif|svg|png|webp)\/?$/g
+  // return regex.test(e.src)
+  return e.src
 }
