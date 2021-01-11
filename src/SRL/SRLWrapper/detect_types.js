@@ -3,7 +3,14 @@ export function isSimpleImage(e) {
 }
 
 export function isGalleryImage(e) {
-  return e.nodeName === 'IMG' && e.parentNode?.nodeName === 'A'
+  return (
+    (e.nodeName === 'IMG' &&
+      (e.offsetParent?.nodeName === 'A' || e.parentNode?.nodeName === 'A')) ||
+    // UGLY FIX FOR GATSBY
+    (e.nodeName === 'IMG' &&
+      e.parentNode.nodeName === 'PICTURE' &&
+      e.parentNode.parentNode.className === 'gatsby-image-wrapper')
+  )
 }
 
 export function isImageByUser(e) {
