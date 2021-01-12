@@ -10,7 +10,12 @@ import {
 import { GALLERY_IMAGE, IMAGE } from './element_types'
 import { dispatchError } from '../SRLErrors'
 import { handleAttachListener } from './utils'
-import { isSimpleImage, isGalleryImage, isImageByUser } from './detect_types'
+import {
+  isSimpleImage,
+  isGatsbyGalleryImage,
+  isGalleryImage,
+  isImageByUser
+} from './detect_types'
 // IsEqual from lodash to do a deep comparison of the objects
 import { isEqual, isEmpty } from 'lodash'
 
@@ -107,7 +112,7 @@ const SRLWrapper = ({
     function handleCreateElements(allImgs) {
       let elements = []
       allImgs.forEach((e) => {
-        if (isGalleryImage(e)) {
+        if (isGalleryImage(e) || isGatsbyGalleryImage(e)) {
           elements = [
             ...elements,
             {
