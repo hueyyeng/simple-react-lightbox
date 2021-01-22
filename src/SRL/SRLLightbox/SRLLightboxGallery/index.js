@@ -17,6 +17,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
 import { HANDLE_ELEMENT, CLOSE_LIGHTBOX } from '../../SRLContext/actions'
 import { fullscreenError } from '../../SRLErrors'
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 // Lodash helper
 import { findIndex } from 'lodash'
@@ -427,6 +428,7 @@ const SRLLightboxGallery = ({
     // Adds a class to the body to remove the overflow
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
+      disableBodyScroll(document.getElementsByClassName('.SRLOpened'))
       document.body.style.overflow = 'hidden'
       document.body.style.marginRight = compensateForScrollbar + 'px'
     }
@@ -436,6 +438,7 @@ const SRLLightboxGallery = ({
       document.body.classList.remove('SRLOpened')
       document.body.style.marginRight = '0'
       document.body.style.overflow = ''
+      clearAllBodyScrollLocks()
     }
   }, [])
 
