@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { SRLCtx } from '../SRLContext'
-import loadImage from 'image-promise'
+import { loadImages } from './utils'
 import {
   READY_LIGHTBOX,
   RESET_LIGHTBOX,
@@ -57,6 +57,7 @@ const SRLWrapper = ({
 
   useEffect(() => {
     /* STARTS SIMPLE REACT LIGHTBOX */
+
     function handleSRL(array) {
       if (!array) {
         return
@@ -68,9 +69,7 @@ const SRLWrapper = ({
       if (collectedElements.length > 0) {
         if (!context.isLoaded) {
           handleImagesLoaded(collectedElements)
-        }
-        // preventDefault on elements inside the ref
-        if (!context.isLoaded) {
+          // preventDefault on elements inside the ref
           Array.from(collectedElements).map((e) =>
             e.addEventListener('click', (event) => {
               event.preventDefault()
@@ -137,14 +136,14 @@ const SRLWrapper = ({
 
     /* DETECTS IF IMAGES ARE LOADED IN THE DOM AND ARE NOT BROKEN */
     function handleImagesLoaded(allElements) {
-      loadImage(allElements)
+      return loadImages(allElements)
         .then(function (allImgs) {
           if (!mountedRef.current) return null
-          handleCreateElements(allImgs)
+          return handleCreateElements(allImgs)
         })
         .catch(function (err) {
           if (!mountedRef.current) return null
-          handleCreateElements(err.loaded)
+          return handleCreateElements(err.loaded)
         })
     }
 

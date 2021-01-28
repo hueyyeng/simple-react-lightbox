@@ -429,7 +429,6 @@ const SRLLightboxGallery = ({
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
       disableBodyScroll(document.getElementsByClassName('.SRLOpened'))
-      document.body.style.overflow = 'hidden'
       document.body.style.marginRight = compensateForScrollbar + 'px'
     }
 
@@ -437,7 +436,6 @@ const SRLLightboxGallery = ({
     return () => {
       document.body.classList.remove('SRLOpened')
       document.body.style.marginRight = '0'
-      document.body.style.overflow = ''
       clearAllBodyScrollLocks()
     }
   }, [])
