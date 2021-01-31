@@ -11,7 +11,6 @@ import SRLLightboxControls from './SRLLightboxControls'
 import SRLProgressBarComponent from './SRLContainer/SRLProgressBar'
 import { SRLCtx } from '../../SRLContext'
 import { useInterval } from '../../SRLHooks'
-import panzoom from 'panzoom'
 import { useIdle } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
@@ -37,9 +36,6 @@ const SRLLightboxGallery = ({
   // Context
   const ctx = useContext(SRLCtx)
 
-  // Ref for the Image with the panzoom (we define it here as we need it here, but the ref is inside the SRLContainer component)
-  const SRLPanzoomImageRef = useRef()
-
   /* Ref for the thumbnails div (we will need it in the SRLLightboxControls to calculate the width of the div containing the thumbnails
     and to calculate the height of the image minus the width or the height of the div containing the thumbnails) */
   const SRLThumbnailsRef = useRef()
@@ -49,9 +45,6 @@ const SRLLightboxGallery = ({
 
   // Ref for the SRLStage
   const SRLStageRef = useRef()
-
-  // Ref for the panzoom instance
-  const panZoomController = useRef()
 
   // Ref for the subscribe
   const unsubscribe = useRef()
@@ -130,7 +123,6 @@ const SRLLightboxGallery = ({
   const [autoplay, setAutoplay] = useState(false)
   // Set a state for the "panzoom" option
   const [panzoomEnabled, setPanzoomEnabled] = useState(false)
-  const [panzoomActive, setPanzoomActive] = useState(false)
   // Set the direction of a slide if it comes before or after the current slide
   const [direction, setDirection] = useState()
   // Set a state for the user to hide/show the thumbnails (not from the option, if they want to hide them on the fly)
@@ -191,13 +183,9 @@ const SRLLightboxGallery = ({
     (value) => {
       if (!settings.disablePanzoom) {
         setPanzoomEnabled(value)
-        setPanzoomActive(false)
-      }
-      if (panzoomEnabled) {
-        panZoomController.current.dispose()
       }
     },
-    [settings.disablePanzoom, panzoomEnabled]
+    [settings.disablePanzoom]
   )
 
   // Set the element, reset the panzoom state and determine direction of the slide
@@ -428,8 +416,8 @@ const SRLLightboxGallery = ({
     // Adds a class to the body to remove the overflow
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
-      disableBodyScroll(document.getElementsByClassName('.SRLOpened'))
       document.body.style.marginRight = compensateForScrollbar + 'px'
+      disableBodyScroll(document.getElementsByClassName('.SRLOpened'))
     }
 
     // Cleanup function
@@ -447,27 +435,6 @@ const SRLLightboxGallery = ({
         handleOnIdle()
       } else {
         handleOnActive()
-      }
-    }
-
-    // Initialize the panzoom functionality
-    if (!settings.disablePanzoom && !panzoomActive) {
-      if (panzoomEnabled) {
-        const panzoomElementRef = SRLPanzoomImageRef.current
-        const INITIAL_ZOOM = 1.5
-
-        panZoomController.current = panzoom(panzoomElementRef, {
-          bounds: true,
-          maxZoom: 3,
-          minZoom: 0.9
-        })
-
-        if (panzoomElementRef !== undefined || panzoomElementRef !== null) {
-          // Zoom the image
-          panZoomController.current.zoomAbs(0, 0, INITIAL_ZOOM)
-          panZoomController.current.moveTo(0, 0)
-          setPanzoomActive(true)
-        }
       }
     }
 
@@ -512,7 +479,7 @@ const SRLLightboxGallery = ({
     settings.disablePanzoom,
     settings.disableKeyboardControls,
     panzoomEnabled,
-    panzoomActive,
+    // panzoomActive,
     settings.hideControlsAfter,
     isIdle,
     handleNavigationWithKeys,
@@ -540,7 +507,6 @@ const SRLLightboxGallery = ({
     panzoomEnabled,
     setAutoplay,
     settings,
-    SRLPanzoomImageRef,
     SRLThumbnailsRef,
     SRLCaptionRef
   }
@@ -596,7 +562,6 @@ SRLLightboxGallery.propTypes = {
   isOpened: PropTypes.bool,
   dispatch: PropTypes.func,
   selectedElement: PropTypes.object,
-  SRLPanzoomImageRef: PropTypes.object,
   options: PropTypes.shape({
     thumbnails: PropTypes.shape({
       thumbnailsContainerPadding: PropTypes.string,

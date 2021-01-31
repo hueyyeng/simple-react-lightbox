@@ -116,16 +116,40 @@ export const SRLElementWrapper = styled(motion.div)`
     top: 50%;
     left: 50%;
   }
+
+  /* react-zoom-pan-pinch library styles overrides*/
+  .react-transform-component {
+    width: fit-content;
+    width: auto;
+    height: fit-content;
+    height: auto;
+    z-index: 9997;
+    overflow: inherit;
+    cursor: grab;
+  }
+  .react-transform-element {
+    width: fit-content;
+    width: auto;
+    height: fit-content;
+    height: auto;
+    top: 0;
+    left: 0;
+    position: relative;
+
+    z-index: 9997;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+  }
 `
 
 // Image Element
-export const SRLImage = styled.img`
+export const SRLImage = styled(motion.img)`
   background: transparent;
   border: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   display: block;
   max-width: 100%;
   max-height: 100%;
@@ -145,12 +169,10 @@ export const SRLImage = styled.img`
 `
 
 // The Pan-zoomed image
-export const SRLPanzoomedImage = styled.img`
+export const SRLPanzoomedImage = styled(motion.img)`
   top: 0;
   left: 0;
   position: relative;
-  transform-origin: 50% 50% !important;
-  cursor: grab;
   z-index: 9997;
   display: block;
   max-width: 100%;

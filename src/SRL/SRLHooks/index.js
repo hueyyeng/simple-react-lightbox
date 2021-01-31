@@ -65,6 +65,8 @@ export function useOnClickOutside(ref, handler) {
           event.target.classList.contains('SRLThumbnails') ||
           event.target.classList.contains('SRLThumb') ||
           event.target.classList.contains('SRLCaption') ||
+          event.target.classList.contains('react-transform-component') ||
+          event.target.classList.contains('react-transform-element') ||
           event.type === 'touchstart' ||
           event.button !== 0
         ) {

@@ -11,8 +11,7 @@ import ImageLoad from './SRLImageComponent'
 import { SRLContainer } from '../../../styles/SRLContainerStyles'
 import {
   SRLElementContainer,
-  SRLElementWrapper,
-  SRLPanzoomedImage
+  SRLElementWrapper
 } from '../../../styles/SRLElementContainerStyles'
 
 function SRLContainerComponent({
@@ -30,7 +29,6 @@ function SRLContainerComponent({
   options,
   panzoomEnabled,
   source,
-  SRLPanzoomImageRef,
   SRLThumbnailsRef,
   SRLCaptionRef,
   width: elementWidth
@@ -209,29 +207,18 @@ function SRLContainerComponent({
               opacity: { duration: settings.slideTransitionSpeed }
             }}
           >
-            {!panzoomEnabled && (
-              <ImageLoad
-                disablePanzoom={settings.disablePanzoom}
-                handlePanzoom={handlePanzoom}
-                src={source}
-                caption={caption}
-                boxShadow={settings.boxShadow}
-              />
-            )}
-          </SRLElementWrapper>
-
-          {panzoomEnabled ? (
-            <SRLPanzoomedImage
-              className="SRLPanzoomImage"
-              ref={SRLPanzoomImageRef}
-              width={elementWidth}
-              height={elementHeight}
-              src={typeof source === 'object' ? 'Loading...' : source}
-              alt={caption}
+            <ImageLoad
+              disablePanzoom={settings.disablePanzoom}
+              panzoomEnabled={panzoomEnabled}
+              handlePanzoom={handlePanzoom}
+              containerRef={SRLLightboxContentRef}
+              imgHeight={elementHeight}
+              imgWidth={elementWidth}
+              src={source}
+              caption={caption}
+              boxShadow={settings.boxShadow}
             />
-          ) : (
-            <></>
-          )}
+          </SRLElementWrapper>
         </AnimatePresence>
       </SRLElementContainer>
 
@@ -308,8 +295,6 @@ SRLContainerComponent.propTypes = {
   showControls: PropTypes.bool,
   source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   SRLCaptionRef: PropTypes.object,
-  SRLLightboxPanzoomImageRef: PropTypes.object,
-  SRLPanzoomImageRef: PropTypes.object,
   SRLThumbnailsRef: PropTypes.object,
   thumbnailsOpacity: PropTypes.number,
   type: PropTypes.string,

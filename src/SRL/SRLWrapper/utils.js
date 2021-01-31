@@ -7,54 +7,44 @@ export function handleAttachListener(e, element, callback) {
 }
 
 function loadSingleImage(image) {
-  const promise = new Promise(function (resolve, reject) {
-    if (image.naturalWidth) {
-      // If the browser can determine the naturalWidth the image is already loaded successfully
+  const promise = new Promise((resolve, reject) => {
+    if (image.loading === 'lazy') {
+      resolve(image)
+    } else if (image.naturalWidth !== 0) {
       resolve(image)
     } else if (image.complete) {
-      // If the image is complete but the naturalWidth is 0px it is probably broken
-      reject(image)
+      reject(undefined)
     } else {
-      image.addEventListener('load', fulfill)
-      image.addEventListener('error', fulfill)
+      // Add event listeners
+      image.addEventListener('load', imageIsLoaded)
+      image.addEventListener('error', imageIsLoaded)
     }
-    function fulfill() {
-      if (image.naturalWidth) {
+
+    function imageIsLoaded() {
+      if (image.loading === 'lazy') {
+        resolve(image)
+      } else if (image.naturalWidth !== 0) {
         resolve(image)
       } else {
-        reject(image)
+        reject(undefined)
       }
-      image.removeEventListener('load', fulfill)
-      image.removeEventListener('error', fulfill)
+      // Removes event listeners
+      image.removeEventListener('load', imageIsLoaded)
+      image.removeEventListener('error', imageIsLoaded)
     }
   })
   return Object.assign(promise, { image: image })
 }
 
 export function loadImages(input) {
-  // Momentarily ignore errors
-  const reflect = function (img) {
+  const checkEachImage = (img) => {
     return loadSingleImage(img).catch(function (error) {
       return error
     })
   }
-  const reflected = [].map.call(input, reflect)
-
-  const elements = Promise.all(reflected).then(function (results) {
-    const loaded = results.filter(function (x) {
-      return x.naturalWidth
-    })
-
-    if (loaded.length === results.length) {
-      return Promise.resolve(loaded)
-    }
-    return Promise.reject({
-      loaded: loaded,
-      errored: results.filter(function (x) {
-        return !x.naturalWidth
-      })
-    })
+  const arrayOfPromises = [].map.call(input, checkEachImage)
+  const elements = Promise.all(arrayOfPromises).then(function (results) {
+    return Promise.resolve(results.filter((e) => e))
   })
-  // Variables named `tsFix` are only here because TypeScript hates Promise-returning functions.
   return elements
 }

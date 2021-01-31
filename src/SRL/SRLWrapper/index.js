@@ -30,6 +30,8 @@ const SRLWrapper = ({
   // Imports the context
   const context = useContext(SRLCtx)
 
+  // console.log(context.elements)
+
   // Sets a new Ref which will be used to target the div with the images
   const elementsContainer = useRef(null)
   // Ref for the mutation
@@ -136,15 +138,10 @@ const SRLWrapper = ({
 
     /* DETECTS IF IMAGES ARE LOADED IN THE DOM AND ARE NOT BROKEN */
     function handleImagesLoaded(allElements) {
-      return loadImages(allElements)
-        .then(function (allImgs) {
-          if (!mountedRef.current) return null
-          return handleCreateElements(allImgs)
-        })
-        .catch(function (err) {
-          if (!mountedRef.current) return null
-          return handleCreateElements(err.loaded)
-        })
+      return loadImages(allElements).then(function (allImgs) {
+        if (!mountedRef.current) return null
+        return handleCreateElements(allImgs)
+      })
     }
 
     /* DISPATCH THE ACTION TO HANDLE THE ELEMENT */
@@ -218,11 +215,12 @@ const SRLWrapper = ({
                     e.parentElement.parentElement.parentElement.href || // UGLY FIX FOR GATSBY
                     null,
                   caption: e.alt || e.textContent,
-                  thumbnail: e.currentSrc || e.parentElement.href,
+                  thumbnail: e.currentSrc || e.src || e.parentElement.href,
                   width: null,
                   height: null,
                   type: 'gallery_image'
                 }
+
                 handleAttachListener(e, element, handleElement)
                 return element
               }
