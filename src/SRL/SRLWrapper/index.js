@@ -30,8 +30,6 @@ const SRLWrapper = ({
   // Imports the context
   const context = useContext(SRLCtx)
 
-  // console.log(context.elements)
-
   // Sets a new Ref which will be used to target the div with the images
   const elementsContainer = useRef(null)
   // Ref for the mutation
@@ -181,12 +179,16 @@ const SRLWrapper = ({
 
           /* Next.js version 10 include an Image component which has a div with another image with a role of presentation that shouldn't be included */
           const isNextJsImage = e.getAttribute('role') === 'presentation'
+          const isNextJsTransparentImage = e.src?.includes(
+            'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+          )
 
           if (
             (isGatsbyImage &&
               (isBase64Image || isSVGImage) &&
               isGatsbyPicture) ||
-            isNextJsImage
+            isNextJsImage ||
+            isNextJsTransparentImage
           ) {
             return undefined
           } else {
