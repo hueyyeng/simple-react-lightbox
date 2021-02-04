@@ -744,7 +744,7 @@ const options = {
 function MyComponent() {
   return (
     <div className="MyComponent">
-     <SRLWrapper callbacks={callbacks}>
+     <SRLWrapper options={options}>
         // Your images here
       </SRLWrapper>
     </div>
