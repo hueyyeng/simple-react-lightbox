@@ -11,7 +11,7 @@
 
 #### Packed with features 📦
 
-**Simple React Lightbox** comes with many features: please check the [options](#options) section to learn more. Some features are only available in the PRO version available on the official [Simple React Lightbox - webiste](https://simple-react-lightbox.dev).
+**Simple React Lightbox** comes with many features: please check the [options](#options) section to learn more. Some features are only available in the PRO version available on the official [Simple React Lightbox - website](https://simple-react-lightbox.dev).
 
 ---
 
@@ -29,14 +29,11 @@
 - [A note on "slide" animation and Firefox](#firefox-issue)
 
 
-#### December update (v4.0.0) and PRO version (v1.0)
-- It took a while but with this update the Simple React Lightbox PRO version is finally ready. The PRO version can be purchased for **just $5 dollars** and it will give access to some new exciting and requested features like: Video and audio support (Web videos or YouTube, Twitch, DailyMotion, Vimeo, SoundCloud), custom icons, custom captions, translations, excluding content easily from the lightbox.
-The PRO version can be purchased on the official [Simple React Lightbox - webiste](https://simple-react-lightbox.dev).
-- Added a `boxShadow` option in the settings object to allow to display a shadow behind the element.
-- ⚠️ The data attribute `data-attribute="SRL"` for when creating a gallery with thumbnails is no longer need and should be removed.
-- Some features have been removed from the Free version but all the options related to the customization of the lightbox are still available.
-- Improved the overall quality of the code, including the occurrence of a small memory leak when changing routes if a lightbox component was unmounted before the elements were loaded.
-- Fixed a notable bug where an instance of the lightbox was fetching the wrong sets of elements when changing a route if the previous elements were not loaded.
+#### February update (v.3.6.3) / PRO (1.2.1)
+- The panzoom functionality has been reworked and it should now work better. Pinch to zoom has also improved on mobile.
+- Added a fix for images lazy loaded in Gatsby and NextJS.
+- Added a fix to a bug that was causing the page to scroll when using the lightbox on IOS using Safari.
+- Added a support for [overlay on top of the images ](https://simple-react-lightbox.dev/with-overlay) in the PRO version that allows to have an overlay DIV on top of an image. You can see this in [action on the demo website](https://demo.simple-react-lightbox.dev/with-overlay).
 
 ---
 
@@ -67,7 +64,7 @@ or with Yarn
 yarn add simple-react-lightbox
 ```
 
-The installation for the PRO version is slightly different. You will get instructions on how to install the PRO version after the purchase on the [Simple React Lightbox - webiste](https://simple-react-lightbox.dev).
+The installation for the PRO version is slightly different. You will get instructions on how to install the PRO version after the purchase on the [Simple React Lightbox - website](https://simple-react-lightbox.dev).
 
 
 #### First step (Step 1)
@@ -646,6 +643,63 @@ Check the example on the [demo website](https://simple-react-lightbox.dev/with-c
       </div>
     );
   }
+```
+
+---
+
+## Usage with overlay DIV
+#### (PRO Only)
+
+If you are using the PRO version version you can use overlay on the images. This is particularly useful when using a gallery of images in an e-commerce website. In order to achieve this a special div must be included before the image and it must include a custom attribute called `srl_overlay="true"`.
+
+The code structure must follow the exact order (DIV with the overlay first, image after) as shown in the code example (the overlay structure is entirely up to you of course). Overlay CSS is up to you of course and the overlay must be on top of the image in order to be clickable.
+
+```jsx
+import { SRLWrapper } from "simple-react-lightbox";
+// USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
+// import { SRLWrapper } from 'simple-react-lightbox-pro'
+
+function MyComponent() {
+  return (
+    <SRLWrapper>
+
+    // First image
+    <a href="/product01.jpg" className="element_with_overlay">
+    // Overlay DIV with the custom attribute
+      <div className="overlay" srl_overlay="true">
+        <h1>Funny cap</h1>
+        <p>£30.00</p>
+      </div>
+      <img src="product/01.jpg" alt="Funny cap"/>
+    </a>
+
+    // Second image
+    <a href="/product02.jpg" className="element_with_overlay">
+    // Overlay DIV with the custom attribute
+      <div className="overlay" srl_overlay="true">
+        <h1>Sunglasses</h1>
+        <p>£90.00</p>
+      </div>
+      <img src="product/02.jpg" alt="Sunglasses"/>
+    </a>
+
+    // Third Image (Not using a thumbnail)
+    <div className="element_with_overlay">
+      <div className="overlay" srl_overlay="true">
+        <h1>Funny cap</h1>
+        <p>£30.00</p>
+      </div>
+      <img
+        src="/product03.jpg"
+        alt="Cool backpack"
+      />
+    </div>
+
+    </SRLWrapper>
+  )
+}
+
+export default MyComponent;
 ```
 
 ---
