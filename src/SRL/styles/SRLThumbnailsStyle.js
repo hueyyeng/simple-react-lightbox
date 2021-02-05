@@ -115,7 +115,7 @@ export const SRLThumbnailGallery = styled.div`
 
   @media (max-width: 768px) {
     justify-content: start;
-    overflow: auto !important;
+    overflow: scroll !important;
     flex-direction: row;
     width: 100vw !important;
     height: auto;

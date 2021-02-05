@@ -417,7 +417,11 @@ const SRLLightboxGallery = ({
     if (typeof window !== 'undefined') {
       document.body.classList.add('SRLOpened')
       document.body.style.marginRight = compensateForScrollbar + 'px'
-      disableBodyScroll(document.getElementsByClassName('.SRLOpened'))
+      disableBodyScroll(document.getElementsByClassName('.SRLOpened'), {
+        allowTouchMove: (el) =>
+          el.className.includes('SRLThumbnailsContainer') ||
+          el.className.includes('SRLThumb')
+      })
     }
 
     // Cleanup function

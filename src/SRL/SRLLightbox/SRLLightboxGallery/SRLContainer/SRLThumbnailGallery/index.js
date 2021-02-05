@@ -142,13 +142,6 @@ const SRLThumbnailGalleryComponent = ({
     SRLTCR.addEventListener('mousemove', (e) =>
       handleMouseMoveOnThumbnails(e.pageX, e.pageY)
     )
-    SRLTCR.addEventListener('touchstart', (e) =>
-      handleMouseDownOnThumbnails(e.pageX, e.pageY)
-    )
-    SRLTCR.addEventListener('touchend', () => handleMouseLeaveOnThumbnails())
-    SRLTCR.addEventListener('touchmove', (e) =>
-      handleMouseMoveOnThumbnails(e.pageX, e.pageY)
-    )
 
     // CLEAN UP
     return () => {
@@ -163,15 +156,6 @@ const SRLThumbnailGalleryComponent = ({
       )
       SRLTCR.removeEventListener('mousemove', (e) =>
         handleMouseMoveOnThumbnails(e)
-      )
-      SRLTCR.removeEventListener('touchstart', (e) =>
-        handleMouseDownOnThumbnails(e.pageX, e.pageY)
-      )
-      SRLTCR.removeEventListener('touchend', () =>
-        handleMouseLeaveOnThumbnails()
-      )
-      SRLTCR.removeEventListener('touchmove', (e) =>
-        handleMouseMoveOnThumbnails(e.pageX, e.pageY)
       )
     }
   }, [currentId, handleCurrentElement, SRLThumbnailsRef, thumbnailsAlignment])
