@@ -219,7 +219,7 @@ const SRLLightboxGallery = ({
     toDataURL(selectedElement.source).then((dataUrl) => {
       const a = document.createElement('a')
       a.href = dataUrl
-      a.download = ''
+      a.download = `${ctx.options.settings.downloadedFileName}-${selectedElement.id}`
       a.click()
     })
   }

@@ -358,6 +358,7 @@ SRLWrapper.propTypes = {
       disableKeyboardControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
       disableWheelControls: PropTypes.bool,
+      downloadedFileName: PropTypes.string,
       hideControlsAfter: PropTypes.oneOfType([
         PropTypes.number,
         PropTypes.bool
@@ -445,6 +446,7 @@ SRLWrapper.defaultProps = {
       disableKeyboardControls: false,
       disablePanzoom: false,
       disableWheelControls: false,
+      downloadedFileName: 'SRL-image',
       hideControlsAfter: false,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',

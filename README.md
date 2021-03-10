@@ -29,10 +29,11 @@
 - [A note on "slide" animation and Firefox](#firefox-issue)
 
 
-#### February update (v.3.6.3) / PRO (1.2.1)
-- The panzoom functionality has been reworked and it should now work better. Pinch to zoom has also improved on mobile.
-- Added a fix for images lazy loaded in Gatsby and NextJS.
-- Added a fix to a bug that was causing the page to scroll when using the lightbox on IOS using Safari.
+#### March update (v.3.6.4) / PRO (1.2.3)
+- Adds a way to help the lightbox to identify the right thumbnail when using Gatsby Image and NextJS Image Component. Please refer to the [Gallery with thumbnails section](#gallery-with-thumbnails) of the docs.
+
+- PRO VERSION: New more flexible pricing are going to be available from the 12th of March which allows you to increase the number of downloads per license depending on the plan. Check the official website to learn more.
+
 - Added a support for [overlay on top of the images ](https://simple-react-lightbox.dev/with-overlay) in the PRO version that allows to have an overlay DIV on top of an image. You can see this in [action on the demo website](https://demo.simple-react-lightbox.dev/with-overlay).
 
 ---
@@ -129,8 +130,12 @@ If you want to create a traditional gallery with some thumbnails that on click t
 
 The anchor tag will point to the full width image while the image will act as thumbnail. The captions is taken from the thumbnail. Simple React Lightbox is smart enough to recognize the link wrapping the image, ignore the thumbnails and trigger the lightbox.
 
+🆕 If the thumbnail is not recognized (for example this happens using NextJS image component), simply add the attribute `srl_gallery_image="true"` to the image or the component.
+
 ```jsx
 import { SRLWrapper } from "simple-react-lightbox";
+import Image from 'next/image'
+
 // USE THE IMPORT BELOW INSTEAD IF YOU ARE USING THE PRO VERSION
 // import { SRLWrapper } from 'simple-react-lightbox-pro'
 
@@ -142,6 +147,15 @@ function MyComponent() {
       </a>
       <a href="/link/to/the/full/width/image_two.jpg">
         <img src="/link/for/the/thumbnail/image_two.jpg" alt="Blue sky" />
+      </a>
+      <a href="/link/for/the/full/width/image/image_three.jpg">
+        <Image
+          src="/link/for/the/thumbnail/image_three.jpg"
+          alt="Picture of the author"
+          width={500}
+          height={900}
+          srl_gallery_image="true" // Add this if your thumbnail is not recognized
+        />
       </a>
     </SRLWrapper>
   );
@@ -265,6 +279,7 @@ export default MyComponent;
 | `disableKeyboardControls`   | `boolean`   | `false`  | Disable keyboard controls. |
 | `disableWheelControls`   | `boolean`   | `false`   | Disable mouse wheel controls.  |
 | `disablePanzoom`   | `boolean`   | `false`  | Disable panzzom controls.  |
+| `downloadedFileName` 🆕   | `boolean`   | `SRL-image`  | Allows to change the filename of the images when downloaded. Each image will have the filename and the ID of the image in the order they are displayed.  |
 | `hideControlsAfter`  | `number` or `boolean`  |  false  |  Controls how long it will takes for the controls and thumbnails to be hidden. This value can't be less then 1000ms. If you want the controls and thumbnails to be always visible set this to FALSE. |
 | `lightboxTransitionSpeed `   | `number`   | 0.6  | Controls the transition speed of when the lightbox is opened. **This value is in seconds ⚠️**.  |
 | `lightboxTransitionTimingFunction`   | `string`   | "linear"  | Controls the transition timing function of when the lightbox is opened. Accepted values are *"linear", "easeIn","easeOut", "easeInOut","circIn", "circOut", "circInOut", "backIn", "backOut", "backInOut", "anticipate"*|

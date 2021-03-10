@@ -31,6 +31,7 @@ const initialState = {
       disableKeyboardControls: false,
       disablePanzoom: false,
       disableWheelControls: false,
+      downloadedFileName: 'SRL-image',
       hideControlsAfter: false,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',

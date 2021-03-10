@@ -4,6 +4,7 @@ export function isSimpleImage(e) {
 
 export function isGalleryImage(e) {
   return (
+    e.getAttribute('srl_gallery_image') ||
     (e.nodeName === 'IMG' &&
       (e.offsetParent?.nodeName === 'A' || e.parentNode?.nodeName === 'A')) ||
     (e.nodeName === 'IMG' &&
