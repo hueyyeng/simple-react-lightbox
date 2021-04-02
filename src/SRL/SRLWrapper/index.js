@@ -217,7 +217,13 @@ const SRLWrapper = ({
                     e.parentElement.parentElement.parentElement.href || // UGLY FIX FOR GATSBY
                     null,
                   caption: e.alt || e.textContent,
-                  thumbnail: e.currentSrc || e.src || e.parentElement.href,
+                  thumbnail:
+                    e.parentElement.href ||
+                    e.offsetParent.parentElement.href ||
+                    e.offsetParent.href ||
+                    e.parentElement.parentElement.parentElement.href ||
+                    e.currentSrc ||
+                    e.src,
                   width: null,
                   height: null,
                   type: 'gallery_image'
