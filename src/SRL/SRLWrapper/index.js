@@ -197,9 +197,9 @@ const SRLWrapper = ({
               case IMAGE: {
                 const element = {
                   id: e.getAttribute('srl_elementid'),
-                  source: e.currentSrc || e.src,
+                  source: e.src || e.currentSrc,
                   caption: e.alt,
-                  thumbnail: e.currentSrc || e.src,
+                  thumbnail: e.src || e.currentSrc,
                   width: e.naturalWidth,
                   height: e.naturalHeight,
                   type: 'image'
@@ -215,15 +215,17 @@ const SRLWrapper = ({
                     e.offsetParent.parentElement.href ||
                     e.offsetParent.href ||
                     e.parentElement.parentElement.parentElement.href || // UGLY FIX FOR GATSBY
+                    e.src ||
+                    e.currentSrc ||
                     null,
                   caption: e.alt || e.textContent,
                   thumbnail:
                     e.parentElement.href ||
                     e.offsetParent.parentElement.href ||
                     e.offsetParent.href ||
-                    e.parentElement.parentElement.parentElement.href ||
-                    e.currentSrc ||
-                    e.src,
+                    e.parentElement.parentElement.parentElement.href || // UGLY FIX FOR GATSBY
+                    e.src ||
+                    e.currentSrc,
                   width: null,
                   height: null,
                   type: 'gallery_image'
