@@ -93,7 +93,10 @@ const SRLThumbnailGalleryComponent = ({
         SRLTCR.scrollWidth > SRLTCR.offsetWidth ||
         SRLTCR.scrollHeight > SRLTCR.offsetHeight
       ) {
-        if (pageX === startX.current || pageY === startY.current) {
+        if (
+          Math.trunc(pageX) === Math.trunc(startX.current) ||
+          Math.trunc(pageY) === Math.trunc(startY.current)
+        ) {
           handleCurrentElement(id, currentId)
         }
       } else {
