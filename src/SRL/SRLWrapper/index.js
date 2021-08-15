@@ -179,9 +179,13 @@ const SRLWrapper = ({
 
           /* Next.js version 10 include an Image component which has a div with another image with a role of presentation that shouldn't be included */
           const isNextJsImage = e.getAttribute('role') === 'presentation'
-          const isNextJsTransparentImage = e.src?.includes(
-            'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-          )
+          const isNextJsTransparentImage =
+            e.src?.includes(
+              'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+            ) ||
+            e.src?.includes(
+              'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4='
+            )
 
           if (
             (isGatsbyImage &&

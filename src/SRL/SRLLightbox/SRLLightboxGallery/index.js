@@ -59,12 +59,8 @@ const SRLLightboxGallery = ({
   } = options
 
   // Destructuring the callbacks !!!passed by user!!! and we need to check if those are functions
-  const {
-    onCountSlides,
-    onSlideChange,
-    onLightboxClosed,
-    onLightboxOpened
-  } = callbacks
+  const { onCountSlides, onSlideChange, onLightboxClosed, onLightboxOpened } =
+    callbacks
 
   // Callbacks functions
   const onChange = useCallback(
