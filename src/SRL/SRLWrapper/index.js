@@ -166,6 +166,10 @@ const SRLWrapper = ({
       let elementId = 0
       const elements = data
         .map(({ element: e, type }) => {
+          if (e.ariaHidden) {
+            return
+          }
+
           e.setAttribute('srl_elementid', elementId)
           /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
           want to ignore that one but only if it's Gatsby because other base64 images are allowed)
@@ -180,12 +184,8 @@ const SRLWrapper = ({
           /* Next.js version 10 include an Image component which has a div with another image with a role of presentation that shouldn't be included */
           const isNextJsImage = e.getAttribute('role') === 'presentation'
           const isNextJsTransparentImage =
-            e.src?.includes(
-              'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-            ) ||
-            e.src?.includes(
-              'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4='
-            )
+            e.src?.includes('data:image/gif') ||
+            e.src?.includes('data:image/svg+xml;base64')
 
           if (
             (isGatsbyImage &&
