@@ -131,7 +131,7 @@ function SRLContainerComponent({
     // Handle scrollwheel
     if (!panzoomEnabled && !settings.disableWheelControls) {
       const addWheelListener = subscribe(document, 'wheel', (e) =>
-        handleScrollWheel.callback(e.deltaY)
+        handleScrollWheel(e.deltaY)
       )
       return () => {
         addWheelListener()

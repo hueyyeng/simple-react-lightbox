@@ -462,7 +462,7 @@ const SRLLightboxGallery = ({
       unsubscribe.current = subscribe(
         document,
         'keydown',
-        (e) => handleNavigationWithKeys.callback(e.key),
+        (e) => handleNavigationWithKeys(e.key),
         false
       )
     }
