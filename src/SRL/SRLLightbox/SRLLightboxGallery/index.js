@@ -16,7 +16,6 @@ import { useDebouncedCallback } from 'use-debounce'
 import subscribe from 'subscribe-event'
 import { HANDLE_ELEMENT, CLOSE_LIGHTBOX } from '../../SRLContext/actions'
 import { fullscreenError } from '../../SRLErrors'
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 // Lodash helper
 import { findIndex } from 'lodash'
@@ -31,7 +30,6 @@ const SRLLightboxGallery = ({
   selectedElement,
   elements,
   dispatch,
-  compensateForScrollbar
 }) => {
   // Context
   const ctx = useContext(SRLCtx)
@@ -408,24 +406,6 @@ const SRLLightboxGallery = ({
     onCount({
       totalSlide: ctx.elements.length
     })
-
-    // Adds a class to the body to remove the overflow
-    if (typeof window !== 'undefined') {
-      document.body.classList.add('SRLOpened')
-      document.body.style.marginRight = compensateForScrollbar + 'px'
-      disableBodyScroll(document.getElementsByClassName('.SRLOpened'), {
-        allowTouchMove: (el) =>
-          el.className.includes('SRLThumbnailsContainer') ||
-          el.className.includes('SRLThumb')
-      })
-    }
-
-    // Cleanup function
-    return () => {
-      document.body.classList.remove('SRLOpened')
-      document.body.style.marginRight = '0'
-      clearAllBodyScrollLocks()
-    }
   }, [])
 
   useEffect(() => {
@@ -557,7 +537,6 @@ const SRLLightboxGallery = ({
 
 SRLLightboxGallery.propTypes = {
   callbacks: PropTypes.object,
-  compensateForScrollbar: PropTypes.number,
   elements: PropTypes.array,
   isOpened: PropTypes.bool,
   dispatch: PropTypes.func,

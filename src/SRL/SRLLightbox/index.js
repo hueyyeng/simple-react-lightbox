@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import Portal from '../SRLPortal'
 import PropTypes from 'prop-types'
 import SRLLightboxGallery from './SRLLightboxGallery'
@@ -9,7 +9,6 @@ function SRLLightbox() {
   const context = useContext(SRLCtx)
   const { isOpened, options } = context
   const isUsingPreact = options.settings.usingPreact
-  const [mousePlugged, setMousePlugged] = useState(0)
   const vh = useRef()
 
   useEffect(() => {
@@ -27,21 +26,11 @@ function SRLLightbox() {
     return () => window.removeEventListener('resize', getVH)
   }, [])
 
-  useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      document.body.scrollHeight > window.innerHeight
-    ) {
-      setMousePlugged(window.innerWidth - document.documentElement.clientWidth)
-    }
-  })
-
   if (isUsingPreact) {
     return (
       <Portal selector="SRLLightbox" isOpened={isOpened}>
         <SRLLightboxGallery
           {...context}
-          compensateForScrollbar={mousePlugged}
         />
       </Portal>
     )
@@ -52,7 +41,6 @@ function SRLLightbox() {
           <Portal selector="SRLLightbox" isOpened={isOpened}>
             <SRLLightboxGallery
               {...context}
-              compensateForScrollbar={mousePlugged}
             />
           </Portal>
         )}
