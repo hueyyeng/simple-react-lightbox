@@ -208,6 +208,7 @@ function SRLContainerComponent({
             }}
           >
             <ImageLoad
+              limitToBounds={settings.limitToBounds}
               disablePanzoom={settings.disablePanzoom}
               panzoomEnabled={panzoomEnabled}
               handlePanzoom={handlePanzoom}
@@ -262,6 +263,7 @@ SRLContainerComponent.propTypes = {
       boxShadow: PropTypes.string,
       disablePanzoom: PropTypes.bool,
       disableWheelControls: PropTypes.bool,
+      limitToBounds: PropTypes.bool,
       slideAnimationType: PropTypes.string,
       slideSpringValues: PropTypes.array,
       slideTransitionSpeed: PropTypes.number,

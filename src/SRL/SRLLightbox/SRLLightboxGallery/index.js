@@ -553,6 +553,7 @@ SRLLightboxGallery.propTypes = {
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
+      limitToBounds: PropTypes.bool,
 
       hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
     }),

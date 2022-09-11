@@ -12,6 +12,7 @@ const ImageLoad = React.memo(
   ({
     src,
     caption,
+    limitToBounds,
     disablePanzoom,
     handlePanzoom,
     panzoomEnabled,
@@ -72,6 +73,7 @@ const ImageLoad = React.memo(
         minScale={0.5}
         wheel={{ step: 0.5 }}
         zoomAnimation={{ animationType: 'easeInOutQuad' }}
+        limitToBounds={limitToBounds}
       >
         <TransformComponent>
           <SRLPanzoomedImage
@@ -99,6 +101,7 @@ ImageLoad.propTypes = {
   handlePanzoom: PropTypes.func,
   src: PropTypes.string,
   caption: PropTypes.string,
+  limitToBounds: PropTypes.bool,
   disablePanzoom: PropTypes.bool,
   boxShadow: PropTypes.string,
   panzoomEnabled: PropTypes.bool,

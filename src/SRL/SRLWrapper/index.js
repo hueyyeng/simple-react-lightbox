@@ -380,6 +380,7 @@ SRLWrapper.propTypes = {
         PropTypes.string,
         PropTypes.array
       ]),
+      limitToBounds: PropTypes.bool,
       overlayColor: PropTypes.string,
       slideAnimationType: PropTypes.string,
       slideSpringValues: PropTypes.array,
@@ -460,6 +461,7 @@ SRLWrapper.defaultProps = {
       disableWheelControls: false,
       downloadedFileName: 'SRL-image',
       hideControlsAfter: false,
+      limitToBounds: false,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(30, 30, 30, 0.9)',
