@@ -143,6 +143,9 @@ export const SRLElementWrapper = styled(motion.div)`
     width: auto;
     height: auto;
   }
+  .react-transform-wrapper {
+    overflow: inherit;
+  }
 `
 
 // Image Element
