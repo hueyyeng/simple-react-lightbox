@@ -1,10 +1,13 @@
 {
-  "name": "simple-react-lightbox",
-  "version": "3.6.9-0",
+  "name": "@hueyyeng/simple-react-lightbox",
+  "version": "3.7.0-0",
   "description": "A simple but functional light-box for React.",
-  "author": "michelecocuccio",
+  "author": "hueyyeng",
   "license": "MIT",
-  "repository": "michelecocuccio/simple-react-lightbox",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hueyyeng/simple-react-lightbox"
+  },
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
