@@ -367,6 +367,7 @@ SRLWrapper.propTypes = {
     settings: PropTypes.shape({
       autoplaySpeed: PropTypes.number,
       boxShadow: PropTypes.string,
+      removeScrollBar: PropTypes.bool,
       disableKeyboardControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
       disableWheelControls: PropTypes.bool,
@@ -456,6 +457,7 @@ SRLWrapper.defaultProps = {
     settings: {
       autoplaySpeed: 3000,
       boxShadow: 'none',
+      removeScrollBar: true,
       disableKeyboardControls: false,
       disablePanzoom: false,
       disableWheelControls: false,
@@ -514,9 +516,9 @@ SRLWrapper.defaultProps = {
     }
   },
   defaultCallbacks: {
-    onCountSlides: () => {},
-    onSlideChange: () => {},
-    onLightboxClosed: () => {},
-    onLightboxOpened: () => {}
+    onCountSlides: () => { },
+    onSlideChange: () => { },
+    onLightboxClosed: () => { },
+    onLightboxOpened: () => { }
   }
 }
