@@ -6,6 +6,7 @@ As the original GitHub repository no longer exists/accessible, I like the overal
 
 ## New Changes Since v3.6.9 by Michele Cocuccio
 
+- **NEW** Add **react-remove-scroll** dependencies
 - Override **.react-transform-wrapper** overflow to inherit
 - Expose **react-zoom-pan-pinch** `limitToBounds` settings
 - Remove **body-scroll-lock** dependencies and logic
