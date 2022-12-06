@@ -4,10 +4,12 @@ import PropTypes from 'prop-types'
 import SRLLightboxGallery from './SRLLightboxGallery'
 import { SRLCtx } from '../SRLContext'
 import { AnimatePresence } from 'framer-motion'
+import { RemoveScroll } from 'react-remove-scroll';
 
 function SRLLightbox() {
   const context = useContext(SRLCtx)
   const { isOpened, options } = context
+  const isRemoveScrollBar = options.settings.removeScrollBar
   const isUsingPreact = options.settings.usingPreact
   const vh = useRef()
 
@@ -29,20 +31,24 @@ function SRLLightbox() {
   if (isUsingPreact) {
     return (
       <Portal selector="SRLLightbox" isOpened={isOpened}>
-        <SRLLightboxGallery
-          {...context}
-        />
+        <RemoveScroll removeScrollBar={isRemoveScrollBar}>
+          <SRLLightboxGallery
+            {...context}
+          />
+        </RemoveScroll>
       </Portal>
     )
   } else {
     return (
       <AnimatePresence>
         {isOpened && (
-          <Portal selector="SRLLightbox" isOpened={isOpened}>
-            <SRLLightboxGallery
-              {...context}
-            />
-          </Portal>
+          <RemoveScroll removeScrollBar={isRemoveScrollBar}>
+            <Portal selector="SRLLightbox" isOpened={isOpened}>
+              <SRLLightboxGallery
+                {...context}
+              />
+            </Portal>
+          </RemoveScroll>
         )}
       </AnimatePresence>
     )
