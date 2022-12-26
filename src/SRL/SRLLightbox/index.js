@@ -6,12 +6,35 @@ import { SRLCtx } from '../SRLContext'
 import { AnimatePresence } from 'framer-motion'
 import { RemoveScroll } from 'react-remove-scroll';
 
+let scrollY  // Store scroll position here
+
 function SRLLightbox() {
   const context = useContext(SRLCtx)
   const { isOpened, options } = context
   const isRemoveScrollBar = options.settings.removeScrollBar
   const isUsingPreact = options.settings.usingPreact
   const vh = useRef()
+  if (typeof window !== 'undefined') {
+    const iOSSafari =
+      navigator.userAgent.match(/safari/i) &&
+      navigator.vendor.match(/apple/i) &&
+      navigator.maxTouchPoints
+
+    if (iOSSafari) {
+      const isSRLLightbox = document.getElementById('SRLLightbox')
+      if (isSRLLightbox) {
+        if (isOpened) {
+          if (window.scrollY) {
+            scrollY = window.scrollY
+          }
+          document.body.style.position = 'fixed'
+        } else {
+          document.body.style.position = 'inherit'
+          window.scrollTo(0, scrollY)
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     /* Set a value in the --vh custom property to the root of the document so that we can calculate the height of the light-box
