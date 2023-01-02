@@ -1,4 +1,4 @@
-# Simple React Lightbox (SRL)
+# @hueyyeng/simple-react-lightbox
 
 Modified React lightbox based on Michele Cocuccio's Simple React Lightbox. The original README.md can be found here: [README.old.md](README.old.md).
 
