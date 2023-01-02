@@ -1,5 +1,7 @@
 # @hueyyeng/simple-react-lightbox
 
+[![npm version](https://badge.fury.io/js/@hueyyeng%2Fsimple-react-lightbox.svg)](https://badge.fury.io/js/@hueyyeng%2Fsimple-react-lightbox)
+
 Modified React lightbox based on Michele Cocuccio's Simple React Lightbox. The original README.md can be found here: [README.old.md](README.old.md).
 
 As the original GitHub repository no longer exists/accessible, I like the overall features (versus other React lighbox) and made some minor tweaking to suit my requirements hence the forking (although I originally forked it from a forked repo of the original repository).
