@@ -5,10 +5,10 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import url from '@rollup/plugin-url'
 import svgr from '@svgr/rollup'
 import gzipPlugin from 'rollup-plugin-gzip'
-import image from 'rollup-plugin-image'
+import image from '@rollup/plugin-image'
 import pkg from './package.json'
-import { terser } from 'rollup-plugin-terser'
-import nodePolyfills from 'rollup-plugin-node-polyfills'
+import terser from '@rollup/plugin-terser'
+import nodePolyfills from 'rollup-plugin-polyfill-node'
 
 export default {
   input: 'src/index.js',

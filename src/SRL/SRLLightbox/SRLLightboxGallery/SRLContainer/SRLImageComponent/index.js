@@ -5,7 +5,7 @@ import {
 } from '../../../../styles/SRLElementContainerStyles'
 import SRLLoadingIndicator from '../SRLLoadingIndicator'
 import PropTypes from 'prop-types'
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+import { TransformWrapper, TransformComponent } from '@pronestor/react-zoom-pan-pinch'
 import { AnimatePresence } from 'framer-motion'
 
 const ImageLoad = React.memo(
