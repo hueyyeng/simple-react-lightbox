@@ -20,7 +20,9 @@ function SRLLightbox() {
       navigator.vendor.match(/apple/i) &&
       navigator.maxTouchPoints
 
-    if (iOSSafari) {
+    const isiPad = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 0) || navigator.platform === 'iPad'
+
+    if (iOSSafari && !isiPad) {
       const isSRLLightbox = document.getElementById('SRLLightbox')
       if (isSRLLightbox) {
         if (isOpened) {
