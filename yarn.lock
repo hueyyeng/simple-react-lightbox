@@ -1817,10 +1817,6 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@pronestor/react-zoom-pan-pinch@git+https://github.com/hueyyeng/react-zoom-pan-pinch.git#use-matrix3d-for-transform":
-  version "2.4.5"
-  resolved "git+ssh://git@github.com/hueyyeng/react-zoom-pan-pinch.git#1d22029e12634bfb403dd7e7f72adbb79cb5eae2"
-
 "@rollup/plugin-babel@^5.2.0", "@rollup/plugin-babel@^5.3.0":
   version "5.3.1"
   resolved "https://registry.npmjs.org/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz"
@@ -8042,6 +8038,11 @@ react-use@^17.2.4:
     throttle-debounce "^3.0.1"
     ts-easing "^0.2.0"
     tslib "^2.1.0"
+
+react-zoom-pan-pinch@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-2.2.1.tgz#0158bd44c512bab068173b0ee57f6e18e7be3ac3"
+  integrity sha512-1TPTjTzX+i0N70QAKMvYWqzgLsCMyxLIIB/oVzKhGK+n1QON5EEGKqrcf4Zc0kI5BQ7bq5YN5PS9BbysLLQKKw==
 
 read-cache@^1.0.0:
   version "1.0.0"
