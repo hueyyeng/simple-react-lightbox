@@ -6,7 +6,7 @@ import url from '@rollup/plugin-url'
 import svgr from '@svgr/rollup'
 import gzipPlugin from 'rollup-plugin-gzip'
 import image from '@rollup/plugin-image'
-import pkg from './package.json'
+import pkg from './package.json' assert { type: "json" };
 import terser from '@rollup/plugin-terser'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 
