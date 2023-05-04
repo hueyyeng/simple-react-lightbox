@@ -6,7 +6,7 @@ import { SRLCtx } from '../SRLContext'
 import { AnimatePresence } from 'framer-motion'
 import { RemoveScroll } from 'react-remove-scroll';
 
-let scrollY  // Store scroll position here
+let scrollY: number  // Store scroll position here
 
 function SRLLightbox() {
   const context = useContext(SRLCtx)
