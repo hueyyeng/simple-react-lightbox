@@ -11,7 +11,7 @@ import terser from '@rollup/plugin-terser'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 
 export default {
-  input: 'src/index.js',
+  input: 'src/index.tsx',
   output: [
     {
       file: pkg.main,
@@ -26,7 +26,6 @@ export default {
       exports: 'named' /** Disable warning for default imports */
     }
   ],
-
   plugins: [
     external(),
     url({
@@ -37,7 +36,10 @@ export default {
     babel({
       exclude: 'node_modules/**',
       babelHelpers: 'runtime',
-      presets: ['@babel/preset-env', '@babel/preset-react'],
+      presets: [
+        '@babel/preset-env',
+        '@babel/preset-react'
+      ],
       plugins: [
         [
           '@babel/plugin-transform-runtime',
@@ -47,9 +49,17 @@ export default {
         ]
       ]
     }),
-    nodeResolve({ preferBuiltins: true, customResolveOptions: 'src' }),
+    nodeResolve({
+      preferBuiltins: true,
+      customResolveOptions: 'src'
+    }),
     commonjs({
       include: 'node_modules/**'
+    }),
+    typescript({
+      tsconfig: './tsconfig.build.json',
+      declaration: true,
+      declarationDir: 'dist',
     }),
     gzipPlugin(),
     image(),
