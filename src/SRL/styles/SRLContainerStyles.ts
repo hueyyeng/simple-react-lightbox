@@ -1,5 +1,7 @@
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+
+import { ISRLContainer } from '../../types'
 
 const thumbnailsOnRight = css`
   -ms-grid-columns: 1fr auto;
@@ -8,14 +10,17 @@ const thumbnailsOnRight = css`
   grid-template-rows: 90% auto;
 
   > *:nth-of-type(1) {
+    grid-row: 1;
     -ms-grid-row: 1;
   }
 
   > *:nth-of-type(2) {
+    grid-row: 2;
     -ms-grid-row: 2;
   }
 
   > *:nth-of-type(3) {
+    grid-row: 3;
     -ms-grid-row: 1;
   }
 `
@@ -27,20 +32,23 @@ const thumbnailsOnLeft = css`
   grid-template-rows: 90% auto;
 
   > *:nth-of-type(1) {
+    grid-row: 1;
     -ms-grid-row: 1;
   }
 
   > *:nth-of-type(2) {
+    grid-row: 2;
     -ms-grid-row: 2;
   }
 
   > *:nth-of-type(3) {
+    grid-row: 3;
     -ms-grid-row: 1;
   }
 `
 
 // The content of the light-box
-export const SRLContainer = styled.div`
+export const SRLContainer = styled.div<ISRLContainer>`
   bottom: 0;
   left: 0;
   right: 0;
@@ -57,14 +65,17 @@ export const SRLContainer = styled.div`
   height: calc(var(--vh, 1vh) * 100);
 
   > *:nth-of-type(1) {
+    grid-row: 1;
     -ms-grid-row: 1;
   }
 
   > *:nth-of-type(2) {
+    grid-row: 2;
     -ms-grid-row: 2;
   }
 
   > *:nth-of-type(3) {
+    grid-row: 3;
     -ms-grid-row: 3;
   }
 

@@ -1,18 +1,21 @@
-import React, { useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
-import SRLThumbnailGalleryComponent from './SRLThumbnailGallery'
-import SRLCaptionContainerComponent from './SRLCaption'
+import { useEffect, useRef } from 'react'
 import { useSwipeable } from 'react-swipeable'
-import { useDebouncedCallback } from 'use-debounce'
-import subscribe from 'subscribe-event'
 import { AnimatePresence } from 'framer-motion'
+import PropTypes from 'prop-types'
+import subscribe from 'subscribe-event'
+import { useDebouncedCallback } from 'use-debounce'
+
+import { ISRLContainerComponent } from '../../../../types'
 import { useOnClickOutside, useSizes } from '../../../SRLHooks'
-import ImageLoad from './SRLImageComponent'
 import { SRLContainer } from '../../../styles/SRLContainerStyles'
 import {
   SRLElementContainer,
   SRLElementWrapper
 } from '../../../styles/SRLElementContainerStyles'
+
+import SRLCaptionContainerComponent from './SRLCaption'
+import ImageLoad from './SRLImageComponent'
+import SRLThumbnailGalleryComponent from './SRLThumbnailGallery'
 
 function SRLContainerComponent({
   caption,
@@ -32,21 +35,21 @@ function SRLContainerComponent({
   SRLThumbnailsRef,
   SRLCaptionRef,
   width: elementWidth
-}) {
+}: ISRLContainerComponent) {
   const { settings, thumbnails, caption: captionSettings } = options
 
   const [captionDivSizes] = useSizes(SRLCaptionRef)
   const [thumbnailsDivSizes] = useSizes(SRLThumbnailsRef)
 
   // Ref for the Content
-  const SRLLightboxContentRef = useRef()
+  const SRLLightboxContentRef = useRef<HTMLDivElement | null>(null)
 
-  const isIE11 = !!window.MSInputMethodContext && !!document.documentMode
+  const isIE11 = navigator.userAgent.toUpperCase().indexOf('TRIDENT/') != -1
   const POSITIVE_X = isIE11 ? 1000 : '100%'
   const NEGATIVE_X = isIE11 ? -1000 : '-100%'
 
   const variants = {
-    slideIn: (direction) => {
+    slideIn: (direction: 'next' | 'previous' | undefined) => {
       return {
         x:
           direction === undefined
@@ -59,7 +62,7 @@ function SRLContainerComponent({
         }
       }
     },
-    slideOut: (direction) => {
+    slideOut: (direction: 'next' | 'previous' | undefined) => {
       return {
         x: direction === 'previous' ? POSITIVE_X : NEGATIVE_X,
         transition: {
@@ -79,7 +82,7 @@ function SRLContainerComponent({
         ease: settings.slideTransitionTimingFunction
       }
     },
-    bothIn: (direction) => {
+    bothIn: (direction: 'next' | 'previous' | undefined) => {
       return {
         opacity: 1,
         x: direction === undefined ? '0' : direction === 'next' ? 1000 : -1000,
@@ -88,7 +91,7 @@ function SRLContainerComponent({
         }
       }
     },
-    bothOut: (direction) => {
+    bothOut: (direction: 'next' | 'previous' | undefined) => {
       return {
         opacity: 0,
         x: direction === 'previous' ? 1000 : -1000,
@@ -104,19 +107,19 @@ function SRLContainerComponent({
   }
 
   // Swipe Handlers
-  const handlers = useSwipeable({
+  const swipeHandlers = useSwipeable({
     onSwipedLeft: () => handleNextElement(id),
     onSwipedRight: () => handlePrevElement(id),
     delta: panzoomEnabled ? 500 : 90, // min distance(px) before a swipe starts
-    preventDefaultTouchmoveEvent: true, // preventDefault on touchmove, *See Details*
+    preventScrollOnSwipe: true, // previously preventDefaultTouchmoveEvent on React Swipeable v6 and older
     trackTouch: true, // track touch input
     trackMouse: false
   })
 
   // Debounce callback
-  const handleScrollWheel = useDebouncedCallback(
+  const handleScrollWheelNavigate = useDebouncedCallback(
     // function
-    (value) => {
+    (value: number) => {
       if (value > 0) {
         handleNextElement(id)
       } else if (value < 0) {
@@ -130,14 +133,18 @@ function SRLContainerComponent({
   useEffect(() => {
     // Handle scrollwheel
     if (!panzoomEnabled && !settings.disableWheelControls) {
-      const addWheelListener = subscribe(document, 'wheel', (e) =>
-        handleScrollWheel(e.deltaY)
+      const addWheelListenerNavigate = subscribe(
+        document,
+        'wheel',
+        (e: WheelEvent) => handleScrollWheelNavigate(e.deltaY)
       )
       return () => {
-        addWheelListener()
+        addWheelListenerNavigate()
       }
     }
-  }, [handleScrollWheel, panzoomEnabled, settings.disableWheelControls])
+
+    return () => {}
+  }, [handleScrollWheelNavigate, panzoomEnabled, settings.disableWheelControls])
 
   // UseOnClickOutside
   useOnClickOutside(SRLLightboxContentRef, () => handleCloseLightbox())
@@ -154,7 +161,8 @@ function SRLContainerComponent({
     captionFontSize: options.caption.captionFontSize,
     captionFontStyle: options.caption.captionFontStyle,
     captionFontWeight: options.caption.captionFontWeight,
-    captionTextTransform: options.caption.captionTextTransform
+    captionTextTransform: options.caption.captionTextTransform,
+    showCaption: options.caption.showCaption
   }
 
   return (
@@ -168,16 +176,16 @@ function SRLContainerComponent({
       <SRLElementContainer
         thumbnailsPosition={thumbnails.thumbnailsPosition}
         // showThumbnails is the "setting" passed from the user to the context to completely hide the thumbnails
-        showThumbnails={thumbnails.showThumbnails}
+        // showThumbnails={thumbnails.showThumbnails}
         // hideThumbnails is the button that shows and hides the thumbnails on the go
         hideThumbnails={hideThumbnails}
-        showCaption={captionSettings.showCaption}
+        // showCaption={captionSettings.showCaption}
         className="SRLElementContainer"
         captionDivSizes={captionDivSizes}
         thumbnailsDivSizes={thumbnailsDivSizes}
-        {...handlers}
+        {...swipeHandlers}
       >
-        <AnimatePresence className="SRLAnimatePresence" custom={direction}>
+        <AnimatePresence custom={direction}>
           <SRLElementWrapper
             variants={variants}
             custom={direction}
@@ -208,15 +216,16 @@ function SRLContainerComponent({
             }}
           >
             <ImageLoad
+              src={source}
+              caption={caption}
+              limitToBounds={settings.limitToBounds}
               disablePanzoom={settings.disablePanzoom}
               panzoomEnabled={panzoomEnabled}
               handlePanzoom={handlePanzoom}
-              containerRef={SRLLightboxContentRef}
+              boxShadow={settings.boxShadow}
               imgHeight={elementHeight}
               imgWidth={elementWidth}
-              src={source}
-              caption={caption}
-              boxShadow={settings.boxShadow}
+              // containerRef={SRLLightboxContentRef}
             />
           </SRLElementWrapper>
         </AnimatePresence>
@@ -225,6 +234,7 @@ function SRLContainerComponent({
       {captionSettings.showCaption && (
         <SRLCaptionContainerComponent
           id={id}
+          captionAlignment={options.caption.captionAlignment}
           thumbnailsPosition={thumbnails.thumbnailsPosition}
           captionOptions={captionOptions}
           caption={caption}
@@ -237,7 +247,7 @@ function SRLContainerComponent({
           handleCurrentElement={handleCurrentElement}
           thumbnails={thumbnails}
           currentId={id}
-          elements={elements || []}
+          elements={elements}
           SRLThumbnailsRef={SRLThumbnailsRef}
         />
       )}
@@ -262,13 +272,11 @@ SRLContainerComponent.propTypes = {
       boxShadow: PropTypes.string,
       disablePanzoom: PropTypes.bool,
       disableWheelControls: PropTypes.bool,
+      limitToBounds: PropTypes.bool,
       slideAnimationType: PropTypes.string,
       slideSpringValues: PropTypes.array,
       slideTransitionSpeed: PropTypes.number,
-      slideTransitionTimingFunction: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.array
-      ])
+      slideTransitionTimingFunction: PropTypes.string
     }),
     caption: PropTypes.shape({
       captionAlignment: PropTypes.string,

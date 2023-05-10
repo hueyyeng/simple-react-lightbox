@@ -1,8 +1,9 @@
-import React from 'react'
-import { SRLVideoIconStyle } from '../../../../styles/SRLThumbnailsStyle'
 import PropTypes from 'prop-types'
 
-export default function SRLVideoIcon({ thumbnailsIconColor }) {
+import { ISRLVideoIcon } from '../../../../../types'
+import { SRLVideoIconStyle } from '../../../../styles/SRLThumbnailsStyle'
+
+export default function SRLVideoIcon({ thumbnailsIconColor }: ISRLVideoIcon) {
   return (
     <SRLVideoIconStyle
       aria-hidden="true"

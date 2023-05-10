@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "inlineSources": false,
+  },
+  "exclude": [
+    "../../node_modules/**",
+    "**/*.spec.ts", // Exclude test files if needed
+    "**/*.test.ts", // Exclude test files if needed
+    "src/stories/**",
+    "@types",
+    "node_modules",
+    "build",
+    "dist",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest"
+  ]
+}

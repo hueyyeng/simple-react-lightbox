@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es5",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "jsxImportSource": "@emotion/react",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./dist"
+  },
+  "include": [
+    "./src/*",
+    "./src/types",
+  ],
+  "exclude": [
+    "./.eslintrc.cjs",
+    "../../node_modules/**",
+    "**/*.spec.ts", // Exclude test files if needed
+    "**/*.test.ts", // Exclude test files if needed
+    "@types",
+    "node_modules",
+    "build",
+    "dist",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest"
+  ],
+  "types": [
+    "typePatches"
+  ]
+}

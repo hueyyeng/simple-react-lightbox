@@ -1,25 +1,20 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  useContext
-} from 'react'
-import PropTypes from 'prop-types'
-import SRLContainerComponent from './SRLContainer'
-import SRLLightboxControls from './SRLLightboxControls'
-import SRLProgressBarComponent from './SRLContainer/SRLProgressBar'
-import { SRLCtx } from '../../SRLContext'
-import { useInterval } from '../../SRLHooks'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useIdle } from 'react-use'
-import { useDebouncedCallback } from 'use-debounce'
-import subscribe from 'subscribe-event'
-import { HANDLE_ELEMENT, CLOSE_LIGHTBOX } from '../../SRLContext/actions'
-import { fullscreenError } from '../../SRLErrors'
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
-
 // Lodash helper
 import { findIndex } from 'lodash'
+import PropTypes from 'prop-types'
+import subscribe from 'subscribe-event'
+import { useDebouncedCallback } from 'use-debounce'
+
+import { IElement, ISRLLightboxGallery } from '../../../types'
+import { SRLCtx } from '../../SRLContext'
+import { CLOSE_LIGHTBOX, HANDLE_ELEMENT } from '../../SRLContext/actions'
+import { fullscreenError } from '../../SRLErrors'
+import { useInterval } from '../../SRLHooks'
+
+import SRLProgressBarComponent from './SRLContainer/SRLProgressBar'
+import SRLContainerComponent from './SRLContainer'
+import SRLLightboxControls from './SRLLightboxControls'
 
 // CONSTANTS
 const NEXT = 'next'
@@ -30,24 +25,23 @@ const SRLLightboxGallery = ({
   callbacks,
   selectedElement,
   elements,
-  dispatch,
-  compensateForScrollbar
-}) => {
+  dispatch
+}: ISRLLightboxGallery) => {
   // Context
   const ctx = useContext(SRLCtx)
 
   /* Ref for the thumbnails div (we will need it in the SRLLightboxControls to calculate the width of the div containing the thumbnails
     and to calculate the height of the image minus the width or the height of the div containing the thumbnails) */
-  const SRLThumbnailsRef = useRef()
+  const SRLThumbnailsRef = useRef<HTMLDivElement | null>(null)
 
   /* Ref for the caption div (to calculate the height of the image minus the width or the height of the div containing the caption) */
-  const SRLCaptionRef = useRef()
+  const SRLCaptionRef = useRef<HTMLDivElement | null>(null)
 
   // Ref for the SRLStage
-  const SRLStageRef = useRef()
+  const SRLStageRef = useRef<HTMLDivElement | null>(null)
 
   // Ref for the subscribe
-  const unsubscribe = useRef()
+  const unsubscribe = useRef<() => void | undefined>()
 
   // Destructuring the options
   const {
@@ -64,7 +58,7 @@ const SRLLightboxGallery = ({
 
   // Callbacks functions
   const onChange = useCallback(
-    (object) => {
+    (object: object) => {
       if (typeof onSlideChange === 'function') {
         return ctx.callbacks.onSlideChange(object)
       } else {
@@ -77,7 +71,7 @@ const SRLLightboxGallery = ({
   )
 
   const onOpened = useCallback(
-    (current) => {
+    (current: object) => {
       if (typeof onLightboxOpened === 'function') {
         ctx.callbacks.onLightboxOpened(current)
       } else {
@@ -90,7 +84,7 @@ const SRLLightboxGallery = ({
   )
 
   const onClosed = useCallback(
-    (current) => {
+    (current: object) => {
       if (typeof onLightboxClosed === 'function') {
         ctx.callbacks.onLightboxClosed(current)
       } else {
@@ -103,7 +97,7 @@ const SRLLightboxGallery = ({
   )
 
   const onCount = useCallback(
-    (total) => {
+    (total: object) => {
       if (typeof onCountSlides === 'function') {
         ctx.callbacks.onCountSlides(total)
       } else {
@@ -117,21 +111,24 @@ const SRLLightboxGallery = ({
 
   // Set a state for the "autoplay" option
   const [autoplay, setAutoplay] = useState(false)
+
   // Set a state for the "panzoom" option
   const [panzoomEnabled, setPanzoomEnabled] = useState(false)
+
   // Set the direction of a slide if it comes before or after the current slide
-  const [direction, setDirection] = useState()
+  const [direction, setDirection] = useState<string | undefined>()
+
   // Set a state for the user to hide/show the thumbnails (not from the option, if they want to hide them on the fly)
   const [hideThumbnails, setHideThumbnails] = useState(false)
 
-  // Check if the user is not taking any action
+  // Check if the user is not taking any action (value in ms)
   const isIdle = useIdle(
     settings.hideControlsAfter < 1000 ? 9999999 : settings.hideControlsAfter
   )
 
   // Method to get the index of a slide
   const getElementIndex = useCallback(
-    (id) => {
+    (id: string) => {
       const elIndex = findIndex(elements, function (el) {
         return el.id === id
       })
@@ -142,10 +139,19 @@ const SRLLightboxGallery = ({
 
   // Method to establish if we are selecting an element that comes before or after the current one
   const establishNextOrPrevious = useCallback(
-    (selectedElementId, currentElementId, knownDirection) => {
+    (
+      selectedElementId: string | null,
+      currentElementId: string | null,
+      knownDirection?: string
+    ) => {
+      const selectedId = parseInt(selectedElementId || '0')
+      const currentId = parseInt(currentElementId || '0')
+
       /* Because we can't get the ID of a selected element when clicking on the
       "next" and "previous" button, we pass an hard-coded value called "knownDirection"
-      as we know that we are definitely running that particular function (handleNextElement or handlePreviousElement). If we have this value, skip the check all together and immediately set the new direction */
+      as we know that we are definitely running that particular
+      function (handleNextElement or handlePreviousElement). If we have this value, skip
+      the check all together and immediately set the new direction */
       if (knownDirection) {
         if (knownDirection === NEXT) {
           setDirection(NEXT)
@@ -156,10 +162,11 @@ const SRLLightboxGallery = ({
         }
       } else {
         /* If we are clicking on a thumbnail we can check if the ID of the thumbnail
-        that we clicked on is greater o lower than the currentElementID so we can establish if it comes after or before it */
-        if (selectedElementId > currentElementId) {
+        that we clicked on is greater o lower than the currentElementID so we can
+        establish if it comes after or before it */
+        if (selectedId > currentId) {
           setDirection(NEXT)
-        } else if (selectedElementId < currentElementId) {
+        } else if (selectedId < currentId) {
           setDirection(PREVIOUS)
         } else {
           setDirection(undefined)
@@ -176,7 +183,7 @@ const SRLLightboxGallery = ({
 
   // Handle Panzoom
   const handlePanzoom = useCallback(
-    (value) => {
+    (value: boolean) => {
       if (!settings.disablePanzoom) {
         setPanzoomEnabled(value)
       }
@@ -186,7 +193,12 @@ const SRLLightboxGallery = ({
 
   // Set the element, reset the panzoom state and determine direction of the slide
   const setElementAndDirection = useCallback(
-    (elementID, currentID, element, knownDirection) => {
+    (
+      elementID: string | null,
+      currentID: string | null,
+      element: IElement,
+      knownDirection?: 'next' | 'previous' | undefined
+    ) => {
       handlePanzoom(false)
       establishNextOrPrevious(elementID, currentID, knownDirection)
       dispatch({
@@ -198,20 +210,24 @@ const SRLLightboxGallery = ({
   )
 
   // Handle Image Download
-  const toDataURL = (url) =>
+  const toDataURL = (url: string): Promise<string> =>
     fetch(url)
       .then((response) => response.blob())
       .then(
         (blob) =>
           new Promise((resolve, reject) => {
             const reader = new FileReader()
-            reader.onloadend = () => resolve(reader.result)
+            reader.onloadend = () => resolve(reader.result as string)
             reader.onerror = reject
             reader.readAsDataURL(blob)
           })
       )
 
   function handleImageDownload() {
+    if (!selectedElement?.source) {
+      return
+    }
+
     toDataURL(selectedElement.source).then((dataUrl) => {
       const a = document.createElement('a')
       a.href = dataUrl
@@ -222,7 +238,7 @@ const SRLLightboxGallery = ({
 
   // Handle Current Element
   const handleCurrentElement = useCallback(
-    (elementID, currentID) => {
+    (elementID: string, currentID: string) => {
       // Grab the current element index
       const currentElementIndex = getElementIndex(elementID)
 
@@ -249,7 +265,7 @@ const SRLLightboxGallery = ({
 
   // Handle Previous Element
   const handlePrevElement = useCallback(
-    (elementID) => {
+    (elementID: string) => {
       // Get the current element index
       const currentElementIndex = getElementIndex(elementID)
 
@@ -281,7 +297,7 @@ const SRLLightboxGallery = ({
 
   // Handle Next element
   const handleNextElement = useCallback(
-    (elementID) => {
+    (elementID: string) => {
       // Get the current element index
       const currentElementIndex = getElementIndex(elementID)
 
@@ -333,7 +349,7 @@ const SRLLightboxGallery = ({
   // Handle Navigation With Keys
   const handleNavigationWithKeys = useDebouncedCallback(
     // function
-    (value) => {
+    (value: string) => {
       if (value === 'ArrowRight' || value === 'ArrowUp') {
         handleNextElement(selectedElement.id)
       }
@@ -350,7 +366,7 @@ const SRLLightboxGallery = ({
 
   // Handle FullScreen
   function handleFullScreen() {
-    let el = ''
+    let el = null
     if (typeof window !== 'undefined') {
       el = document.querySelector('#SRLLightbox')
     }
@@ -365,6 +381,8 @@ const SRLLightboxGallery = ({
             navigator.userAgent.indexOf('Safari') !== -1 &&
             navigator.userAgent.indexOf('Chrome') === -1
           ) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             el.webkitRequestFullScreen()
           } else {
             el.requestFullscreen()
@@ -408,24 +426,6 @@ const SRLLightboxGallery = ({
     onCount({
       totalSlide: ctx.elements.length
     })
-
-    // Adds a class to the body to remove the overflow
-    if (typeof window !== 'undefined') {
-      document.body.classList.add('SRLOpened')
-      document.body.style.marginRight = compensateForScrollbar + 'px'
-      disableBodyScroll(document.getElementsByClassName('.SRLOpened'), {
-        allowTouchMove: (el) =>
-          el.className.includes('SRLThumbnailsContainer') ||
-          el.className.includes('SRLThumb')
-      })
-    }
-
-    // Cleanup function
-    return () => {
-      document.body.classList.remove('SRLOpened')
-      document.body.style.marginRight = '0'
-      clearAllBodyScrollLocks()
-    }
   }, [])
 
   useEffect(() => {
@@ -439,8 +439,9 @@ const SRLLightboxGallery = ({
     }
 
     // Sets the current element to be the first item in the array if the id is undefined.
-    // This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
-    if (selectedElement.id === undefined) {
+    // This is crucial in case the user uses the provided method to open the lightbox
+    // from a link or a button (using the High Order Component) etc...
+    if (selectedElement?.id === undefined) {
       dispatch({
         type: HANDLE_ELEMENT,
         element: {
@@ -462,14 +463,14 @@ const SRLLightboxGallery = ({
       unsubscribe.current = subscribe(
         document,
         'keydown',
-        (e) => handleNavigationWithKeys(e.key),
+        (e: KeyboardEvent) => handleNavigationWithKeys(e.key),
         false
       )
     }
 
     // Cleans up function to remove the class from the body
     return () => {
-      if (!settings.disableKeyboardControls) {
+      if (!settings.disableKeyboardControls && unsubscribe.current) {
         unsubscribe.current()
       }
     }
@@ -520,7 +521,6 @@ const SRLLightboxGallery = ({
     // Offset the buttons from the autoplay progress bar
     buttonsOffsetFromProgressBar: progressBar.height,
     showProgressBar: progressBar.showProgressBar,
-    // Translations
     translations: ctx.options.translations,
     // Custom Icons
     icons: ctx.options.icons
@@ -541,7 +541,6 @@ const SRLLightboxGallery = ({
         {...controls}
         thumbnailsPosition={thumbnails.thumbnailsPosition}
         thumbnailsSize={thumbnails.thumbnailsSize}
-        thumbnailsContainerPadding={thumbnails.thumbnailsContainerPadding}
         showThumbnails={thumbnails.showThumbnails}
         SRLThumbnailsRef={SRLThumbnailsRef}
       />
@@ -557,7 +556,6 @@ const SRLLightboxGallery = ({
 
 SRLLightboxGallery.propTypes = {
   callbacks: PropTypes.object,
-  compensateForScrollbar: PropTypes.number,
   elements: PropTypes.array,
   isOpened: PropTypes.bool,
   dispatch: PropTypes.func,
@@ -574,8 +572,8 @@ SRLLightboxGallery.propTypes = {
       autoplaySpeed: PropTypes.number,
       disableKeyboardControls: PropTypes.bool,
       disablePanzoom: PropTypes.bool,
-
-      hideControlsAfter: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
+      limitToBounds: PropTypes.bool,
+      hideControlsAfter: PropTypes.number
     }),
     buttons: PropTypes.shape({
       backgroundColor: PropTypes.string,

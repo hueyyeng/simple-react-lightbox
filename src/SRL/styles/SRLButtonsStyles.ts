@@ -1,8 +1,10 @@
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+
+import { IIcon, ISRLTopButtons, IStyledButton } from '../../types'
 
 // The buttons
-const StyledButton = styled.button`
+const StyledButton = styled.button<IStyledButton>`
   position: absolute;
   height: ${(props) => (props.buttonsSize ? props.buttonsSize : '30px')};
   width: ${(props) => (props.buttonsSize ? props.buttonsSize : '30px')};
@@ -132,7 +134,7 @@ const StyledButton = styled.button`
 `
 
 // Top right buttons
-const SRLTopButtons = styled.div`
+const SRLTopButtons = styled.div<ISRLTopButtons>`
   position: absolute;
   top: 5px;
   right: 5px;
@@ -149,11 +151,10 @@ const SRLTopButtons = styled.div`
     props.showProgressBar &&
     props.autoplay &&
     css`
-      top: ${Math.round(parseInt(props.buttonsOffsetFromProgressBar, 10)) *
-      2}px;
+      top: ${Math.round(props?.buttonsOffsetFromProgressBar || 10) * 2}px;
       top: calc(
         env(safe-area-inset-top) +
-          ${Math.round(parseInt(props.buttonsOffsetFromProgressBar, 10)) * 2}px
+          ${Math.round(props?.buttonsOffsetFromProgressBar || 10) * 2}px
       );
     `};
 
@@ -161,9 +162,10 @@ const SRLTopButtons = styled.div`
   ${(props) =>
     props.thumbnailsPosition === 'right' &&
     css`
-      right: ${props.thumbnailsDivSizes.width + 5}px;
+      right: ${(props.thumbnailsDivSizes?.width || 0) + 5}px;
       right: calc(
-        env(safe-area-inset-top) + ${props.thumbnailsDivSizes.width + 5}px
+        env(safe-area-inset-top) +
+          ${(props.thumbnailsDivSizes?.width || 0) + 5}px
       );
     `};
 
@@ -183,12 +185,12 @@ const SRLTopButtons = styled.div`
 `
 
 // The "close" button
-const SRLCloseIcon = styled(StyledButton)`
+const SRLCloseIcon = styled(StyledButton)<IIcon>`
   position: relative;
 `
 
 // The "expand" button
-const SRLExpandIcon = styled(StyledButton)`
+const SRLExpandIcon = styled(StyledButton)<IIcon>`
   position: relative;
   margin-right: 5px;
 
@@ -198,20 +200,20 @@ const SRLExpandIcon = styled(StyledButton)`
 `
 
 // The "zoomOut" button
-const SRLZoomOutIcon = styled(StyledButton)`
+const SRLZoomOutIcon = styled(StyledButton)<IIcon>`
   position: relative;
   margin-right: 5px;
 `
 
 // The "autoplay" button
-const SRLAutoplayIcon = styled(StyledButton)`
+const SRLAutoplayIcon = styled(StyledButton)<IIcon>`
   position: relative;
   margin-right: 5px;
   display: ${(props) => (props.autoplaySpeed === 0 ? 'none' : 'flex')};
 `
 
 // The "download" button
-const SRLThumbnailsIcon = styled(StyledButton)`
+const SRLThumbnailsIcon = styled(StyledButton)<IIcon>`
   position: relative;
   margin-right: 5px;
 
@@ -239,13 +241,13 @@ const SRLThumbnailsIcon = styled(StyledButton)`
 `
 
 // The "download" button
-const SRLDownloadIcon = styled(StyledButton)`
+const SRLDownloadIcon = styled(StyledButton)<IIcon>`
   position: relative;
   margin-right: 5px;
 `
 
 // The "next" button
-const SRLNextIcon = styled(StyledButton)`
+const SRLNextIcon = styled(StyledButton)<IIcon>`
   top: calc(50% - 50px);
   right: 5px;
   right: calc(env(safe-area-inset-right) + 5px);
@@ -256,9 +258,10 @@ const SRLNextIcon = styled(StyledButton)`
   ${(props) =>
     props.thumbnailsPosition === 'right' &&
     css`
-      right: ${props.thumbnailsDivSizes.width + 5}px;
+      right: ${(props.thumbnailsDivSizes?.width || 0) + 5}px;
       right: calc(
-        env(safe-area-inset-right) + ${props.thumbnailsDivSizes.width + 5}px
+        env(safe-area-inset-right) +
+          ${(props.thumbnailsDivSizes?.width || 0) + 5}px
       );
     `};
 
@@ -277,7 +280,7 @@ const SRLNextIcon = styled(StyledButton)`
 `
 
 // The "prev" button
-const SRLPrevIcon = styled(StyledButton)`
+const SRLPrevIcon = styled(StyledButton)<IIcon>`
   top: calc(50% - 50px);
   left: 5px;
   left: calc(env(safe-area-inset-left) + 5px);
@@ -288,9 +291,10 @@ const SRLPrevIcon = styled(StyledButton)`
   ${(props) =>
     props.thumbnailsPosition === 'left' &&
     css`
-      left: ${props.thumbnailsDivSizes.width + 5}px;
+      left: ${(props.thumbnailsDivSizes?.width || 0) + 5}px;
       left: calc(
-        env(safe-area-inset-right) + ${props.thumbnailsDivSizes.width + 5}px
+        env(safe-area-inset-right) +
+          ${(props.thumbnailsDivSizes?.width || 0) + 5}px
       );
     `};
 
@@ -310,13 +314,13 @@ const SRLPrevIcon = styled(StyledButton)`
 
 // Export all of the above
 export {
-  SRLCloseIcon,
-  SRLNextIcon,
-  SRLPrevIcon,
   SRLAutoplayIcon,
-  SRLThumbnailsIcon,
+  SRLCloseIcon,
   SRLDownloadIcon,
   SRLExpandIcon,
-  SRLZoomOutIcon,
-  SRLTopButtons
+  SRLNextIcon,
+  SRLPrevIcon,
+  SRLThumbnailsIcon,
+  SRLTopButtons,
+  SRLZoomOutIcon
 }

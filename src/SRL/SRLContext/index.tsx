@@ -1,14 +1,18 @@
 import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
+
+import { IElement, IReducerAction, IState } from '../../types'
+
 import {
-  READY_LIGHTBOX,
-  RESET_LIGHTBOX,
+  CLOSE_LIGHTBOX,
   HANDLE_ELEMENT,
   OPEN_AT_INDEX,
-  CLOSE_LIGHTBOX
+  READY_LIGHTBOX,
+  RESET_LIGHTBOX
 } from './actions'
 
-const initialState = {
+const initialState: IState = {
+  dispatch: () => {},
   elements: [],
   isOpened: false,
   isLoaded: false,
@@ -17,6 +21,7 @@ const initialState = {
       backgroundColor: 'rgba(30,30,36,0.8)',
       iconColor: 'rgba(255, 255, 255, 0.8)',
       iconPadding: '10px',
+      showThumbnailsButton: true,
       showAutoplayButton: true,
       showCloseButton: true,
       showDownloadButton: true,
@@ -28,11 +33,13 @@ const initialState = {
     settings: {
       autoplaySpeed: 3000,
       boxShadow: 'none',
+      removeScrollBar: true,
       disableKeyboardControls: false,
       disablePanzoom: false,
       disableWheelControls: false,
       downloadedFileName: 'SRL-image',
-      hideControlsAfter: false,
+      hideControlsAfter: 3000,
+      limitToBounds: false,
       lightboxTransitionSpeed: 0.3,
       lightboxTransitionTimingFunction: 'linear',
       overlayColor: 'rgba(30, 30, 30, 0.9)',
@@ -53,6 +60,8 @@ const initialState = {
       captionTextTransform: 'inherit',
       showCaption: true
     },
+    icons: {}, // Originally PRO version... need to revisit in the future
+    translations: {}, // Originally PRO version... need to revisit in the future
     thumbnails: {
       showThumbnails: true,
       thumbnailsAlignment: 'center',
@@ -67,14 +76,15 @@ const initialState = {
     progressBar: {
       backgroundColor: '#f2f2f2',
       fillColor: '#000000',
-      height: '3px',
+      height: 3, // px unit
       showProgressBar: true
     }
   },
   selectedElement: {
     caption: '',
     height: 0,
-    id: 0,
+    id: '0',
+    src: '',
     source: '',
     thumbnail: '',
     width: 0
@@ -89,15 +99,26 @@ const initialState = {
 
 const SRLCtx = React.createContext(initialState)
 
-const SRLContextComponent = (props) => {
+type TSRLContextComponent = {
+  children: React.ReactNode
+}
+
+const SRLContextComponent: React.FC<TSRLContextComponent> = (props) => {
   // Reducer
-  const reducer = (state, action) => {
+  const reducer: React.Reducer<IState, IReducerAction> = (
+    state,
+    action
+  ): IState => {
+    const stateElements = state.elements as IElement[]
+    const actionElements = action.elements as IElement[]
+    const actionElement = action.element as IElement
+
     switch (action.type) {
       case READY_LIGHTBOX:
         return {
           ...state,
           ...action.mergedSettings,
-          elements: action.elements,
+          elements: actionElements,
           isLoaded: true
         }
       case RESET_LIGHTBOX: {
@@ -110,7 +131,7 @@ const SRLContextComponent = (props) => {
           ...state,
           isOpened: true,
           selectedElement: {
-            ...action.element
+            ...actionElement
           }
         }
       case OPEN_AT_INDEX:
@@ -118,7 +139,7 @@ const SRLContextComponent = (props) => {
           ...state,
           isOpened: true,
           selectedElement: {
-            ...state.elements[action.index]
+            ...stateElements[action.index as number]
           }
         }
       case CLOSE_LIGHTBOX:
