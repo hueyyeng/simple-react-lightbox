@@ -1,6 +1,6 @@
 {
   "name": "@hueyyeng/simple-react-lightbox",
-  "version": "3.10.0",
+  "version": "4.0.0",
   "description": "A simple but functional light-box for React.",
   "author": "hueyyeng",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "test": "cross-env CI=1 react-scripts test --env=jsdom  --passWithNoTests",
     "test:watch": "react-scripts test --env=jsdom  --passWithNoTests",
     "build:dev": "tsc && rollup -c",
-    "build": "cross-env NODE_ENV=production rimraf dist && tsc && rollup -c",
+    "build": "rimraf dist && tsc && cross-env NODE_ENV=production rollup -c",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn install && yarn run build"
