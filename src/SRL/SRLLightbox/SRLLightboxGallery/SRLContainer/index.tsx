@@ -247,7 +247,7 @@ function SRLContainerComponent({
           handleCurrentElement={handleCurrentElement}
           thumbnails={thumbnails}
           currentId={id}
-          elements={elements || []}
+          elements={elements}
           SRLThumbnailsRef={SRLThumbnailsRef}
         />
       )}

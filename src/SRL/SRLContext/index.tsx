@@ -90,7 +90,7 @@ const initialState: IState = {
     width: 0
   },
   callbacks: {
-    onCountSlides: (total) => ({ totalSlide: total }),
+    onCountSlides: () => {},
     onSlideChange: () => {},
     onLightboxClosed: () => {},
     onLightboxOpened: () => {}
@@ -110,7 +110,7 @@ const SRLContextComponent: React.FC<TSRLContextComponent> = (props) => {
     action
   ): IState => {
     const stateElements = state.elements as IElement[]
-    const actionElements = state.elements as IElement[]
+    const actionElements = action.elements as IElement[]
     const actionElement = action.element as IElement
 
     switch (action.type) {

@@ -97,7 +97,7 @@ const SRLLightboxGallery = ({
   )
 
   const onCount = useCallback(
-    (total: number) => {
+    (total: object) => {
       if (typeof onCountSlides === 'function') {
         ctx.callbacks.onCountSlides(total)
       } else {
@@ -149,7 +149,9 @@ const SRLLightboxGallery = ({
 
       /* Because we can't get the ID of a selected element when clicking on the
       "next" and "previous" button, we pass an hard-coded value called "knownDirection"
-      as we know that we are definitely running that particular function (handleNextElement or handlePreviousElement). If we have this value, skip the check all together and immediately set the new direction */
+      as we know that we are definitely running that particular
+      function (handleNextElement or handlePreviousElement). If we have this value, skip
+      the check all together and immediately set the new direction */
       if (knownDirection) {
         if (knownDirection === NEXT) {
           setDirection(NEXT)
@@ -160,7 +162,8 @@ const SRLLightboxGallery = ({
         }
       } else {
         /* If we are clicking on a thumbnail we can check if the ID of the thumbnail
-        that we clicked on is greater o lower than the currentElementID so we can establish if it comes after or before it */
+        that we clicked on is greater o lower than the currentElementID so we can
+        establish if it comes after or before it */
         if (selectedId > currentId) {
           setDirection(NEXT)
         } else if (selectedId < currentId) {
@@ -420,7 +423,9 @@ const SRLLightboxGallery = ({
     })
 
     // The slide will be counted once when the light-box is opened, there is no way to manipulate the number of slides
-    onCount((ctx.elements && ctx.elements.length) || 0)
+    onCount({
+      totalSlide: ctx.elements.length
+    })
   }, [])
 
   useEffect(() => {
@@ -434,7 +439,8 @@ const SRLLightboxGallery = ({
     }
 
     // Sets the current element to be the first item in the array if the id is undefined.
-    // This is crucial in case the user uses the provided method to open the lightbox from a link or a button (using the High Order Component) etc...
+    // This is crucial in case the user uses the provided method to open the lightbox
+    // from a link or a button (using the High Order Component) etc...
     if (selectedElement?.id === undefined) {
       dispatch({
         type: HANDLE_ELEMENT,

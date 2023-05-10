@@ -7,7 +7,6 @@ import {
   READY_LIGHTBOX,
   RESET_LIGHTBOX
 } from '../SRL/SRLContext/actions'
-import { defaultCallbacks, defaultOptions } from '../SRL/SRLWrapper'
 import { GALLERY_IMAGE, IMAGE } from '../SRL/SRLWrapper/element_types'
 
 // For 'subscribe-event' package
@@ -94,7 +93,7 @@ export interface IOptions {
 }
 
 export interface ICallbacks {
-  onCountSlides: (total: number) => { totalSlide: number }
+  onCountSlides: (newValue: object) => void
   onSlideChange: (newValue: object) => void
   onLightboxClosed: (newValue: object) => void
   onLightboxOpened: (newValue: object) => void

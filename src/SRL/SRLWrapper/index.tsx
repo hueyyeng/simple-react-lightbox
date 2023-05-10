@@ -191,6 +191,7 @@ const SRLWrapper = ({
           }
 
           e.setAttribute('srl_elementid', elementId.toString())
+
           /* Gatsby Images (Gatsby images creates two images, the first one is in base64 and we
           want to ignore that one but only if it's Gatsby because other base64 images are allowed)
           Also ignores images inside the <picture></picture> tag in Gatsby Images */
@@ -275,9 +276,7 @@ const SRLWrapper = ({
             }
           }
         })
-        .filter(
-          (newElement): newElement is IElement => newElement !== undefined
-        )
+        .filter((newElement) => newElement !== undefined) as IElement[]
 
       // Adds elements to the context
       return handleLightBox(elements)
@@ -544,7 +543,7 @@ export const defaultOptions = {
 }
 
 export const defaultCallbacks = {
-  onCountSlides: (total: number) => ({ totalSlide: total }),
+  onCountSlides: () => {},
   onSlideChange: () => {},
   onLightboxClosed: () => {},
   onLightboxOpened: () => {}
