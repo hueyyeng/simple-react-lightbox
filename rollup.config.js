@@ -6,11 +6,11 @@ import url from '@rollup/plugin-url'
 import svgr from '@svgr/rollup'
 import gzipPlugin from 'rollup-plugin-gzip'
 import image from '@rollup/plugin-image'
-import pkg from './package.json' assert { type: 'json' }
 import terser from '@rollup/plugin-terser'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import typescript from '@rollup/plugin-typescript'
 import sourcemaps from 'rollup-plugin-sourcemaps'
+import pkg from './package.json' assert { type: 'json' }
 
 export default {
   input: 'src/index.tsx',
@@ -19,13 +19,13 @@ export default {
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: 'true',
+      sourcemap: process.env.NODE_ENV === 'production' ? false : true,
       exports: 'named' /** Disable warning for default imports */
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: 'true',
+      sourcemap: process.env.NODE_ENV === 'production' ? false : true,
       exports: 'named' /** Disable warning for default imports */
     }
   ],
@@ -60,12 +60,15 @@ export default {
       ]
     }),
     typescript({
-      tsconfig: './tsconfig.build.json',
+      tsconfig:
+        process.env.NODE_ENV === 'production'
+          ? './tsconfig.build.json'
+          : './tsconfig.json',
       declaration: true,
       declarationDir: 'dist',
-      sourceMap: true
+      sourceMap: process.env.NODE_ENV === 'production' ? false : true
     }),
-    sourcemaps(),
+    process.env.NODE_ENV !== 'production' && sourcemaps(),
     commonjs({
       include: 'node_modules/**'
     }),
@@ -75,7 +78,7 @@ export default {
     }),
     gzipPlugin(),
     image(),
-    // terser(),
+    process.env.NODE_ENV === 'production' && terser(),
     nodePolyfills()
   ]
 }

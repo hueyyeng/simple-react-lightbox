@@ -39,7 +39,8 @@
   "scripts": {
     "test": "cross-env CI=1 react-scripts test --env=jsdom  --passWithNoTests",
     "test:watch": "react-scripts test --env=jsdom  --passWithNoTests",
-    "build": "rimraf dist && tsc && rollup -c",
+    "build:dev": "tsc && rollup -c",
+    "build": "cross-env NODE_ENV=production rimraf dist && tsc && rollup -c",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn install && yarn run build"
