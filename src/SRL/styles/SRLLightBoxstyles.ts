@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
 
+import { ISRLLightBox } from '../../types'
+
 // Main DIV containing the entire light-box
-export const SRLLightbox = styled(motion.div)`
+export const SRLLightbox = styled(motion.div)<ISRLLightBox>`
   background-color: ${(props) => props.overlayColor};
   position: fixed;
   width: 100%;

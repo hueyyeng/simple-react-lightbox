@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+
 import { SRLCtx } from '../SRLContext'
 import { SRLLightbox } from '../styles/SRLLightBoxstyles'
 
@@ -9,7 +10,13 @@ const variants = {
   hidden: { opacity: 0 }
 }
 
-const Portal = ({ isOpened, children, className }) => {
+interface IPortal {
+  isOpened: boolean
+  children: React.ReactNode
+  className?: string
+}
+
+const Portal = ({ isOpened, children, className }: IPortal) => {
   const context = useContext(SRLCtx)
   const { options } = context
 

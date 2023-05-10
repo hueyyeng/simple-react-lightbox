@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SRLContextComponent from './SRL/SRLContext'
-import SRLWrapper from './SRL/SRLWrapper'
-import SRLLightbox from './SRL/SRLLightbox'
-import { useLightbox } from './SRL/SRLHooks'
 
-const SimpleReactLightbox = ({ children }) => {
+import SRLContextComponent from './SRL/SRLContext'
+import { useLightbox } from './SRL/SRLHooks'
+import SRLLightbox from './SRL/SRLLightbox'
+import SRLWrapper from './SRL/SRLWrapper'
+
+const SimpleReactLightbox = ({ children }: { children: React.ReactNode }) => {
   return (
     <SRLContextComponent>
       {children}
@@ -21,5 +22,5 @@ SimpleReactLightbox.propTypes = {
   ]).isRequired
 }
 
-export { useLightbox, SRLWrapper }
+export { SRLWrapper, useLightbox }
 export default SimpleReactLightbox

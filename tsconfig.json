@@ -10,7 +10,10 @@
     "emitDeclarationOnly": true,
     "isolatedModules": true,
     "sourceMap": true,
-    "jsx": "react",
+    "inlineSources": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "jsxImportSource": "@emotion/react",
     "moduleResolution": "node",
     "rootDir": "src",
     "noImplicitReturns": true,
@@ -18,12 +21,19 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "outDir": "./dist"
   },
   "include": [
-    "./src/*"
+    "./src/*",
+    "./src/types",
   ],
   "exclude": [
+    "./.eslintrc.cjs",
+    "../../node_modules/**",
+    "**/*.spec.ts", // Exclude test files if needed
+    "**/*.test.ts", // Exclude test files if needed
+    "@types",
     "node_modules",
     "build",
     "dist",

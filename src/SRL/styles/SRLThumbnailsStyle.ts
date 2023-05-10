@@ -1,10 +1,18 @@
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 
-const thumbnailsOnRight = (props) => css`
+import {
+  ISRLThumbnailGallery,
+  ISRLThumbnailGalleryImage,
+  ISRLVideoIconStyle
+} from '../../types'
+
+const thumbnailsOnRight = () => css`
   flex-direction: column;
+  grid-column: 2;
   -ms-grid-column: 2;
   grid-column-start: 2;
+  grid-row: 1;
   -ms-grid-row: 1;
   grid-row-start: 1;
   -ms-grid-row-span: 2;
@@ -25,10 +33,12 @@ const thumbnailsOnRight = (props) => css`
   }
 `
 
-const thumbnailsOnLeft = (props) => css`
+const thumbnailsOnLeft = () => css`
   flex-direction: column;
+  grid-column: 1;
   -ms-grid-column: 1;
   grid-column-start: 1;
+  grid-row: 1;
   -ms-grid-row: 1;
   grid-row-start: 1;
   -ms-grid-row-span: 2;
@@ -49,8 +59,8 @@ const thumbnailsOnLeft = (props) => css`
   }
 `
 
-// The thumbnails galley
-export const SRLThumbnailGallery = styled.div`
+// The thumbnails gallery
+export const SRLThumbnailGallery = styled.div<ISRLThumbnailGallery>`
   display: flex;
   color: white;
   height: auto;
@@ -125,7 +135,7 @@ export const SRLThumbnailGallery = styled.div`
 `
 
 // The images on the thumbnail gallery
-export const SRLThumbnailGalleryImage = styled.a`
+export const SRLThumbnailGalleryImage = styled.a<ISRLThumbnailGalleryImage>`
   width: ${(props) =>
     props.thumbnailsSize ? props.thumbnailsSize[0] : '80px'};
   height: ${(props) =>
@@ -134,7 +144,7 @@ export const SRLThumbnailGalleryImage = styled.a`
   background-size: cover;
   margin: ${(props) => (props.thumbnailsGap ? props.thumbnailsGap : '1px')};
   opacity: ${(props) =>
-    props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
+    props.thumbnailsOpacity ? `${props.thumbnailsOpacity}` : '0.4'};
   transition: 0.3s ease;
   will-change: opacity;
   display: block;
@@ -156,11 +166,11 @@ export const SRLThumbnailGalleryImage = styled.a`
 `
 
 // The icons inside the image thumbnail if it's a video
-export const SRLVideoIconStyle = styled.svg`
+export const SRLVideoIconStyle = styled.svg<ISRLVideoIconStyle>`
   width: ${(props) =>
-    props.thumbnailsSize ? props.thumbnailsSize[0] / 2 : '40px'};
+    props.thumbnailsSize ? parseInt(props.thumbnailsSize[0]) / 2 : '40px'};
   height: ${(props) =>
-    props.thumbnailsSize ? props.thumbnailsSize[1] / 2 : '40px'};
+    props.thumbnailsSize ? parseInt(props.thumbnailsSize[1]) / 2 : '40px'};
   opacity: ${(props) =>
-    props.thumbnailsOpacity ? props.thumbnailsOpacity : '0.4'};
+    props.thumbnailsOpacity ? `${props.thumbnailsOpacity}` : '0.4'};
 `
