@@ -1,17 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+
+import { ISRLProgressBarComponent } from '../../../../../types'
 import { useInterval } from '../../../../SRLHooks'
 import {
   SRLProgressBar,
   SRLProgressBarWrapper
 } from '../../../../styles/SRLProgressBarStyles'
-import PropTypes from 'prop-types'
 
 const SRLProgressBarComponent = ({
   autoplay,
   autoplaySpeed,
   progressBar,
   currentElementID
-}) => {
+}: ISRLProgressBarComponent) => {
   const [isPlaying, setIsPlaying] = useState(false)
 
   // Call of the interval to fill the progress bar

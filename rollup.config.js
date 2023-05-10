@@ -6,38 +6,50 @@ import url from '@rollup/plugin-url'
 import svgr from '@svgr/rollup'
 import gzipPlugin from 'rollup-plugin-gzip'
 import image from '@rollup/plugin-image'
-import pkg from './package.json' assert { type: "json" };
 import terser from '@rollup/plugin-terser'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
+import typescript from '@rollup/plugin-typescript'
+import sourcemaps from 'rollup-plugin-sourcemaps'
+import pkg from './package.json' assert { type: 'json' }
 
 export default {
-  input: 'src/index.js',
+  input: 'src/index.tsx',
+  external: [/@babel\/runtime/, 'react', 'react-dom'],
   output: [
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: false,
+      sourcemap: process.env.NODE_ENV === 'production' ? false : true,
       exports: 'named' /** Disable warning for default imports */
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: false,
+      sourcemap: process.env.NODE_ENV === 'production' ? false : true,
       exports: 'named' /** Disable warning for default imports */
     }
   ],
-
   plugins: [
-    external(),
-    url({
-      limit: 0, // 0 => copy all files
-      include: ['**/*.?(ttf|woff|woff2|png|jpg|svg|gif)']
+    nodeResolve({
+      preferBuiltins: true,
+      customResolveOptions: 'src'
     }),
+    external(),
     svgr(),
     babel({
       exclude: 'node_modules/**',
       babelHelpers: 'runtime',
-      presets: ['@babel/preset-env', '@babel/preset-react'],
+      inputSourceMap: true,
+      presets: [
+        '@babel/preset-typescript',
+        '@babel/preset-react',
+        [
+          '@babel/preset-env',
+          {
+            modules: false
+          }
+        ]
+      ],
       plugins: [
         [
           '@babel/plugin-transform-runtime',
@@ -47,13 +59,26 @@ export default {
         ]
       ]
     }),
-    nodeResolve({ preferBuiltins: true, customResolveOptions: 'src' }),
+    typescript({
+      tsconfig:
+        process.env.NODE_ENV === 'production'
+          ? './tsconfig.build.json'
+          : './tsconfig.json',
+      declaration: true,
+      declarationDir: 'dist',
+      sourceMap: process.env.NODE_ENV === 'production' ? false : true
+    }),
+    process.env.NODE_ENV !== 'production' && sourcemaps(),
     commonjs({
       include: 'node_modules/**'
     }),
+    url({
+      limit: 0, // 0 => copy all files
+      include: ['**/*.?(ttf|woff|woff2|png|jpg|svg|gif)']
+    }),
     gzipPlugin(),
     image(),
-    terser(),
+    process.env.NODE_ENV === 'production' && terser(),
     nodePolyfills()
   ]
 }

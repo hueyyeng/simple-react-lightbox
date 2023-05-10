@@ -1,12 +1,18 @@
 /* ATTACH AN EVENT LISTENER TO AN ELEMENT */
-export function handleAttachListener(e, element, callback) {
+export function handleAttachListener(
+  e: EventTarget,
+  element: object,
+  callback: CallableFunction
+): void {
   e.addEventListener('click', () => {
     // Run the function to handle the clicked item
-    if (callback) return callback(element)
+    if (callback) {
+      return callback(element)
+    }
   })
 }
 
-function loadSingleImage(image) {
+function loadSingleImage(image: HTMLImageElement) {
   const promise = new Promise((resolve, reject) => {
     if (image.loading === 'lazy') {
       resolve(image)
@@ -33,17 +39,22 @@ function loadSingleImage(image) {
       image.removeEventListener('error', imageIsLoaded)
     }
   })
+
   return Object.assign(promise, { image: image })
 }
 
-export function loadImages(input) {
-  const checkEachImage = (img) => {
-    return loadSingleImage(img).catch(function (error) {
+export function loadImages(images: NodeListOf<HTMLImageElement>) {
+  const checkEachImage = (img: HTMLImageElement) => {
+    return loadSingleImage(img).catch((error) => {
+      console.error('Unexpected error when loading image!', error)
       return error
     })
   }
-  const arrayOfPromises = [].map.call(input, checkEachImage)
-  const elements = Promise.all(arrayOfPromises).then(function (results) {
+  const arrayOfPromises: Array<Promise<HTMLImageElement>> = [].map.call(
+    images,
+    checkEachImage
+  )
+  const elements = Promise.all(arrayOfPromises).then((results) => {
     return Promise.resolve(results.filter((e) => e))
   })
   return elements

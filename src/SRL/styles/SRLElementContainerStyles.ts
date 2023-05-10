@@ -1,8 +1,10 @@
-import { motion } from 'framer-motion'
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+import { motion } from 'framer-motion'
 
-const thumbnailsOnRight = (props) => css`
+import { ISRLElementContainer, ISRLImage, IThumbnailsOn } from '../../types'
+
+const thumbnailsOnRight = (props: IThumbnailsOn) => css`
   grid-column: 1/2;
   -ms-grid-column: 1;
   -ms-grid-column-span: 1;
@@ -10,7 +12,7 @@ const thumbnailsOnRight = (props) => css`
   height: calc(100vh - ${props.captionDivSizes.height}px);
 `
 
-const thumbnailsOnLeft = (props) => css`
+const thumbnailsOnLeft = (props: IThumbnailsOn) => css`
   grid-column: 2/2;
   -ms-grid-column: 2;
   width: 100%;
@@ -18,7 +20,7 @@ const thumbnailsOnLeft = (props) => css`
 `
 
 // The container for the image
-export const SRLElementContainer = styled.div`
+export const SRLElementContainer = styled.div<ISRLElementContainer>`
   position: relative;
   display: flex;
   justify-content: center;
@@ -39,6 +41,7 @@ export const SRLElementContainer = styled.div`
   /* Thumbnails aligned to the left.
     We need to exclude the height of the div containing the thumbnails this time */
   ${(props) => props.thumbnailsPosition === 'left' && thumbnailsOnLeft};
+
   /* Thumbnails hidden */
   ${(props) =>
     props.hideThumbnails &&
@@ -149,7 +152,7 @@ export const SRLElementWrapper = styled(motion.div)`
 `
 
 // Image Element
-export const SRLImage = styled(motion.img)`
+export const SRLImage = styled(motion.img)<ISRLImage>`
   background: transparent;
   border: 0;
   position: relative;

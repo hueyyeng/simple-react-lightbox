@@ -1,26 +1,30 @@
-import React, { useContext, useEffect, useRef } from 'react'
-import Portal from '../SRLPortal'
-import PropTypes from 'prop-types'
-import SRLLightboxGallery from './SRLLightboxGallery'
-import { SRLCtx } from '../SRLContext'
+import { useContext, useEffect, useRef } from 'react'
+import { RemoveScroll } from 'react-remove-scroll'
 import { AnimatePresence } from 'framer-motion'
-import { RemoveScroll } from 'react-remove-scroll';
+import PropTypes from 'prop-types'
 
-let scrollY  // Store scroll position here
+import { SRLCtx } from '../SRLContext'
+import Portal from '../SRLPortal'
+
+import SRLLightboxGallery from './SRLLightboxGallery'
+
+let scrollY: number // Store scroll position here
 
 function SRLLightbox() {
   const context = useContext(SRLCtx)
   const { isOpened, options } = context
   const isRemoveScrollBar = options.settings.removeScrollBar
   const isUsingPreact = options.settings.usingPreact
-  const vh = useRef()
+  const vhRef = useRef<number | undefined>()
   if (typeof window !== 'undefined') {
     const iOSSafari =
       navigator.userAgent.match(/safari/i) &&
       navigator.vendor.match(/apple/i) &&
       navigator.maxTouchPoints
 
-    const isiPad = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 0) || navigator.platform === 'iPad'
+    const isiPad =
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 0) ||
+      navigator.platform === 'iPad'
 
     if (iOSSafari && !isiPad) {
       const isSRLLightbox = document.getElementById('SRLLightbox')
@@ -43,8 +47,8 @@ function SRLLightbox() {
     This is needed due to a mobile issues wit the VH unit https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
     function getVH() {
       if (typeof window !== 'undefined') {
-        vh.current = window.innerHeight * 0.01
-        document.documentElement.style.setProperty('--vh', `${vh.current}px`)
+        vhRef.current = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vhRef.current}px`)
       }
     }
     getVH()
@@ -57,9 +61,7 @@ function SRLLightbox() {
     return (
       <Portal selector="SRLLightbox" isOpened={isOpened}>
         <RemoveScroll removeScrollBar={isRemoveScrollBar}>
-          <SRLLightboxGallery
-            {...context}
-          />
+          <SRLLightboxGallery {...context} />
         </RemoveScroll>
       </Portal>
     )
@@ -69,9 +71,7 @@ function SRLLightbox() {
         {isOpened && (
           <RemoveScroll removeScrollBar={isRemoveScrollBar}>
             <Portal selector="SRLLightbox" isOpened={isOpened}>
-              <SRLLightboxGallery
-                {...context}
-              />
+              <SRLLightboxGallery {...context} />
             </Portal>
           </RemoveScroll>
         )}

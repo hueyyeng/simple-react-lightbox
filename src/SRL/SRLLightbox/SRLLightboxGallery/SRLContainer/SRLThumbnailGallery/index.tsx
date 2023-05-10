@@ -1,10 +1,15 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+
+import { ISRLThumbnailGalleryComponent } from '../../../../../types'
 import {
   SRLThumbnailGallery,
   SRLThumbnailGalleryImage
 } from '../../../../styles/SRLThumbnailsStyle'
+
 import SRLVideoIcon from './SRLVideoIcon'
+
+type TCurrentElementRef = (pageX: number, pageY: number, id: string) => void
 
 const SRLThumbnailGalleryComponent = ({
   elements,
@@ -12,7 +17,7 @@ const SRLThumbnailGalleryComponent = ({
   handleCurrentElement,
   thumbnails,
   SRLThumbnailsRef
-}) => {
+}: ISRLThumbnailGalleryComponent) => {
   const {
     thumbnailsOpacity,
     thumbnailsSize,
@@ -28,7 +33,7 @@ const SRLThumbnailGalleryComponent = ({
   // const SRLThumbnailsContainerRef = useRef()
 
   // Ref for the variables that we will use to determine the mouse move drag effect
-  const isDown = useRef(0)
+  const isDown = useRef(false)
   const startX = useRef(0)
   const startY = useRef(0)
   const scrollLeft = useRef(0)
@@ -37,11 +42,11 @@ const SRLThumbnailGalleryComponent = ({
   /* We need to access the function passed via props inside the useEffect as
   we need some refs (which are undefined outside useEffect). Because the function
   is called on the onClick attribute we need to use a ref */
-  const handleCurrentElementRef = useRef()
+  const handleCurrentElementRef = useRef<TCurrentElementRef | undefined>()
 
   useEffect(() => {
     // To make it easier using the ref, we use a short name
-    const SRLTCR = SRLThumbnailsRef.current
+    const SRLTCR = SRLThumbnailsRef.current as HTMLElement
 
     // Target the thumbnail
     const target = document.querySelector(`.SRLThumb${currentId}`)
@@ -88,7 +93,11 @@ const SRLThumbnailGalleryComponent = ({
     on the image immediately after releasing the mouse, so we need a condition
     to determine if we are "clicking" on the same point on the page (pageX OR pageY)
     and that we are not coming from a drag action */
-    handleCurrentElementRef.current = function (pageX, pageY, id) {
+    handleCurrentElementRef.current = function (
+      pageX: number,
+      pageY: number,
+      id: string
+    ) {
       if (
         SRLTCR.scrollWidth > SRLTCR.offsetWidth ||
         SRLTCR.scrollHeight > SRLTCR.offsetHeight
@@ -104,7 +113,7 @@ const SRLThumbnailGalleryComponent = ({
       }
     }
 
-    function handleMouseDownOnThumbnails(pageX, pageY) {
+    function handleMouseDownOnThumbnails(pageX: number, pageY: number) {
       if (SRLTCR.scrollWidth > SRLTCR.offsetWidth) {
         isDown.current = true
         startX.current = pageX - SRLTCR.offsetLeft
@@ -123,8 +132,11 @@ const SRLThumbnailGalleryComponent = ({
       SRLTCR.classList.remove('SRLDraggable')
     }
 
-    function handleMouseMoveOnThumbnails(pageX, pageY) {
-      if (!isDown.current) return
+    function handleMouseMoveOnThumbnails(pageX: number, pageY: number) {
+      if (!isDown.current) {
+        return
+      }
+
       if (SRLTCR.scrollHeight > SRLTCR.offsetHeight) {
         const y = pageY - SRLTCR.offsetTop
         const walk = y - startY.current
@@ -149,7 +161,7 @@ const SRLThumbnailGalleryComponent = ({
     // CLEAN UP
     return () => {
       SRLTCR.removeEventListener('mousedown', (e) =>
-        handleMouseDownOnThumbnails(e.pageX)
+        handleMouseDownOnThumbnails(e.pageX, e.pageY)
       )
       SRLTCR.removeEventListener('mouseleave', () =>
         handleMouseLeaveOnThumbnails()
@@ -158,7 +170,7 @@ const SRLThumbnailGalleryComponent = ({
         handleMouseLeaveOnThumbnails()
       )
       SRLTCR.removeEventListener('mousemove', (e) =>
-        handleMouseMoveOnThumbnails(e)
+        handleMouseMoveOnThumbnails(e.pageX, e.pageY)
       )
     }
   }, [currentId, handleCurrentElement, SRLThumbnailsRef, thumbnailsAlignment])
@@ -174,11 +186,10 @@ const SRLThumbnailGalleryComponent = ({
       className="SRLThumbnailsContainer"
     >
       {elements.map((element) => {
+        const callback = handleCurrentElementRef.current as TCurrentElementRef
         return (
           <SRLThumbnailGalleryImage
-            onClick={(e) =>
-              handleCurrentElementRef.current(e.pageX, e.pageY, element.id)
-            }
+            onClick={(e) => callback(e.pageX, e.pageY, element.id)}
             thumbnailsOpacity={thumbnailsOpacity}
             thumbnailsSize={thumbnailsSize}
             thumbnailsGap={thumbnailsGap}

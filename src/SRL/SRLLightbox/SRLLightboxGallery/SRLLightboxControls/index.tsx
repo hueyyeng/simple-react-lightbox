@@ -1,16 +1,16 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import { useSizes } from '../../../SRLHooks'
 
+import { ISRLLightboxControls } from '../../../../types'
+import { useSizes } from '../../../SRLHooks'
 import {
+  SRLAutoplayIcon,
   SRLCloseIcon,
+  SRLDownloadIcon,
+  SRLExpandIcon,
   SRLNextIcon,
   SRLPrevIcon,
-  SRLTopButtons,
-  SRLAutoplayIcon,
-  SRLDownloadIcon,
   SRLThumbnailsIcon,
-  SRLExpandIcon,
+  SRLTopButtons,
   SRLZoomOutIcon
 } from '../../../styles/SRLButtonsStyles'
 
@@ -23,8 +23,8 @@ const SRLLightboxControls = ({
   handleFullScreen,
   handleImageDownload,
   handleNextElement,
-  handlePanzoom,
   handlePrevElement,
+  handlePanzoom,
   handleThumbnails,
   hideThumbnails,
   panzoomEnabled,
@@ -33,15 +33,15 @@ const SRLLightboxControls = ({
   showProgressBar,
   showThumbnails,
   SRLThumbnailsRef,
-  thumbnailsPosition,
-  thumbnailsSize
-}) => {
+  thumbnailsPosition
+}: // thumbnailsSize
+ISRLLightboxControls) => {
   /* Unfortunately, we need to calculate the offsetWidth of the thumbnails container
   by taking its "REF" from up above */
   const [thumbnailsDivSizes] = useSizes(SRLThumbnailsRef)
 
   return (
-    <>
+    <div>
       <SRLTopButtons
         className="SRLControls"
         autoplay={autoplay}
@@ -49,7 +49,6 @@ const SRLLightboxControls = ({
         buttonsOffsetFromProgressBar={buttonsOffsetFromProgressBar}
         thumbnailsPosition={thumbnailsPosition}
         thumbnailsDivSizes={thumbnailsDivSizes}
-        thumbnailsSize={thumbnailsSize}
         hideThumbnails={hideThumbnails}
       >
         {buttons.showAutoplayButton && (
@@ -234,7 +233,6 @@ const SRLLightboxControls = ({
           buttonsIconPadding={buttons.iconPadding}
           thumbnailsPosition={thumbnailsPosition}
           thumbnailsDivSizes={thumbnailsDivSizes}
-          thumbnailsSize={thumbnailsSize}
           hideThumbnails={hideThumbnails}
           title="Next"
           className="SRLNextButton"
@@ -265,7 +263,6 @@ const SRLLightboxControls = ({
           className="SRLPrevButton"
           thumbnailsPosition={thumbnailsPosition}
           thumbnailsDivSizes={thumbnailsDivSizes}
-          thumbnailsSize={thumbnailsSize}
           hideThumbnails={hideThumbnails}
           onClick={() => handlePrevElement(currentElementID)}
         >
@@ -283,7 +280,7 @@ const SRLLightboxControls = ({
           </div>
         </SRLPrevIcon>
       )}
-    </>
+    </div>
   )
 }
 
@@ -302,7 +299,6 @@ SRLLightboxControls.propTypes = {
     showNextButton: PropTypes.bool,
     showPrevButton: PropTypes.bool,
     showThumbnailsButton: PropTypes.bool,
-
     size: PropTypes.string
   }),
   hideThumbnails: PropTypes.bool,

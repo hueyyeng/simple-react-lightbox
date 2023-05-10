@@ -1,8 +1,10 @@
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+
+import { ISRLCaption } from '../../types'
 
 // The caption
-export const SRLCaption = styled.div`
+export const SRLCaption = styled.div<ISRLCaption>`
   color: white;
   font-family: inherit;
   outline: none;

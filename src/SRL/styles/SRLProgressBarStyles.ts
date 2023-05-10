@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
 
-export const SRLProgressBarWrapper = styled.div`
+import { ISRLProgressBar, ISRLProgressBarWrapper } from '../../types'
+
+export const SRLProgressBarWrapper = styled.div<ISRLProgressBarWrapper>`
   width: 100%;
-  height: ${(props) => props.barHeight};
+  height: ${(props) => `${props.barHeight}px`};
   background-color: ${(props) => props.backgroundColor};
   position: fixed;
   top: 0;
@@ -10,8 +12,8 @@ export const SRLProgressBarWrapper = styled.div`
   z-index: 9999;
 `
 
-export const SRLProgressBar = styled.div`
-  height: ${(props) => props.barHeight};
+export const SRLProgressBar = styled.div<ISRLProgressBar>`
+  height: ${(props) => `${props.barHeight}px`};
   width: 100%;
   background-color: ${(props) => props.fillColor};
   position: absolute;
