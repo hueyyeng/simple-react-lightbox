@@ -12,6 +12,7 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "browserslist": [
     "> 0.25%",
     "not op_mini all",
@@ -23,6 +24,7 @@
     "reactjs",
     "es6",
     "javascript",
+    "typescript",
     "react-lightbox",
     "react lightbox",
     "react light-box",
